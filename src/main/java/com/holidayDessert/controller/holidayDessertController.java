@@ -14,7 +14,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.holidayDessert.model.Authority;
+import com.holidayDessert.model.Banner;
 import com.holidayDessert.service.AuthorityService;
+import com.holidayDessert.service.BannerService;
 
 @Controller
 @SessionAttributes("memberSession")
@@ -24,6 +26,9 @@ public class holidayDessertController {
 	@Autowired
 	private AuthorityService authorityService;
 	
+	@Autowired
+	private BannerService bannerService;
+	
 	@RequestMapping(value = "/index" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 
@@ -31,6 +36,11 @@ public class holidayDessertController {
 		
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		System.out.println(authorityList);
+		
+		Banner banner = new Banner();
+		
+		List<Map<String, Object>> bannerList = bannerService.list(banner);
+		System.out.println(bannerList);
 		
 		return "front/holidayDessert/index";
 	}
