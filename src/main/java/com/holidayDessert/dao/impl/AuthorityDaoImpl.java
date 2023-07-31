@@ -16,7 +16,8 @@ public class AuthorityDaoImpl implements AuthorityDao{
 	
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
+	
+	@Override
 	public List<Map<String, Object>> list(Authority authority) {
 
 		String sql = " select * from holiday_dessert.authority ";

@@ -12,13 +12,14 @@ import com.holidayDessert.dao.BannerDao;
 import com.holidayDessert.model.Banner;
 
 @Repository
-public class BannerDaoImpl implements BannerDao{
-	
+public class BannerDaoImpl implements BannerDao {
+
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
 	@Override
 	public List<Map<String, Object>> list(Banner banner) {
+
 		String sql = " select * from holiday_dessert.banner ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
@@ -30,6 +31,7 @@ public class BannerDaoImpl implements BannerDao{
 		} else {
 			return null;
 		}
+		
 	}
-	
+
 }
