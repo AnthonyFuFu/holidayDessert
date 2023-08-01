@@ -1,31 +1,31 @@
 version: '3'
 services:
-  forecast-server:
+  holidayDessert-server:
     build: .
     ports:
-      - 8080:8050
+      - 8080:8080
     networks:
-      - forecast-bridge
+      - holidayDessert-bridge
     environment:
-      - spring.datasource.druid.first.url=jdbc:mysql://mysqldbcompose:3306/forecast
+      - spring.datasource.druid.first.url=jdbc:mysql://mysqldbcompose:3306/holiday_dessert
       - spring.datasource.druid.first.username=root
-      - spring.datasource.druid.first.password=tkb0004757
+      - spring.datasource.druid.first.password=cga103g4
       - spring.datasource.druid.first.driver-class-name =com.mysql.cj.jdbc.Driver
     depends_on:
       - mysqldbcompose
   mysqldbcompose:
     image: mariadb:10.5.3
     ports:
-      - '3307:3306'
+      - '3306:3306'
     environment:
-      MYSQL_DATABASE: 'forecast'
+      MYSQL_DATABASE: 'holidayDessert'
       MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'tkb0004757'
-      MYSQL_ROOT_PASSWORD: 'tkb0004757'
+      MYSQL_PASSWORD: 'cga103g4'
+      MYSQL_ROOT_PASSWORD: 'cga103g4'
     volumes:
       - /app/server/mysql:/var/lib/mysql
     networks:
-      - forecast-bridge
+      - holidayDessert-bridge
 networks:
-  forecast-bridge:
+  holidayDessert-bridge:
     external: true
