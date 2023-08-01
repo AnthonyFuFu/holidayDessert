@@ -6,13 +6,21 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.logging.LoggerGroups;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
+import com.auth0.jwt.interfaces.DecodedJWT;
 import com.holidayDessert.model.Authority;
 import com.holidayDessert.model.Banner;
 import com.holidayDessert.model.Cart;
@@ -51,12 +59,21 @@ import com.holidayDessert.service.ProductService;
 import com.holidayDessert.service.PromotionDetailService;
 import com.holidayDessert.service.PromotionService;
 import com.holidayDessert.service.impl.ReceiptInformationService;
+import com.holidayDessert.utils.JWTUtils;
+
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
 @Controller
-@SessionAttributes("memberSession")
 @RequestMapping("/")
+@SessionAttributes("memberSession")
+@CrossOrigin
+//@RestController
+@Api(tags = "首頁")
 public class holidayDessertController {
-
+	
+	private final org.slf4j.Logger log = LoggerFactory.getLogger(LoggerGroups.class);
+	
 	@Autowired
 	private AuthorityService authorityService;
 
@@ -115,8 +132,10 @@ public class holidayDessertController {
 	private ReceiptInformationService receiptInformationService;
 
 	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "查詢首頁", httpMethod = "GET", notes = "進行查詢首頁")
+//	@GetMapping("/index")
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
-
+		
 		Authority authority = new Authority();
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		System.out.println(authorityList);
@@ -192,9 +211,11 @@ public class holidayDessertController {
 		ReceiptInformation receiptInformation = new ReceiptInformation();
 		List<Map<String, Object>> receiptInformationList = receiptInformationService.list(receiptInformation);
 		System.out.println(receiptInformationList);
-
-		return "front/holidayDessert/index";
+		
+		System.out.println("index");
+		
+		return "front/index";
 
 	}
-
+	
 }

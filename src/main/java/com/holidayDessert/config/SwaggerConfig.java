@@ -26,7 +26,7 @@ public class SwaggerConfig {
 	@Bean
 	public Docket swaggerSetting() {
 		return new Docket(DocumentationType.SWAGGER_2).apiInfo(apiInfo()).select()
-				.apis(RequestHandlerSelectors.basePackage("com.tw.AnthonyFu.controller")).paths(PathSelectors.any())
+				.apis(RequestHandlerSelectors.basePackage("com.holidayDessert.controller")).paths(PathSelectors.any())
 				.build().securitySchemes(securitySchemes()).securityContexts(securityContexts());
 	}
 

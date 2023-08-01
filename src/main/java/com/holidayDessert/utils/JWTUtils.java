@@ -12,7 +12,7 @@ public class JWTUtils {
 	private static final String SIGN = "F!@#$%^&*ADSA";
 
 	/*
-	 * 生成token header.payload.sing
+	 * 生成token header.payload.sign
 	 */
 	public static String getToken(Map<String, String> map) {
 		Calendar instance = Calendar.getInstance();
