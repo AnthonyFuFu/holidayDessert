@@ -16,7 +16,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.filter.GenericFilterBean;
 
-import com.holidayDessert.util.UserAgentUtils;
+import com.holidayDessert.utils.UserAgentUtils;
 
 public class SessionCookieFilter extends GenericFilterBean {
 

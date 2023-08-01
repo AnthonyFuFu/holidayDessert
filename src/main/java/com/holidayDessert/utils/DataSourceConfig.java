@@ -1,4 +1,4 @@
-package com.holidayDessert.util;
+package com.holidayDessert.utils;
 
 import javax.sql.DataSource;
 
