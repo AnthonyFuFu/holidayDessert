@@ -128,16 +128,23 @@ public class holidayDessertController {
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		
 		Authority authority = new Authority();
+		authority.setEmpId("101");
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		System.out.println(authorityList);
 
 		Banner banner = new Banner();
-		List<Map<String, Object>> bannerList = bannerService.list(banner);
+		banner.setNewsId("101");
+		List<Map<String, Object>> bannerList = bannerService.frontRandList(banner);
 		System.out.println(bannerList);
 
 		Cart cart = new Cart();
+		cart.setMemId("201");
+		List<Map<String, Object>> frontList = cartService.frontList(cart);
+		System.out.println(frontList);
+		cart.setSearchText("s9017611x");
 		List<Map<String, Object>> cartList = cartService.list(cart);
-		System.out.println(cartList);
+		Integer cartCount = cartService.count(cart);
+		System.out.println(cartCount+":"+cartList);
 
 		CompanyInformation companyInformation = new CompanyInformation();
 		List<Map<String, Object>> companyInformationList = companyInformationService.list(companyInformation);

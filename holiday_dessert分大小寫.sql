@@ -81,25 +81,27 @@ CREATE TABLE emp_function(
 FUNC_ID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 FUNC_NAME VARCHAR(40) NOT NULL,
 FUNC_LAYER VARCHAR(5),
+FUNC_PARENT_ID VARCHAR(5),
 FUNC_LINK VARCHAR(100),
 FUNC_STATUS TINYINT(1) NOT NULL default '1',
 FUNC_ICON VARCHAR(50)
 );
-INSERT INTO emp_function(FUNC_NAME,FUNC_LAYER,FUNC_LINK)  
-VALUES  ('客服聊天紀錄管理','1','/admin/message/list'),
-		('商品管理','1','/admin/product/list');
+INSERT INTO emp_function(FUNC_NAME,FUNC_LAYER,FUNC_PARENT_ID,FUNC_LINK)  
+VALUES  ('客服聊天紀錄管理','1','0','/admin/message/list'),
+		('商品管理','1','0','/admin/product/list');
         
 -- 管理員權限 --
  CREATE TABLE authority(
 EMP_ID INT NOT NULL,
 FUNC_ID INT NOT NULL,
+AUTH_STATUS TINYINT(1) NOT NULL default '1',
 CONSTRAINT authority_employee_FK FOREIGN KEY (EMP_ID) references employee(EMP_ID),
 CONSTRAINT authority_emp_function_FK FOREIGN KEY (FUNC_ID) references emp_function(FUNC_ID), 
 CONSTRAINT PK_authority_emp_ID_FUNC_ID PRIMARY KEY (EMP_ID, FUNC_ID)
 );
-INSERT INTO authority(EMP_ID, FUNC_ID)
-VALUES  (101, 1),
-		(101,2);
+INSERT INTO authority(EMP_ID, FUNC_ID, AUTH_STATUS)
+VALUES  (101, 1, 1),
+		(101, 2, 1);
 
 -- 最新消息 --
 create table news(

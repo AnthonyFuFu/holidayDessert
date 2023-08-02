@@ -22,18 +22,8 @@ public class BannerServiceImpl implements BannerService{
 	}
 
 	@Override
-	public int getCount(Banner banner) {
-		return bannerDao.getCount(banner);
-	}
-
-	@Override
 	public void add(Banner banner) {
 		bannerDao.add(banner);
-	}
-
-	@Override
-	public void update(Banner banner) {
-		bannerDao.update(banner);
 	}
 
 	@Override

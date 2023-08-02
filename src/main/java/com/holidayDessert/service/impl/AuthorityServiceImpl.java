@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.holidayDessert.dao.AuthorityDao;
 import com.holidayDessert.model.Authority;
+import com.holidayDessert.model.Employee;
 import com.holidayDessert.service.AuthorityService;
 
 @Service
@@ -22,19 +23,13 @@ public class AuthorityServiceImpl implements AuthorityService {
 	}
 
 	@Override
-	public void add(Authority authority) {
-		authorityDao.add(authority);
+	public void batchAdd(Employee employee, String[] empFunction) {
+		authorityDao.batchAdd(employee, empFunction);
 	}
 
 	@Override
 	public void update(Authority authority) {
 		authorityDao.update(authority);
 	}
-
-	@Override
-	public void delete(Authority authority) {
-		authorityDao.delete(authority);
-	}
 	
-
 }

@@ -2,16 +2,18 @@ package com.holidayDessert.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NonNull
 @NoArgsConstructor
 @AllArgsConstructor
-public class Cart {
+public class Cart extends Base {
 
 	private String memId;              // 會員ID
 	private String pdId;               // 商品ID

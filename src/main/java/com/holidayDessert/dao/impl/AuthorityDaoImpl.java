@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import com.holidayDessert.dao.AuthorityDao;
 import com.holidayDessert.model.Authority;
+import com.holidayDessert.model.Employee;
 
 @Repository
 public class AuthorityDaoImpl implements AuthorityDao{
@@ -19,13 +20,17 @@ public class AuthorityDaoImpl implements AuthorityDao{
 	
 	@Override
 	public List<Map<String, Object>> list(Authority authority) {
-
-		String sql = " SELECT * FROM holiday_dessert.authority ";
-
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
-		list = jdbcTemplate.queryForList(sql);
-
+		
+		List<Object> args = new ArrayList<Object>();
+		
+		String sql = " SELECT a.EMP_ID, a.AUTH_STATUS, ef.* FROM holiday_dessert.authority a "
+				   + " LEFT JOIN holiday_dessert.emp_function ef on ef.FUNC_ID = a.FUNC_ID "
+				   + " WHERE EMP_ID = ? "
+				   + " AND AUTH_STATUS = 1 ";
+		
+		args.add(authority.getEmpId());
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
 		if (list != null && list.size() > 0) {
 			return list;
 		} else {
@@ -35,21 +40,45 @@ public class AuthorityDaoImpl implements AuthorityDao{
 	}
 
 	@Override
-	public void add(Authority authority) {
-		// TODO Auto-generated method stub
+	public void batchAdd(Employee employee, String[] empFunction) {
+		
+		List<Object> args = new ArrayList<Object>();
+		
+		String sql = " INSERT INTO holiday_dessert.authority "
+				   + " (EMP_ID, FUNC_ID) ";
+		
+		if(empFunction.length > 0) {
+			for(int i=0; i<empFunction.length; i++) {
+				if(i == 0) {
+					sql += " VALUES(?, ?) ";
+				} else {
+					sql += " ,(?, ?) ";
+				}
+				args.add(employee.getEmpId());
+				args.add(empFunction[i]);
+			}
+		}
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
 	@Override
 	public void update(Authority authority) {
-		// TODO Auto-generated method stub
+
+		List<Object> args = new ArrayList<Object>();
+		
+		String sql = " UPDATE holiday_dessert.authority "
+				   + " SET AUTH_STATUS = ? "
+				   + " WHERE EMP_ID = ? "
+				   + " AND FUNC_ID = ? ";
+		
+		args.add(authority.getAuthStatus());
+		args.add(authority.getEmpId());
+		args.add(authority.getFuncId());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
-
-	@Override
-	public void delete(Authority authority) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 }

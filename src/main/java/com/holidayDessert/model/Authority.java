@@ -15,5 +15,6 @@ public class Authority {
 
 	private String empId;              // 管理員ID
 	private String funcId;             // 功能ID
-
+	private String authStatus;         // 權限狀態
+	
 }
