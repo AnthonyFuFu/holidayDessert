@@ -21,4 +21,29 @@ public class CompanyInformationServiceImpl implements CompanyInformationService 
 		return companyInformationDao.list(companyInformation);
 	}
 
+	@Override
+	public int getCount(CompanyInformation companyInformation) {
+		return companyInformationDao.getCount(companyInformation);
+	}
+
+	@Override
+	public void add(CompanyInformation companyInformation) {
+		companyInformationDao.add(companyInformation);
+	}
+
+	@Override
+	public void update(CompanyInformation companyInformation) {
+		companyInformationDao.update(companyInformation);
+	}
+
+	@Override
+	public void delete(CompanyInformation companyInformation) {
+		companyInformationDao.delete(companyInformation);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(CompanyInformation companyInformation) {
+		return companyInformationDao.frontList(companyInformation);
+	}
+
 }

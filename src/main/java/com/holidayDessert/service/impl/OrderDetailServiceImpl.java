@@ -21,4 +21,29 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 		return orderDetailDao.list(orderDetail);
 	}
 
+	@Override
+	public int getCount(OrderDetail orderDetail) {
+		return orderDetailDao.getCount(orderDetail);
+	}
+
+	@Override
+	public void update(OrderDetail orderDetail) {
+		orderDetailDao.update(orderDetail);
+	}
+
+	@Override
+	public void delete(OrderDetail orderDetail) {
+		orderDetailDao.delete(orderDetail);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(OrderDetail orderDetail) {
+		return orderDetailDao.frontList(orderDetail);
+	}
+
+	@Override
+	public void add(OrderDetail orderDetail) {
+		orderDetailDao.add(orderDetail);
+	}
+
 }

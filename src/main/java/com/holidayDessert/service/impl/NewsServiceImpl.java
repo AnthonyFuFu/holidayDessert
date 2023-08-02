@@ -21,4 +21,34 @@ public class NewsServiceImpl implements NewsService {
 		return newsDao.list(news);
 	}
 
+	@Override
+	public int getCount(News news) {
+		return newsDao.getCount(news);
+	}
+
+	@Override
+	public void add(News news) {
+		newsDao.add(news);
+	}
+
+	@Override
+	public void update(News news) {
+		newsDao.update(news);
+	}
+
+	@Override
+	public void delete(News news) {
+		newsDao.delete(news);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(News news) {
+		return newsDao.frontList(news);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandList(News news) {
+		return newsDao.frontRandList(news);
+	}
+
 }

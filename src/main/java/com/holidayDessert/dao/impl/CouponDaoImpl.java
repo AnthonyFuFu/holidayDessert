@@ -34,4 +34,34 @@ public class CouponDaoImpl implements CouponDao {
 		
 	}
 
+	@Override
+	public int getCount(Coupon coupon) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(Coupon coupon) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Coupon coupon) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Coupon coupon) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(Coupon coupon) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

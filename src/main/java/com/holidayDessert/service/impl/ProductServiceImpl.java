@@ -21,4 +21,39 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.list(product);
 	}
 
+	@Override
+	public int getCount(Product product) {
+		return productDao.getCount(product);
+	}
+
+	@Override
+	public void add(Product product) {
+		productDao.add(product);
+	}
+
+	@Override
+	public void update(Product product) {
+		productDao.update(product);
+	}
+
+	@Override
+	public void delete(Product product) {
+		productDao.delete(product);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontNewList(Product product) {
+		return productDao.frontNewList(product);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontTypeList(Product product) {
+		return productDao.frontTypeList(product);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandTypeList(Product product) {
+		return productDao.frontRandTypeList(product);
+	}
+
 }

@@ -34,4 +34,34 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
 
 	}
 
+	@Override
+	public int getCount(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void update(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void add(OrderDetail orderDetail) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

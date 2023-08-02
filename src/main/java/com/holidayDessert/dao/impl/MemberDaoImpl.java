@@ -34,4 +34,34 @@ public class MemberDaoImpl implements MemberDao {
 
 	}
 
+	@Override
+	public int getCount(Member member) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void update(Member member) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Member member) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void register(Member member) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void edit(Member member) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

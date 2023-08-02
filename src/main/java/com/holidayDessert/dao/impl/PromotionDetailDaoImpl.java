@@ -34,4 +34,46 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 
 	}
 
+	@Override
+	public int getCount(PromotionDetail promotionDetail) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(PromotionDetail promotionDetail) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(PromotionDetail promotionDetail) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(PromotionDetail promotionDetail) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> frontNewList(PromotionDetail promotionDetail) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> frontTypeList(PromotionDetail promotionDetail) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandTypeList(PromotionDetail promotionDetail) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

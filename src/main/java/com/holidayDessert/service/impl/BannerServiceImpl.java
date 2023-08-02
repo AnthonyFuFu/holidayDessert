@@ -20,5 +20,30 @@ public class BannerServiceImpl implements BannerService{
 	public List<Map<String, Object>> list(Banner banner) {
 		return bannerDao.list(banner);
 	}
+
+	@Override
+	public int getCount(Banner banner) {
+		return bannerDao.getCount(banner);
+	}
+
+	@Override
+	public void add(Banner banner) {
+		bannerDao.add(banner);
+	}
+
+	@Override
+	public void update(Banner banner) {
+		bannerDao.update(banner);
+	}
+
+	@Override
+	public void delete(Banner banner) {
+		bannerDao.delete(banner);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandList(Banner banner) {
+		return bannerDao.frontRandList(banner);
+	}
 	
 }

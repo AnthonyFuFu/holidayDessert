@@ -21,4 +21,29 @@ public class ProductCollectionServiceImpl implements ProductCollectionService {
 		return productCollectionDao.list(productCollection);
 	}
 
+	@Override
+	public int getCount(ProductCollection productCollection) {
+		return productCollectionDao.getCount(productCollection);
+	}
+
+	@Override
+	public void add(ProductCollection productCollection) {
+		productCollectionDao.add(productCollection);
+	}
+
+	@Override
+	public void update(ProductCollection productCollection) {
+		productCollectionDao.update(productCollection);
+	}
+
+	@Override
+	public void delete(ProductCollection productCollection) {
+		productCollectionDao.delete(productCollection);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(ProductCollection productCollection) {
+		return productCollectionDao.frontList(productCollection);
+	}
+
 }

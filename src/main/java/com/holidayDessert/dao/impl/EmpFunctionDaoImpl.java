@@ -34,4 +34,22 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 		
 	}
 
+	@Override
+	public void add(EmpFunction empFunction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(EmpFunction empFunction) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(EmpFunction empFunction) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

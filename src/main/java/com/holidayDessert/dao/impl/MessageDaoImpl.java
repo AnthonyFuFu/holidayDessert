@@ -33,4 +33,16 @@ public class MessageDaoImpl implements MessageDao {
 
 	}
 
+	@Override
+	public void edit(Message message) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Message message) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

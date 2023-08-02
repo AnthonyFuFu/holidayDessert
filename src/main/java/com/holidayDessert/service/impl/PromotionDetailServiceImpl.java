@@ -21,4 +21,39 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
 		return promotionDetailDao.list(promotionDetail);
 	}
 
+	@Override
+	public int getCount(PromotionDetail promotionDetail) {
+		return promotionDetailDao.getCount(promotionDetail);
+	}
+
+	@Override
+	public void add(PromotionDetail promotionDetail) {
+		promotionDetailDao.add(promotionDetail);
+	}
+
+	@Override
+	public void update(PromotionDetail promotionDetail) {
+		promotionDetailDao.update(promotionDetail);
+	}
+
+	@Override
+	public void delete(PromotionDetail promotionDetail) {
+		promotionDetailDao.delete(promotionDetail);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontNewList(PromotionDetail promotionDetail) {
+		return promotionDetailDao.frontNewList(promotionDetail);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontTypeList(PromotionDetail promotionDetail) {
+		return promotionDetailDao.frontTypeList(promotionDetail);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandTypeList(PromotionDetail promotionDetail) {
+		return promotionDetailDao.frontRandTypeList(promotionDetail);
+	}
+
 }

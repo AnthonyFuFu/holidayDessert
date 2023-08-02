@@ -34,4 +34,28 @@ public class CartDaoImpl implements CartDao {
 
 	}
 
+	@Override
+	public int getCount(Cart cart) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(Cart cart) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Cart cart) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Cart cart) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

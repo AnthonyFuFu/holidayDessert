@@ -34,4 +34,28 @@ public class MainOrderDaoImpl implements MainOrderDao {
 
 	}
 
+	@Override
+	public int getCount(MainOrder mainOrder) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(MainOrder mainOrder) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(MainOrder mainOrder) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(MainOrder mainOrder) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

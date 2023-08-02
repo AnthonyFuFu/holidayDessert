@@ -34,4 +34,22 @@ public class AuthorityDaoImpl implements AuthorityDao{
 
 	}
 
+	@Override
+	public void add(Authority authority) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Authority authority) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Authority authority) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

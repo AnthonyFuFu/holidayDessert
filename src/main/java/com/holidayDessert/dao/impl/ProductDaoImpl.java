@@ -34,4 +34,46 @@ public class ProductDaoImpl implements ProductDao {
 
 	}
 
+	@Override
+	public int getCount(Product product) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(Product product) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> frontNewList(Product product) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> frontTypeList(Product product) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandTypeList(Product product) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

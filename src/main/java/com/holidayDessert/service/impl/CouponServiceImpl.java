@@ -20,5 +20,30 @@ public class CouponServiceImpl implements CouponService{
 	public List<Map<String, Object>> list(Coupon coupon) {
 		return couponDao.list(coupon);
 	}
+
+	@Override
+	public int getCount(Coupon coupon) {
+		return couponDao.getCount(coupon);
+	}
+
+	@Override
+	public void add(Coupon coupon) {
+		couponDao.add(coupon);
+	}
+
+	@Override
+	public void update(Coupon coupon) {
+		couponDao.update(coupon);
+	}
+
+	@Override
+	public void delete(Coupon coupon) {
+		couponDao.delete(coupon);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(Coupon coupon) {
+		return couponDao.frontList(coupon);
+	}
 	
 }

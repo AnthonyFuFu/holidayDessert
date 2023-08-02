@@ -21,4 +21,14 @@ public class MessageServiceImpl implements MessageService {
 		return messageDao.list(message);
 	}
 
+	@Override
+	public void edit(Message message) {
+		messageDao.edit(message);
+	}
+
+	@Override
+	public void delete(Message message) {
+		messageDao.delete(message);
+	}
+
 }

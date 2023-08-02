@@ -20,5 +20,21 @@ public class AuthorityServiceImpl implements AuthorityService {
 	public List<Map<String, Object>> list(Authority authority) {
 		return authorityDao.list(authority);
 	}
+
+	@Override
+	public void add(Authority authority) {
+		authorityDao.add(authority);
+	}
+
+	@Override
+	public void update(Authority authority) {
+		authorityDao.update(authority);
+	}
+
+	@Override
+	public void delete(Authority authority) {
+		authorityDao.delete(authority);
+	}
 	
+
 }

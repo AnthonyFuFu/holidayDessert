@@ -6,7 +6,16 @@ import java.util.Map;
 import com.holidayDessert.model.News;
 
 public interface NewsService {
-
+	
+	// back
 	public List<Map<String, Object>> list(News news);
-
+	public int getCount(News news);
+	public void add(News news);
+	public void update(News news);
+	public void delete(News news);
+	
+	// front
+	public List<Map<String, Object>> frontList(News news);
+	public List<Map<String, Object>> frontRandList(News news);
+		
 }

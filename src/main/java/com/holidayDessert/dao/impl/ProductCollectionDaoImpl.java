@@ -34,4 +34,34 @@ public class ProductCollectionDaoImpl implements ProductCollectionDao {
 
 	}
 
+	@Override
+	public int getCount(ProductCollection productCollection) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(ProductCollection productCollection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(ProductCollection productCollection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(ProductCollection productCollection) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(ProductCollection productCollection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

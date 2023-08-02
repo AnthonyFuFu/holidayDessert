@@ -21,4 +21,29 @@ public class MemberServiceImpl implements MemberService {
 		return memberDao.list(member);
 	}
 
+	@Override
+	public int getCount(Member member) {
+		return memberDao.getCount(member);
+	}
+
+	@Override
+	public void update(Member member) {
+		memberDao.update(member);
+	}
+
+	@Override
+	public void delete(Member member) {
+		memberDao.delete(member);
+	}
+
+	@Override
+	public void register(Member member) {
+		memberDao.register(member);
+	}
+
+	@Override
+	public void edit(Member member) {
+		memberDao.edit(member);
+	}
+
 }

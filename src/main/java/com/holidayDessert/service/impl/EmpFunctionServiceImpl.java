@@ -21,4 +21,19 @@ public class EmpFunctionServiceImpl implements EmpFunctionService {
 		return empFunctionDao.list(empFunction);
 	}
 
+	@Override
+	public void add(EmpFunction empFunction) {
+		empFunctionDao.add(empFunction);
+	}
+
+	@Override
+	public void update(EmpFunction empFunction) {
+		empFunctionDao.update(empFunction);
+	}
+
+	@Override
+	public void delete(EmpFunction empFunction) {
+		empFunctionDao.delete(empFunction);
+	}
+
 }

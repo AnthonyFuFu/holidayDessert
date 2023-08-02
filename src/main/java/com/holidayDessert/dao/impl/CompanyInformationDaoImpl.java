@@ -34,4 +34,34 @@ public class CompanyInformationDaoImpl implements CompanyInformationDao {
 
 	}
 
+	@Override
+	public int getCount(CompanyInformation companyInformation) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void add(CompanyInformation companyInformation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void update(CompanyInformation companyInformation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void delete(CompanyInformation companyInformation) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> frontList(CompanyInformation companyInformation) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
