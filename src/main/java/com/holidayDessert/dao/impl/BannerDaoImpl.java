@@ -20,7 +20,7 @@ public class BannerDaoImpl implements BannerDao {
 	@Override
 	public List<Map<String, Object>> list(Banner banner) {
 
-		String sql = " select * from holiday_dessert.banner ";
+		String sql = " SELECT * FROM holiday_dessert.banner ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

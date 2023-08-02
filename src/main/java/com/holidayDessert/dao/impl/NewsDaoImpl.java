@@ -20,7 +20,7 @@ public class NewsDaoImpl implements NewsDao {
 	@Override
 	public List<Map<String, Object>> list(News news) {
 
-		String sql = " select * from holiday_dessert.news ";
+		String sql = " SELECT * FROM holiday_dessert.news ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

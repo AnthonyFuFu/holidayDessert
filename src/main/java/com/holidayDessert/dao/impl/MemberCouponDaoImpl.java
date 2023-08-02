@@ -20,7 +20,7 @@ public class MemberCouponDaoImpl implements MemberCouponDao {
 	@Override
 	public List<Map<String, Object>> list(MemberCoupon memberCoupon) {
 
-		String sql = " select * from holiday_dessert.member_coupon ";
+		String sql = " SELECT * FROM holiday_dessert.member_coupon ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

@@ -20,7 +20,7 @@ public class ProductDaoImpl implements ProductDao {
 	@Override
 	public List<Map<String, Object>> list(Product product) {
 
-		String sql = " select * from holiday_dessert.product ";
+		String sql = " SELECT * FROM holiday_dessert.product ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

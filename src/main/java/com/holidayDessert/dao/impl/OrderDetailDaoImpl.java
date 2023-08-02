@@ -20,7 +20,7 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
 	@Override
 	public List<Map<String, Object>> list(OrderDetail orderDetail) {
 
-		String sql = " select * from holiday_dessert.order_detail ";
+		String sql = " SELECT * FROM holiday_dessert.order_detail ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

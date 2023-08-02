@@ -133,7 +133,6 @@ public class holidayDessertController {
 
 	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
 	@ApiOperation(value = "查詢首頁", httpMethod = "GET", notes = "進行查詢首頁")
-//	@GetMapping("/index")
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		
 		Authority authority = new Authority();

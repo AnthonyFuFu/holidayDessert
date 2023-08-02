@@ -20,7 +20,7 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public List<Map<String, Object>> list(Member member) {
 
-		String sql = " select * from holiday_dessert.member ";
+		String sql = " SELECT * FROM holiday_dessert.member ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

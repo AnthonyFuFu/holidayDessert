@@ -20,7 +20,7 @@ public class MainOrderDaoImpl implements MainOrderDao {
 	@Override
 	public List<Map<String, Object>> list(MainOrder mainOrder) {
 
-		String sql = " select * from holiday_dessert.main_order ";
+		String sql = " SELECT * FROM holiday_dessert.main_order ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

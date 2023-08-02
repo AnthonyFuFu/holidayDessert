@@ -19,7 +19,7 @@ public class MessageDaoImpl implements MessageDao {
 	@Override
 	public List<Map<String, Object>> list(Message message) {
 
-		String sql = " select * from holiday_dessert.message ";
+		String sql = " SELECT * FROM holiday_dessert.message ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

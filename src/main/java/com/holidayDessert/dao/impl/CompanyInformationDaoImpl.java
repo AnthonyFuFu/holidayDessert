@@ -20,7 +20,7 @@ public class CompanyInformationDaoImpl implements CompanyInformationDao {
 	@Override
 	public List<Map<String, Object>> list(CompanyInformation companyInformation) {
 
-		String sql = " select * from holiday_dessert.company_information ";
+		String sql = " SELECT * FROM holiday_dessert.company_information ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

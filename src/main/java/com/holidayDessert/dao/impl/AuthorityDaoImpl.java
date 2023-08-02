@@ -20,7 +20,7 @@ public class AuthorityDaoImpl implements AuthorityDao{
 	@Override
 	public List<Map<String, Object>> list(Authority authority) {
 
-		String sql = " select * from holiday_dessert.authority ";
+		String sql = " SELECT * FROM holiday_dessert.authority ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

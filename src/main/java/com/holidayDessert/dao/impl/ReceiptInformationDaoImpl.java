@@ -20,7 +20,7 @@ public class ReceiptInformationDaoImpl implements ReceiptInformationDao {
 	@Override
 	public List<Map<String, Object>> list(ReceiptInformation receiptInformation) {
 
-		String sql = " select * from holiday_dessert.receipt_information ";
+		String sql = " SELECT * FROM holiday_dessert.receipt_information ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

@@ -20,7 +20,7 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 	@Override
 	public List<Map<String, Object>> list(PromotionDetail promotionDetail) {
 
-		String sql = " select * from holiday_dessert.promotion_detail ";
+		String sql = " SELECT * FROM holiday_dessert.promotion_detail ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

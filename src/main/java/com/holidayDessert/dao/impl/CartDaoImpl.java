@@ -20,7 +20,7 @@ public class CartDaoImpl implements CartDao {
 	@Override
 	public List<Map<String, Object>> list(Cart cart) {
 
-		String sql = " select * from holiday_dessert.cart ";
+		String sql = " SELECT * FROM holiday_dessert.cart ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

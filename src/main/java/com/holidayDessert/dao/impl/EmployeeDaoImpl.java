@@ -20,7 +20,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public List<Map<String, Object>> list(Employee employee) {
 		
-		String sql = " select * from holiday_dessert.employee ";
+		String sql = " SELECT * FROM holiday_dessert.employee ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

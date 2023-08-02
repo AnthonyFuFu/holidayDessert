@@ -20,7 +20,7 @@ public class ProductPicDaoImpl implements ProductPicDao {
 	@Override
 	public List<Map<String, Object>> list(ProductPic productPic) {
 
-		String sql = " select * from holiday_dessert.product_pic ";
+		String sql = " SELECT * FROM holiday_dessert.product_pic ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 

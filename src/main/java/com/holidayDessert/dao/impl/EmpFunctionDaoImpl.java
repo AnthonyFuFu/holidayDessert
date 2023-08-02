@@ -20,7 +20,7 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 	@Override
 	public List<Map<String, Object>> list(EmpFunction empFunction) {
 		
-		String sql = " select * from holiday_dessert.emp_function ";
+		String sql = " SELECT * FROM holiday_dessert.emp_function ";
 
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
 
