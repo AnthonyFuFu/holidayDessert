@@ -45,14 +45,14 @@ public class AuthorityDaoImpl implements AuthorityDao{
 		List<Object> args = new ArrayList<Object>();
 		
 		String sql = " INSERT INTO holiday_dessert.authority "
-				   + " (EMP_ID, FUNC_ID) ";
+				   + " (EMP_ID, FUNC_ID, AUTH_STATUS) ";
 		
 		if(empFunction.length > 0) {
 			for(int i=0; i<empFunction.length; i++) {
 				if(i == 0) {
-					sql += " VALUES(?, ?) ";
+					sql += " VALUES(?, ?, 1) ";
 				} else {
-					sql += " ,(?, ?) ";
+					sql += " ,(?, ?, 1) ";
 				}
 				args.add(employee.getEmpId());
 				args.add(empFunction[i]);

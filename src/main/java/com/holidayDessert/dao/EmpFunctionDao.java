@@ -11,6 +11,6 @@ public interface EmpFunctionDao {
 	public List<Map<String, Object>> list(EmpFunction empFunction);
 	public void add(EmpFunction empFunction);
 	public void update(EmpFunction empFunction);
-	public void delete(EmpFunction empFunction);
+	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction);
 	
 }

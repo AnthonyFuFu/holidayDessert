@@ -70,6 +70,7 @@ public class CartDaoImpl implements CartDao {
 
 	@Override
 	public Integer count(Cart cart) {
+		
 		List<Object> args = new ArrayList<Object>();
 		
 		String sql = " SELECT COUNT(*) AS COUNT "
@@ -130,6 +131,7 @@ public class CartDaoImpl implements CartDao {
 
 	@Override
 	public void add(Cart cart) {
+		
 		String sql = " INSERT INTO holiday_dessert.cart "
 				   + " (MEM_ID, PD_ID, CART_PD_QUANTITY) "
 				   + " VALUES(?, ?, ?) ";

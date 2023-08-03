@@ -29,25 +29,35 @@ public class MemberCouponServiceImpl implements MemberCouponService {
 	}
 
 	@Override
-	public void update(MemberCoupon memberCoupon) {
-		memberCouponDao.update(memberCoupon);
+	public void batchAddOneDayCoupon(Coupon coupon, String[] member) {
+		memberCouponDao.batchAddOneDayCoupon(coupon, member);
 	}
 
 	@Override
-	public void delete(MemberCoupon memberCoupon) {
-		memberCouponDao.delete(memberCoupon);
+	public void batchAddOneWeekCoupon(Coupon coupon, String[] member) {
+		memberCouponDao.batchAddOneWeekCoupon(coupon, member);
+	}
+	
+	@Override
+	public void useCoupon(MemberCoupon memberCoupon) {
+		memberCouponDao.useCoupon(memberCoupon);
 	}
 
 	@Override
-	public void batchAdd(Coupon coupon, String[] member) {
-		memberCouponDao.batchAdd(coupon, member);
+	public void receiveOneDayCoupon(Coupon coupon, Member member) {
+		memberCouponDao.receiveOneDayCoupon(coupon, member);
 	}
 
 	@Override
-	public void receiveCoupon(Coupon coupon, Member member) {
-		memberCouponDao.receiveCoupon(coupon, member);
+	public void receiveOneWeekCoupon(Coupon coupon, Member member) {
+		memberCouponDao.receiveOneWeekCoupon(coupon, member);
 	}
-
+	
+	@Override
+	public void receiveOneMonthCoupon(Coupon coupon, Member member) {
+		memberCouponDao.receiveOneMonthCoupon(coupon, member);
+	}
+	
 	@Override
 	public List<Map<String, Object>> listMemberCoupon(MemberCoupon memberCoupon) {
 		return memberCouponDao.listMemberCoupon(memberCoupon);

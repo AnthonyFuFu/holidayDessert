@@ -12,12 +12,14 @@ public interface MemberCouponService {
 	// back
 	public List<Map<String, Object>> list(MemberCoupon memberCoupon);
 	public int getCount(MemberCoupon memberCoupon);
-	public void update(MemberCoupon memberCoupon);
-	public void delete(MemberCoupon memberCoupon);
-	public void batchAdd(Coupon coupon, String[] member);
+	public void batchAddOneDayCoupon(Coupon coupon, String[] member);
+	public void batchAddOneWeekCoupon(Coupon coupon, String[] member);
 	
 	// front
-	public void receiveCoupon(Coupon coupon, Member member);
+	public void useCoupon(MemberCoupon memberCoupon);
+	public void receiveOneDayCoupon(Coupon coupon, Member member);
+	public void receiveOneWeekCoupon(Coupon coupon, Member member);
+	public void receiveOneMonthCoupon(Coupon coupon, Member member);
 	public List<Map<String, Object>> listMemberCoupon(MemberCoupon memberCoupon);
 	
 }

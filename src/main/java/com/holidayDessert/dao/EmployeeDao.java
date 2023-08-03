@@ -12,6 +12,6 @@ public interface EmployeeDao {
 	public int getCount(Employee employee);
 	public void add(Employee employee);
 	public void update(Employee employee);
-	public void delete(Employee employee);
+	public void resign(Employee employee);
 	
 }

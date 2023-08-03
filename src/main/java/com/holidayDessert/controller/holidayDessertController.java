@@ -127,33 +127,45 @@ public class holidayDessertController {
 	@ApiOperation(value = "查詢首頁", httpMethod = "GET", notes = "進行查詢首頁")
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		
+		// 權限
 		Authority authority = new Authority();
 		authority.setEmpId("101");
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		System.out.println(authorityList);
-
+		
+		// 公告圖片
 		Banner banner = new Banner();
 		banner.setNewsId("101");
 		List<Map<String, Object>> bannerList = bannerService.frontRandList(banner);
 		System.out.println(bannerList);
-
+		
+		// 購物車
 		Cart cart = new Cart();
 		cart.setMemId("201");
-		List<Map<String, Object>> frontList = cartService.frontList(cart);
-		System.out.println(frontList);
-		cart.setSearchText("s9017611x");
+		List<Map<String, Object>> cartFrontList = cartService.frontList(cart);
+		System.out.println(cartFrontList);
+		cart.setSearchText("s9017611");
 		List<Map<String, Object>> cartList = cartService.list(cart);
 		Integer cartCount = cartService.count(cart);
 		System.out.println(cartCount+":"+cartList);
-
+		
+		// 公司資訊
 		CompanyInformation companyInformation = new CompanyInformation();
+		companyInformation.setSearchText("X假日甜點");
 		List<Map<String, Object>> companyInformationList = companyInformationService.list(companyInformation);
-		System.out.println(companyInformationList);
-
+		Integer companyInformationCount = companyInformationService.getCount(companyInformation);
+		System.out.println(companyInformationCount+":"+companyInformationList);
+		List<Map<String, Object>> companyInformationFfrontList = companyInformationService.frontList(companyInformation);
+		System.out.println(companyInformationFfrontList);
+		
+		// 優惠券
 		Coupon coupon = new Coupon();
+		coupon.setSearchText("50");
 		List<Map<String, Object>> couponList = couponService.list(coupon);
-		System.out.println(couponList);
-
+		Integer couponCount = couponService.getCount(coupon);
+		System.out.println(couponCount+":"+couponList);
+		
+		// 後臺功能
 		EmpFunction empFunction = new EmpFunction();
 		List<Map<String, Object>> empFunctionList = empFunctionService.list(empFunction);
 		System.out.println(empFunctionList);
@@ -163,16 +175,27 @@ public class holidayDessertController {
 		System.out.println(employeeList);
 
 		MainOrder mainOrder = new MainOrder();
+		mainOrder.setSearchText("50");
 		List<Map<String, Object>> mainOrderList = mainOrderService.list(mainOrder);
-		System.out.println(mainOrderList);
-
-		Member member = new Member();
-		List<Map<String, Object>> memberList = memberService.list(member);
-		System.out.println(memberList);
+		Integer mainOrderCount = mainOrderService.getCount(mainOrder);
+		System.out.println(mainOrderCount+":"+mainOrderList);
 
 		MemberCoupon memberCoupon = new MemberCoupon();
+		memberCoupon.setSearchText("50");
 		List<Map<String, Object>> memberCouponList = memberCouponService.list(memberCoupon);
-		System.out.println(memberCouponList);
+		Integer memberCouponCount = memberCouponService.getCount(memberCoupon);
+		System.out.println(memberCouponCount+":"+memberCouponList);
+		Member anthonyFu = new Member();
+		anthonyFu.setMemId("201");
+		memberCoupon.setMemId(anthonyFu.getMemId());
+		List<Map<String, Object>> frontMemberCouponList = memberCouponService.listMemberCoupon(memberCoupon);
+		System.out.println("anthonyFu:"+frontMemberCouponList);
+
+		Member member = new Member();
+		member.setSearchText("嘉");
+		List<Map<String, Object>> memberList = memberService.list(member);
+		Integer memberCount = memberService.getCount(member);
+		System.out.println(memberCount+":"+memberList);
 
 		Message message = new Message();
 		List<Map<String, Object>> messageList = messageService.list(message);

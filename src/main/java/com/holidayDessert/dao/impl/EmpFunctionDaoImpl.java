@@ -22,10 +22,8 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 		
 		String sql = " SELECT * FROM holiday_dessert.emp_function ";
 
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
-		list = jdbcTemplate.queryForList(sql);
-
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		
 		if (list != null && list.size() > 0) {
 			return list;
 		} else {
@@ -36,19 +34,49 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 
 	@Override
 	public void add(EmpFunction empFunction) {
-		// TODO Auto-generated method stub
+
+		String sql = " INSERT INTO holiday_dessert.emp_function "
+				   + " (FUNC_NAME, FUNC_LAYER, FUNC_PARENT_ID, FUNC_LINK, FUNC_STATUS, FUNC_ICON) "
+				   + " VALUES(?, ?, ?, ?, ?, ?) ";
+		
+		jdbcTemplate.update(sql, new Object[] {empFunction.getFuncName(), empFunction.getFuncLayer(), empFunction.getFuncParentId(), empFunction.getFuncLink(), empFunction.getFuncStatus(), empFunction.getFuncIcon() });
 		
 	}
 
 	@Override
 	public void update(EmpFunction empFunction) {
-		// TODO Auto-generated method stub
+
+		List<Object> args = new ArrayList<Object>();
+		
+		String sql = " UPDATE holiday_dessert.emp_function "
+				   + " SET FUNC_NAME = ?, FUNC_LAYER = ?, FUNC_PARENT_ID = ?, FUNC_LINK = ?, FUNC_STATUS = ?, FUNC_ICON = ? "
+				   + " WHERE FUNC_ID = ? ";
+		
+		args.add(empFunction.getFuncName());
+		args.add(empFunction.getFuncLayer());
+		args.add(empFunction.getFuncParentId());
+		args.add(empFunction.getFuncLink());
+		args.add(empFunction.getFuncStatus());
+		args.add(empFunction.getFuncIcon());
+		args.add(empFunction.getFuncId());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
 	@Override
-	public void delete(EmpFunction empFunction) {
-		// TODO Auto-generated method stub
+	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction) {
+
+		String sql = " SELECT FUNC_ID FROM holiday_dessert.emp_function "
+				   + " WHERE FUNC_STATUS = 1 ";
+
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
 		
 	}
 

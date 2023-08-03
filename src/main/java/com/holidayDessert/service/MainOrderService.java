@@ -11,7 +11,6 @@ public interface MainOrderService {
 	public List<Map<String, Object>> list(MainOrder mainOrder);
 	public int getCount(MainOrder mainOrder);
 	public void update(MainOrder mainOrder);
-	public void delete(MainOrder mainOrder);
 	
 	// front
 	public void add(MainOrder mainOrder);

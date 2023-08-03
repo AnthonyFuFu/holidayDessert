@@ -32,11 +32,6 @@ public class MainOrderServiceImpl implements MainOrderService {
 	}
 
 	@Override
-	public void delete(MainOrder mainOrder) {
-		mainOrderDao.delete(mainOrder);
-	}
-
-	@Override
 	public void add(MainOrder mainOrder) {
 		mainOrderDao.add(mainOrder);
 	}

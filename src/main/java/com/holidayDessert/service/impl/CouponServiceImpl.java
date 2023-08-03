@@ -37,13 +37,8 @@ public class CouponServiceImpl implements CouponService{
 	}
 
 	@Override
-	public void delete(Coupon coupon) {
-		couponDao.delete(coupon);
-	}
-
-	@Override
-	public List<Map<String, Object>> frontList(Coupon coupon) {
-		return couponDao.frontList(coupon);
+	public void takeDown(Coupon coupon) {
+		couponDao.takeDown(coupon);
 	}
 	
 }

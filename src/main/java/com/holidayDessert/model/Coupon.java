@@ -2,16 +2,18 @@ package com.holidayDessert.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NonNull
 @NoArgsConstructor
 @AllArgsConstructor
-public class Coupon {
+public class Coupon extends Base {
 
 	private String cpId;               // 優惠券種類ID
 	private String cpName;             // 優惠券名稱

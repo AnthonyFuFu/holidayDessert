@@ -32,8 +32,8 @@ public class EmpFunctionServiceImpl implements EmpFunctionService {
 	}
 
 	@Override
-	public void delete(EmpFunction empFunction) {
-		empFunctionDao.delete(empFunction);
+	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction) {
+		return empFunctionDao.getIdToAuth(empFunction);
 	}
 
 }

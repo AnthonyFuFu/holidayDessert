@@ -20,12 +20,60 @@ public class MainOrderDaoImpl implements MainOrderDao {
 	@Override
 	public List<Map<String, Object>> list(MainOrder mainOrder) {
 
-		String sql = " SELECT * FROM holiday_dessert.main_order ";
+		List<Object> args = new ArrayList<Object>();
+		
+		String sql = " SELECT * FROM ( SELECT MEM_ACCOUNT, "
+				   + " CASE MEM_GENDER "
+				   + " WHEN 'm' THEN '男' "
+				   + " WHEN 'f' THEN '女' "
+				   + " END AS MEM_GENDER, "
+				   + " MEM_EMAIL, mo.*, "
+				   + " CASE WHEN mo.MEM_CP_ID IS NULL THEN '未使用' "
+				   + " ELSE (SELECT CP_NAME "
+				   + " FROM member_coupon mc "
+				   + " LEFT JOIN coupon c ON c.CP_ID = mc.CP_ID "
+				   + " WHERE mc.MEM_CP_ID = mo.MEM_CP_ID "
+				   + " LIMIT 1) "
+				   + " END AS COUPON_USED "
+				   + " FROM holiday_dessert.main_order mo"
+				   + " LEFT JOIN member m ON m.MEM_ID = mo.MEM_ID"
+				   + ") AS subquery ";
+		
+		if (mainOrder.getSearchText() != null && mainOrder.getSearchText().length() > 0) {
+			String[] searchText = mainOrder.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(MEM_ACCOUNT, ?) > 0"
+					+  " OR INSTR(MEM_GENDER, ?) > 0 "
+					+  " OR INSTR(MEM_EMAIL, ?) > 0 "
+					+  " OR INSTR(ORD_RECIPIENT, ?) > 0 "
+					+  " OR INSTR(ORD_RECIPIENT_PHONE, ?) > 0 "
+					+  " OR INSTR(ORD_ADDRESS, ?) > 0 "
+					+  " OR INSTR(ORD_NOTE, ?) > 0 "
+					+  " OR INSTR(COUPON_USED, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		
+		if (mainOrder.getStart() != null && !"".equals(mainOrder.getStart())) {
+			sql += " LIMIT " + mainOrder.getStart() + "," + mainOrder.getLength();
+		}
 
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
-		list = jdbcTemplate.queryForList(sql);
-
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
 		if (list != null && list.size() > 0) {
 			return list;
 		} else {
@@ -36,25 +84,103 @@ public class MainOrderDaoImpl implements MainOrderDao {
 
 	@Override
 	public int getCount(MainOrder mainOrder) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
-	@Override
-	public void add(MainOrder mainOrder) {
-		// TODO Auto-generated method stub
+		List<Object> args = new ArrayList<Object>();
 		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM ( "
+				   + " SELECT * FROM ( SELECT MEM_ACCOUNT, "
+				   + " CASE MEM_GENDER "
+				   + " WHEN 'm' THEN '男' "
+				   + " WHEN 'f' THEN '女' "
+				   + " END AS MEM_GENDER, "
+				   + " MEM_EMAIL, mo.*, "
+				   + " CASE WHEN mo.MEM_CP_ID IS NULL THEN '未使用' "
+				   + " ELSE (SELECT CP_NAME "
+				   + " FROM member_coupon mc "
+				   + " LEFT JOIN coupon c ON c.CP_ID = mc.CP_ID "
+				   + " WHERE mc.MEM_CP_ID = mo.MEM_CP_ID "
+				   + " LIMIT 1) "
+				   + " END AS COUPON_USED "
+				   + " FROM holiday_dessert.main_order mo"
+				   + " LEFT JOIN member m ON m.MEM_ID = mo.MEM_ID"
+				   + ") AS subquery ";
+		
+		if (mainOrder.getSearchText() != null && mainOrder.getSearchText().length() > 0) {
+			String[] searchText = mainOrder.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(MEM_ACCOUNT, ?) > 0"
+					+  " OR INSTR(MEM_GENDER, ?) > 0 "
+					+  " OR INSTR(MEM_EMAIL, ?) > 0 "
+					+  " OR INSTR(ORD_RECIPIENT, ?) > 0 "
+					+  " OR INSTR(ORD_RECIPIENT_PHONE, ?) > 0 "
+					+  " OR INSTR(ORD_ADDRESS, ?) > 0 "
+					+  " OR INSTR(ORD_NOTE, ?) > 0 "
+					+  " OR INSTR(COUPON_USED, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		sql += ") count ";
+		
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 
 	@Override
 	public void update(MainOrder mainOrder) {
-		// TODO Auto-generated method stub
+
+		List<Object> args = new ArrayList<Object>();
+		
+		String sql = " UPDATE holiday_dessert.main_order "
+				   + " SET MEM_ID = ?, MEM_CP_ID = ?, ORD_SUBTOTAL = ?, ORD_TOTAL = ?, ORD_STATUS = ?, "
+				   + " ORD_RECIPIENT = ?, ORD_RECIPIENT_PHONE = ?, ORD_PAYMENT = ?, "
+				   + " ORD_DELIVERY = ?, ORD_ADDRESS = ?, ORD_NOTE = ?, ORD_DELIVERY_FEE = ? "
+				   + " WHERE ORD_ID = ? ";
+		
+		args.add(mainOrder.getMemId());
+		args.add(mainOrder.getMemCpId());
+		args.add(mainOrder.getOrdSubtotal());
+		args.add(mainOrder.getOrdTotal());
+		args.add(mainOrder.getOrdStatus());
+		args.add(mainOrder.getOrdRecipient());
+		args.add(mainOrder.getOrdRecipientPhone());
+		args.add(mainOrder.getOrdPayment());
+		args.add(mainOrder.getOrdDelivery());
+		args.add(mainOrder.getOrdAddress());
+		args.add(mainOrder.getOrdNote());
+		args.add(mainOrder.getOrdDeliveryFee());
+		args.add(mainOrder.getOrdId());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
 	@Override
-	public void delete(MainOrder mainOrder) {
-		// TODO Auto-generated method stub
+	public void add(MainOrder mainOrder) {
+
+		String sql = " INSERT INTO holiday_dessert.main_order "
+				   + " (MEM_ID, MEM_CP_ID, ORD_SUBTOTAL, ORD_TOTAL, ORD_STATUS, ORD_CREATE, ORD_RECIPIENT, "
+				   + " ORD_RECIPIENT_PHONE, ORD_PAYMENT, ORD_DELIVERY, ORD_ADDRESS, ORD_NOTE, ORD_DELIVERY_FEE) "
+				   + " VALUES(?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?)";
+		
+		jdbcTemplate.update(sql, new Object[] { mainOrder.getMemId(), mainOrder.getMemCpId(),
+				mainOrder.getOrdSubtotal(),mainOrder.getOrdTotal(), mainOrder.getOrdStatus(),
+				mainOrder.getOrdRecipient(), mainOrder.getOrdRecipientPhone(),
+				mainOrder.getOrdPayment(), mainOrder.getOrdDelivery(), mainOrder.getOrdAddress(),
+				mainOrder.getOrdNote(), mainOrder.getOrdDeliveryFee() });
 		
 	}
 
