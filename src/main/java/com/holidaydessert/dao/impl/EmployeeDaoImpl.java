@@ -1,0 +1,149 @@
+package com.holidaydessert.dao.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
+import com.holidaydessert.dao.EmployeeDao;
+import com.holidaydessert.model.Employee;
+
+@Repository
+public class EmployeeDaoImpl implements EmployeeDao {
+
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+	
+	@Override
+	public List<Map<String, Object>> list(Employee employee) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.employee ";
+
+		if (employee.getSearchText() != null && employee.getSearchText().length() > 0) {
+			String[] searchText = employee.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(EMP_NAME, ?) > 0"
+					+  " OR INSTR(EMP_PHONE, ?) > 0 "
+					+  " OR INSTR(EMP_ACCOUNT, ?) > 0 "
+					+  " OR INSTR(EMP_HIREDATE, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		
+		if(sql.indexOf("WHERE") > 0) {
+			sql += " AND EMP_STATUS = 1 ";
+		} else {
+			sql += " WHERE EMP_STATUS = 1 ";
+		}
+		
+		if (employee.getStart() != null && !"".equals(employee.getStart())) {
+			sql += " LIMIT " + employee.getStart() + "," + employee.getLength();
+		}
+
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public int getCount(Employee employee) {
+		
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM holiday_dessert.employee ";
+		
+		if (employee.getSearchText() != null && employee.getSearchText().length() > 0) {
+			String[] searchText = employee.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(EMP_NAME, ?) > 0"
+					+  " OR INSTR(EMP_PHONE, ?) > 0 "
+					+  " OR INSTR(EMP_ACCOUNT, ?) > 0 "
+					+  " OR INSTR(EMP_HIREDATE, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		
+		if(sql.indexOf("WHERE") > 0) {
+			sql += " AND EMP_STATUS = 1 ";
+		} else {
+			sql += " WHERE EMP_STATUS = 1 ";
+		}
+		
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
+	}
+
+	@Override
+	public void add(Employee employee) {
+
+		String sql = " INSERT INTO holiday_dessert.employee "
+				   + " (EMP_NAME, EMP_PHONE, EMP_PICTURE, EMP_ACCOUNT, EMP_PASSWORD, EMP_LEVEL, EMP_STATUS, EMP_HIREDATE) "
+				   + " VALUES(?, ?, ?, ?, ?, ?, ?, NOW()) ";
+		
+		jdbcTemplate.update(sql, new Object[] { employee.getEmpName(), employee.getEmpPhone(), employee.getEmpPicture(), employee.getEmpAccount(), employee.getEmpPassword(), employee.getEmpLevel(), employee.getEmpStatus() });
+		
+	}
+
+	@Override
+	public void update(Employee employee) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " UPDATE holiday_dessert.employee "
+				   + " SET EMP_NAME = ? , EMP_PHONE = ?, EMP_PICTURE = ?, EMP_ACCOUNT = ?, EMP_PASSWORD = ?, EMP_LEVEL = ? "
+				   + " WHERE EMP_ID = ? ";
+		
+		args.add(employee.getEmpName());
+		args.add(employee.getEmpPhone());
+		args.add(employee.getEmpPicture());
+		args.add(employee.getEmpAccount());
+		args.add(employee.getEmpPassword());
+		args.add(employee.getEmpLevel());
+		args.add(employee.getEmpId());
+		
+		jdbcTemplate.update(sql, args.toArray());
+		
+	}
+
+	@Override
+	public void resign(Employee employee) {
+
+		String sql = " UPDATE holiday_dessert.employee "
+				   + " SET EMP_STATUS = ? "
+				   + " WHERE EMP_ID = ? ";
+		
+		jdbcTemplate.update(sql, new Object[] { employee.getEmpStatus(), employee.getEmpId() });
+		
+	}
+
+}
