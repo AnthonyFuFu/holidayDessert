@@ -175,7 +175,7 @@ public class HolidayDessertController {
 		System.out.println(employeeList);
 
 		MainOrder mainOrder = new MainOrder();
-		mainOrder.setSearchText("50");
+		// mainOrder.setSearchText("100");
 		List<Map<String, Object>> mainOrderList = mainOrderService.list(mainOrder);
 		Integer mainOrderCount = mainOrderService.getCount(mainOrder);
 		System.out.println(mainOrderCount+":"+mainOrderList);
@@ -206,10 +206,21 @@ public class HolidayDessertController {
 		List<Map<String, Object>> newsList = newsService.list(news);
 		Integer newsCount = newsService.getCount(news);
 		System.out.println(newsCount+":"+newsList);
-
+		news.setStart("1");
+		news.setLength("2");
+		List<Map<String, Object>> newsFrontList = newsService.frontList(news);
+		System.out.println(newsFrontList);
+		List<Map<String, Object>> newsRandList = newsService.frontRandList(news);
+		System.out.println(newsRandList);
+		
 		OrderDetail orderDetail = new OrderDetail();
+		orderDetail.setSearchText("2 leo");
 		List<Map<String, Object>> orderDetailList = orderDetailService.list(orderDetail);
-		System.out.println(orderDetailList);
+		Integer orderDetailCount = orderDetailService.getCount(orderDetail);
+		System.out.println(orderDetailCount+":"+orderDetailList);
+		orderDetail.setOrdId("1");
+		OrderDetail oneOrderDetail = orderDetailService.data(orderDetail);
+		System.out.println(oneOrderDetail.toString());
 
 		Product product = new Product();
 		List<Map<String, Object>> productList = productService.list(product);

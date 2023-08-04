@@ -109,13 +109,15 @@ NEWS_ID int auto_increment not null primary key,
 NEWS_NAME varchar(50),
 NEWS_CONTENT varchar(500),
 NEWS_STATUS TINYINT(1) NOT NULL default '0',
-NEWS_TIME datetime not null default current_timestamp
+NEWS_START datetime,
+NEWS_END datetime,
+NEWS_CREATE datetime not null default current_timestamp
 )auto_increment=101;
 
-insert into news(NEWS_ID,NEWS_NAME,NEWS_CONTENT)
-VALUES ('101','慶祝父親節','慶祝父親節，全館88折'),
-	   ('102','歡慶中元節','歡慶中元節，全館9折'),
-       ('103','光棍節快樂','光棍節快樂，全館1.1折起');
+insert into news(NEWS_ID,NEWS_NAME,NEWS_CONTENT,NEWS_START,NEWS_END)
+VALUES ('101','慶祝父親節','慶祝父親節，全館88折',NOW(),NOW()),
+	   ('102','歡慶中元節','歡慶中元節，全館9折',NOW(),NOW()),
+       ('103','光棍節快樂','光棍節快樂，全館1.1折起',NOW(),NOW());
 
 -- BANNER --
 create table banner(

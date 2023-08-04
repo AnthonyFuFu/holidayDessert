@@ -22,7 +22,11 @@ public class NewsDaoImpl implements NewsDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT * FROM ( SELECT *, "
+		String sql = " SELECT * FROM ( SELECT "		   
+				   + " NEWS_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
+				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
+				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d') NEWS_CREATE, "
 				   + " CASE NEWS_STATUS "
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
@@ -42,9 +46,7 @@ public class NewsDaoImpl implements NewsDao {
 				sql += " INSTR(NEWS_NAME, ?) > 0"
 					+  " OR INSTR(NEWS_CONTENT, ?) > 0 "
 					+  " OR INSTR(STATUS, ?) > 0 "
-					+  " OR INSTR(NEWS_TIME, ?) > 0 "
 					+  " ) ";
-		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -72,10 +74,9 @@ public class NewsDaoImpl implements NewsDao {
 		
 		String sql = " SELECT COUNT(*) AS COUNT "
 				   + " FROM ( "
-				   + " SELECT *,  CASE NEWS_STATUS WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS STATUS "
+				   + " SELECT *, CASE NEWS_STATUS WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS STATUS "
 				   + " FROM holiday_dessert.news "
 				   + ") AS subquery ";
-		
 		
 		if (news.getSearchText() != null && news.getSearchText().length() > 0) {
 			String[] searchText = news.getSearchText().split(" ");
@@ -89,9 +90,7 @@ public class NewsDaoImpl implements NewsDao {
 				sql += " INSTR(NEWS_NAME, ?) > 0"
 					+  " OR INSTR(NEWS_CONTENT, ?) > 0 "
 					+  " OR INSTR(STATUS, ?) > 0 "
-					+  " OR INSTR(NEWS_TIME, ?) > 0 "
 					+  " ) ";
-		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -104,8 +103,8 @@ public class NewsDaoImpl implements NewsDao {
 	public void add(News news) {
 
 		String sql = " INSERT INTO holiday_dessert.news "
-				   + " (NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, NEWS_TIME) "
-				   + " VALUES(?, ?, ?, NOW()) ";
+				   + " (NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, NEWS_START, NEWS_END, NEWS_CREATE) "
+				   + " VALUES(?, ?, ?, ?, ?, NOW()) ";
 		
 		jdbcTemplate.update(sql, new Object[] {news.getNewsName(), news.getNewsContent(), news.getNewsStatus() });
 		
@@ -113,22 +112,51 @@ public class NewsDaoImpl implements NewsDao {
 
 	@Override
 	public void update(News news) {
-		// TODO Auto-generated method stub
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " UPDATE holiday_dessert.news "
+				   + " SET NEWS_NAME = ?, NEWS_CONTENT = ?, NEWS_STATUS = ?, "
+				   + " NEWS_START = ?, NEWS_END = ? "
+				   + " WHERE NEWS_ID = ? ";
+		
+		args.add(news.getNewsName());
+		args.add(news.getNewsContent());
+		args.add(news.getNewsStatus());
+		args.add(news.getNewsStart());
+		args.add(news.getNewsEnd());
+		args.add(news.getNewsId());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
 	@Override
 	public void delete(News news) {
-		// TODO Auto-generated method stub
+
+		String sql = " UPDATE holiday_dessert.news "
+				   + " SET NEWS_STATUS = 0 "
+				   + " WHERE NEWS_ID = ? ";
+		
+		jdbcTemplate.update(sql, new Object[] { news.getNewsId() });
 		
 	}
 
 	@Override
 	public List<Map<String, Object>> frontList(News news) {
 
-		String sql = " SELECT * FROM holiday_dessert.news "
-				   + " WHERE NEWS_STATUS = 1 ";
-		
+		String sql = " SELECT NEWS_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
+				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
+				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d') NEWS_CREATE "
+				   + " FROM holiday_dessert.news "
+				   + " WHERE NEWS_STATUS = 1 "
+				   + " ORDER BY NEWS_CREATE DESC ";
+
+		if (news.getStart() != null && !"".equals(news.getStart())) {
+			sql += " LIMIT " + news.getStart() + "," + news.getLength();
+		}
+
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		
 		if (list != null && list.size() > 0) {
@@ -142,7 +170,11 @@ public class NewsDaoImpl implements NewsDao {
 	@Override
 	public List<Map<String, Object>> frontRandList(News news) {
 
-		String sql = " SELECT * FROM holiday_dessert.news "
+		String sql = " SELECT NEWS_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
+				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
+				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d') NEWS_CREATE "
+				   + " FROM holiday_dessert.news "
 				   + " WHERE NEWS_STATUS = 1 "
 				   + " ORDER BY RAND() LIMIT 3 ";
 

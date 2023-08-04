@@ -139,10 +139,10 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	public void resign(Employee employee) {
 
 		String sql = " UPDATE holiday_dessert.employee "
-				   + " SET EMP_STATUS = ? "
+				   + " SET EMP_STATUS = 0 "
 				   + " WHERE EMP_ID = ? ";
 		
-		jdbcTemplate.update(sql, new Object[] { employee.getEmpStatus(), employee.getEmpId() });
+		jdbcTemplate.update(sql, new Object[] { employee.getEmpId() });
 		
 	}
 
