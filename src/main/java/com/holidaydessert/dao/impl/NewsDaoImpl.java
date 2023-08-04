@@ -20,12 +20,43 @@ public class NewsDaoImpl implements NewsDao {
 	@Override
 	public List<Map<String, Object>> list(News news) {
 
-		String sql = " SELECT * FROM holiday_dessert.news ";
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM ( SELECT *, "
+				   + " CASE NEWS_STATUS "
+				   + " WHEN '0' THEN '下架' "
+				   + " WHEN '1' THEN '上架' "
+				   + " END AS STATUS "
+				   + " FROM holiday_dessert.news "
+				   + ") AS subquery ";
+		
+		if (news.getSearchText() != null && news.getSearchText().length() > 0) {
+			String[] searchText = news.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(NEWS_NAME, ?) > 0"
+					+  " OR INSTR(NEWS_CONTENT, ?) > 0 "
+					+  " OR INSTR(STATUS, ?) > 0 "
+					+  " OR INSTR(NEWS_TIME, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
 
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+		if (news.getStart() != null && !"".equals(news.getStart())) {
+			sql += " LIMIT " + news.getStart() + "," + news.getLength();
+		}
 
-		list = jdbcTemplate.queryForList(sql);
-
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
 		if (list != null && list.size() > 0) {
 			return list;
 		} else {
@@ -36,13 +67,47 @@ public class NewsDaoImpl implements NewsDao {
 
 	@Override
 	public int getCount(News news) {
-		// TODO Auto-generated method stub
-		return 0;
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM ( "
+				   + " SELECT *,  CASE NEWS_STATUS WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS STATUS "
+				   + " FROM holiday_dessert.news "
+				   + ") AS subquery ";
+		
+		
+		if (news.getSearchText() != null && news.getSearchText().length() > 0) {
+			String[] searchText = news.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(NEWS_NAME, ?) > 0"
+					+  " OR INSTR(NEWS_CONTENT, ?) > 0 "
+					+  " OR INSTR(STATUS, ?) > 0 "
+					+  " OR INSTR(NEWS_TIME, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 
 	@Override
 	public void add(News news) {
-		// TODO Auto-generated method stub
+
+		String sql = " INSERT INTO holiday_dessert.news "
+				   + " (NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, NEWS_TIME) "
+				   + " VALUES(?, ?, ?, NOW()) ";
+		
+		jdbcTemplate.update(sql, new Object[] {news.getNewsName(), news.getNewsContent(), news.getNewsStatus() });
 		
 	}
 
@@ -60,14 +125,35 @@ public class NewsDaoImpl implements NewsDao {
 
 	@Override
 	public List<Map<String, Object>> frontList(News news) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String sql = " SELECT * FROM holiday_dessert.news "
+				   + " WHERE NEWS_STATUS = 1 ";
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+		
 	}
 
 	@Override
 	public List<Map<String, Object>> frontRandList(News news) {
-		// TODO Auto-generated method stub
-		return null;
+
+		String sql = " SELECT * FROM holiday_dessert.news "
+				   + " WHERE NEWS_STATUS = 1 "
+				   + " ORDER BY RAND() LIMIT 3 ";
+
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		
+		if(list!=null && list.size()>0) {
+			return list;
+		} else {
+			return null;
+		}
+		
 	}
 
 }

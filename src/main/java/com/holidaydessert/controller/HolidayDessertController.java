@@ -62,7 +62,7 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin
 //@RestController
 @Api(tags = "首頁")
-public class holidayDessertController {
+public class HolidayDessertController {
 	
 //	private final org.slf4j.Logger log = LoggerFactory.getLogger(LoggerGroups.class);
 	
@@ -202,8 +202,10 @@ public class holidayDessertController {
 		System.out.println(messageList);
 
 		News news = new News();
+		news.setSearchText("下");
 		List<Map<String, Object>> newsList = newsService.list(news);
-		System.out.println(newsList);
+		Integer newsCount = newsService.getCount(news);
+		System.out.println(newsCount+":"+newsList);
 
 		OrderDetail orderDetail = new OrderDetail();
 		List<Map<String, Object>> orderDetailList = orderDetailService.list(orderDetail);

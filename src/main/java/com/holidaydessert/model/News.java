@@ -2,16 +2,18 @@ package com.holidaydessert.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NonNull
 @NoArgsConstructor
 @AllArgsConstructor
-public class News {
+public class News extends Base {
 
 	private String newsId;             // 公告ID
 	private String newsContent;        // 公告內容
