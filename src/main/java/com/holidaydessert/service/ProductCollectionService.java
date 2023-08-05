@@ -12,7 +12,7 @@ public interface ProductCollectionService {
 	public int getCount(ProductCollection productCollection);
 	public void add(ProductCollection productCollection);
 	public void update(ProductCollection productCollection);
-	public void delete(ProductCollection productCollection);
+	public void takeDown(ProductCollection productCollection);
 	
 	// front
 	public List<Map<String, Object>> frontList(ProductCollection productCollection);

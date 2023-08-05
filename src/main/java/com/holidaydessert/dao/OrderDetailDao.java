@@ -12,7 +12,7 @@ public interface OrderDetailDao {
 	public int getCount(OrderDetail orderDetail);
 				
 	// front
-	public OrderDetail data(OrderDetail orderDetail);
+	public List<Map<String, Object>> frontOrderDetails(OrderDetail orderDetail);
 	public void add(OrderDetail orderDetail);
 	
 }

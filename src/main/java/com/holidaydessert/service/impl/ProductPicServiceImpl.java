@@ -21,4 +21,19 @@ public class ProductPicServiceImpl implements ProductPicService {
 		return productPicDao.list(productPic);
 	}
 
+	@Override
+	public void add(ProductPic productPic) {
+		productPicDao.add(productPic);
+	}
+
+	@Override
+	public void delete(ProductPic productPic) {
+		productPicDao.delete(productPic);
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandList(ProductPic productPic) {
+		return productPicDao.frontRandList(productPic);
+	}
+
 }

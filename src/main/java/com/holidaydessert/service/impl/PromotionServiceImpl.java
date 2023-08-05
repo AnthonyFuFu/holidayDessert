@@ -37,23 +37,13 @@ public class PromotionServiceImpl implements PromotionService {
 	}
 
 	@Override
-	public void delete(Promotion promotion) {
-		promotionDao.delete(promotion);
+	public void takeDown(Promotion promotion) {
+		promotionDao.takeDown(promotion);
 	}
 
 	@Override
-	public List<Map<String, Object>> frontNewList(Promotion promotion) {
-		return promotionDao.frontNewList(promotion);
-	}
-
-	@Override
-	public List<Map<String, Object>> frontTypeList(Promotion promotion) {
-		return promotionDao.frontTypeList(promotion);
-	}
-
-	@Override
-	public List<Map<String, Object>> frontRandTypeList(Promotion promotion) {
-		return promotionDao.frontRandTypeList(promotion);
+	public List<Map<String, Object>> nearestStartList(Promotion promotion) {
+		return promotionDao.nearestStartList(promotion);
 	}
 
 }

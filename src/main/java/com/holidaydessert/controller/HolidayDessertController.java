@@ -61,7 +61,7 @@ import io.swagger.annotations.ApiOperation;
 @SessionAttributes("memberSession")
 @CrossOrigin
 //@RestController
-@Api(tags = "首頁")
+@Api(tags = "前台")
 public class HolidayDessertController {
 	
 //	private final org.slf4j.Logger log = LoggerFactory.getLogger(LoggerGroups.class);
@@ -124,7 +124,7 @@ public class HolidayDessertController {
 	private ReceiptInformationService receiptInformationService;
 
 	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "查詢首頁", httpMethod = "GET", notes = "進行查詢首頁")
+	@ApiOperation(value = "首頁", httpMethod = "GET", notes = "進行查詢")
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		
 		// 權限
@@ -219,33 +219,49 @@ public class HolidayDessertController {
 		Integer orderDetailCount = orderDetailService.getCount(orderDetail);
 		System.out.println(orderDetailCount+":"+orderDetailList);
 		orderDetail.setOrdId("1");
-		OrderDetail oneOrderDetail = orderDetailService.data(orderDetail);
-		System.out.println(oneOrderDetail.toString());
+		List<Map<String, Object>> frontOrderDetails = orderDetailService.frontOrderDetails(orderDetail);
+		System.out.println(frontOrderDetails);
 
 		Product product = new Product();
 		List<Map<String, Object>> productList = productService.list(product);
 		System.out.println(productList);
 
 		ProductCollection productCollection = new ProductCollection();
+		productCollection.setSearchText("上");
 		List<Map<String, Object>> productCollectionList = productCollectionService.list(productCollection);
-		System.out.println(productCollectionList);
+		Integer productCollectionCount = productCollectionService.getCount(productCollection);
+		System.out.println(productCollectionCount+":"+productCollectionList);
 
 		ProductPic productPic = new ProductPic();
 		List<Map<String, Object>> productPicList = productPicService.list(productPic);
+		productPic.setPdId("4001");
+		productPic.setLength("2");
+		List<Map<String, Object>> productPicfrontRandList = productPicService.frontRandList(productPic);
 		System.out.println(productPicList);
+		System.out.println("randPIC:"+productPicfrontRandList);
 
 		Promotion promotion = new Promotion();
+		promotion.setSearchText("上");
 		List<Map<String, Object>> promotionList = promotionService.list(promotion);
-		System.out.println(promotionList);
+		Integer promotionCount = promotionService.getCount(promotion);
+		System.out.println(promotionCount+":"+promotionList);
+		List<Map<String, Object>> nearestStartList = promotionService.nearestStartList(promotion);
+		System.out.println(nearestStartList);
 
 		PromotionDetail promotionDetail = new PromotionDetail();
+		promotionDetail.setSearchText("0.79 中 ");
 		List<Map<String, Object>> promotionDetailList = promotionDetailService.list(promotionDetail);
-		System.out.println(promotionDetailList);
+		Integer promotionDetailCount = promotionDetailService.getCount(promotionDetail);
+		System.out.println(promotionDetailCount+":"+promotionDetailList);
+		promotionDetail.setPmId("2");
+		List<Map<String, Object>> promotionDetailFrontList = promotionDetailService.frontList(promotionDetail);
+		System.out.println("YOYO:"+promotionDetailFrontList);
 
 		ReceiptInformation receiptInformation = new ReceiptInformation();
 		List<Map<String, Object>> receiptInformationList = receiptInformationService.list(receiptInformation);
 		System.out.println(receiptInformationList);
 		
+		model.addAttribute("frontOrderDetails", frontOrderDetails);
 		System.out.println("index");
 		
 		return "front/index";

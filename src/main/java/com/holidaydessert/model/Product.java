@@ -17,6 +17,7 @@ public class Product {
 	private String pdcId;              // 商品分類ID
 	private String pdName;             // 商品名稱
 	private String pdPrice;            // 商品原價
+	private String pdDisplayQuantity;  // 商品圖片陳列數量
 	private String pdDescription;      // 商品資訊
 	private String pdStatus;           // 商品狀態(0:下架 1:上架 Default:0)
 	

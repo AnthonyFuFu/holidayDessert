@@ -2,16 +2,18 @@ package com.holidaydessert.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NonNull
 @NoArgsConstructor
 @AllArgsConstructor
-public class PromotionDetail {
+public class PromotionDetail extends Base {
 
 	private String pmdId;              // 活動優惠明細ID
 	private String pdId;               // 商品ID

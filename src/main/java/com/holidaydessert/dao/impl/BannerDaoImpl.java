@@ -51,7 +51,7 @@ public class BannerDaoImpl implements BannerDao {
 	public void delete(Banner banner) {
 		
 		String sql = " DELETE FROM holiday_dessert.banner "
-				   + " WHERE ID = ? ";
+				   + " WHERE BAN_ID = ? ";
 		
 		jdbcTemplate.update(sql, new Object[] { banner.getBanId() });
 		

@@ -27,8 +27,8 @@ public class OrderDetailServiceImpl implements OrderDetailService {
 	}
 
 	@Override
-	public OrderDetail data(OrderDetail orderDetail) {
-		return orderDetailDao.data(orderDetail);
+	public List<Map<String, Object>> frontOrderDetails(OrderDetail orderDetail) {
+		return orderDetailDao.frontOrderDetails(orderDetail);
 	}
 
 	@Override

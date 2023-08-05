@@ -20,18 +20,65 @@ public class ProductPicDaoImpl implements ProductPicDao {
 	@Override
 	public List<Map<String, Object>> list(ProductPic productPic) {
 
-		String sql = " SELECT * FROM holiday_dessert.product_pic ";
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.product_pic "
+				   + " WHERE PD_ID = ? ";
 
-		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-
-		list = jdbcTemplate.queryForList(sql);
-
+		args.add(productPic.getPdId());
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
 		if (list != null && list.size() > 0) {
 			return list;
 		} else {
 			return null;
 		}
+		
+	}
 
+	@Override
+	public void add(ProductPic productPic) {
+
+		String sql = " INSERT INTO holiday_dessert.product_pic "
+				   + " (PD_ID, PD_PIC) "
+				   + " VALUES(?, ?) ";
+		
+		jdbcTemplate.update(sql, new Object[] {productPic.getPdId(), productPic.getPdPic() });
+		
+	}
+
+	@Override
+	public void delete(ProductPic productPic) {
+
+		String sql = " DELETE FROM holiday_dessert.product_pic "
+				   + " WHERE PD_PIC_ID = ? ";
+		
+		jdbcTemplate.update(sql, new Object[] { productPic.getPdPicId() });
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> frontRandList(ProductPic productPic) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.product_pic "
+				   + " WHERE PD_ID = ? "
+				   + " ORDER BY RAND() ";
+
+		if (productPic.getLength() != null && !"".equals(productPic.getLength())) {
+			sql += " LIMIT " + productPic.getLength();
+		}
+
+		args.add(productPic.getPdId());
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+		
 	}
 
 }

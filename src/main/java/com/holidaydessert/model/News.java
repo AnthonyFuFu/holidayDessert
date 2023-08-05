@@ -16,6 +16,7 @@ import lombok.Setter;
 public class News extends Base {
 
 	private String newsId;             // 公告ID
+	private String pmId;               // 活動優惠ID
 	private String newsName;           // 公告名稱
 	private String newsContent;        // 公告內容
 	private String newsStatus;         // 公告狀態(0:下架 1:上架 Default:0)

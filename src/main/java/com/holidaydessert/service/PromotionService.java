@@ -12,11 +12,9 @@ public interface PromotionService {
 	public int getCount(Promotion promotion);
 	public void add(Promotion promotion);
 	public void update(Promotion promotion);
-	public void delete(Promotion promotion);
+	public void takeDown(Promotion promotion);
 	
 	// front
-	public List<Map<String, Object>> frontNewList(Promotion promotion);
-	public List<Map<String, Object>> frontTypeList(Promotion promotion);
-	public List<Map<String, Object>> frontRandTypeList(Promotion promotion);
+	public List<Map<String, Object>> nearestStartList(Promotion promotion);
 	
 }

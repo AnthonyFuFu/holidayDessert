@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.PromotionDetailDao;
+import com.holidaydessert.model.Promotion;
 import com.holidaydessert.model.PromotionDetail;
 import com.holidaydessert.service.PromotionDetailService;
 
@@ -27,8 +28,23 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
 	}
 
 	@Override
-	public void add(PromotionDetail promotionDetail) {
-		promotionDetailDao.add(promotionDetail);
+	public void addOne(PromotionDetail promotionDetail) {
+		promotionDetailDao.addOne(promotionDetail);
+	}
+
+	@Override
+	public void batchAddPromotion(Promotion promotion, String[] productId, String[] productPrice) {
+		promotionDetailDao.batchAddPromotion(promotion, productId, productPrice);
+	}
+
+	@Override
+	public void batchAddOneDayPromotion(Promotion promotion, String[] productId, String[] productPrice) {
+		promotionDetailDao.batchAddOneDayPromotion(promotion, productId, productPrice);
+	}
+
+	@Override
+	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId, String[] productPrice) {
+		promotionDetailDao.batchAddOneWeekPromotion(promotion, productId, productPrice);
 	}
 
 	@Override
@@ -37,23 +53,8 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
 	}
 
 	@Override
-	public void delete(PromotionDetail promotionDetail) {
-		promotionDetailDao.delete(promotionDetail);
-	}
-
-	@Override
-	public List<Map<String, Object>> frontNewList(PromotionDetail promotionDetail) {
-		return promotionDetailDao.frontNewList(promotionDetail);
-	}
-
-	@Override
-	public List<Map<String, Object>> frontTypeList(PromotionDetail promotionDetail) {
-		return promotionDetailDao.frontTypeList(promotionDetail);
-	}
-
-	@Override
-	public List<Map<String, Object>> frontRandTypeList(PromotionDetail promotionDetail) {
-		return promotionDetailDao.frontRandTypeList(promotionDetail);
+	public List<Map<String, Object>> frontList(PromotionDetail promotionDetail) {
+		return promotionDetailDao.frontList(promotionDetail);
 	}
 
 }

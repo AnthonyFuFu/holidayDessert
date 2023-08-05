@@ -23,7 +23,7 @@ public class NewsDaoImpl implements NewsDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT * FROM ( SELECT "		   
-				   + " NEWS_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+				   + " NEWS_ID, PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
 				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
 				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
 				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d') NEWS_CREATE, "
@@ -73,8 +73,11 @@ public class NewsDaoImpl implements NewsDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT COUNT(*) AS COUNT "
-				   + " FROM ( "
-				   + " SELECT *, CASE NEWS_STATUS WHEN '0' THEN '下架' WHEN '1' THEN '上架' END AS STATUS "
+				   + " FROM ( SELECT *, "
+				   + " CASE NEWS_STATUS "
+				   + " WHEN '0' THEN '下架' "
+				   + " WHEN '1' THEN '上架' "
+				   + " END AS STATUS "
 				   + " FROM holiday_dessert.news "
 				   + ") AS subquery ";
 		
@@ -103,10 +106,10 @@ public class NewsDaoImpl implements NewsDao {
 	public void add(News news) {
 
 		String sql = " INSERT INTO holiday_dessert.news "
-				   + " (NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, NEWS_START, NEWS_END, NEWS_CREATE) "
-				   + " VALUES(?, ?, ?, ?, ?, NOW()) ";
+				   + " (PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, NEWS_START, NEWS_END, NEWS_CREATE) "
+				   + " VALUES(?, ?, ?, ?, ?, ?, NOW()) ";
 		
-		jdbcTemplate.update(sql, new Object[] {news.getNewsName(), news.getNewsContent(), news.getNewsStatus() });
+		jdbcTemplate.update(sql, new Object[] {news.getPmId(), news.getNewsName(), news.getNewsContent(), news.getNewsStatus() });
 		
 	}
 
@@ -116,10 +119,11 @@ public class NewsDaoImpl implements NewsDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.news "
-				   + " SET NEWS_NAME = ?, NEWS_CONTENT = ?, NEWS_STATUS = ?, "
+				   + " SET PM_ID = ?, NEWS_NAME = ?, NEWS_CONTENT = ?, NEWS_STATUS = ?, "
 				   + " NEWS_START = ?, NEWS_END = ? "
 				   + " WHERE NEWS_ID = ? ";
 		
+		args.add(news.getPmId());
 		args.add(news.getNewsName());
 		args.add(news.getNewsContent());
 		args.add(news.getNewsStatus());
@@ -145,7 +149,7 @@ public class NewsDaoImpl implements NewsDao {
 	@Override
 	public List<Map<String, Object>> frontList(News news) {
 
-		String sql = " SELECT NEWS_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+		String sql = " SELECT NEWS_ID, PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
 				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
 				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
 				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d') NEWS_CREATE "
@@ -170,7 +174,7 @@ public class NewsDaoImpl implements NewsDao {
 	@Override
 	public List<Map<String, Object>> frontRandList(News news) {
 
-		String sql = " SELECT NEWS_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+		String sql = " SELECT NEWS_ID, PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
 				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
 				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
 				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d') NEWS_CREATE "

@@ -22,7 +22,13 @@ public class CouponDaoImpl implements CouponDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT * FROM holiday_dessert.coupon ";
+		String sql = " SELECT * FROM ( SELECT *, "
+				   + " CASE CP_STATUS "
+				   + " WHEN '0' THEN '下架' "
+				   + " WHEN '1' THEN '上架' "
+				   + " END AS STATUS "
+				   + " FROM holiday_dessert.coupon "
+				   + " ) AS subquery ";
 		
 		if (coupon.getSearchText() != null && coupon.getSearchText().length() > 0) {
 			String[] searchText = coupon.getSearchText().split(" ");
@@ -35,7 +41,9 @@ public class CouponDaoImpl implements CouponDao {
 				}
 				sql += " INSTR(CP_NAME, ?) > 0"
 					+  " OR INSTR(CP_DISCOUNT, ?) > 0 "
+					+  " OR INSTR(STATUS, ?) > 0 "
 					+  " ) ";
+		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 			}
@@ -61,7 +69,13 @@ public class CouponDaoImpl implements CouponDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT COUNT(*) AS COUNT "
-				   + " FROM holiday_dessert.coupon ";
+				   + " FROM ( SELECT *,"
+				   + " CASE CP_STATUS "
+				   + " WHEN '0' THEN '下架' "
+				   + " WHEN '1' THEN '上架' "
+				   + " END AS STATUS "
+				   + " FROM holiday_dessert.coupon "
+				   + " ) AS subquery ";
 		
 		if (coupon.getSearchText() != null && coupon.getSearchText().length() > 0) {
 			String[] searchText = coupon.getSearchText().split(" ");
@@ -74,11 +88,14 @@ public class CouponDaoImpl implements CouponDao {
 				}
 				sql += " INSTR(CP_NAME, ?) > 0"
 					+  " OR INSTR(CP_DISCOUNT, ?) > 0 "
+					+  " OR INSTR(STATUS, ?) > 0 "
 					+  " ) ";
+		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 			}
 		}
+		
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 
@@ -99,7 +116,7 @@ public class CouponDaoImpl implements CouponDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.coupon "
-				   + " SET CP_NAME = ? , CP_DISCOUNT = ?, CP_STATUS = ?, CP_PIC = ? "
+				   + " SET CP_NAME = ?, CP_DISCOUNT = ?, CP_STATUS = ?, CP_PIC = ? "
 				   + " WHERE CP_ID = ? ";
 		
 		args.add(coupon.getCpName());

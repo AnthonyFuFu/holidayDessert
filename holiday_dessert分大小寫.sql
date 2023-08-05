@@ -106,6 +106,7 @@ VALUES  (101, 1, 1),
 -- 最新消息 --
 create table news(
 NEWS_ID int auto_increment not null primary key,
+PM_ID int,
 NEWS_NAME varchar(50),
 NEWS_CONTENT varchar(500),
 NEWS_STATUS TINYINT(1) NOT NULL default '0',
@@ -114,10 +115,10 @@ NEWS_END datetime,
 NEWS_CREATE datetime not null default current_timestamp
 )auto_increment=101;
 
-insert into news(NEWS_ID,NEWS_NAME,NEWS_CONTENT,NEWS_START,NEWS_END)
-VALUES ('101','慶祝父親節','慶祝父親節，全館88折',NOW(),NOW()),
-	   ('102','歡慶中元節','歡慶中元節，全館9折',NOW(),NOW()),
-       ('103','光棍節快樂','光棍節快樂，全館1.1折起',NOW(),NOW());
+insert into news(PM_ID,NEWS_ID,NEWS_NAME,NEWS_CONTENT,NEWS_START,NEWS_END)
+VALUES (null,'101','慶祝父親節','慶祝父親節，全館88折',CONCAT(CURDATE(), ' 00:00:00'),CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 23:59:59')),
+	   (2,'102','歡慶中元節','歡慶中元節，全館9折',CONCAT(CURDATE(), ' 00:00:00'),CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 23:59:59')),
+       (null,'103','中秋節快樂','中秋節快樂，全館79折',CONCAT(CURDATE(), ' 00:00:00'),CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 23:59:59'));
 
 -- BANNER --
 create table banner(
@@ -153,11 +154,13 @@ value(101,201,"HI",0),
 create table product_collection(
 	PDC_ID int auto_increment not null primary key,
     PDC_NAME varchar(10) not null,
+    PDC_KEYWORD varchar(200),
     PDC_STATUS tinyint(1) not null default 1
 );
 
-insert into product_collection(PDC_NAME)
-values ('可麗路');
+insert into product_collection(PDC_NAME,PDC_KEYWORD)
+values ('可麗路','巧克力 起司 抹茶')
+	  ,('可頌','巧克力 楓糖 蜂蜜 紅豆');
 -- 商品 --
 create table product(
 	PD_ID int auto_increment not null primary key,
@@ -165,11 +168,13 @@ create table product(
     PD_NAME varchar(30) not null unique, 
     PD_PRICE int not null,
     PD_DESCRIPTION varchar(200),
+    PD_DISPLAY_QUANTITY int,
     PD_STATUS tinyint(1) not null default 0,
     constraint product_product_collection_fk FOREIGN KEY (PDC_ID) REFERENCES product_collection(PDC_ID)
 )auto_increment=4001;
-insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_STATUS)
-values (1, '奶茶風味可麗露', 300, 'NNNNNNNNN', 0);
+insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS)
+values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1),
+       (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1);
 
 -- 商品圖片 --
 create table product_pic (
@@ -179,7 +184,7 @@ create table product_pic (
     constraint product_pic_product_fk foreign key (PD_ID) references product(PD_ID)
 );
 insert into product_pic(PD_ID)
-values (4001);
+values (4001),(4001),(4001),(4002),(4002),(4002);
 
 -- ================== CREATE TABLE(優惠相關）================== --
 
@@ -188,13 +193,17 @@ values (4001);
 PM_ID int not null primary key auto_increment,
 PM_NAME varchar(45) not null,
 PM_DESCRIPTION varchar(255),
-PM_DISCOUNT decimal(3,2) not null,
-PM_STATUS tinyint(1) not null
+PM_DISCOUNT decimal(3,2),
+PM_REGULARLY tinyint(1) not null,
+PM_STATUS tinyint(1) not null,
+PM_START datetime,
+PM_END datetime
 );
 
-insert into promotion(PM_NAME,PM_DESCRIPTION,PM_DISCOUNT,PM_STATUS)
-values('中秋節特價','所有常溫品項79折',0.79,1);
- 
+insert into promotion(PM_NAME,PM_DESCRIPTION,PM_DISCOUNT,PM_REGULARLY,PM_STATUS,PM_START,PM_END)
+values('單品特價','特價商品最優惠',1.00,1,1,null,null),
+	  ('中秋節特價','全館79折',0.79,1,1,CONCAT(CURDATE(), ' 00:00:00'),CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 23:59:59'));
+
 -- 優惠活動明細 --
 create table promotion_detail(
 PMD_ID int auto_increment not null primary key,
@@ -207,7 +216,7 @@ constraint promotion_detail_promotion_fk foreign key (PM_ID) references promotio
 constraint promotion_detail_product_fk foreign key (PD_ID) references product(PD_ID));
 
 insert into promotion_detail(PM_ID,PD_ID,PMD_START,PMD_END,PMD_PD_DISCOUNT_PRICE)
-values(1,4001,str_to_date('2022-08-20','%Y-%m-%d'), str_to_date('2022-08-31','%Y-%m-%d'),399);
+values(2,4001,CONCAT(CURDATE(), ' 00:00:00'), str_to_date('2022-08-31','%Y-%m-%d'),237);
 
 -- 優惠券種類 --
 create table coupon(
@@ -234,7 +243,7 @@ create table member_coupon(
     constraint member_coupon_coupon_fk foreign key (CP_ID) references coupon(CP_ID)
 );
 insert into member_coupon(MEM_ID, CP_ID, MEM_CP_START,MEM_CP_END, MEM_CP_STATUS, MEM_CP_RECORD)
-values (201, 1, str_to_date('2022-08-31','%Y-%m-%d'),str_to_date('2022-10-31','%Y-%m-%d'), 1, null);
+values (201, 1, CONCAT(CURDATE(), ' 00:00:00'),str_to_date('2022-10-31','%Y-%m-%d'), 1, null);
 
 -- ================== CREATE TABLE(商品相關）================== --
 

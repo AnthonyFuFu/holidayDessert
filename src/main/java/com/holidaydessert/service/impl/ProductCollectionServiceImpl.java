@@ -37,8 +37,8 @@ public class ProductCollectionServiceImpl implements ProductCollectionService {
 	}
 
 	@Override
-	public void delete(ProductCollection productCollection) {
-		productCollectionDao.delete(productCollection);
+	public void takeDown(ProductCollection productCollection) {
+		productCollectionDao.takeDown(productCollection);
 	}
 
 	@Override
