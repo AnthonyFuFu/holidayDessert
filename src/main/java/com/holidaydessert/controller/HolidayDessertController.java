@@ -51,7 +51,7 @@ import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
 import com.holidaydessert.service.PromotionDetailService;
 import com.holidaydessert.service.PromotionService;
-import com.holidaydessert.service.impl.ReceiptInformationService;
+import com.holidaydessert.service.ReceiptInformationService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -223,9 +223,18 @@ public class HolidayDessertController {
 		System.out.println(frontOrderDetails);
 
 		Product product = new Product();
+		product.setSearchText("上");
 		List<Map<String, Object>> productList = productService.list(product);
-		System.out.println(productList);
-
+		Integer productCount = productService.getCount(product);
+		System.out.println(productCount+":"+productList);
+		List<Map<String, Object>> productFrontNewList = productService.frontNewList(product);
+		product.setPdcId("1");
+		List<Map<String, Object>> productFrontTypeList = productService.frontTypeList(product);
+		List<Map<String, Object>> productFrontRandTypeList = productService.frontRandTypeList(product);
+		System.out.println("productFrontNewList:"+productFrontNewList);
+		System.out.println("productFrontTypeList:"+productFrontTypeList);
+		System.out.println("productFrontRandTypeList:"+productFrontRandTypeList);
+		
 		ProductCollection productCollection = new ProductCollection();
 		productCollection.setSearchText("上");
 		List<Map<String, Object>> productCollectionList = productCollectionService.list(productCollection);
@@ -258,8 +267,13 @@ public class HolidayDessertController {
 		System.out.println("YOYO:"+promotionDetailFrontList);
 
 		ReceiptInformation receiptInformation = new ReceiptInformation();
+		receiptInformation.setSearchText("中");
 		List<Map<String, Object>> receiptInformationList = receiptInformationService.list(receiptInformation);
-		System.out.println(receiptInformationList);
+		Integer receiptInformationCount = receiptInformationService.getCount(receiptInformation);
+		System.out.println(receiptInformationCount+":"+receiptInformationList);
+		receiptInformation.setMemId("201");
+		List<Map<String, Object>> receiptInformationFrontList = receiptInformationService.frontList(receiptInformation);
+		System.out.println(receiptInformationFrontList);
 		
 		model.addAttribute("frontOrderDetails", frontOrderDetails);
 		System.out.println("index");

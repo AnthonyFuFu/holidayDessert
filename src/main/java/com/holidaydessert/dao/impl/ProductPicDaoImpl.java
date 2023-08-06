@@ -23,7 +23,8 @@ public class ProductPicDaoImpl implements ProductPicDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT * FROM holiday_dessert.product_pic "
-				   + " WHERE PD_ID = ? ";
+				   + " WHERE PD_ID = ? "
+				   + " ORDER BY PD_PIC_SORT ";
 
 		args.add(productPic.getPdId());
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
@@ -39,11 +40,33 @@ public class ProductPicDaoImpl implements ProductPicDao {
 	@Override
 	public void add(ProductPic productPic) {
 
-		String sql = " INSERT INTO holiday_dessert.product_pic "
-				   + " (PD_ID, PD_PIC) "
-				   + " VALUES(?, ?) ";
+		List<Object> args = new ArrayList<>();
 		
-		jdbcTemplate.update(sql, new Object[] {productPic.getPdId(), productPic.getPdPic() });
+		String sql = " INSERT INTO holiday_dessert.product_pic "
+				   + " (PD_ID, PD_PIC, PD_PIC_SORT) "
+				   + " VALUES(?, ?, ?) ";
+		
+		args.add(productPic.getPdId());
+		args.add(productPic.getPdPic());
+		args.add(productPic.getPdPicSort());
+		
+		jdbcTemplate.update(sql, args.toArray());
+		
+	}
+
+	@Override
+	public void update(ProductPic productPic) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " UPDATE holiday_dessert.product_pic "
+				   + " SET PD_PIC_SORT = ?, "
+				   + " WHERE PD_PIC_ID = ? ";
+		
+		args.add(productPic.getPdPicSort());
+		args.add(productPic.getPdPicId());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 

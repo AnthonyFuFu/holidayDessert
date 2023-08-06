@@ -2,16 +2,18 @@ package com.holidaydessert.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NonNull
 @NoArgsConstructor
 @AllArgsConstructor
-public class ReceiptInformation {
+public class ReceiptInformation extends Base{
 	
 	private String rcpId;              // 常用收貨資訊ID
 	private String memId;              // 會員ID

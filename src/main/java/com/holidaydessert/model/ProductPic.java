@@ -17,5 +17,7 @@ public class ProductPic extends Base {
 
 	private String pdPicId;            // 商品圖片ID
 	private String pdId;               // 商品ID
+	private String pdPicSort;          // 商品圖片排序
 	private byte[] pdPic;              // 商品圖片
+	
 }

@@ -169,22 +169,29 @@ create table product(
     PD_PRICE int not null,
     PD_DESCRIPTION varchar(200),
     PD_DISPLAY_QUANTITY int,
-    PD_STATUS tinyint(1) not null default 0,
+    PD_STATUS tinyint(1) not null default 1,
+    PD_IS_DEL tinyint(1) not null default 0,
+    PD_CREATE_BY varchar(20) ,
+	PD_CREATE_TIME datetime ,
+	PD_UPDATE_BY varchar(20) ,
+	PD_UPDATE_TIME datetime,
     constraint product_product_collection_fk FOREIGN KEY (PDC_ID) REFERENCES product_collection(PDC_ID)
 )auto_increment=4001;
-insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS)
-values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1),
-       (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1);
+insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS, PD_IS_DEL,
+					PD_CREATE_BY,PD_CREATE_TIME,PD_UPDATE_BY,PD_UPDATE_TIME)
+values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1, 0,'嘉寶貝',NOW(),'嘉寶貝',NOW()),
+       (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1, 0,'嘉寶貝',NOW(),'嘉寶貝',NOW());
 
 -- 商品圖片 --
 create table product_pic (
 	PD_PIC_ID int auto_increment not null primary key,
     PD_ID int,
+    PD_PIC_SORT int,
     PD_PIC longblob,
     constraint product_pic_product_fk foreign key (PD_ID) references product(PD_ID)
 );
-insert into product_pic(PD_ID)
-values (4001),(4001),(4001),(4002),(4002),(4002);
+insert into product_pic(PD_ID, PD_PIC_SORT)
+values (4001, 1),(4001, 2),(4001, 3),(4002, 1),(4002, 3),(4002, 2);
 
 -- ================== CREATE TABLE(優惠相關）================== --
 

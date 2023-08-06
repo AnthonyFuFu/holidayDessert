@@ -53,6 +53,12 @@ public class CartDaoImpl implements CartDao {
 		  		args.add(searchText[i]);
 			}
 		}
+
+		if(sql.indexOf("WHERE") > 0) {
+			sql += " AND PD_IS_DEL = 0 ";
+		} else {
+			sql += " WHERE PD_IS_DEL = 0 ";
+		}
 		
 		if (cart.getStart() != null && !"".equals(cart.getStart())) {
 			sql += " LIMIT " + cart.getStart() + "," + cart.getLength();
@@ -104,6 +110,13 @@ public class CartDaoImpl implements CartDao {
 		  		args.add(searchText[i]);
 			}
 		}
+
+		if(sql.indexOf("WHERE") > 0) {
+			sql += " AND PD_IS_DEL = 0 ";
+		} else {
+			sql += " WHERE PD_IS_DEL = 0 ";
+		}
+		
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 
@@ -116,7 +129,9 @@ public class CartDaoImpl implements CartDao {
 				   + " FROM holiday_dessert.cart c "
 				   + " LEFT JOIN product p ON p.PD_ID = c.PD_ID "
 				   + " LEFT JOIN member m ON m.MEM_ID = c.MEM_ID "
-				   + " WHERE c.MEM_ID = ? ";
+				   + " WHERE c.MEM_ID = ? "
+				   + " AND PD_IS_DEL = 0 "
+				   + " AND PD_STATUS = 1 ";
 		
 		args.add(cart.getMemId());
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());

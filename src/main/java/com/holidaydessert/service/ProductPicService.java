@@ -10,6 +10,7 @@ public interface ProductPicService {
 	// back
 	public List<Map<String, Object>> list(ProductPic productPic);
 	public void add(ProductPic productPic);
+	public void update(ProductPic productPic);
 	public void delete(ProductPic productPic);
 	
 	// front

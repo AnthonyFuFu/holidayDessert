@@ -27,6 +27,11 @@ public class ProductPicServiceImpl implements ProductPicService {
 	}
 
 	@Override
+	public void update(ProductPic productPic) {
+		productPicDao.update(productPic);
+	}
+
+	@Override
 	public void delete(ProductPic productPic) {
 		productPicDao.delete(productPic);
 	}
