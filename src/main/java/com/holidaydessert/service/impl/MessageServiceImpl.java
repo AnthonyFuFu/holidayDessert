@@ -15,10 +15,20 @@ public class MessageServiceImpl implements MessageService {
 
 	@Autowired
 	private MessageDao messageDao;
+	
+	@Override
+	public List<Map<String, Object>> getMessageByEmpId(Message message) {
+		return messageDao.getMessageByEmpId(message);
+	}
 
 	@Override
-	public List<Map<String, Object>> list(Message message) {
-		return messageDao.list(message);
+	public List<Map<String, Object>> getMessageByMemId(Message message) {
+		return messageDao.getMessageByMemId(message);
+	}
+
+	@Override
+	public void saveMessage(Message message) {
+		messageDao.saveMessage(message);
 	}
 
 	@Override

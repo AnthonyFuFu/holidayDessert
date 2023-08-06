@@ -10,7 +10,7 @@ public interface AuthorityService {
 	
 	// back
 	public List<Map<String, Object>> list(Authority authority);
-	public void batchAdd(Employee employee, String[] empFunction);
+	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction);
 	public void update(Authority authority);
 	
 }

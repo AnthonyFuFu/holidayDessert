@@ -198,7 +198,8 @@ public class HolidayDessertController {
 		System.out.println(memberCount+":"+memberList);
 
 		Message message = new Message();
-		List<Map<String, Object>> messageList = messageService.list(message);
+		message.setMemId("201");
+		List<Map<String, Object>> messageList = messageService.getMessageByMemId(message);
 		System.out.println(messageList);
 
 		News news = new News();

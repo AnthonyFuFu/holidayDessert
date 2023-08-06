@@ -40,22 +40,22 @@ public class AuthorityDaoImpl implements AuthorityDao{
 	}
 
 	@Override
-	public void batchAdd(Employee employee, String[] empFunction) {
+	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction) {
 		
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " INSERT INTO holiday_dessert.authority "
 				   + " (EMP_ID, FUNC_ID, AUTH_STATUS) ";
 		
-		if(empFunction.length > 0) {
-			for(int i=0; i<empFunction.length; i++) {
+		if(empFunction.size() > 0) {
+			for(int i=0; i<empFunction.size(); i++) {
 				if(i == 0) {
 					sql += " VALUES(?, ?, 1) ";
 				} else {
 					sql += " ,(?, ?, 1) ";
 				}
 				args.add(employee.getEmpId());
-				args.add(empFunction[i]);
+				args.add(empFunction.get(i).get("FUNC_ID"));
 			}
 		}
 		

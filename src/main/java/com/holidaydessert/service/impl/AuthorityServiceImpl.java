@@ -23,7 +23,7 @@ public class AuthorityServiceImpl implements AuthorityService {
 	}
 
 	@Override
-	public void batchAdd(Employee employee, String[] empFunction) {
+	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction) {
 		authorityDao.batchAdd(employee, empFunction);
 	}
 
