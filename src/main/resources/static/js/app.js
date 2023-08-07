@@ -12,8 +12,7 @@ stompClient.onConnect = (frame) => {
     setConnected(true);
     console.log('Connected: ' + frame);
     stompClient.subscribe('/topic/greetings', (greeting) => {
-	console.log(greeting);
-        showGreeting(JSON.parse(greeting.body).content);
+        showGreeting(greeting.body);
     });
 };
 
@@ -51,17 +50,19 @@ function disconnect() {
 function sendMsgContent() {
     stompClient.publish({
         destination: "/app/chat",
-        body: JSON.stringify({'msgContent': $("#msgContent").val()})
+        body: JSON.stringify({'memId': $("#memId").val(),'msgContent': $("#msgContent").val(),'msgDirection': 1})
     });
 }
 
-function showGreeting(message) {
-    $("#greetings").append("<tr><td>" + message + "</td></tr>");
+function showGreeting(greeting) {
+	let msgContent = JSON.parse(greeting).msgContent
+	let msgTime = JSON.parse(greeting).msgTime
+    $("#greetings").append("<tr><td>" + msgContent + "</td><td>" + msgTime + "</td></tr>");
 }
 
 $(function () {
     $("form").on('submit', (e) => e.preventDefault());
-    $( "#connect" ).click(() => connect());
-    $( "#disconnect" ).click(() => disconnect());
-    $( "#send" ).click(() => sendMsgContent());
+    $("#connect").click(() => connect());
+    $("#disconnect").click(() => disconnect());
+    $("#send").click(() => sendMsgContent());
 });

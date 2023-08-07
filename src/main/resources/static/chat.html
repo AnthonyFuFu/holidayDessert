@@ -26,9 +26,14 @@
         </div>
         <div class="col-md-6">
             <form class="form-inline">
+                <input type="hidden" id="msgDirection">
                 <div class="form-group">
-                    <label for="msgContent">sendMsg</label>
-                    <input type="text" id="msgContent" class="form-control" placeholder="send message here...">
+                    <label for="memId">memId</label>
+                    <input type="text" id="memId" class="form-control" placeholder="memId here...">
+                </div>
+                <div class="form-group">
+                    <label for="msgContent">msgContent</label>
+                    <input type="text" id="msgContent" class="form-control" placeholder="msgContent here...">
                 </div>
                 <button id="send" class="btn btn-default" type="submit">Send</button>
             </form>

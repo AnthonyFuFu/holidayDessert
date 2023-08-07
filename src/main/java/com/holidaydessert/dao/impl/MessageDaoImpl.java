@@ -61,16 +61,51 @@ public class MessageDaoImpl implements MessageDao {
 
 	@Override
 	public void saveMessage(Message message) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " INSERT INTO holiday_dessert.product_pic "
+				   + " (EMP_ID, MEM_ID, MSG_CONTENT, MSG_TIME, MSG_DIRECTION, MSG_PIC) "
+				   + " VALUES(?, ?, ?, ?, ?, ?) ";
+		
+		args.add(message.getEmpId());
+		args.add(message.getMemId());
+		args.add(message.getMsgContent());
+		args.add(message.getMsgTime());
+		args.add(message.getMsgDirection());
+		args.add(message.getMsgPic());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
 	@Override
 	public void edit(Message message) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " UPDATE holiday_dessert.message "
+				   + " SET MSG_CONTENT = ?, MSG_TIME = ? "
+				   + " WHERE MSG_ID = ? ";
+		
+		args.add(message.getMsgContent());
+		args.add(message.getMsgTime());
+		args.add(message.getMsgId());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
-
+	
 	@Override
 	public void delete(Message message) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " DELETE FROM holiday_dessert.message "
+				   + " WHERE MSG_ID = ? ";
+		
+		args.add(message.getMsgId());
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 

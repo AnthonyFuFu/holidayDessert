@@ -38,7 +38,7 @@ public class JWTInterceptor implements HandlerInterceptor {
 //		}
 
 		// 檢查請求路徑是否以 "/holidayDessert/admin" 開頭，如果是，則進行 JWT 驗證
-		if (request.getRequestURI().startsWith("/holidayDessert/admin")) {
+		if (request.getRequestURI().startsWith("/holidayDessert/adminx")) {
 			
 			Map<String, Object> map = new HashMap<>();
 			System.out.println("preHandle");
