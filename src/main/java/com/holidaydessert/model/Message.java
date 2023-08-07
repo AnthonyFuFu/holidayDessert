@@ -13,12 +13,6 @@ import lombok.NonNull;
 @AllArgsConstructor
 public class Message {
 
-	public Message(String string) {
-	}
-	
-	public Message(String empId, String msgContent, String time) {
-	}
-
 	private String msgId;              // 聊天紀錄ID
 	private String empId;              // 管理員ID
 	private String memId;              // 會員ID
