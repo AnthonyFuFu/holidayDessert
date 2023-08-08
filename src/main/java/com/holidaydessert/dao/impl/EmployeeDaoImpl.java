@@ -146,4 +146,43 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 	}
 
+	@Override
+	public Employee login(Employee employee) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM forecast.employee "
+				   + " WHERE EMP_ACCOUNT = ? "
+				   + " AND EMP_STATUS = '1' ";
+		
+		args.add(employee.getEmpAccount());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Employee user = new Employee();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String empId = (String) resultMap.get("EMP_ID");
+	        String empName = (String) resultMap.get("EMP_NAME");
+	        String empPhone = (String) resultMap.get("EMP_PHONE");
+	        byte[] empPicture = (byte[]) resultMap.get("EMP_PICTURE");
+	        String empAccount = (String) resultMap.get("EMP_ACCOUNT");
+	        String empPassword = (String) resultMap.get("EMP_PASSWORD");
+	        String empLevel = (String) resultMap.get("EMP_LEVEL");
+	        String empStatus = (String) resultMap.get("EMP_STATUS");
+	        String empHiredate = (String) resultMap.get("EMP_HIREDATE");
+	        
+	        user.setEmpId(empId);
+	        user.setEmpName(empName);
+	        user.setEmpPhone(empPhone);
+	        user.setEmpPicture(empPicture);
+	        user.setEmpAccount(empAccount);
+	        user.setEmpPassword(empPassword);
+	        user.setEmpLevel(empLevel);
+	        user.setEmpStatus(empStatus);
+	        user.setEmpHiredate(empHiredate);
+	    }
+		return user == null ? null : user;
+	}
+
 }

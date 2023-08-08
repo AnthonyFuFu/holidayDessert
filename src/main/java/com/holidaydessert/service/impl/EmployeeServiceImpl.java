@@ -41,4 +41,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employeeDao.resign(employee);
 	}
 
+	@Override
+	public Employee login(Employee employee) {
+		return employeeDao.login(employee);
+	}
+
 }

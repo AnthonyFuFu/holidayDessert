@@ -112,12 +112,12 @@ public class MemberDaoImpl implements MemberDao {
 	public void register(Member member) {
 
 		String sql = " INSERT INTO holiday_dessert.member "
-				   + " (MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE,"
-				   + " MEM_EMAIL, MEM_ADDRESS, MEM_BIRTHDAY, MEM_STATUS) "
-				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0)";
+				   + " (MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL, "
+				   + " MEM_ADDRESS, MEM_BIRTHDAY, MEM_STATUS, MEM_VERIFICATION_STATUS, MEM_VERIFICATION_CODE) "
+				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)";
 		
-		jdbcTemplate.update(sql, new Object[] { member.getMemName(), member.getMemAccount(), member.getMemPassword(),
-				member.getMemGender(), member.getMemPhone(), member.getMemEmail(), member.getMemAddress(), member.getMemBirthday() });
+		jdbcTemplate.update(sql, new Object[] { member.getMemName(), member.getMemAccount(), member.getMemPassword(), member.getMemGender(), member.getMemPhone(), 
+				member.getMemEmail(), member.getMemAddress(), member.getMemBirthday(), member.getMemVerificationCode() });
 		
 	}
 
@@ -143,6 +143,61 @@ public class MemberDaoImpl implements MemberDao {
 		
 		jdbcTemplate.update(sql, args.toArray());
 		
+	}
+	
+	public void verificationEmail(Member member) {
+		
+		String sql = " UPDATE forecast.member_account "
+				   + " SET MEM_VERIFICATION_STATUS = '1', MEM_STATUS = '1' "
+				   + " WHERE MEM_ID = ? ";
+		
+		jdbcTemplate.update(sql, new Object[] { member.getMemId() });
+		
+	}
+
+	@Override
+	public Member getCheckMemberEmail(Member member) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.member "
+				   + " WHERE MEM_EMAIL = ? ";
+		
+		args.add(member.getMemEmail());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Member user = new Member();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String memId = (String) resultMap.get("MEM_ID");
+	        String memName = (String) resultMap.get("MEM_NAME");
+	        String memAccount = (String) resultMap.get("MEM_ACCOUNT");
+	        String memPassword = (String) resultMap.get("MEM_PASSWORD");
+	        String memGender = (String) resultMap.get("MEM_GENDER");
+	        String memPhone = (String) resultMap.get("MEM_PHONE");
+	        String memEmail = (String) resultMap.get("MEM_EMAIL");
+	        String memAddress = (String) resultMap.get("MEM_ADDRESS");
+	        String memBirthday = (String) resultMap.get("MEM_BIRTHDAY");
+	        String memStatus = (String) resultMap.get("MEM_STATUS");
+	        String memVerificationStatus = (String) resultMap.get("MEM_VERIFICATION_STATUS");
+	        String memVerificationCode = (String) resultMap.get("MEM_VERIFICATION_CODE");
+	        
+	        user.setMemId(memId);
+	        user.setMemName(memName);
+	        user.setMemAccount(memAccount);
+	        user.setMemPassword(memPassword);
+	        user.setMemGender(memGender);
+	        user.setMemPhone(memPhone);
+	        user.setMemEmail(memEmail);
+	        user.setMemAddress(memAddress);
+	        user.setMemBirthday(memBirthday);
+	        user.setMemStatus(memStatus);
+	        user.setMemVerificationStatus(memVerificationStatus);
+	        user.setMemVerificationCode(memVerificationCode);
+	    }
+		return user == null ? null : user;
+
 	}
 
 }

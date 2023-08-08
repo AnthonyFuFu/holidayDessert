@@ -36,4 +36,14 @@ public class MemberServiceImpl implements MemberService {
 		memberDao.edit(member);
 	}
 
+	@Override
+	public void verificationEmail(Member member) {
+		memberDao.verificationEmail(member);
+	}
+
+	@Override
+	public Member getCheckMemberEmail(Member member) {
+		return memberDao.getCheckMemberEmail(member);
+	}
+
 }

@@ -14,5 +14,7 @@ public interface MemberService {
 	// front
 	public void register(Member member);
 	public void edit(Member member);
+	public void verificationEmail(Member member);
+	public Member getCheckMemberEmail(Member member);
 	
 }

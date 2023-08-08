@@ -32,16 +32,18 @@ MEM_PHONE VARCHAR(10) NOT NULL,
 MEM_EMAIL VARCHAR(40) NOT NULL,
 MEM_ADDRESS VARCHAR(100),
 MEM_BIRTHDAY DATE NOT NULL,
-MEM_STATUS TINYINT(1) DEFAULT(0),
+MEM_STATUS TINYINT(1) DEFAULT(1),
+MEM_VERIFICATION_STATUS TINYINT(1) DEFAULT(0),
+MEM_VERIFICATION_CODE VARCHAR(100),
 CONSTRAINT unikey_MEM_ACCOUNT unique(MEM_ACCOUNT)
 )auto_increment=201;
 
-INSERT INTO member(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY)
-VALUES  ('傅寶貝', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d')),
-		('嘉寶貝', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d')),
-        ('傅貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d')),
-        ('傅寶', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d')),
-        ('傅', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'))
+INSERT INTO member(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS)
+VALUES  ('傅寶貝', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
+		('嘉寶貝', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1),
+        ('傅貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
+        ('傅寶', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
+        ('傅', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1)
         ;
 
 -- 常用收貨資訊 --
