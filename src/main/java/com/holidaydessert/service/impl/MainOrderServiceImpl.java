@@ -36,4 +36,9 @@ public class MainOrderServiceImpl implements MainOrderService {
 		mainOrderDao.add(mainOrder);
 	}
 
+	@Override
+	public List<Map<String, Object>> getMemOrderList(MainOrder mainOrder) {
+		return mainOrderDao.getMemOrderList(mainOrder);
+	}
+
 }

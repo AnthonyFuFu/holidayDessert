@@ -151,7 +151,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT * FROM forecast.employee "
+		String sql = " SELECT * FROM holiday_dessert.employee "
 				   + " WHERE EMP_ACCOUNT = ? "
 				   + " AND EMP_STATUS = '1' ";
 		

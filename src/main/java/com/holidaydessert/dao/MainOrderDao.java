@@ -14,5 +14,6 @@ public interface MainOrderDao {
 	
 	// front
 	public void add(MainOrder mainOrder);
+	public List<Map<String, Object>> getMemOrderList(MainOrder mainOrder);
 	
 }

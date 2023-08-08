@@ -16,5 +16,8 @@ public interface MemberDao {
 	public void edit(Member member);
 	public void verificationEmail(Member member);
 	public Member getCheckMemberEmail(Member member);
+	public void updateVerification(Member member);
+	public void updatePassword(Member member);
+	public Member login(Member member);
 	
 }
