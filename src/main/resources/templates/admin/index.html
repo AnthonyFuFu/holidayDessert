@@ -10,13 +10,16 @@
 <!-- <meta property="og:title" content="112學測落點分析｜AI大數據精準落點選填大學校系志願必備-甄戰"/> -->
 <!-- <meta property="og:description" content="112學測落點分析，AI大數據精準落點2023學測成績！唯一依據使用者行為智能運算法，動態推測高低估校系；設定追蹤，每日動態更新申請入學志願校系趨勢變動，獨家校系參考功能等你使用！學測申請入學6志願選填就交給甄戰AI大數據落點系統！"/> -->
 <!-- <meta property="og:image" th:content="@{/front/images/login_pic.png}"/> -->
-<title>[[${@environment.getProperty('html.title')}]]</title>
-
+<title>[[${@environment.getProperty('html.title')}]] - 後台</title>
 <!-- <script type="text/javascript" th:src="@{/front/js/baseForm.js}"></script> -->
 <!-- <script type="text/javascript" th:src="@{/front/js/index.js}"></script> -->
+<head th:include="admin/load/js :: js"></head>
 </head>
 
 <body>
+holidaydessert101   emppassword1
+<div th:if="${employeeSession != null}"> [[${employeeSession.empName}]], [[${employeeSession.empAccount}]], [[${employeeSession.empPassword}]] </div>
+<div th:if="${employeeSession != null}" th:include="front/chat :: chat"></div>
 
 <!-- <dl th:each="orderDetail:${frontOrderDetails}"> -->
 <!-- 	<dd><div th:text="${orderDetail.ORD_ID}"></div></dd> -->

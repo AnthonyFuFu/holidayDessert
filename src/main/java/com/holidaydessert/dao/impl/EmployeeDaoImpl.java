@@ -162,15 +162,16 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		Employee user = new Employee();
 		if (!list.isEmpty()) {
 	        Map<String, Object> resultMap = list.get(0);
-	        String empId = (String) resultMap.get("EMP_ID");
-	        String empName = (String) resultMap.get("EMP_NAME");
-	        String empPhone = (String) resultMap.get("EMP_PHONE");
-	        byte[] empPicture = (byte[]) resultMap.get("EMP_PICTURE");
-	        String empAccount = (String) resultMap.get("EMP_ACCOUNT");
-	        String empPassword = (String) resultMap.get("EMP_PASSWORD");
-	        String empLevel = (String) resultMap.get("EMP_LEVEL");
-	        String empStatus = (String) resultMap.get("EMP_STATUS");
-	        String empHiredate = (String) resultMap.get("EMP_HIREDATE");
+	        System.out.println(resultMap);
+	        String empId = String.valueOf(resultMap.get("EMP_ID"));
+	        String empName = String.valueOf(resultMap.get("EMP_NAME"));
+	        String empPhone = String.valueOf(resultMap.get("EMP_PHONE"));
+	        String empPicture = String.valueOf(resultMap.get("EMP_PICTURE"));
+	        String empAccount = String.valueOf(resultMap.get("EMP_ACCOUNT"));
+	        String empPassword = String.valueOf(resultMap.get("EMP_PASSWORD"));
+	        String empLevel = String.valueOf(resultMap.get("EMP_LEVEL")).equals("true") ? "1": "0";
+	        String empStatus = String.valueOf(resultMap.get("EMP_STATUS")).equals("true") ? "1": "0";
+	        String empHiredate = String.valueOf(resultMap.get("EMP_HIREDATE"));
 	        
 	        user.setEmpId(empId);
 	        user.setEmpName(empName);

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<div th:fragment="menu">
+		<script type="text/javascript">
+			try{ace.settings.loadState('sidebar')}catch(e){}
+		</script>
+
+		<ul class="nav nav-list">
+			<li class="">
+				<a>
+					<i class="menu-icon fa fa-tachometer"></i>
+					<span class="menu-text"> 選單 </span>
+				</a>
+				<b class="arrow"></b>
+			</li>
+			
+			<li th:each="menu1:${menu}">
+				<a href="#" class="dropdown-toggle">
+					<i class="menu-icon fa" th:classappend="${menu1.icon}"></i>
+					<span class="menu-text" th:text="${menu1.name}"></span>
+					<b class="arrow fa fa-angle-down"></b>
+				</a>
+				<b class="arrow"></b>
+				<ul class="submenu">
+					<li class="" th:each="menu2:${menu1.menu2}">
+						<a th:if="${menu2.link} != null" th:href="${menu2.link}">
+							<i class="menu-icon fa fa-caret-right"></i>
+							<span th:if="${menu2.name} != null" th:text="${menu2.name}"></span>
+						</a>
+						<b class="arrow"></b>
+					</li>
+				</ul>
+			</li>
+		</ul><!-- /.nav-list -->
+
+		<div class="sidebar-toggle sidebar-collapse" id="sidebar-collapse">
+			<i id="sidebar-toggle-icon" class="ace-icon fa fa-angle-double-left ace-save-state" data-icon1="ace-icon fa fa-angle-double-left" data-icon2="ace-icon fa fa-angle-double-right"></i>
+		</div>
+	</div>
+</html>

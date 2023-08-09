@@ -19,6 +19,6 @@ public class Message {
 	private String msgContent;         // 聊天內容
 	private String msgTime;            // 訊息時間
 	private String msgDirection;       // 發送方向(0:客服對會員 1:會員對客服)
-	private byte[] msgPic;             // 圖片
+	private String msgPic;             // 圖片
 	
 }

@@ -21,8 +21,7 @@
 <section class="login-area" th:include="front/load/login :: login"></section>
 <div th:include="front/load/header :: header" id="header"></div>
 <div th:if="${memberSession != null}" th:include="front/chat :: chat"></div>
-holidaydessert101
-emppassword1
+
 <dl th:each="orderDetail:${frontOrderDetails}">
 	<dd><div th:text="${orderDetail.ORD_ID}"></div></dd>
 	<dd><div th:text="${orderDetail.PD_ID}"></div></dd>

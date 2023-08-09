@@ -15,6 +15,6 @@ public class Banner {
 
 	private String banId;              // 公告BannerID
 	private String newsId;             // 公告ID
-	private byte[] banPic;             // 公告Banner
+	private String banPic;             // 公告Banner
 	
 }

@@ -1,14 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="chat">
-<head>
-    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-    <link th:href="@{/front/css/main.css}" rel="stylesheet">
-    <script type="text/javascript" th:src="@{/front/js/app.js}"></script>
-</head>
-<body>
-
+<html xmlns:th="http://www.thymeleaf.org">
+<body th:fragment="chat">
 <div id="main-content" class="container">
     <div class="row">
         <div class="col-md-6">
@@ -21,11 +13,13 @@
             </form>
         </div>
         <div class="col-md-6">
-            <form class="form-inline">
-                <input type="hidden" id="msgDirection">
+            <form class="form-inline" th:if="${memberSession != null}">
+                <input type="hidden" id="msgDirection" value="1">
                 <div class="form-group">
                     <label for="memId">[[${memberSession.memAccount}]]</label>
                     <input type="hidden" id="memId" th:value="*{memberSession.memId}">
+                    <input type="hidden" id="empId">
+                    <input type="hidden" id="msgPic">
                 </div>
                 <div class="form-group">
                     <label for="msgContent">msgContent</label>
@@ -33,6 +27,22 @@
                 </div>
                 <button id="send" class="btn btn-default" type="submit">Send</button>
             </form>
+            
+            <form class="form-inline" th:if="${employeeSession != null}">
+                <input type="hidden" id="msgDirection" value="0">
+                <div class="form-group">
+                    <label for="empId">[[${employeeSession.empName}]]</label>
+                    <input type="hidden" id="empId" th:value="*{employeeSession.empId}">
+                    <input type="hidden" id="memId">
+                    <input type="hidden" id="msgPic">
+                </div>
+                <div class="form-group">
+                    <label for="msgContent">msgContent</label>
+                    <input type="text" id="msgContent" class="form-control" placeholder="msgContent here...">
+                </div>
+                <button id="send" class="btn btn-default" type="submit">Send</button>
+            </form>
+            
         </div>
     </div>
     <div class="row">
@@ -50,4 +60,3 @@
     </div>
 </div>
 </body>
-</html>

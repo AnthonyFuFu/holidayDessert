@@ -2,7 +2,7 @@ let port = window.location.port;
 let url = window.location.hostname + (port ? ':' + port : '');
 //let httpUrl = window.location.protocol + '//' + window.location.hostname + (port ? ':' + port : '') + '/';
 let socket = "ws://"+url+"/holidayDessert/chat"
-
+console.log(socket);
 const stompClient = new StompJs.Client({
 	brokerURL: socket
 //    brokerURL: 'ws://localhost:8080/holidayDessert/chat'
@@ -50,14 +50,15 @@ function disconnect() {
 function sendMsgContent() {
     stompClient.publish({
         destination: "/app/chat",
-        body: JSON.stringify({'memId': $("#memId").val(),'msgContent': $("#msgContent").val(),'msgDirection': 1})
+        body: JSON.stringify({'empId': $("#empId").val(),'memId': $("#memId").val(),'msgContent': $("#msgContent").val(),'msgDirection': $("#msgDirection").val(),'msgPic': $("#msgPic").val()})
     });
 }
 
 function showGreeting(greeting) {
 	let msgContent = JSON.parse(greeting).msgContent
 	let msgTime = JSON.parse(greeting).msgTime
-    $("#greetings").append("<tr><td>" + msgContent + "</td><td>" + msgTime + "</td></tr>");
+	let msgPic = JSON.parse(greeting).msgPic
+    $("#greetings").append("<tr><td>" + msgContent + "</td><td>" + msgTime + "</td><td>" + msgPic + "</td></tr>");
 }
 
 $(function () {

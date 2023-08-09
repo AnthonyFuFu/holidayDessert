@@ -60,13 +60,13 @@ insert into receipt_information(MEM_ID,RCP_NAME,RCP_CVS,RCP_PHONE)
 values ('201','傅寶貝','全家中壢中山店','0999000000');
 
 -- ================== CREATE TABLE(管理員相關）================== --
-        
+
 -- 管理員 --
 CREATE TABLE employee(
 EMP_ID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 EMP_NAME VARCHAR(20) NOT NULL,
 EMP_PHONE varchar(10) NOT NULL,
-EMP_PICTURE LONGBLOB,
+EMP_PICTURE VARCHAR(100),
 EMP_ACCOUNT VARCHAR(20) NOT NULL,
 EMP_PASSWORD VARCHAR(20) NOT NULL,
 EMP_LEVEL TINYINT(1) NOT NULL,
@@ -74,9 +74,9 @@ EMP_STATUS TINYINT(1) NOT NULL default '0',
 EMP_HIREDATE date not null DEFAULT (CURRENT_DATE),
 CONSTRAINT unikey_EMP_ACCOUNT unique(EMP_ACCOUNT)
 )auto_increment=101;
-INSERT INTO employee(EMP_NAME, EMP_PHONE, EMP_ACCOUNT, EMP_PASSWORD, EMP_LEVEL)  
-VALUES  ('傅寶貝', '0912345678','holidaydessert101', 'emppassword1','0'),
-		('嘉寶貝', '0987654321','holidaydessert102', 'emppassword2','0');
+INSERT INTO employee(EMP_NAME, EMP_PHONE, EMP_ACCOUNT, EMP_PASSWORD, EMP_LEVEL, EMP_STATUS)  
+VALUES  ('傅寶貝', '0912345678','holidaydessert101', 'emppassword1','0','1'),
+		('嘉寶貝', '0987654321','holidaydessert102', 'emppassword2','0','1');
 
 -- 功能-- 
 CREATE TABLE emp_function(
@@ -126,7 +126,7 @@ VALUES (null,'101','慶祝父親節','慶祝父親節，全館88折',CONCAT(CURD
 create table banner(
 BAN_ID	int auto_increment not null primary key,
 NEWS_ID	 int not null,
-BAN_PIC longblob,
+BAN_PIC VARCHAR(100),
 CONSTRAINT banner_news_FK FOREIGN KEY (NEWS_ID) references news(NEWS_ID)
 );
 
@@ -143,7 +143,7 @@ create table message(
 	MSG_CONTENT varchar(3000),
 	MSG_TIME datetime default current_timestamp on update current_timestamp not null,
 	MSG_DIRECTION tinyint(1) not null,
-    MSG_PIC longblob,
+    MSG_PIC VARCHAR(100),
     constraint message_employee_fk foreign key (EMP_ID) references employee(EMP_ID),
     constraint message_member_fk foreign key (MEM_ID) references member(MEM_ID)
 );
@@ -189,7 +189,7 @@ create table product_pic (
 	PD_PIC_ID int auto_increment not null primary key,
     PD_ID int,
     PD_PIC_SORT int,
-    PD_PIC longblob,
+    PD_PIC VARCHAR(100),
     constraint product_pic_product_fk foreign key (PD_ID) references product(PD_ID)
 );
 insert into product_pic(PD_ID, PD_PIC_SORT)
@@ -233,7 +233,7 @@ create table coupon(
     CP_NAME varchar(45) not null,
     CP_DISCOUNT int not null,
     CP_STATUS tinyint not null,
-    CP_PIC longblob
+    CP_PIC VARCHAR(100)
 );
 insert into coupon(CP_NAME, CP_DISCOUNT, CP_STATUS)
 values ('50元購物金', 50, 1),

@@ -239,7 +239,6 @@ public class MemberDaoImpl implements MemberDao {
 		Member user = new Member();
 		if (!list.isEmpty()) {
 			Map<String, Object> resultMap = list.get(0);
-			System.out.println(resultMap);
 	        String memId = String.valueOf(resultMap.get("MEM_ID"));
 	        String memName = String.valueOf(resultMap.get("MEM_NAME"));
 	        String memAccount = String.valueOf(resultMap.get("MEM_ACCOUNT"));

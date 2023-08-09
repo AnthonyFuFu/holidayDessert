@@ -35,7 +35,8 @@ public class LoginController {
 		
 		String msg = "";
 //		String ip = pRequest.getRemoteAddr();
-		
+		System.out.println(empAccount);
+		System.out.println(empPassword);
 		try {
 			employee.setEmpAccount(empAccount);
 			employee.setEmpPassword(empPassword);
@@ -47,15 +48,12 @@ public class LoginController {
 				
 				Employee login = employeeService.login(employee);
 				
+				System.out.println(login);
 				//檢查帳號狀態
 				if(login != null) {
 					
 					if("0".equals(login.getEmpStatus())) {
 						msg = "此帳號已被停權！";
-						model.addAttribute("msg", msg);
-						return "admin/login";
-					} else if(Integer.valueOf(login.getEmpLevel()) > 0) {
-						msg = "此帳號無登入權限！";
 						model.addAttribute("msg", msg);
 						return "admin/login";
 					} else {

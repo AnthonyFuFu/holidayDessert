@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<script th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
+	</head>
+	<body>
+		<form id="mainForm" method="POST" th:action="${PATH}" >
+			<input type="hidden" id="path" th:value="${PATH}" />
+			<input type="hidden" id="message" th:value="${MESSAGE}"></input>
+			<input type="hidden" id="page" name="page" th:value="${PAGE}"></input>
+		</form>
+	</body>
+    <script>
+		$(function(){
+			if($("#message").val() != "") {
+				alert($("#message").val());
+			}
+			$("#mainForm").submit();
+		});
+	</script>
+</html>

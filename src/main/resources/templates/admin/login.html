@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta charset="utf-8" />
+<title>AdminLogin</title>
+</head>
+
+<body class="login-layout light-login">
+	<div class="position-relative">
+		<div id="login-box" class="login-box visible widget-box no-border">
+
+			<h6 th:text="${msg}">&nbsp;</h6>
+
+			<form role="form" id="mainForm" method="post" enctype="multipart/form-data" th:action="@{/admin/doLogin}">
+
+				<label class="block clearfix">
+				<input type="text" class="form-control" id="empAccount" name="empAccount"/></label>
+					
+				<label class="block clearfix">
+				<input type="password" class="form-control" id="empPassword" name="empPassword"/></label>
+
+				<div class="clearfix">
+				<button type="button" class="width-35 pull-right btn btn-sm btn-primary" onclick="checkLogin()">
+					<span class="bigger-110">Login</span>
+				</button>
+				</div>
+
+			</form>
+		</div>
+	</div>
+</body>
+<script th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
+<script type="text/javascript">
+function checkLogin() {
+	$("#mainForm").submit();
+}		
+</script>
+</html>
