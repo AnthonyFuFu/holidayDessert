@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="front/load/css :: css"></head>
+<head th:include="front/load/js :: js"></head>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<title>[[${@environment.getProperty('html.title')}]]-會員驗證</title>
+</head>
+
+<body th:include="front/load/header :: header" id="header" class="full-width"></body>
+<body>
+<!-- 會員登入區塊 -->
+<section class="login-area" th:include="front/load/login :: login"></section>
+<section class="secbox-checkmail">
+	<article class="edm-wrapper">
+	    <h1 class="title">
+	        會員E-mail認證
+	    	<div class="bg-hexagon-inregister"><img th:src="@{/front/images/bg_hexagon.jpg}"></div>
+	    </h1>
+
+	    <!-- 重認證 -->
+		<div class="fail">
+	        <aside>
+	            會員註冊後，系統會發送認證信到您的信箱，點選認證信之連結後，即可登入會員開始進行落點，若您5分鐘內未收到認證信，請檢查您的<span>垃圾郵件或垃圾桶檔案夾</span>，或者點選【重新寄送認證信】
+	        </aside>
+ 		    <div class="fail-input">
+ 		        <input type="text" id="email" placeholder="&nbsp;&nbsp;請重新輸入E-mail" onfocus="this.placeholder = ''"
+ 		        onblur="this.placeholder = '&nbsp;&nbsp;請重新輸入E-mail'">
+		    </div>
+ 		    
+	        <div class="btn-display">
+	            <a class="btn-sumit login btn-login" href="javascript:void(0);">登入會員開始落點</a>
+	            <a class="btn-sumit" href="" onclick="toSend()">重新寄送認證信</a>
+	        </div>
+ 		    <!-- <a class="btn-sumit" onclick="toSend()">寄送認證信</a> -->
+			<!-- <div class="btn-display">
+	            <a class="btn-sumit login btn-login" href="javascript:void(0);">登入會員開始落點</a>
+	            <a class="btn-sumit" href="">重新寄送認證信</a>
+	        </div> -->
+		</div><!-- fail -->
+
+	</article><!-- edm-wrapper End-->
+</section><!-- secbox-forget End -->
+
+<!-- 廣告 -->
+<section class="secbox-3" th:include="front/load/bottomBanner :: bottomBanner"></section>
+
+<!-- 版權頁尾 -->
+<section class="footerArea" th:include="front/load/footer :: footer"></section>
+
+<!-- 手機版面，下方功能列 -->
+<section id="service" th:include="front/load/service :: service"></section>
+
+<!--停機畫面-->
+<section th:include="front/load/shutdown :: shutdown"></section>
+
+<script>
+
+	function toSend(){
+		if($("#email").val() == ""){
+			alert("Email不可為空");
+			return false;
+		}
+		$.ajax({
+			url : "/forecast/member/reSendEmail",
+			cache: false,
+			async: false,
+			type : "POST",
+			dataType : 'text',
+			data : {
+				email:$("#email").val()
+			},
+			success : function(msg) {
+				if(msg == "驗證信寄出異常") {
+					alert("驗證信寄出失敗，請確認填寫的 E-Mail 是否正確，E-Mail 為註冊會員時填寫的 E-Mail");
+				} else {
+					alert(msg);
+				}
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+
+			}
+		});
+	}
+
+</script>
+
+</body>
+</html>

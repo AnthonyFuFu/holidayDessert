@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="front/load/css :: css"></head>
+<head th:include="front/load/js :: js"></head>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<title>[[${@environment.getProperty('html.title')}]]-會員驗證成功</title>
+<link type="image/x-icon" rel="shortcut icon" href="https://www.reallygood.com.tw/images/favicon_tkb.ico" />
+</head>
+<body th:include="front/load/header :: header" id="header" class="full-width"></body>
+<body>
+<!-- 會員登入區塊 -->
+<section class="login-area" th:include="front/load/login :: login"></section>
+<section class="secbox-checkmail">
+	<article class="edm-wrapper">             
+	    <h1 class="title">
+	        會員密碼寄信完成
+	    	<div class="bg-hexagon-inregister"><img th:src="@{/front/images/bg_hexagon.jpg}"></div>
+	    </h1>   
+	
+		<!-- 成功認證 -->
+	    <div class="success">
+	        <div class="title-sup-center">
+	            親愛的會員您好，已將密碼寄至您的信箱。
+	        </div>     
+	        <a class="btn-sumit login">登入</a>
+	    </div>
+	    
+	</article><!-- edm-wrapper End-->
+</section><!-- secbox-forget End -->
+
+<!-- 固定底部廣告 -->
+<section class="secbox-3" th:include="front/load/bottomBanner :: bottomBanner"></section>
+
+<!-- 版權頁尾 -->
+<section class="footerArea" th:include="front/load/footer :: footer"></section>
+
+<!-- 手機版面，下方功能列 -->
+<section id="service" th:include="front/load/service :: service"></section>
+
+<!--停機畫面-->
+<section th:include="front/load/shutdown :: shutdown"></section>
+</body>
+</html>

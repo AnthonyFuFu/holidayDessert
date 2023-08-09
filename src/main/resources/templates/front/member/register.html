@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head th:include="front/load/css :: css"></head>
+
+<head th:include="front/load/js :: js"></head>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+	<title>[[${@environment.getProperty('html.title')}]]-會員註冊</title>
+	<script type="text/javascript" th:src="@{/front/js/register.js}"></script>
+	<script type="text/javascript" th:src="@{/front/js/baseForm.js}"></script>
+</head>
+
+<body th:include="front/load/header :: header" id="header" class="full-width"></body>
+
+<body>
+	<!-- 會員登入區塊 -->
+	<section class="login-area" th:include="front/load/login :: login"></section>
+	<section class="secbox-register">
+		<article class="edm-wrapper">
+			<h1 class="title">會員註冊
+				<div class="bg-hexagon-inregister"><img th:src="@{/front/images/bg_hexagon.jpg}"></div>
+			</h1>
+			<div class="title-sup-center">
+				歡迎您加入本網站會員，為確保您的權益，請填寫下方個人資料。
+				<br>
+				<span style="color:#F00;">如已於TKB相關網站註冊之會員，不需重複註冊。</span>
+			</div>
+			<article class="register">
+				<form id="mainForm" method="POST" th:object="${memberAccount}" enctype="multipart/form-data"
+					role="form">
+
+					<input type="hidden" id="educationValue" th:field="*{education}" />
+					<input type="hidden" id="departmentValue" th:field="*{department}" />
+					<aside><span>*</span>字號為必填</aside>
+					<dl>
+						<dt><span>*</span>E-mail (會員帳號)</dt>
+						<dd>
+							<input type="text" id="Memberemail" th:field="*{email}" onchange="checkEmailExist()"
+								placeholder="&nbsp;&nbsp;請輸入您的電子郵件信箱,信箱為登錄用帳號,註冊後不可再改"
+								onfocus="this.placeholder = '&nbsp;&nbsp;請輸入您的電子郵件信箱,信箱為登錄用帳號,註冊後不可再改'"
+								onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的電子郵件信箱,信箱為登錄用帳號,註冊後不可再改'" maxlength="40" />
+						</dd>
+					</dl>
+					<dl>
+						<dt><span>*</span>姓名</dt>
+						<dd>
+							<input type="text" id="chineseName" th:field="*{chinese_name}"
+								placeholder="&nbsp;&nbsp;請輸入您的真實姓名" onfocus="this.placeholder = ''"
+								onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的真實姓名'" maxlength="20" />
+						</dd>
+					</dl>
+					<dl>
+						<dt><span>*</span>性別</dt>
+						<dd>
+							<select id="gender" th:field="*{gender}" onchange="changeGender()">
+								<option selected disabled value="0">請選擇</option>
+								<option value="M">男</option>
+								<option value="F">女</option>
+							</select>
+						</dd>
+					</dl>
+					<dl>
+						<dt>身分證字號</dt>
+						<dd>
+							<input type="text" id="idNo" th:field="*{id_no}" onchange="checkIdNo()"
+								placeholder="&nbsp;&nbsp;請輸入您的身份證字號" onfocus="this.placeholder = ''"
+								onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的身份證字號'" maxlength="10" />
+						</dd>
+					</dl>
+					<dl>
+						<dt><span>*</span>行動電話</dt>
+						<dd>
+							<input type="text" id="cellphone" th:field="*{cellphone}"
+								placeholder="&nbsp;&nbsp;請輸入您的行動電話號碼" onfocus="this.placeholder = ''"
+								onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的行動電話號碼'" maxlength="10" />
+						</dd>
+					</dl>
+					<dl>
+						<dt><span>*</span>密碼</dt>
+						<dd>
+							<input type="password" id="MemberPassword" th:field="*{password}"
+								placeholder="&nbsp;&nbsp;請輸入您的密碼,密碼長度需要大於6碼且小於12碼" onfocus="this.placeholder = ''"
+								onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的密碼,密碼長度需要大於6碼且小於12碼'" maxlength="12" />
+						</dd>
+					</dl>
+					<dl>
+						<dt><span>*</span>密碼確認</dt>
+						<dd>
+							<input type="password" id="checkPassword" placeholder="&nbsp;&nbsp;再輸入一次您的密碼"
+								onfocus="this.placeholder = ''" onblur="this.placeholder = '&nbsp;&nbsp;再輸入一次您的密碼'"
+								maxlength="12" />
+						</dd>
+					</dl>
+					
+					<div class="gray-divine-long MTB35"></div>
+					<div class="register-accept">
+						<input type="checkbox" th:field="*{agree_news}" value="1">&nbsp;同意接受TKB發送最新考試資訊、優惠電子報、優惠簡訊<br />
+						<input type="checkbox" th:field="*{approve}" value="1">&nbsp;已閱讀且同意<a href="/forecast/right"
+							target="_blank">會員權利說明</a>，並已瞭解<a href="/forecast/protection"
+							target="_blank">個資法相關規範</a>
+					</div>
+				</form>
+			</article><!-- register -->
+			<a class="btn-single-gold" onclick="add()">註冊</a>
+			<!-- 		    <button type="button"  class="btn-single-gold" style="cursor: pointer;">註冊</button> -->
+		</article><!-- edm-wrapper End-->
+
+	</section><!-- secbox-register End -->
+
+<!-- 版權頁尾 -->
+<section class="footerArea" th:include="front/load/footer :: footer"></section>
+	
+<!-- 手機版面，下方功能列 -->
+<section id="service" th:include="front/load/service :: service"></section>
+
+</body>
+
+</html>

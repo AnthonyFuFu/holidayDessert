@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="front/load/css :: css"></head>
+<head th:include="front/load/js :: js"></head>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<title>[[${@environment.getProperty('html.title')}]]-會員中心</title>
+<link type="image/x-icon" rel="shortcut icon" href="https://www.reallygood.com.tw/images/favicon_tkb.ico" />
+<script type="text/javascript" th:src="@{/front/js/baseForm.js}"></script>
+</head>
+
+<body th:include="front/load/header :: header" id="header" class="full-width"></body>
+<body>
+	<!-- 會員登入區塊 -->
+	<section class="login-area" th:include="front/load/login :: login"></section>
+
+	<form id="examNumForm" method="POST" th:object="${memberDetail}" enctype="multipart/form-data" role="form" >
+		<input type="hidden" th:field="*{exam_number}"/>
+		<input type="hidden" th:field="*{chinese}"/>
+		<input type="hidden" th:field="*{english}"/>
+		<input type="hidden" th:field="*{mathematics}"/>
+		<input type="hidden" th:field="*{mathematics_a}"/>
+		<input type="hidden" th:field="*{mathematics_b}"/>
+		<input type="hidden" th:field="*{society}"/>
+		<input type="hidden" th:field="*{naturally}"/>
+		<input type="hidden" th:field="*{english_hearing}"/>
+		<input type="hidden" th:field="*{apcs_concept}"/>
+		<input type="hidden" th:field="*{apcs_practice}"/>
+		<input type="hidden" th:field="*{id_no}"/>
+		<input type="hidden" th:field="*{status}"/>
+		<input type="hidden" th:field="*{id}" id="exam_id"/>
+		<input type="hidden" th:field="*{schoolDept}" id="schoolDept"/>
+		<input type="hidden" th:field="*{sex}" id="sdSex"/>
+	</form>
+
+	<!-- 新增成績區塊浮出燈箱 -->
+	<section class="add-id-area" th:include="front/load/score :: score"></section>
+
+	<!-- 新增序號區塊浮出燈箱 -->
+	<section class="add-sn-area" th:include="front/load/wish6 :: wish6"></section>
+	
+	<section class="secbox-memeber">
+		<h1 class="title">
+			會員中心
+			<div class="bg-hexagon-inregister"><img th:src="@{/front/images/bg_hexagon.jpg}"></div>
+		</h1>
+	
+		<div class="container">
+			<article class="member-tabs" id="member_tabs">
+				<button class="tab active" data-member-tab="personal_infomation">基本資料</button>
+				<button class="tab " data-member-tab="admission_ticket">准考證</button>
+				<button class="tab" data-member-tab="serial_number">志願序號</button>
+				<button class="tab" data-member-tab="order">訂單資訊</button>
+				<button class="tab" data-member-tab="change-pwd">修改密碼</button>
+			</article>
+		</div>
+	
+		<article data-member-panel="personal_infomation" class="member-panel active">
+			<form id="mainForm" th:object="${memberAccount}" method="POST" enctype="multipart/form-data" role="form">
+				<div class="panel-personal-infomation">
+					<dl>
+						<dt>姓名</dt>
+						<dd>
+							<input type="text" id="chineseName" th:field="*{chinese_name}" maxlength="20" placeholder="請輸入您的真實姓名" onfocus="this.placeholder = ''"
+							onblur="this.placeholder = '請輸入您的真實姓名'">
+						</dd>
+					</dl>
+				
+					<dl class="select">
+						<dt>性別</dt>
+						<dd>
+							<input type="text" readonly class="select-value" th:field="*{gender}" onchange="changeGender()">
+							<p class="select-view">[[*{gender == 'M' ? '男' : '女'}]]</p>
+							<ul class="options">
+								<li data-value="M">男</li>
+								<li data-value="F">女</li>
+							</ul>
+						</dd>
+					</dl>
+				
+					<dl>
+						<dt>身份證字號</dt>
+						<dd>
+							<input type="text" id="idNo" th:field="*{id_no}" onchange="checkIdNo()" placeholder="請輸入您的身份證字號"
+							onfocus="this.placeholder = ''" onblur="this.placeholder = '請輸入您的身份證字號'" maxlength="10">
+						</dd>
+					</dl>
+				
+					<dl>
+						<dt>行動電話</dt>
+						<dd>
+							<input type="text" th:field="*{cellphone}" placeholder="請輸入您的行動電話號碼" onfocus="this.placeholder = ''"
+							onblur="this.placeholder = '請輸入您的行動電話號碼'" maxlength="10"/>
+						</dd>
+					</dl>
+				
+					<dl>
+						<dt>電子郵箱</dt>
+						<dd>
+							<div class="content"><span>[[*{email}]]</span></div>
+						</dd>
+					</dl>
+					<a class="btn-save" onclick="update()">儲存資料</a>
+				</div>
+			</form>
+		</article>
+	
+		<article data-member-panel="admission_ticket" class="member-panel">
+			<div id="exam" class="panel-admission-ticket">
+				<!-- 如果沒有准考證 -->
+				<div th:if="${memberDetailList == null}" class="nodata">
+					<div class="nodata-img"><img th:src="@{/front/images/no-ticket.jpeg}" alt=""></div>
+					<p class="nodata-text">您尚未新增准考證</p>
+				</div>
+				<!-- 如果只有一個准考證，dl 的 class 加上 set-center：<dl class="set-center"> ... ... </dl> -->
+				<dl th:each="detail: ${memberDetailList}"
+					th:classappend="${(#lists.size(memberDetailList) == 1 ? 'set-center' : '') + ' ' + (memberAccountSession.exam_number == detail.exam_number ? 'active' : '')}" 
+					th:value="*{detail.id}" th:status="*{detail.status}">
+					<dt>准考證號碼</dt>
+					<dd class="number">[[*{detail.exam_number}]]</dd>
+					<dd class="grade">
+						<table>
+							<thead>
+								<tr>
+									<th>學測科目</th>
+									<th>學測級分</th>
+									<th>原始分數</th>
+									<th>分科測驗成績</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td>國</td>
+									<td>[[*{detail.chinese}]]</td>
+									<td>[[*{detail.chinese_raw}]]</td>
+									<td>[[*{detail.chinese_ast}]]</td>
+								</tr>
+								<tr>
+									<td>英</td>
+									<td>[[*{detail.english}]]</td>
+									<td>[[*{detail.english_raw}]]</td>
+									<td>[[*{detail.english_ast}]]</td>
+								</tr>
+								<tr>
+									<td>數A</td>
+									<td>[[*{detail.mathematics_a}]]</td>
+									<td>[[*{detail.mathematics_a_raw}]]</td>
+									<td>[[*{detail.mathematics_a_ast}]]</td>
+								</tr>
+								<tr>
+									<td>數B</td>
+									<td>[[*{detail.mathematics_b}]]</td>
+									<td>[[*{detail.mathematics_b_raw}]]</td>
+									<td>[[*{detail.mathematics_b_ast}]]</td>
+								</tr>
+								<tr>
+									<td>社</td>
+									<td>[[*{detail.society}]]</td>
+									<td>[[*{detail.society_raw}]]</td>
+									<td>[[*{detail.society_ast}]]</td>
+								</tr>
+								<tr>
+									<td>自</td>
+									<td>[[*{detail.naturally}]]</td>
+									<td>[[*{detail.naturally_raw}]]</td>
+									<td>[[*{detail.naturally_ast}]]</td>
+								</tr>
+								<tr>
+									<td>英聽</td>
+									<td>[[*{detail.english_hearing}]]</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<td>APCS(觀念)</td>
+									<td>[[*{detail.apcs_concept}]]</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+								<tr>
+									<td>APCS(實作)</td>
+									<td>[[*{detail.apcs_practice}]]</td>
+									<td>-</td>
+									<td>-</td>
+								</tr>
+							</tbody>
+						</table>
+					</dd>
+				</dl>
+			
+				<a class="add-id" href="javascript:void(0)"><i class="fas fa-plus-circle"></i>新增准考證</a>
+			</div>
+		</article>
+	
+		<article data-member-panel="serial_number" class="member-panel">
+			<div class="panel-sn">
+				<dl class="panel-sn-top">
+					<th:block th:each="list, stat: ${list}">
+						<dt>序號[[${stat.index + 1}]]</dt>
+						<dd th:classappend="${list.count != 0 ? 'used' : ''}">
+							<div class="content">[[*{list.serial_number}]]</div>
+							<a th:if="${list.count != 0}" href="javascript:void(0)" class="content-icon"><img th:src="@{/front/images/used.svg}" alt="已使用"></a>
+							<a th:unless="${list.count != 0}" th:href="@{${'/wish/12/select?serial_number='+list.serial_number+'&password='+list.password}}" class="content-icon"><img th:src="@{/front/images/link-out.svg}" alt="前往綁定"></a>
+						</dd>
+					</th:block>
+				</dl>
+				<a href="javascript:void(0)" class="add-sn"><img th:src="@{/front/images/plus-circle.svg}" alt="新增序號">新增序號</a>
+				
+				<th:block th:if="${authCreateByList}">
+					<h3 class="sn-heading">活動贈送</h3>
+					<ul class="panel-sn-bottom">
+						<li th:each="auth: ${authCreateByList}"class="sn-wrap">
+							<div class="sn-title">
+								<span class="sn-title-tag">活動</span>
+								<div>
+									<p class="sn-title-name">[[*{auth.memo}]]</p>
+									<p class="sn-title-exp">有效期限：[[*{auth.end_date}]]</p>
+								</div>
+							</div>
+							<dl class="sn-data">
+								<dt>序號</dt>
+								<dd>[[*{auth.serial_number}]]</dd>
+								<dt>密碼</dt>
+								<dd>[[*{auth.password}]]</dd>
+							</dl>
+						</li>
+					</ul>
+				</th:block>
+			</div>
+		</article>
+	
+		<article data-member-panel="order" class="member-panel">
+			<div class="panel-order">
+				<!-- 如果沒有訂單 -->
+				<div th:unless="${orderParentList}" class="nodata">
+					<div class="nodata-img"><img th:src="@{/front/images/no-order.jpeg}" alt=""></div>
+					<p class="nodata-text">目前尚無訂單</p>
+				</div>
+				<ul th:if="${orderParentList}">
+					<li th:each="order, stat: ${orderParentList}">
+						<h3 class="order-title">訂單[[${stat.index + 1}]]</h3>
+						<div class="order-data">
+							<dl>
+								<dt>訂單編號</dt>
+								<dd>[[*{order.order_no}]]</dd>
+								<dt>發票號碼</dt>
+								<dd>[[*{order.gui_no}]]</dd>
+								
+								<dt>發票日期</dt>
+								<dd>[[*{order.invoice_date}]]</dd>
+								<dt>有效日期</dt>
+								<dd>[[*{order.invoice_date}]]</dd>
+								<dt class="price-title">金額</dt>
+								<dd class="price-data">NT$[[*{order.pay_amount}]]</dd>
+							</dl>
+							<ul>
+								<li th:if="${orderChild.order_no} == ${order.order_no}" th:each="orderChild, statChild: ${orderChildList}">
+									<h4>序號</h4>
+									<p>[[*{orderChild.serial_number}]]([[*{orderChild.status == '1' ? '已使用' : '未使用'}]])</p>
+									<h4>密碼</h4>
+									<p>[[*{orderChild.password}]]([[*{orderChild.status == '1' ? '已使用' : '未使用'}]])</p>
+								</li>
+							</ul>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</article>
+		<form id="updatePassForm" method="POST" th:object="${memberAccount}" enctype="multipart/form-data" role="form" >
+			<input type="hidden" id="password" th:field="*{password}"/>
+		</form>
+		<article data-member-panel="change-pwd" class="member-panel">
+			<div class="panel-changepwd">
+				<p class="text">親愛的會員您好，您可以定期變更密碼以確保個人帳戶安全。</p>
+				<div class="form-group">
+					<label class="must" for="old_pwd">舊密碼</label>
+					<input type="password" placeholder="&nbsp;&nbsp;6~12碼英文與數字" onfocus="this.placeholder = ''"
+					onblur="this.placeholder = '&nbsp;&nbsp;6~12碼英文與數字'" id="oldPW" name="oldPW" maxlength="12" />
+				</div>
+				<div class="form-group">
+					<label class="must" for="new_pwd">新密碼</label>
+					<input type="password" placeholder="&nbsp;&nbsp;6~12碼英文與數字" onfocus="this.placeholder = ''"
+					onblur="this.placeholder = '&nbsp;&nbsp;6~12碼英文與數字'" id="memberPassword" name="memberPassword"
+					maxlength="12" />
+				</div>
+				<div class="form-group">
+					<label class="must" for="confirm_pwd">確認新密碼</label>
+					<input type="password" placeholder="&nbsp;&nbsp;6~12碼英文與數字" onfocus="this.placeholder = ''"
+					onblur="this.placeholder = '&nbsp;&nbsp;6~12碼英文與數字'" id="checkPassword" name="checkPassword"
+					maxlength="12" />
+				</div>
+				<a class="form-submit" onclick="updatePassword()">送出</a>
+			</div>
+		</article>
+	<!-- memeber-End -->
+	<!-- edm-wrapper End-->
+	</section><!-- secbox-register End -->
+
+<!-- 版權頁尾 -->
+<section class="footerArea" th:include="front/load/footer :: footer"></section>
+
+<!-- 手機版面，下方功能列 -->
+<section id="service" th:include="front/load/service :: service"></section>
+
+<!--停機畫面-->
+<section th:include="front/load/shutdown :: shutdown"></section>
+
+</body>
+</html>

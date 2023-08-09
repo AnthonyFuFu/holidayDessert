@@ -398,7 +398,7 @@ public class MemberController {
 		String email = pRequest.getParameter("email") != null ? pRequest.getParameter("email") : "";
 		
 		List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		list.add(map);
 		
 		Member member = new Member();

@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<script th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
+	</head>
+	<input type="hidden" id="path" th:value="${PATH}" />
+    <script>
+    	if($("#path").val() != "") {
+    		$(location).attr("href", $("#path").val());
+    	}
+	</script>
+</html>

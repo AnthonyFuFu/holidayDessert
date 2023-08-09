@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<!-- 20190124新增甄戰據點Google Map區塊START-->
+	<section th:fragment="footer">
+		<script type="text/javascript" th:src="@{/front/js/location.js}"></script>
+<!-- 		<script type="text/javascript" th:src="@{/front/js/fb.js}"></script> -->
+		<section class="mapArea">
+		    <!-- 甄戰據點 -->
+		    <div class="locationBox">
+		        <div class="inner">
+		            <aside>甄<span>/</span>戰<span>/</span>據<span>/</span>點</aside>
+		            <nav>
+		                <a class="selected" href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.613428957157!2d121.51042611504954!3d25.047189743916398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a90d19d05333%3A0xb850cf6b061f4531!2z5Y-w5YyX55SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1471856396167')">北區</a>
+		                <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.4117570625112!2d121.22307241504829!3d24.952101747723443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34682249285513a5%3A0xd4118db72172cb24!2z5Lit5aOi55SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1471856517241')">桃竹區</a>
+		                <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3639.969711708933!2d120.64424531495519!3d24.17279498438284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34691620f07c7023%3A0x3d1b17c7e7396d38!2zNDA35Y-w5Lit5biC6KW_5bGv5Y2A5rKz5Y2X6Lev5LqM5q61MzE56Jmf5qiT5LmLMQ!5e0!3m2!1szh-TW!2stw!4v1548043403490')">中區</a>
+		                <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.71287974807!2d120.20624931517322!3d22.997583323032124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e768ba9c6d991%3A0xe03d96b635868478!2zNzAw5Y-w5Y2X5biC5Lit6KW_5Y2A5oiQ5Yqf6LevNzXomZ8!5e0!3m2!1szh-TW!2stw!4v1495072164418')">嘉南區</a>
+		                <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3682.4772798422764!2d120.30198631501426!3d22.635986936345496!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e048cbbb59b13%3A0x25c4566072d4b807!2z6auY5bGP55SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1471856851492')">高屏區</a>
+		            </nav>
+		            <ul class="location-content">
+		            <li>
+	                	<figcaption>台北甄戰</figcaption>
+		                <figure>
+		                    台北市中正區忠孝西路一段102號3樓<br>
+		                    TEL：(02)5580-2006
+		                    <br><br>
+		                    <span>服務時間</span><br>
+		                    10:00-21:00
+		                    <br><br>
+		                    <span>粉絲團</span><br>
+		                    <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                </figure>
+		            </li>
+		            <li>
+		                <div class="location-subNav">
+		                    <a class="selected" href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3617.4117570625112!2d121.22307241504829!3d24.952101747723443!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34682249285513a5%3A0xd4118db72172cb24!2z5Lit5aOi55SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1471856517241')">中壢甄戰</a>
+		                    <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4691.166744528806!2d121.21830099053658!3d24.95304427040417!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3468224b349c7b69%3A0x9d2ce6edaba2829b!2z5qGD5ZyS55SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1513734448871')">桃園甄戰</a>
+		                    <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.752507687276!2d120.96977131504589!3d24.80392685362962!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346835c240c90c65%3A0x19577b7847534641!2z5paw56u555SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1471856611880')">新竹甄戰</a>
+		                </div><!-- location-subNav -->
+		                <dl>
+		                    <figcaption>中壢甄戰</figcaption>
+		                    <figure>
+		                        中壢市新興路102巷11號<br>
+		                        TEL：(03)250-2355
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        一~六:10:00-19:00 日:休息
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                    </figure>
+		                </dl>
+		                <dl>
+		                    <figcaption>桃園甄戰</figcaption>
+		                    <figure>
+		                        桃園市桃園區中華路27號<br>
+		                        TEL：(03)250-7068
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        一~六:10:00-19:00 日:休息
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                    </figure>
+		                </dl>
+		                <dl>
+		                    <figcaption>新竹甄戰</figcaption>
+		                    <figure>
+		                        新竹市中華路2段314號1樓<br>
+		                        TEL：(03)602-7098
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        10:00~19:00
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                    </figure>
+		                </dl>
+		            </li>
+
+		            <li>
+		            	<div class="location-subNav">
+		                    <a class="selected" href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3641.068002363376!2d120.67980831503588!3d24.134249879920873!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34693d113d280329%3A0xc63573b4cbb2f17b!2z55SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1471856683053')">台中甄戰</a>
+		                    <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3652.9934429176806!2d120.54121891486031!3d23.71192819616206!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346ec8309e71438d%3A0xdc01d2f3461f33cf!2zNjQw6Zuy5p6X57ij5paX5YWt5biC6Y6u5YyX6LevMzTomZ8!5e0!3m2!1szh-TW!2stw!4v1632730185080!5m2!1szh-TW!2stw')">斗六甄戰</a>
+		                    <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3639.969711708933!2d120.64424531495519!3d24.17279498438284!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34691620f07c7023%3A0x3d1b17c7e7396d38!2zNDA35Y-w5Lit5biC6KW_5bGv5Y2A5rKz5Y2X6Lev5LqM5q61MzE56Jmf5qiT5LmLMQ!5e0!3m2!1szh-TW!2stw!4v1548043403490')">西屯甄戰</a>
+		                    <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3653.2652221193116!2d120.4246573148603!3d23.702220996532336!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346eba0654b7f5a7%3A0x1ded893bf02519d1!2zNjMy6Zuy5p6X57ij6JmO5bC-6Y6u5p6X5qOu6Lev5LqM5q61MjY46Jmf!5e0!3m2!1szh-TW!2stw!4v1632733867237!5m2!1szh-TW!2stw')">虎尾甄戰</a>
+		                    
+		                </div><!-- location-subNav -->
+		            	<dl>
+		                    <figcaption>台中甄戰</figcaption>
+		                    <figure>
+		                        台中市南區復興路三段503號<br>
+		                        TEL：(04)3506-1355
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        平日:12:30-21:30 假日:10:00-19:00
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                        <a href="http://realgood520.pixnet.net/blog" target="_blank">部落格-甄試服了你</a>
+		                    </figure>
+		                </dl>
+		            	<dl>
+		                    <figcaption>斗六甄戰</figcaption>
+		                    <figure>
+		                        雲林縣斗六市鎮北路34號<br>
+		                        TEL：(05)535-0071
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        星期一 12:00–21:00 星期二 08:30–21:00 星期三 08:30–21:00 星期四 08:30–21:00 星期五 08:30–17:30 星期六 08:30–17:30 星期日 08:30–17:30
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                        <a href="http://realgood520.pixnet.net/blog" target="_blank">部落格-甄試服了你</a>
+		                    </figure>
+		                </dl>
+		                <dl>
+		                    <figcaption>西屯甄戰</figcaption>
+		                    <figure>
+		                        台中市河南路二段319號2樓<br>
+		                        TEL：(04)2452-3305
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        平日:12:30-20:30 假日:10:00-18:00
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                        <a href="http://realgood520.pixnet.net/blog" target="_blank">部落格-甄試服了你</a>
+		                    </figure>
+		                </dl>
+		                <dl>
+		                    <figcaption>虎尾甄戰</figcaption>
+		                    <figure>
+		                        雲林縣虎尾鎮林森路二段268號<br>
+		                        TEL：(05)632-5477
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        星期一 12:00–17:30 星期二 08:30–21:00 星期三 08:30–21:00 星期四 12:00–21:00 星期五 08:30–17:30 星期六 08:30–17:30 星期日 08:30–17:30
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                        <a href="http://realgood520.pixnet.net/blog" target="_blank">部落格-甄試服了你</a>
+		                    </figure>
+		                </dl>
+		            </li>
+
+		            <li>
+		            	<div class="location-subNav">
+		                    <a class="selected" href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3659.4484412244515!2d120.44130611497626!3d23.48035188472316!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e942e9320e411%3A0x2f10e6308fef6a2c!2zNjAw5ZiJ576p5biC6KW_5Y2A5YyX5qau6KGXMjE56Jmf!5e0!3m2!1szh-TW!2stw!4v1548049900354')">嘉義甄戰</a>
+		                    <a href="javascript:void(0);" onclick="changeLocation('https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3672.71287974807!2d120.20624931517322!3d22.997583323032124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346e768ba9c6d991%3A0xe03d96b635868478!2zNzAw5Y-w5Y2X5biC5Lit6KW_5Y2A5oiQ5Yqf6LevNzXomZ8!5e0!3m2!1szh-TW!2stw!4v1495072164418')">台南甄戰</a>
+		                </div><!-- location-subNav -->
+		                <dl>
+			                <figcaption>嘉義甄戰</figcaption>
+		                    <figure>
+		                        嘉義市北榮街219號<br>
+		                        TEL：(05)229-0125
+		                        <br><br>
+		                        <span>服務時間</span><br>
+		                        10:00-19:00
+		                        <br><br>
+		                        <span>粉絲團</span><br>
+		                        <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                        Line ID @maq4946v
+		                    </figure>
+						</dl>
+						<dl>
+		                    <figcaption>台南甄戰</figcaption>
+			                <figure>
+			                    台南市北區公園路145號<br>
+			                    TEL：(06)511-2258
+			                    <br><br>
+			                    <span>服務時間</span><br>
+			                    09:00-22:00
+			                    <br><br>
+			                    <span>粉絲團</span><br>
+			                    <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+			                    Line ID @maq4946v
+			                    <a href="http://zhanzhen.pixnet.net/blog/post/243511779-2018%E5%98%89%E5%8D%97%E7%94%84%E8%AE%9A%E7%87%9F%E9%9A%8A%E5%8D%B3%E6%97%A5%E9%96%8B%E8%B7%91">嘉南甄讚--學習顧問中心</a>
+			                </figure>
+		                </dl>
+		            </li>
+
+		            <li>
+		                <figcaption>高雄甄戰</figcaption>
+		                <figure>
+		                    高雄市新興區八德一路332號5樓<br>
+		                    TEL：(07)953-7037
+		                    <br><br>
+		                    <span>服務時間</span><br>
+		                    11:00-20:00
+		                    <br><br>
+		                    <span>粉絲團</span><br>
+		                    <a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">甄戰學習顧問中心</a>
+		                </figure>
+		            </li>
+		            </ul><!-- location-content -->
+		        </div><!-- inner -->
+		    </div><!-- locationBox -->
+
+		    <!-- Google Map API Start -->
+		    <iframe id="map" class="map" width="100%" height="260" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.613428957157!2d121.51042611504954!3d25.047189743916398!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442a90d19d05333%3A0xb850cf6b061f4531!2z5Y-w5YyX55SE5oiw5a2457-S6aGn5ZWP5Lit5b-D!5e0!3m2!1szh-TW!2stw!4v1471856396167"></iframe>
+		    <!-- Google Map API End -->
+		</section><!-- mapArea -->
+		<!-- 甄戰據點Google Map區塊新增 END -->
+
+		<!-- 版權頁尾 -->
+		<section class="footerArea">
+		    <div class="footerBox">
+		    <article>
+
+		        <p>
+		            FaceBook：<a href="https://www.facebook.com/reallygood.com.tw/" target="_blank">https://www.facebook.com/reallygood.com.tw/</a><br>
+		            聯絡電話：(02)5580-2006<br>
+		            地址：台北市中正區忠孝西路一段102號3樓
+		        </p>
+		    </article>
+		    <article>
+		        <nav>
+		            <a href="https://www.reallygood.com.tw/index" target="_blank"><picture><source th:srcset="@{/front/images/logo_footer.webp}" type="image/webp"><img th:src="@{/front/images/logo_footer.png}"></picture></a>
+		            <a href="http://www.tkb.com.tw" target="_blank"><picture><source th:srcset="@{/front/images/tkblogo_footer.webp}" type="image/webp"><img th:src="@{/front/images/tkblogo_footer.png}"></picture></a>
+		        </nav>
+		    </article>
+		    </div><!-- footerBox -->
+
+		    <div class="gray-hLine"></div>
+		    <aside>2019 © Copyright All Rights Reserved.</aside>
+		</section><!-- footerArea -->
+	</section>
+</html>

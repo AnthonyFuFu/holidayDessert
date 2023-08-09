@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<body th:fragment="header">
+        <!-- 置頂按鈕 -->
+		<a class="btn-top" href="javascript:void(0);"><i class="fas fa-arrow-up"></i></a>
+		<!-- 首頁按鈕 -->
+		<a class="btn-home" href="/holidayDessert/index"><i class="fas fa-home"></i></a>
+		
+		<!-- 主選單-電腦版懸浮固定 -->
+		<section class="nav-fixed-inside-pc">
+		    <div class="edm-wrapper">
+		    	<main>
+		    		<nav></nav>
+		        </main>
+		        <!-- 會員登入區塊 -->
+		        <div class="login-fixed" th:if="${memberSession} == null">
+		            <a class="login btn-login" href="javascript:void(0);">會員登入</a>
+		            <a class="singin" href="/forecast/member/register">加入會員</a>
+		        </div>
+		        
+		        <!-- 會員登入區塊(已登入) -->
+				<div class="login-fixed" th:if="${memberSession} != null">
+					<div><i class="fas fa-user-circle"></i>[[${memberSession.memName}]]</div>
+					<a class="singin" th:if="${memberSession} != null" href="/holidayDessert/member/update">會員中心</a>
+					<a class="singin" onclick="logout()">登出</a>
+				</div>
+		    </div><!-- edm-wrapper -->
+		</section><!-- nav-fixed-inside-pc -->
+		
+		<!-- 主選單-行動版會員選單內容 -->
+		<section class="memberbar">
+		    <nav>
+		        <a th:if="${memberSession} == null"  class="hvr-shutter-out-vertical btn-nav-1 login" href="javascript:void(0);">會員登入</a>
+		        <a th:if="${memberSession} == null"  class="hvr-shutter-out-vertical btn-nav-2" href="/holidayDessert/member/register">加入會員</a>
+		        <a th:if="${memberSession} != null" href="/holidayDessert/member/update">會員中心</a>
+		        <a th:if="${memberSession} != null" onclick="logout()">登出</a>
+		    </nav>
+		</section><!-- 主選單-行動版會員選單內容 END -->
+		
+    </body>
+</html>
+

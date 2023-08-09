@@ -35,16 +35,17 @@ public class FrontLoginController {
 	@RequestMapping(value = "/doLogin" , method = {RequestMethod.POST})
 	public void doLogin(HttpServletRequest pRequest, HttpServletResponse pResponse, HttpSession session, Model model) {
 		
-		String email = pRequest.getParameter("login_id") != null ? pRequest.getParameter("login_id") : "";
-		String password = pRequest.getParameter("password") != null ? pRequest.getParameter("password") : "";
-		
-		Map<String, Object> map = new HashMap<String, Object>();
+		String memEmail = pRequest.getParameter("memEmail") != null ? pRequest.getParameter("memEmail") : "";
+		String memPassword = pRequest.getParameter("memPassword") != null ? pRequest.getParameter("memPassword") : "";
+		System.out.println(memEmail);
+		System.out.println(memPassword);
+		Map<String, Object> map = new HashMap<>();
 		
 		try {
 			
 			Member member = new Member();
-			member.setMemEmail(email);
-			member.setMemPassword(password);
+			member.setMemEmail(memEmail);
+			member.setMemPassword(memPassword);
 			
 			Member login = memberService.login(member);
 			
@@ -53,10 +54,10 @@ public class FrontLoginController {
 				
 				member = login;
 				
-				if(!"0".equals(member.getMemStatus())) {
+				if("0".equals(member.getMemStatus())) {
 					map.put("STATUS", "N");
 					map.put("MSG", "帳號未啟用");
-				} else if (!"0".equals(member.getMemVerificationStatus())) {
+				} else if ("0".equals(member.getMemVerificationStatus())) {
 					map.put("STATUS", "N");
 					map.put("MSG", "信箱認證未通過");
 				} else {
@@ -67,7 +68,6 @@ public class FrontLoginController {
 					map.put("STATUS", "Y");
 					map.put("MSG", "登入成功");
 				}
-				
 				
 			} else {
 				map.put("STATUS", "N");

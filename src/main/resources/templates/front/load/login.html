@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<section th:fragment="login">
+	<script type="text/javascript" th:src="@{/front/js/login.js}"></script>
+	<aside>
+		<article>
+			<form id="loginForm" method="POST" enctype="multipart/form-data" th:action="@{/front/doLogin}">
+				<div class="titlemain">會員登入<sapn>Login</span></div>
+				<div>會員帳號<span>Username</span></div>
+				<div>
+					<input class="inp-style" placeholder="&nbsp;&nbsp;請輸入您的Email帳號" name="memEmail" 
+					 onfocus="this.placeholder = ''" onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的Email帳號'" type="text">
+				</div>
+				<div>密碼<span> Password</span></div>
+				<div>
+					<input placeholder="&nbsp;&nbsp;請輸入您的會員密碼" name="memPassword" onfocus="this.placeholder = ''"
+						onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的會員密碼'" type="password">
+				</div>
+				<div class="side-display">
+					<div class="remember"><input type="checkbox" />記住密碼</div>
+					<div class="forgetPD" onclick="forgetPD()">忘記密碼<i class="fas fa-question-circle"></i></div>
+					<div class="vfEmail" onclick="vfEmail()">寄送驗證信</div>
+				</div>
+				<div class="btn-display">
+					<div class="btn-login" onclick="login()">登入</div>
+					<div class="btn-login" onclick="register()">註冊</div>
+				</div>
+			</form>
+		</article>
+	</aside>
+
+	<script
+		src="https://cdnjs.cloudflare.com/ajax/libs/alertify.js/0.3.11/alertify.min.js"></script>
+	<script>
+		$(function() {
+			$(".login").on("click", function() {
+				$(document).ready(function() {
+					$('input[name="memEmail"]').focus();
+				});
+			});
+		});
+	</script>
+</section>
+</html>

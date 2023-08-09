@@ -239,18 +239,19 @@ public class MemberDaoImpl implements MemberDao {
 		Member user = new Member();
 		if (!list.isEmpty()) {
 			Map<String, Object> resultMap = list.get(0);
-	        String memId = (String) resultMap.get("MEM_ID");
-	        String memName = (String) resultMap.get("MEM_NAME");
-	        String memAccount = (String) resultMap.get("MEM_ACCOUNT");
-	        String memPassword = (String) resultMap.get("MEM_PASSWORD");
-	        String memGender = (String) resultMap.get("MEM_GENDER");
-	        String memPhone = (String) resultMap.get("MEM_PHONE");
-	        String memEmail = (String) resultMap.get("MEM_EMAIL");
-	        String memAddress = (String) resultMap.get("MEM_ADDRESS");
-	        String memBirthday = (String) resultMap.get("MEM_BIRTHDAY");
-	        String memStatus = (String) resultMap.get("MEM_STATUS");
-	        String memVerificationStatus = (String) resultMap.get("MEM_VERIFICATION_STATUS");
-	        String memVerificationCode = (String) resultMap.get("MEM_VERIFICATION_CODE");
+			System.out.println(resultMap);
+	        String memId = String.valueOf(resultMap.get("MEM_ID"));
+	        String memName = String.valueOf(resultMap.get("MEM_NAME"));
+	        String memAccount = String.valueOf(resultMap.get("MEM_ACCOUNT"));
+	        String memPassword = String.valueOf(resultMap.get("MEM_PASSWORD"));
+	        String memGender = String.valueOf(resultMap.get("MEM_GENDER"));
+	        String memPhone = String.valueOf(resultMap.get("MEM_PHONE"));
+	        String memEmail = String.valueOf(resultMap.get("MEM_EMAIL"));
+	        String memAddress = String.valueOf(resultMap.get("MEM_ADDRESS"));
+	        String memBirthday = String.valueOf(resultMap.get("MEM_BIRTHDAY"));
+	        String memStatus = String.valueOf(resultMap.get("MEM_STATUS")).equals("true") ? "1": "0";
+	        String memVerificationStatus = String.valueOf(resultMap.get("MEM_VERIFICATION_STATUS")).equals("true") ? "1": "0";
+	        String memVerificationCode = String.valueOf(resultMap.get("MEM_VERIFICATION_CODE"));
 	        
 	        user.setMemId(memId);
 	        user.setMemName(memName);
@@ -264,6 +265,7 @@ public class MemberDaoImpl implements MemberDao {
 	        user.setMemStatus(memStatus);
 	        user.setMemVerificationStatus(memVerificationStatus);
 	        user.setMemVerificationCode(memVerificationCode);
+	        
 	    }
 		return user == null ? null : user;
 	}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="front/load/css :: css"></head>
+<head th:include="front/load/js :: js"></head>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<title>[[${@environment.getProperty('html.title')}]]-忘記密碼</title>
+<script type="text/javascript" th:src="@{/front/js/forgetPD.js}"></script>
+</head>
+
+<body th:include="front/load/header :: header" id="header" class="full-width"></body>
+<body>
+<!-- 會員登入區塊 -->
+<section class="login-area" th:include="front/load/login :: login"></section>
+<section class="secbox-forget">
+	<article class="edm-wrapper">
+	    <h1 class="title">
+	        忘記密碼
+	    	<div class="bg-hexagon-inregister"><img th:src="@{/front/images/bg_hexagon.jpg}"></div>
+	    </h1>
+	    <div class="title-sup-center">親愛的會員您好，請於下方輸入電子郵件，系統將自動寄送密碼至您的信箱。</div>
+
+	    <article class="forget-PD">
+	        <p class="forget-note">
+	            若您在收件箱找不到此郵件，請檢查您的垃圾郵件或垃圾桶檔案夾，同時，請確保電郵帳戶可接收到來自我們的郵件。
+	        </p>
+	        <div class="forget-input">
+	            <input type="text" id="email" placeholder="&nbsp;&nbsp;請輸入您的電子郵件信箱" onfocus="this.placeholder = ''"
+	            onblur="this.placeholder = '&nbsp;&nbsp;請輸入您的電子郵件信箱'">
+	        </div>
+	    </article><!-- forget-PD -->
+	    <a class="btn-sumit" onclick="sendPD()">送出</a>
+	</article><!-- edm-wrapper End-->
+</section><!-- secbox-forget End -->
+
+<!-- 固定底部廣告 -->
+<section class="secbox-3" th:include="front/load/bottomBanner :: bottomBanner"></section>
+
+<!-- 版權頁尾 -->
+<section class="footerArea" th:include="front/load/footer :: footer"></section>
+
+<!-- 手機版面，下方功能列 -->
+<section id="service" th:include="front/load/service :: service"></section>
+
+<!--停機畫面-->
+<section th:include="front/load/shutdown :: shutdown"></section>
+</body>
+</html>
