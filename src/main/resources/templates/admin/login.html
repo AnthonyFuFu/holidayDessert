@@ -1,39 +1,56 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:include="admin/load/css :: css"></head>
+<!-- <head th:include="admin/load/js :: js"></head> -->
 <head>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
 <meta charset="utf-8" />
 <title>AdminLogin</title>
 </head>
-
-<body class="login-layout light-login">
-	<div class="position-relative">
-		<div id="login-box" class="login-box visible widget-box no-border">
-
-			<h6 th:text="${msg}">&nbsp;</h6>
-
-			<form role="form" id="mainForm" method="post" enctype="multipart/form-data" th:action="@{/admin/doLogin}">
-
-				<label class="block clearfix">
-				<input type="text" class="form-control" id="empAccount" name="empAccount"/></label>
-					
-				<label class="block clearfix">
-				<input type="password" class="form-control" id="empPassword" name="empPassword"/></label>
-
-				<div class="clearfix">
-				<button type="button" class="width-35 pull-right btn btn-sm btn-primary" onclick="checkLogin()">
-					<span class="bigger-110">Login</span>
-				</button>
-				</div>
-
-			</form>
-		</div>
-	</div>
+<body class="login-page">
+	<div class="login-box">
+        <div class="logo">
+            <a href="javascript:void(0);">假日甜點<b>登入</b></a>
+            <small>© 2023-2024 holidayDessert, Inc. 版權所有</small>
+        </div>
+        <div class="card">
+            <div class="body">
+            	
+                <form id="mainForm" method="POST" enctype="multipart/form-data" th:action="@{/admin/doLogin}">
+                    <div class="msg">請登入開始使用系統</div>
+                    <div class="msg" th:text="${msg}">&nbsp;</div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">person</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="text" class="form-control" id="empAccount" name="empAccount" placeholder="Username" required autofocus>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <i class="material-icons">lock</i>
+                        </span>
+                        <div class="form-line">
+                            <input type="password" class="form-control" id="empPassword" name="empPassword" placeholder="Password" required>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-8 p-t-5"></div>
+                        <div class="col-xs-4">
+                            <button class="btn btn-block bg-pink waves-effect" type="submit" onclick="checkLogin()">Login</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
+<script th:src="@{/assets/js/pages/examples/sign-in.js}"></script>
 <script th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
 <script type="text/javascript">
 function checkLogin() {
 	$("#mainForm").submit();
-}		
+}
 </script>
 </html>

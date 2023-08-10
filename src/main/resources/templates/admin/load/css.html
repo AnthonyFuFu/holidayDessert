@@ -1,21 +1,63 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="css">
-
-<!-- bootstrap & fontawesome -->
-<link rel="stylesheet" th:href="@{/assets/css/bootstrap.min.css}" />
-<link rel="stylesheet" th:href="@{/assets/font-awesome/4.5.0/css/font-awesome.min.css}" />
-
-<link rel="stylesheet" th:href="@{/assets/css/jquery-ui.min.css}" />
-
-<!-- text fonts -->
-<link rel="stylesheet" th:href="@{/assets/css/fonts.googleapis.com.css}" />
-
-<!-- ace styles -->
-<link rel="stylesheet" th:href="@{/assets/css/ace.min.css}" class="ace-main-stylesheet" id="main-ace-style" />
-
-<link rel="stylesheet" th:href="@{/assets/css/ace-skins.min.css}" />
-<link rel="stylesheet" th:href="@{/assets/css/ace-rtl.min.css}" />
-
+	<!-- Favicon-->
+    <link rel="icon" th:href="@{/assets/favicon.ico}" type="image/x-icon"/>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <!-- Bootstrap Core Css -->
+	<link rel="stylesheet" th:href="@{/assets/plugins/bootstrap/css/bootstrap.css}" />
+    <!-- Waves Effect Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/node-waves/waves.css}" />
+    <!-- WaitMe Css-->
+    <link rel="stylesheet" th:href="@{/assets/plugins/waitme/waitMe.css}" />
+    <!-- Animation Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/animate-css/animate.css}" />
+    <!-- Colorpicker Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.css}" />
+    <!-- Dropzone Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/dropzone/dropzone.css}" />
+    <!-- Multi Select Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/multi-select/css/multi-select.css}" />
+    <!-- Bootstrap Spinner Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/jquery-spinner/css/bootstrap-spinner.css}" />
+    <!-- Bootstrap Tagsinput Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap-tagsinput/bootstrap-tagsinput.css}" />
+    <!-- JQuery Nestable Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/nestable/jquery-nestable.css}" />
+    <!-- Sweetalert Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/sweetalert/sweetalert.css}" />
+    <!-- noUISlider Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/nouislider/nouislider.min.css}" />
+    <!-- Custom Css -->
+    <link rel="stylesheet" th:href="@{/assets/css/style.css}" />
+    <!-- AdminBSB Themes. You can choose a theme from css/themes instead of get all themes -->
+    <link rel="stylesheet" th:href="@{/assets/css/themes/all-themes.css}" />
+</head>
+<head th:fragment="jquery-datatable">
+	<!-- JQuery DataTable Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css}" />
+</head>
+<head th:fragment="JVector-map">
+    <!-- JVectorMap Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.css}" />
+</head>
+<head th:fragment="datetime-picker">
+	<!-- Bootstrap Material Datetime Picker Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" />
+</head>
+<head th:fragment="morris-chart">
+    <!-- Morris Chart Css-->
+    <link rel="stylesheet" th:href="@{/assets/plugins/morrisjs/morris.css}" />
+</head>
+<head th:fragment="range-slider">
+    <!-- Range Slider Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/ion-rangeslider/css/ion.rangeSlider.css}" />
+    <link rel="stylesheet" th:href="@{/assets/plugins/ion-rangeslider/css/ion.rangeSlider.skinFlat.css}" />
+</head>
+<head th:fragment="light-gallery">
+    <!-- Light Gallery Plugin Css -->
+    <link rel="stylesheet" th:href="@{/assets/plugins/light-gallery/css/lightgallery.css}" />
 </head>
 </html>

@@ -1,19 +1,96 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:fragment="js">
-	<script th:src="@{/assets/js/ace-extra.min.js}"></script>
-	<script th:src="@{/assets/js/jquery-2.1.4.min.js}"></script>
-	<script th:src="@{/assets/js/bootstrap.min.js}"></script>
-	<script th:src="@{/assets/js/jquery.dataTables.min.js}"></script>
-	<script th:src="@{/assets/js/jquery.dataTables.bootstrap.min.js}"></script>
-	<script th:src="@{/assets/js/dataTables.select.min.js}"></script>
-	<!-- page specific plugin scripts -->
-	<script th:src="@{/assets/js/jquery.nestable.min.js}"></script>
-	<!-- ace scripts -->
-	<script th:src="@{/assets/js/ace-elements.min.js}"></script>
-	<script th:src="@{/assets/js/ace.min.js}"></script>
-	<script th:src="@{/assets/js/jquery-ui.min.js}"></script>
+    <!-- Jquery Core Js -->
+    <script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
+    <!-- Bootstrap Core Js -->
+    <script th:src="@{/assets/plugins/bootstrap/js/bootstrap.js}"></script>
+    <!-- Select Plugin Js -->
+    <script th:src="@{/assets/plugins/bootstrap-select/js/bootstrap-select.js}"></script>
+    <!-- Slimscroll Plugin Js -->
+    <script th:src="@{/assets/plugins/jquery-slimscroll/jquery.slimscroll.js}"></script>
+    <!-- Bootstrap Notify Plugin Js -->
+    <script th:src="@{/assets/plugins/bootstrap-notify/bootstrap-notify.js}"></script>
+    <!-- Waves Effect Plugin Js -->
+    <script th:src="@{/assets/plugins/node-waves/waves.js}"></script>
+    <!-- Jquery Knob Plugin Js -->
+    <script th:src="@{/assets/plugins/jquery-knob/jquery.knob.min.js}"></script>
+    <!-- Autosize Plugin Js -->
+    <script th:src="@{/assets/plugins/autosize/autosize.js}"></script>
+    <!-- Moment Plugin Js -->
+    <script th:src="@{/assets/plugins/momentjs/moment.js}"></script>
+    <!-- Google Maps API Js -->
+    <script src="https://maps.google.com/maps/api/js?v=3&sensor=false"></script>
+    <!-- GMaps PLugin Js -->
+    <script th:src="@{/assets/plugins/gmaps/gmaps.js}"></script>
+    <!-- Editable Table Plugin Js -->
+    <script th:src="@{/assets/plugins/editable-table/mindmup-editabletable.js}"></script>
+    <!-- Jquery Nestable -->
+    <script th:src="@{/assets/plugins/nestable/jquery.nestable.js}"></script>
+    <!-- SweetAlert Plugin Js -->
+    <script th:src="@{/assets/plugins/sweetalert/sweetalert.min.js}"></script>
+    <!-- Wait Me Plugin Js -->
+    <script th:src="@{/assets/plugins/waitme/waitMe.js}"></script>
+    <!-- Jquery CountTo Plugin Js -->
+    <script th:src="@{/assets/plugins/jquery-countto/jquery.countTo.js}"></script>
+    <!-- Validation Plugin Js -->
+    <script th:src="@{/assets/plugins/jquery-validation/jquery.validate.js}"></script>
+    <!-- JQuery Steps Plugin Js -->
+    <script th:src="@{/assets/plugins/jquery-steps/jquery.steps.js}"></script>
+    <!-- ChartJs -->
+    <script th:src="@{/assets/plugins/chartjs/Chart.bundle.js}"></script>
+    <!-- Sparkline Chart Plugin Js -->
+    <script th:src="@{/assets/plugins/jquery-sparkline/jquery.sparkline.js}"></script>
+    <!-- ==================================================================================== -->
     <script src="https://cdn.jsdelivr.net/npm/@stomp/stompjs@7.0.0/bundles/stomp.umd.min.js"></script>
     <script type="text/javascript" th:src="@{/front/js/app.js}"></script>
+    <!-- ==================================================================================== -->
+</head>
+<head th:fragment="jquery-datatable">
+<!-- Jquery DataTable Plugin Js -->
+    <script th:src="@{/assets/plugins/jquery-datatable/jquery.dataTables.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/dataTables.buttons.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/buttons.flash.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/jszip.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/pdfmake.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/vfs_fonts.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/buttons.html5.min.js}"></script>
+    <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/buttons.print.min.js}"></script>
+</head>
+<head th:fragment="flot-charts">
+    <!-- Flot Charts Plugin Js -->
+    <script th:src="@{/assets/plugins/flot-charts/jquery.flot.js}"></script>
+    <script th:src="@{/assets/plugins/flot-charts/jquery.flot.resize.js}"></script>
+    <script th:src="@{/assets/plugins/flot-charts/jquery.flot.pie.js}"></script>
+    <script th:src="@{/assets/plugins/flot-charts/jquery.flot.categories.js}"></script>
+    <script th:src="@{/assets/plugins/flot-charts/jquery.flot.time.js}"></script>
+</head>
+<head th:fragment="JVector-map">
+    <!-- JVectorMap Plugin Js -->
+    <script th:src="@{/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js}"></script>
+    <script th:src="@{/assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js}"></script>
+</head>
+<head th:fragment="datetime-picker">
+	<!-- Bootstrap Material Datetime Picker Plugin Js -->
+    <script th:src="@{/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>
+</head>
+<head th:fragment="editor">
+    <!-- Ckeditor --> <!-- TinyMCE -->
+    <script th:src="@{/assets/plugins/ckeditor/ckeditor.js}"></script>
+    <script th:src="@{/assets/plugins/tinymce/tinymce.js}"></script>
+</head>
+<head th:fragment="morris-chart">
+    <!-- Morris Plugin Js -->
+    <script th:src="@{/assets/plugins/raphael/raphael.min.js}"></script>
+    <script th:src="@{/assets/plugins/morrisjs/morris.js}"></script>
+</head>
+<head th:fragment="range-slider">
+    <!-- RangeSlider Plugin Js -->
+    <script th:src="@{/assets/plugins/ion-rangeslider/js/ion.rangeSlider.js}"></script>
+</head>
+<head th:fragment="light-gallery">
+    <!-- Light Gallery Plugin Js -->
+    <script th:src="@{/assets/plugins/light-gallery/js/lightgallery-all.js}"></script>
 </head>
 </html>

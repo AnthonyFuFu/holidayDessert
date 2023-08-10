@@ -32,43 +32,26 @@ public class LoginController {
 		@RequestParam(value="empAccount",required = true) String empAccount,
 		@RequestParam(value="empPassword",required = true) String empPassword, Model model,
 		HttpServletRequest pRequest){
-		
 		String msg = "";
 //		String ip = pRequest.getRemoteAddr();
-		System.out.println(empAccount);
-		System.out.println(empPassword);
 		try {
 			employee.setEmpAccount(empAccount);
 			employee.setEmpPassword(empPassword);
 			
-			Employee empUserAccount = employeeService.login(employee);
-			
+			Employee login = employeeService.login(employee);
 			//檢查帳號密碼是否符合
-			if(empUserAccount != null) {
+			if(login.getEmpId() != null) {
 				
-				Employee login = employeeService.login(employee);
-				
-				System.out.println(login);
-				//檢查帳號狀態
-				if(login != null) {
-					
-					if("0".equals(login.getEmpStatus())) {
-						msg = "此帳號已被停權！";
-						model.addAttribute("msg", msg);
-						return "admin/login";
-					} else {
-						session.setAttribute("employeeSession", login);
-						session.setMaxInactiveInterval(60* 60);
-						model.addAttribute("PATH", "index");
-						return "admin/toPath";
-					}
-					
-				} else {
-					msg = "無此帳號！";
+				if("0".equals(login.getEmpStatus())) {
+					msg = "此帳號已被停權！";
 					model.addAttribute("msg", msg);
 					return "admin/login";
+				} else {
+					session.setAttribute("employeeSession", login);
+					session.setMaxInactiveInterval(60* 60);
+					model.addAttribute("PATH", "index");
+					return "admin/toPath";
 				}
-				
 			//檢查最高管理者
 			} else if("admin".equals(employee.getEmpAccount()) && "123456".equals(employee.getEmpPassword())) {
 				employee.setEmpAccount("admin");
