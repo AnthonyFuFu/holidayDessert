@@ -34,6 +34,8 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div th:include="front/load/header :: header" id="header"></div>
 <div th:if="${memberSession != null}" th:include="front/chat :: chat"></div>
 
+<script type="text/javascript" th:src="@{/front/js/index.js}"></script>
+
 <dl th:each="orderDetail:${frontOrderDetails}">
 	<dd><div th:text="${orderDetail.ORD_ID}"></div></dd>
 	<dd><div th:text="${orderDetail.PD_ID}"></div></dd>

@@ -37,7 +37,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 					+  " OR INSTR(EMP_PHONE, ?) > 0 "
 					+  " OR INSTR(EMP_ACCOUNT, ?) > 0 "
 					+  " OR INSTR(EMP_HIREDATE, ?) > 0 "
+					+  " OR INSTR(EMP_EMAIL, ?) > 0 "
 					+  " ) ";
+		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -86,7 +88,9 @@ public class EmployeeDaoImpl implements EmployeeDao {
 					+  " OR INSTR(EMP_PHONE, ?) > 0 "
 					+  " OR INSTR(EMP_ACCOUNT, ?) > 0 "
 					+  " OR INSTR(EMP_HIREDATE, ?) > 0 "
+					+  " OR INSTR(EMP_EMAIL, ?) > 0 "
 					+  " ) ";
+		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -106,11 +110,22 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	@Override
 	public void add(Employee employee) {
 
-		String sql = " INSERT INTO holiday_dessert.employee "
-				   + " (EMP_NAME, EMP_PHONE, EMP_PICTURE, EMP_ACCOUNT, EMP_PASSWORD, EMP_LEVEL, EMP_STATUS, EMP_HIREDATE) "
-				   + " VALUES(?, ?, ?, ?, ?, ?, ?, NOW()) ";
+		List<Object> args = new ArrayList<>();
 		
-		jdbcTemplate.update(sql, new Object[] { employee.getEmpName(), employee.getEmpPhone(), employee.getEmpPicture(), employee.getEmpAccount(), employee.getEmpPassword(), employee.getEmpLevel(), employee.getEmpStatus() });
+		String sql = " INSERT INTO holiday_dessert.employee "
+				   + " (EMP_NAME, EMP_PHONE, EMP_PICTURE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS, EMP_HIREDATE) "
+				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, NOW()) ";
+		
+		args.add(employee.getEmpName());
+		args.add(employee.getEmpPhone());
+		args.add(employee.getEmpPicture());
+		args.add(employee.getEmpAccount());
+		args.add(employee.getEmpPassword());
+		args.add(employee.getEmpEmail());
+		args.add(employee.getEmpLevel());
+		args.add(employee.getEmpStatus());
+
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
@@ -120,7 +135,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.employee "
-				   + " SET EMP_NAME = ? , EMP_PHONE = ?, EMP_PICTURE = ?, EMP_ACCOUNT = ?, EMP_PASSWORD = ?, EMP_LEVEL = ? "
+				   + " SET EMP_NAME = ? , EMP_PHONE = ?, EMP_PICTURE = ?, EMP_ACCOUNT = ?, EMP_PASSWORD = ?, EMP_EMAIL = ?, EMP_LEVEL = ? "
 				   + " WHERE EMP_ID = ? ";
 		
 		args.add(employee.getEmpName());
@@ -128,6 +143,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		args.add(employee.getEmpPicture());
 		args.add(employee.getEmpAccount());
 		args.add(employee.getEmpPassword());
+		args.add(employee.getEmpEmail());
 		args.add(employee.getEmpLevel());
 		args.add(employee.getEmpId());
 		
@@ -169,6 +185,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        String empPicture = String.valueOf(resultMap.get("EMP_PICTURE"));
 	        String empAccount = String.valueOf(resultMap.get("EMP_ACCOUNT"));
 	        String empPassword = String.valueOf(resultMap.get("EMP_PASSWORD"));
+	        String empEmail = String.valueOf(resultMap.get("EMP_EMAIL"));
 	        String empLevel = String.valueOf(resultMap.get("EMP_LEVEL")).equals("true") ? "1": "0";
 	        String empStatus = String.valueOf(resultMap.get("EMP_STATUS")).equals("true") ? "1": "0";
 	        String empHiredate = String.valueOf(resultMap.get("EMP_HIREDATE"));
@@ -179,6 +196,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        user.setEmpPicture(empPicture);
 	        user.setEmpAccount(empAccount);
 	        user.setEmpPassword(empPassword);
+	        user.setEmpEmail(empEmail);
 	        user.setEmpLevel(empLevel);
 	        user.setEmpStatus(empStatus);
 	        user.setEmpHiredate(empHiredate);

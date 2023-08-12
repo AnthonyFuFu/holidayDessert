@@ -69,14 +69,15 @@ EMP_PHONE varchar(10) NOT NULL,
 EMP_PICTURE VARCHAR(100),
 EMP_ACCOUNT VARCHAR(20) NOT NULL,
 EMP_PASSWORD VARCHAR(20) NOT NULL,
+EMP_EMAIL VARCHAR(40) NOT NULL,
 EMP_LEVEL TINYINT(1) NOT NULL,
 EMP_STATUS TINYINT(1) NOT NULL default '0',
 EMP_HIREDATE date not null DEFAULT (CURRENT_DATE),
 CONSTRAINT unikey_EMP_ACCOUNT unique(EMP_ACCOUNT)
 )auto_increment=101;
-INSERT INTO employee(EMP_NAME, EMP_PHONE, EMP_ACCOUNT, EMP_PASSWORD, EMP_LEVEL, EMP_STATUS)  
-VALUES  ('傅寶貝', '0912345678','holidaydessert101', 'emppassword1','0','1'),
-		('嘉寶貝', '0987654321','holidaydessert102', 'emppassword2','0','1');
+INSERT INTO employee(EMP_NAME, EMP_PHONE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS)  
+VALUES  ('傅寶貝', '0912345678','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
+		('嘉寶貝', '0987654321','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
 
 -- 功能-- 
 CREATE TABLE emp_function(
@@ -88,10 +89,20 @@ FUNC_LINK VARCHAR(100),
 FUNC_STATUS TINYINT(1) NOT NULL default '1',
 FUNC_ICON VARCHAR(50)
 );
-INSERT INTO emp_function(FUNC_NAME,FUNC_LAYER,FUNC_PARENT_ID,FUNC_LINK)  
-VALUES  ('客服聊天紀錄管理','1','0','/admin/message/list'),
-		('商品管理','1','0','/admin/product/list');
-        
+INSERT INTO emp_function(FUNC_NAME,FUNC_LAYER,FUNC_PARENT_ID,FUNC_LINK,FUNC_STATUS,FUNC_ICON)
+VALUES ('員工管理','1','0','/holidayDessert/admin/employee/list',1,'group_add'),
+	('權限管理','1','0','/holidayDessert/admin/authority/list',1,'lock'),
+	('功能管理','1','0','/holidayDessert/admin/function/list',1,'list'),
+	('會員管理','1','0','/holidayDessert/admin/member/list',1,'people'),
+	('公司管理','1','0','/holidayDessert/admin/company/list',1,'business'),
+	('訂單管理','1','0','/holidayDessert/admin/order/list',1,'payment'),
+	('商品管理','1','0','/holidayDessert/admin/product/list',1,'shop'),
+	('優惠活動管理','1','0','/holidayDessert/admin/promotion/list',1,'event'),
+	('優惠券管理','1','0','/holidayDessert/admin/coupon/list',1,'card_giftcard'),
+	('最新消息管理','1','0','/holidayDessert/admin/news/list',1,'fiber_new'),
+	('購物車管理','1','0','/holidayDessert/admin/cart/list',1,'shopping_cart'),
+	('客服聊天紀錄管理','1','0','/holidayDessert/admin/message/list',1,'message');
+
 -- 管理員權限 --
  CREATE TABLE authority(
 EMP_ID INT NOT NULL,
@@ -101,9 +112,20 @@ CONSTRAINT authority_employee_FK FOREIGN KEY (EMP_ID) references employee(EMP_ID
 CONSTRAINT authority_emp_function_FK FOREIGN KEY (FUNC_ID) references emp_function(FUNC_ID), 
 CONSTRAINT PK_authority_emp_ID_FUNC_ID PRIMARY KEY (EMP_ID, FUNC_ID)
 );
+
 INSERT INTO authority(EMP_ID, FUNC_ID, AUTH_STATUS)
-VALUES  (101, 1, 1),
-		(101, 2, 1);
+VALUES  (101,1,1),
+		(101,2,1),
+		(101,3,1),
+		(101,4,1),
+		(101,5,1),
+		(101,6,1),
+		(101,7,1),
+		(101,8,1),
+		(101,9,1),
+		(101,10,1),
+		(101,11,1),
+		(101,12,1);
 
 -- 最新消息 --
 create table news(

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<aside th:fragment="leftsidebar">
+	<!-- User Info -->
+            <div class="user-info">
+                <div class="image">
+                    <img th:src="@{${employeeSession.empPicture}}" width="48" height="48" alt="User" />
+                </div>
+                <div class="info-container">
+                    <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[[${employeeSession.empName}]]</div>
+                    <div class="email">[[${employeeSession.empEmail}]]</div>
+                    <div class="btn-group user-helper-dropdown">
+                        <i class="material-icons" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">keyboard_arrow_down</i>
+                        <ul class="dropdown-menu pull-right">
+                            <li><a href="javascript:void(0);"><i class="material-icons">person</i>Profile</a></li>
+                            <li role="seperator" class="divider"></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">group</i>Followers</a></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i>Sales</a></li>
+                            <li><a href="javascript:void(0);"><i class="material-icons">favorite</i>Likes</a></li>
+                            <li role="seperator" class="divider"></li>
+                            <li><a href="/holidayDessert/admin/logout"><i class="material-icons">input</i>登出</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <!-- #User Info -->
+            <!-- Menu -->
+            <div class="menu">
+                <ul class="list">
+                    <li class="header">功能列表</li>
+					<li class="active">
+                        <a href="admin/index">
+                            <i class="material-icons">home</i>
+                            <span>Home</span>
+                        </a>
+                    </li>
+                    <li th:each="authority:${authorityList}">
+						<a th:href="${authority.FUNC_LINK}"><i class="material-icons">[[${authority.FUNC_ICON}]]</i><span>[[${authority.FUNC_NAME}]]</span></a>
+					</li>
+                    
+                </ul>
+            </div>
+            <!-- #Menu -->
+            <!-- Footer -->
+            <div class="legal">
+                <div class="version">
+                    <b> &copy; 2023 - 2024 </b> 假日甜點 - Inc. 版權所有
+                </div>
+            </div>
+            <!-- #Footer -->
+	</aside>
+</html>

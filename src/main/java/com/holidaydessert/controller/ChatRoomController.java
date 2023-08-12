@@ -39,7 +39,7 @@ public class ChatRoomController {
 //		messageService.saveMessage(message);
 		
 		System.out.println(messageService.getMessageByMemId(message));
-		Thread.sleep(200);
+//		Thread.sleep(200);
 		
 		String output = gson.toJson(message);
 		

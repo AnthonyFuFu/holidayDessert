@@ -12,3 +12,8 @@ $(function () {
         }
     });
 });
+
+function checkLogin() {
+	$("#mainForm").attr("action", "doLogin");
+	$("#mainForm").submit();
+}
