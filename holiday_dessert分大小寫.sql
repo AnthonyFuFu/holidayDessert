@@ -75,8 +75,8 @@ EMP_STATUS TINYINT(1) NOT NULL default '0',
 EMP_HIREDATE date not null DEFAULT (CURRENT_DATE),
 CONSTRAINT unikey_EMP_ACCOUNT unique(EMP_ACCOUNT)
 )auto_increment=101;
-INSERT INTO employee(EMP_NAME, EMP_PHONE, EMP_PICTURE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS)  
-VALUES  ('傅寶貝', '0912345678','http://localhost:8080/holidayDessert/assets/images/user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
+INSERT INTO employee(EMP_NAME, EMP_PHONE, EMP_PICTURE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
+VALUES  ('傅寶貝', '0912345678','http://localhost:8080/holidayDessert/admin/upload/user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
 		('嘉寶貝', '0987654321','','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
 
 -- 功能-- 

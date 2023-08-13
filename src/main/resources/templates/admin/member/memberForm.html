@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+<meta http-equiv="X-UA-Compatible" content="IE=9; IE=8; IE=7" />
+<meta name="viewport"
+	content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+<title>TKB官網-區域管理</title>
+<head th:include="admin/load/css :: CommonCss" />
+<head th:include="admin/load/css :: mainCss" />
+<head th:include="admin/load/js :: CommonJs" />
+</head>
+<body class="no-skin">
+	<section th:include="admin/layout/header :: header"></section>
+	<div class="main-container ace-save-state" id="main-container">
+		<script type="text/javascript">
+			try {
+				ace.settings.loadState('main-container')
+			} catch (e) {
+			}
+		</script>
+
+		<div id="sidebar" class="sidebar responsive ace-save-state"
+			th:include="admin/layout/menu :: menu"></div>
+
+		<div class="main-content">
+			<div class="main-content-inner">
+				<div class="breadcrumbs ace-save-state" id="breadcrumbs">
+					<span style="font-size: 20px; padding-left: 10px" id="title_text"
+						th:text="${location.id != null and location.id != '' ? '地區 - 修改' : '地區 - 新增'}"></span>
+				</div>
+
+				<div class="page-content">
+
+					<div class="row">
+						<div class="col-xs-12">
+							<!-- PAGE CONTENT BEGINS -->
+							<form class="form-horizontal" role="form" id="mainForm"
+								method="POST" th:object="${location}"
+								enctype="multipart/form-data">
+								<input type="hidden" th:field="*{id}">
+
+								<div class="form-group" style="height: 20px"></div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="name">學堂名稱<font color="red">*</font>
+									</label>
+
+									<div class="col-sm-8">
+										<input type="text" class="col-xs-10 col-sm-5" id="name"
+											th:field="*{name}" maxlength="20" /> <font color="red"
+											class="col-sm-2">限20字</font>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="area_id">區域<font color="red">*</font>
+									</label>
+
+									<div class="col-xs-3">
+										<select class="form-control" id="area_id"
+											th:field="*{area_id}">
+											<option value="N">請選擇</option>
+											<option class="area" th:each="area:${areaList}"
+												th:value="${area.ID}" th:text="${area.NAME}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="website_code">品牌<font color="red">*</font>
+									</label>
+
+									<div class="col-xs-3">
+										<select class="form-control" id="website_code"
+											th:field="*{website_code}">
+											<option value="0">請選擇</option>
+											<option class="website" th:each="website:${websiteList}"
+												th:value="${website.CODE}" th:text="${website.NAME}"></option>
+										</select>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="tel">電話<font color="red">*</font>
+									</label>
+
+									<div class="col-sm-8">
+										<input type="text" class="col-xs-10 col-sm-5" id="tel"
+											th:field="*{tel}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="address">地址<font color="red">*</font>
+									</label>
+
+									<div class="col-sm-8">
+										<input type="text" class="col-xs-10 col-sm-5" id="address"
+											th:field="*{address}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="url">GOOGLE MAP URL<font color="red">*</font>
+									</label>
+
+									<div class="col-sm-8">
+										<input type="text" class="col-xs-10 col-sm-5" id="url"
+											th:field="*{url}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="remark">備註</label>
+
+									<div class="col-sm-8">
+										<textarea class="col-xs-10 col-sm-5" id="remark" th:field="*{remark}" style="overflow: hidden"></textarea>
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right" for="branch_no">館別編號</label>
+
+									<div class="col-sm-8">
+										<input type="text" class="col-xs-10 col-sm-5" id="branch_no"
+											th:field="*{branch_no}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right" for="sort">排序<font color="red">*</font></label>
+
+									<div class="col-sm-8">
+										<input type="text" class="col-xs-10 col-sm-5" id="sort"
+											th:field="*{sort}" />
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right" for="do_business_time">諮詢時間<font color="red">*</font>
+									</label>
+
+									<div class="col-sm-8">
+										<textarea class="col-xs-10 col-sm-5" id="do_business_time" th:field="*{do_business_time}" style="overflow: hidden"></textarea>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right" for="file_info">立案資訊
+									</label>
+
+									<div class="col-sm-8">
+										<textarea class="col-xs-10 col-sm-5" id="file_info" th:field="*{file_info}" style="overflow: hidden"></textarea>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right" for="image">地圖圖片</label>
+									
+									<div class="col-sm-8">
+										<input type="file" id="imageFile" name="imageFile" class="col-xs-10 col-sm-5" />
+										<div id="preview">
+											<img id="mapImg" th:if="${location.image_url}!=null and ${location.image_url} != '' " th:src="${location.image_url}">
+											<img id="mapImg" th:if="${location.image_url} eq null or ${location.image_url} eq '' " ><span class="text">預覽圖</span>
+										</div>
+										<input type="hidden" id="originalImage" name="originalImage" th:value="${location.image}" th:if="${location.image}!=null"/>
+									</div>
+								</div>
+								
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="share_url">分享地圖URL<font color="red">*</font>
+									</label>
+
+									<div class="col-sm-8">
+										<input type="text" class="col-xs-10 col-sm-5" id="share_url"
+											th:field="*{share_url}" />
+									</div>
+								</div>
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right" for="type">判別數位學堂或諮詢據點</label>
+
+									<div class="col-xs-3">
+										<select class="form-control" id="type" th:field="*{type}">
+											<option value="N">請選擇</option>
+											<option class="website" th:value="數位學堂" th:text="數位學堂"></option>
+											<option class="website" th:value="諮詢據點" th:text="諮詢據點"></option>
+										</select>
+									</div>
+								</div>
+
+
+								<div class="form-group">
+									<div class="col-sm-1"></div>
+									<label class="col-sm-1 control-label no-padding-right"
+										for="form-field-4">前台顯示<font color="red">*</font></label>
+
+									<div class="col-xs-3">
+										<label> <input type="hidden" id="status"
+											th:field="*{status}" /> <input
+											class="ace ace-switch ace-switch-4" id="status_check"
+											type="checkbox"
+											th:checked="*{status} == '0' ? 'false' : 'true'" /> <span
+											class="lbl"></span>
+										</label>
+									</div>
+								</div>
+
+								<div class="clearfix form-actions">
+
+									<div class="col-md-offset-6 col-md-9">
+										<button id="add-submit" class="btn btn-info" type="button"
+											th:if="*{id} eq null">
+											<i class="ace-icon fa fa-check bigger-110"> 新增</i>
+										</button>
+										<button id="update-submit"
+											class="btn btn-warning display:none" type="button"
+											th:if="*{id} ne null">
+											<i class="ace-icon fa fa-edit bigger-110"> 修改</i>
+										</button>
+										<button id="backBtn" class="btn" type="button"
+											onclick="history.back()">
+											<i class="ace-icon fa fa-reply bigger-110"> 返回列表</i>
+										</button>
+									</div>
+								</div>
+							</form>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<head th:include="admin/load/js :: location" />
+</body>
+</html>
