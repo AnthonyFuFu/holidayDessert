@@ -23,21 +23,21 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
+import com.holidaydessert.model.Cart;
 import com.holidaydessert.model.Employee;
-import com.holidaydessert.model.Member;
 import com.holidaydessert.service.AuthorityService;
-import com.holidaydessert.service.MemberService;
+import com.holidaydessert.service.CartService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Controller
-@RequestMapping("/admin/member")
+@RequestMapping("/admin/cart")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@Api(tags = "會員管理")
-public class MemberManagement {
-	
+@Api(tags = "購物車管理")
+public class CartManagement {
+
 	@Value("${web.path}")
 	private String WEB_PATH;
 	
@@ -45,12 +45,12 @@ public class MemberManagement {
 	private AuthorityService authorityService;
 	
 	@Autowired
-	private MemberService memberService;
-	
+	private CartService cartService;
+
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "會員清單", httpMethod = "GET", notes = "進行會員查詢")
+	@ApiOperation(value = "購物車清單", httpMethod = "GET", notes = "進行購物車查詢")
 	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
@@ -59,38 +59,38 @@ public class MemberManagement {
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
 		model.addAttribute("authorityList", authorityList);
-		return "admin/member/list";
+		return "admin/cart/list";
 
 	}
 	
-	@GetMapping("/memberTables")
-	public void memberTables(@SessionAttribute("employeeSession") Employee employeeSession,
-			@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Member memberData = new Member();
+	@GetMapping("/cartTables")
+	public void cartTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Cart cart, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		Cart cartData = new Cart();
 
 		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
 		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
 		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
 		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
 
-		memberData.setStart(start);
-		memberData.setLength(length);
-		memberData.setSearchText(searchValue);
+		cartData.setStart(start);
+		cartData.setLength(length);
+		cartData.setSearchText(searchValue);
 		
-		List<Map<String, Object>> memberList = memberService.list(memberData);
+		List<Map<String, Object>> cartList = cartService.list(cartData);
 
-		if (memberList == null) {
-			memberList = new ArrayList<Map<String, Object>>();
+		if (cartList == null) {
+			cartList = new ArrayList<Map<String, Object>>();
 		}
 
-		int count = memberService.getCount(memberData);
+		int count = cartService.getCount(cartData);
 
-		member.setRecordsFiltered(count);
-		member.setRecordsTotal(count);
-		member.setData(memberList);
-		member.setDraw(Integer.valueOf(draw));
+		cart.setRecordsFiltered(count);
+		cart.setRecordsTotal(count);
+		cart.setData(cartList);
+		cart.setDraw(Integer.valueOf(draw));
 
-		String output = gson.toJson(member);
+		String output = gson.toJson(cart);
 
 		pResponse.setCharacterEncoding("utf-8");
 

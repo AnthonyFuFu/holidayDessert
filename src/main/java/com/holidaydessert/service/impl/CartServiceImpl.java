@@ -22,8 +22,8 @@ public class CartServiceImpl implements CartService{
 	}
 
 	@Override
-	public Integer count(Cart cart) {
-		return cartDao.count(cart);
+	public Integer getCount(Cart cart) {
+		return cartDao.getCount(cart);
 	}
 	
 	@Override

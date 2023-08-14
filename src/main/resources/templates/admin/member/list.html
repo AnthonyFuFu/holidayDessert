@@ -5,37 +5,19 @@
 <title>[[${@environment.getProperty('html.title')}]] - 會員管理</title>
 </head>
 <body class="theme-red">
+
     <!-- Page Loader -->
-    <div class="page-loader-wrapper">
-        <div class="loader">
-            <div class="preloader">
-                <div class="spinner-layer pl-red">
-                    <div class="circle-clipper left">
-                        <div class="circle"></div>
-                    </div>
-                    <div class="circle-clipper right">
-                        <div class="circle"></div>
-                    </div>
-                </div>
-            </div>
-            <p>Please wait...</p>
-        </div>
-    </div>
+    <div th:include="admin/load/pageloader :: pageloader" class="page-loader-wrapper"></div>
     <!-- #END# Page Loader -->
+    
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
+    
     <!-- Search Bar -->
-    <div class="search-bar">
-        <div class="search-icon">
-            <i class="material-icons">search</i>
-        </div>
-        <input type="text" placeholder="START TYPING...">
-        <div class="close-search">
-            <i class="material-icons">close</i>
-        </div>
-    </div>
+    <div th:include="admin/load/searchbar :: searchbar" class="search-bar"></div>
     <!-- #END# Search Bar -->
+    
     <!-- Top Bar -->
     <nav th:include="admin/load/navbar :: navbar" id="navbar" class="navbar"></nav>
     <!-- #Top Bar -->
@@ -51,10 +33,11 @@
 
     <section class="content">
         <div class="container-fluid">
-        	<div class="block-header">
-                <h2><b>會員管理</b></h2>
-            </div>
-            <!-- Basic Examples -->
+        
+			<!-- breadcrumbs -->
+            <div th:include="admin/load/breadcrumbs :: member" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+            
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
@@ -94,10 +77,8 @@
                     </div>
                 </div>
             </div>
-            <!-- #END# Basic Examples -->
         </div>
     </section>
-    
 <!-- <div th:if="${employeeSession != null}" th:include="front/chat :: chat"></div> -->
 <div th:include="admin/load/js :: js"></div>
 <div th:include="admin/load/js :: jquery-datatable"></div>
@@ -105,7 +86,7 @@
 
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/member/member.js}"></script>
-    
+
 </body>
 </html>
 	

@@ -29,7 +29,7 @@
                 <ul class="list">
                     <li class="header">功能列表</li>
 					<li class="active">
-                        <a href="index"><i class="material-icons">home</i><span>Home</span></a>
+                        <a href="/holidayDessert/admin/index"><i class="material-icons">home</i><span>首頁</span></a>
                     </li>
                     <li th:each="authority:${authorityList}">
 						<a th:href="${authority.FUNC_LINK}"><i class="material-icons">[[${authority.FUNC_ICON}]]</i><span>[[${authority.FUNC_NAME}]]</span></a>

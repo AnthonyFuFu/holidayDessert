@@ -21,6 +21,11 @@ public class AuthorityServiceImpl implements AuthorityService {
 	public List<Map<String, Object>> list(Authority authority) {
 		return authorityDao.list(authority);
 	}
+	
+	@Override
+	public int getCount(Authority authority) {
+		return authorityDao.getCount(authority);
+	}
 
 	@Override
 	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction) {

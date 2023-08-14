@@ -39,6 +39,24 @@ public class AuthorityDaoImpl implements AuthorityDao{
 
 	}
 
+
+	@Override
+	public int getCount(Authority authority) {
+		
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM holiday_dessert.authority ";
+		
+		if(sql.indexOf("WHERE") > 0) {
+			sql += " AND AUTH_STATUS = 1 ";
+		} else {
+			sql += " WHERE AUTH_STATUS = 1 ";
+		}
+		
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
+	}
+	
 	@Override
 	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction) {
 		

@@ -24,20 +24,20 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
-import com.holidaydessert.model.Member;
+import com.holidaydessert.model.News;
 import com.holidaydessert.service.AuthorityService;
-import com.holidaydessert.service.MemberService;
+import com.holidaydessert.service.NewsService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Controller
-@RequestMapping("/admin/member")
+@RequestMapping("/admin/news")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@Api(tags = "會員管理")
-public class MemberManagement {
-	
+@Api(tags = "最新消息管理")
+public class NewsManagement {
+
 	@Value("${web.path}")
 	private String WEB_PATH;
 	
@@ -45,12 +45,12 @@ public class MemberManagement {
 	private AuthorityService authorityService;
 	
 	@Autowired
-	private MemberService memberService;
-	
+	private NewsService newsService;
+
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "會員清單", httpMethod = "GET", notes = "進行會員查詢")
+	@ApiOperation(value = "最新消息清單", httpMethod = "GET", notes = "進行最新消息查詢")
 	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
@@ -59,38 +59,38 @@ public class MemberManagement {
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
 		model.addAttribute("authorityList", authorityList);
-		return "admin/member/list";
+		return "admin/news/list";
 
 	}
 	
-	@GetMapping("/memberTables")
-	public void memberTables(@SessionAttribute("employeeSession") Employee employeeSession,
-			@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Member memberData = new Member();
+	@GetMapping("/newsTables")
+	public void newsTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute News news, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		News newsData = new News();
 
 		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
 		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
 		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
 		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
 
-		memberData.setStart(start);
-		memberData.setLength(length);
-		memberData.setSearchText(searchValue);
+		newsData.setStart(start);
+		newsData.setLength(length);
+		newsData.setSearchText(searchValue);
 		
-		List<Map<String, Object>> memberList = memberService.list(memberData);
+		List<Map<String, Object>> newsList = newsService.list(newsData);
 
-		if (memberList == null) {
-			memberList = new ArrayList<Map<String, Object>>();
+		if (newsList == null) {
+			newsList = new ArrayList<Map<String, Object>>();
 		}
 
-		int count = memberService.getCount(memberData);
+		int count = newsService.getCount(newsData);
 
-		member.setRecordsFiltered(count);
-		member.setRecordsTotal(count);
-		member.setData(memberList);
-		member.setDraw(Integer.valueOf(draw));
+		news.setRecordsFiltered(count);
+		news.setRecordsTotal(count);
+		news.setData(newsList);
+		news.setDraw(Integer.valueOf(draw));
 
-		String output = gson.toJson(member);
+		String output = gson.toJson(news);
 
 		pResponse.setCharacterEncoding("utf-8");
 

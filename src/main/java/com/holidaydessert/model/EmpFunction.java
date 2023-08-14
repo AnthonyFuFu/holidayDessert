@@ -2,16 +2,18 @@ package com.holidaydessert.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @Builder
 @NonNull
 @NoArgsConstructor
 @AllArgsConstructor
-public class EmpFunction {
+public class EmpFunction extends Base {
 	
 	private String funcId;             // 功能ID
 	private String funcName;           // 功能名稱

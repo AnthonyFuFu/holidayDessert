@@ -22,6 +22,12 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 		
 		String sql = " SELECT * FROM holiday_dessert.emp_function ";
 
+		if(sql.indexOf("WHERE") > 0) {
+			sql += " AND FUNC_STATUS = 1 ";
+		} else {
+			sql += " WHERE FUNC_STATUS = 1 ";
+		}
+		
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
 		
 		if (list != null && list.size() > 0) {
@@ -30,6 +36,23 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 			return null;
 		}
 		
+	}
+
+	@Override
+	public int getCount(EmpFunction empFunction) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM holiday_dessert.emp_function ";
+		
+		if(sql.indexOf("WHERE") > 0) {
+			sql += " AND FUNC_STATUS = 1 ";
+		} else {
+			sql += " WHERE FUNC_STATUS = 1 ";
+		}
+		
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 
 	@Override

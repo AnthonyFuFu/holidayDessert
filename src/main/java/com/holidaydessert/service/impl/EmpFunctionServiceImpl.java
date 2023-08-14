@@ -22,6 +22,11 @@ public class EmpFunctionServiceImpl implements EmpFunctionService {
 	}
 
 	@Override
+	public int getCount(EmpFunction empFunction) {
+		return empFunctionDao.getCount(empFunction);
+	}
+
+	@Override
 	public void add(EmpFunction empFunction) {
 		empFunctionDao.add(empFunction);
 	}

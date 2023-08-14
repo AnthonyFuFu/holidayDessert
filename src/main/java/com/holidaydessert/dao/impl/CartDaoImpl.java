@@ -75,7 +75,7 @@ public class CartDaoImpl implements CartDao {
 	}
 
 	@Override
-	public Integer count(Cart cart) {
+	public Integer getCount(Cart cart) {
 		
 		List<Object> args = new ArrayList<>();
 		

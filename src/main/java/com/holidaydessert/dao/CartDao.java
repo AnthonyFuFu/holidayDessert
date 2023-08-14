@@ -9,7 +9,7 @@ public interface CartDao {
 
 	// back
 	public List<Map<String, Object>> list(Cart cart);
-	public Integer count(Cart cart);
+	public Integer getCount(Cart cart);
 	
 	// front
 	public List<Map<String, Object>> frontList(Cart cart);

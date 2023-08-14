@@ -23,21 +23,21 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
+import com.holidaydessert.model.Coupon;
 import com.holidaydessert.model.Employee;
-import com.holidaydessert.model.Member;
 import com.holidaydessert.service.AuthorityService;
-import com.holidaydessert.service.MemberService;
+import com.holidaydessert.service.CouponService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 
 @Controller
-@RequestMapping("/admin/member")
+@RequestMapping("/admin/coupon")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@Api(tags = "會員管理")
-public class MemberManagement {
-	
+@Api(tags = "優惠券管理")
+public class CouponManagement {
+
 	@Value("${web.path}")
 	private String WEB_PATH;
 	
@@ -45,12 +45,12 @@ public class MemberManagement {
 	private AuthorityService authorityService;
 	
 	@Autowired
-	private MemberService memberService;
-	
+	private CouponService couponService;
+
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "會員清單", httpMethod = "GET", notes = "進行會員查詢")
+	@ApiOperation(value = "優惠券清單", httpMethod = "GET", notes = "進行優惠券查詢")
 	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
@@ -59,38 +59,38 @@ public class MemberManagement {
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
 		model.addAttribute("authorityList", authorityList);
-		return "admin/member/list";
+		return "admin/coupon/list";
 
 	}
 	
-	@GetMapping("/memberTables")
-	public void memberTables(@SessionAttribute("employeeSession") Employee employeeSession,
-			@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Member memberData = new Member();
+	@GetMapping("/couponTables")
+	public void couponTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Coupon coupon, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		Coupon couponData = new Coupon();
 
 		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
 		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
 		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
 		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
 
-		memberData.setStart(start);
-		memberData.setLength(length);
-		memberData.setSearchText(searchValue);
+		couponData.setStart(start);
+		couponData.setLength(length);
+		couponData.setSearchText(searchValue);
 		
-		List<Map<String, Object>> memberList = memberService.list(memberData);
+		List<Map<String, Object>> couponList = couponService.list(couponData);
 
-		if (memberList == null) {
-			memberList = new ArrayList<Map<String, Object>>();
+		if (couponList == null) {
+			couponList = new ArrayList<Map<String, Object>>();
 		}
 
-		int count = memberService.getCount(memberData);
+		int count = couponService.getCount(couponData);
 
-		member.setRecordsFiltered(count);
-		member.setRecordsTotal(count);
-		member.setData(memberList);
-		member.setDraw(Integer.valueOf(draw));
+		coupon.setRecordsFiltered(count);
+		coupon.setRecordsTotal(count);
+		coupon.setData(couponList);
+		coupon.setDraw(Integer.valueOf(draw));
 
-		String output = gson.toJson(member);
+		String output = gson.toJson(coupon);
 
 		pResponse.setCharacterEncoding("utf-8");
 

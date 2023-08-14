@@ -146,7 +146,7 @@ public class HolidayDessertController {
 		System.out.println(cartFrontList);
 		cart.setSearchText("s9017611");
 		List<Map<String, Object>> cartList = cartService.list(cart);
-		Integer cartCount = cartService.count(cart);
+		Integer cartCount = cartService.getCount(cart);
 		System.out.println(cartCount+":"+cartList);
 		
 		// 公司資訊
