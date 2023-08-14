@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/load/css :: css"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 會員管理</title>
+</head>
+<body class="theme-red">
+    <!-- Page Loader -->
+    <div class="page-loader-wrapper">
+        <div class="loader">
+            <div class="preloader">
+                <div class="spinner-layer pl-red">
+                    <div class="circle-clipper left">
+                        <div class="circle"></div>
+                    </div>
+                    <div class="circle-clipper right">
+                        <div class="circle"></div>
+                    </div>
+                </div>
+            </div>
+            <p>Please wait...</p>
+        </div>
+    </div>
+    <!-- #END# Page Loader -->
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <div class="search-icon">
+            <i class="material-icons">search</i>
+        </div>
+        <input type="text" placeholder="START TYPING...">
+        <div class="close-search">
+            <i class="material-icons">close</i>
+        </div>
+    </div>
+    <!-- #END# Search Bar -->
+    <!-- Top Bar -->
+    <nav th:include="admin/load/navbar :: navbar" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:include="admin/load/leftsidebar :: leftsidebar" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+        
+        <!-- Right Sidebar -->
+        <aside th:include="admin/load/rightsidebar :: rightsidebar" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+        	<div class="block-header">
+                <h2><b>會員管理</b></h2>
+            </div>
+            <!-- Basic Examples -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>會員清單</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                                        <li><a href="javascript:void(0);">Action</a></li>
+                                        <li><a href="javascript:void(0);">Another action</a></li>
+                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table id="dynamic-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    <thead>
+                                        <tr>
+                                        	<th>ID</th>
+                                            <th>名字</th>
+                                            <th>帳號</th>
+                                            <th>聯絡電話</th>
+                                            <th>電子信箱</th>
+                                            <th>地址</th>
+                                            <th>生日</th>
+                                            <th>性別</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- #END# Basic Examples -->
+        </div>
+    </section>
+    
+<!-- <div th:if="${employeeSession != null}" th:include="front/chat :: chat"></div> -->
+<div th:include="admin/load/js :: js"></div>
+<div th:include="admin/load/js :: jquery-datatable"></div>
+<div th:include="admin/load/js :: chat"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/member/member.js}"></script>
+    
+</body>
+</html>
+	
