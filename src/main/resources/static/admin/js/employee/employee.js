@@ -1,34 +1,26 @@
 $(function() {
-
-//	let getUrl = location.href;
-//	var url = new URL(getUrl);
-//	var area_id = url.searchParams.get('area_id');
-	let getUrl = location.href;
-	var url = new URL(getUrl);
-	var area_id = url.searchParams.get('area_id');
-	
 	$('.basic-dataTable').DataTable({
-        responsive: true,
+//        responsive: true,
         bAutoWidth: false,
 		serverSide: true,
-		"processing": true,
-		"ordering": true,
-        "ajax": "employeeTables",
-        "aaSorting": [],
-        "oLanguage": {
-			"sProcessing": "處理中...",
-			"sLengthMenu": "顯示 _MENU_ 筆",
-			"sZeroRecords": "目前無資料",
-			"sEmptyTable": "目前無資料",
-			"sInfo": "目前顯示： 第 _START_ 筆 到 第 _END_ 筆， 共有 _TOTAL_ 筆",
-			"sInfoEmpty": "找尋不到相關資料",
-			"sInfoFiltered": "(已過濾 _MAX_ 筆)",
-			"sSearch": "搜尋：",
-			"oPaginate": {
-				"sFirst": "First",
-				"sPrevious": "上一頁",
-				"sNext": "下一頁",
-				"sLast": "Last"
+		processing: true,
+		ordering: true,
+        ajax: "employeeTables",
+        aaSorting: [],
+        oLanguage: {
+			sProcessing: "處理中...",
+			sLengthMenu: "顯示 _MENU_ 筆",
+			sZeroRecords: "目前無資料",
+			sEmptyTable: "目前無資料",
+			sInfo: "目前顯示： 第 _START_ 筆 到 第 _END_ 筆， 共有 _TOTAL_ 筆",
+			sInfoEmpty: "找尋不到相關資料",
+			sInfoFiltered: "(已過濾 _MAX_ 筆)",
+			sSearch: "搜尋：",
+			oPaginate: {
+				sFirst: "First",
+				sPrevious: "上一頁",
+				sNext: "下一頁",
+				sLast: "Last"
 			},
 			select: {
 				rows: {
@@ -39,84 +31,84 @@ $(function() {
 		select: {
 			style: 'multi'
 		},
-		"columnDefs": [
+		columnDefs: [
 			{
-				"targets": [0],
-				"data": "EMP_ID",
-				"searching": false,
-				"orderable": false,
+				targets: [0],
+				data: "EMP_ID",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_ID;
 				}
 			},
 			{
-				"targets": [1],
-				"data": "EMP_NAME",
-				"searching": false,
-				"orderable": false,
+				targets: [1],
+				data: "EMP_NAME",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_NAME;
 				}
 			},
 			{
-				"targets": [2],
-				"data": "EMP_ACCOUNT",
-				"searching": false,
-				"orderable": false,
+				targets: [2],
+				data: "EMP_ACCOUNT",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_ACCOUNT;
 				}
 			},
 			{
-				"targets": [3],
-				"data": "EMP_PHONE",
-				"searching": false,
-				"orderable": false,
+				targets: [3],
+				data: "EMP_PHONE",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_PHONE;
 				}
 			},
 			{
-				"targets": [4],
-				"data": "EMP_EMAIL",
-				"searching": false,
-				"orderable": false,
+				targets: [4],
+				data: "EMP_EMAIL",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_EMAIL;
 				}
 			},
 			{
-				"targets": [5],
-				"data": "EMP_LEVEL",
-				"searching": false,
-				"orderable": false,
+				targets: [5],
+				data: "EMP_LEVEL",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_LEVEL;
 				}
 			},
 			{
-				"targets": [6],
-				"data": "EMP_STATUS",
-				"searching": false,
-				"orderable": false,
+				targets: [6],
+				data: "EMP_STATUS",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_STATUS;
 				}
 			},
 			{
-				"targets": [7],
-				"data": "EMP_HIREDATE",
-				"searching": false,
-				"orderable": false,
+				targets: [7],
+				data: "EMP_HIREDATE",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.EMP_HIREDATE;
 				}
 			},
 			{
-				"targets": [8],
-				"data": "EMP_PICTURE",
-				"searching": false,
-				"orderable": false,
+				targets: [8],
+				data: "EMP_PICTURE",
+				searching: false,
+				orderable: false,
 				render: function(data, type, row, meta) {
 					if (row.EMP_PICTURE != '' && row.EMP_PICTURE != null) {
 						return "<img src='" + row.EMP_PICTURE + "' width='130px' height='160px' />";
