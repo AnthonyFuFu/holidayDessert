@@ -135,13 +135,13 @@ public class HolidayDessertController {
 		
 		// 公告圖片
 		Banner banner = new Banner();
-		banner.setNewsId("101");
+		banner.setNewsId("1");
 		List<Map<String, Object>> bannerList = bannerService.frontRandList(banner);
 		System.out.println(bannerList);
 		
 		// 購物車
 		Cart cart = new Cart();
-		cart.setMemId("201");
+		cart.setMemId("1");
 		List<Map<String, Object>> cartFrontList = cartService.frontList(cart);
 		System.out.println(cartFrontList);
 		cart.setSearchText("s9017611");
@@ -186,7 +186,7 @@ public class HolidayDessertController {
 		Integer memberCouponCount = memberCouponService.getCount(memberCoupon);
 		System.out.println(memberCouponCount+":"+memberCouponList);
 		Member anthonyFu = new Member();
-		anthonyFu.setMemId("201");
+		anthonyFu.setMemId("1");
 		memberCoupon.setMemId(anthonyFu.getMemId());
 		List<Map<String, Object>> frontMemberCouponList = memberCouponService.listMemberCoupon(memberCoupon);
 		System.out.println("anthonyFu:"+frontMemberCouponList);
@@ -198,7 +198,7 @@ public class HolidayDessertController {
 		System.out.println(memberCount+":"+memberList);
 
 		Message message = new Message();
-		message.setMemId("201");
+		message.setMemId("1");
 		List<Map<String, Object>> messageList = messageService.getMessageByMemId(message);
 		System.out.println(messageList);
 
@@ -244,7 +244,7 @@ public class HolidayDessertController {
 
 		ProductPic productPic = new ProductPic();
 		List<Map<String, Object>> productPicList = productPicService.list(productPic);
-		productPic.setPdId("4001");
+		productPic.setPdId("1");
 		productPic.setLength("2");
 		List<Map<String, Object>> productPicfrontRandList = productPicService.frontRandList(productPic);
 		System.out.println(productPicList);
@@ -272,7 +272,7 @@ public class HolidayDessertController {
 		List<Map<String, Object>> receiptInformationList = receiptInformationService.list(receiptInformation);
 		Integer receiptInformationCount = receiptInformationService.getCount(receiptInformation);
 		System.out.println(receiptInformationCount+":"+receiptInformationList);
-		receiptInformation.setMemId("201");
+		receiptInformation.setMemId("1");
 		List<Map<String, Object>> receiptInformationFrontList = receiptInformationService.frontList(receiptInformation);
 		System.out.println(receiptInformationFrontList);
 		

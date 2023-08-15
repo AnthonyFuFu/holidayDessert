@@ -93,7 +93,7 @@ public class ProductManagement {
 		String output = gson.toJson(product);
 
 		pResponse.setCharacterEncoding("utf-8");
-
+		
 		try {
 			PrintWriter out;
 			out = pResponse.getWriter();

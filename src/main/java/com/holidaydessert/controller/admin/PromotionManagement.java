@@ -93,7 +93,7 @@ public class PromotionManagement {
 		String output = gson.toJson(promotion);
 
 		pResponse.setCharacterEncoding("utf-8");
-
+		
 		try {
 			PrintWriter out;
 			out = pResponse.getWriter();

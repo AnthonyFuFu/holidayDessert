@@ -4,7 +4,7 @@ $(function() {
 		serverSide: true,
 		processing: true,
 		ordering: true,
-        ajax: "employeeTables",
+        ajax: "orderTables",
         aaSorting: [],
         oLanguage: {
 			sProcessing: "處理中...",
@@ -33,164 +33,199 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
-				data: "EMP_ID",
+				data: "ORD_RECIPIENT",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_ID;
+					return row.ORD_RECIPIENT;
 				}
 			},
 			{
 				targets: [1],
-				data: "EMP_NAME",
+				data: "MEM_GENDER",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_NAME;
+					return row.MEM_GENDER;
 				}
 			},
 			{
 				targets: [2],
-				data: "EMP_ACCOUNT",
+				data: "MEM_EMAIL",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_ACCOUNT;
+					return row.MEM_EMAIL;
 				}
 			},
 			{
 				targets: [3],
-				data: "EMP_PHONE",
+				data: "ORD_RECIPIENT_PHONE",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_PHONE;
+					return row.ORD_RECIPIENT_PHONE;
 				}
 			},
 			{
 				targets: [4],
-				data: "EMP_EMAIL",
+				data: "ORD_ADDRESS",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_EMAIL;
+					return row.ORD_ADDRESS;
 				}
 			},
 			{
 				targets: [5],
-				data: "DEPT_NAME",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.DEPT_NAME;
-				}
-			},
-			{
-				targets: [6],
-				data: "DEPT_LOC",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.DEPT_LOC;
-				}
-			},
-			{
-				targets: [7],
-				data: "EMP_LEVEL",
+				data: "ORD_DELIVERY",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
 					if(data == 0){
-						return '最高管理員'
+						return '超商取貨'
 					} else if (data == 1){
-						return '一般管理員'
+						return '宅配'
 					} else {
-						return '尚未填寫'
+						return '取消'
 					}
+				}
+			},
+			{
+				targets: [6],
+				data: "ORD_SUBTOTAL",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.ORD_SUBTOTAL;
+				}
+			},
+			{
+				targets: [7],
+				data: "ORD_TOTAL",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.ORD_TOTAL;
 				}
 			},
 			{
 				targets: [8],
-				data: "EMP_STATUS",
+				data: "ORD_DELIVERY_FEE",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					if(data == 1){
-						return '啟用'
-					} else {
-						return '停權'
-					}
+					return row.ORD_DELIVERY_FEE;
 				}
 			},
 			{
 				targets: [9],
-				data: "EMP_HIREDATE",
+				data: "ORD_STATUS",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_HIREDATE;
+					if(data == 0){
+						return '未完成'
+					} else if (data == 1){
+						return '已完成'
+					} else if (data == 2){
+						return '配送中'
+					} else {
+						return '取消'
+					}
 				}
 			},
 			{
 				targets: [10],
-				data: "EMP_PICTURE",
+				data: "ORD_PAYMENT",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					if (row.EMP_PICTURE != '' && row.EMP_PICTURE != null) {
-						return "<img src='" + row.EMP_PICTURE + "' width='90px' height='110px' />";
+					if(data == 0){
+						return '貨到付款'
+					} else if (data == 1){
+						return '信用卡'
 					} else {
-						return "<div class=\"preview\"><img class=\"mapImg\"><span class=\"text\">預覽圖</span></div>"
+						return '取消'
 					}
+				}
+			},
+			{
+				targets: [11],
+				data: "ORD_NOTE",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					if(data == '' || data == null){
+						return '無'
+					} else {
+						return row.ORD_NOTE
+					}
+				}
+			},
+			{
+				targets: [12],
+				data: "COUPON_USED",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.COUPON_USED;
 				}
 			}
 		],
 		columns: [
 			{
-				data: "EMP_ID",
+				data: "ORD_RECIPIENT",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_NAME",
+				data: "MEM_GENDER",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_ACCOUNT",
+				data: "MEM_EMAIL",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_PHONE",
+				data: "ORD_RECIPIENT_PHONE",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_EMAIL",
+				data: "ORD_ADDRESS",
 				defaultContent: ""
 			},
 			{
-				data: "DEPT_NAME",
+				data: "ORD_DELIVERY",
 				defaultContent: ""
 			},
 			{
-				data: "DEPT_LOC",
+				data: "ORD_SUBTOTAL",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_LEVEL",
+				data: "ORD_TOTAL",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_STATUS",
+				data: "ORD_DELIVERY_FEE",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_HIREDATE",
+				data: "ORD_STATUS",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_PICTURE",
+				data: "ORD_PAYMENT",
+				defaultContent: ""
+			},
+			{
+				data: "ORD_NOTE",
+				defaultContent: ""
+			},
+			{
+				data: "COUPON_USED",
 				defaultContent: ""
 			}
 		]
     });
 });
-

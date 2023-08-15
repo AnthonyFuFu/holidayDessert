@@ -2,8 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/load/css :: css"></head>
 <head>
-<title>[[${@environment.getProperty('html.title')}]] - 員工管理</title>
-<link rel="stylesheet" th:href="@{/admin/css/employee.css}" />
+<title>[[${@environment.getProperty('html.title')}]] - 優惠券管理</title>
 </head>
 <body class="theme-red">
 
@@ -36,14 +35,14 @@
         <div class="container-fluid">
         
 			<!-- breadcrumbs -->
-            <div th:include="admin/load/breadcrumbs :: employee" class="row clearfix block-header"></div>
+            <div th:include="admin/load/breadcrumbs :: coupon" class="row clearfix block-header"></div>
             <!-- #END# breadcrumbs -->
             
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>員工清單</h2>
+                            <h2>優惠券清單</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -63,16 +62,10 @@
                                     <thead>
                                         <tr>
                                         	<th>ID</th>
-                                            <th>名字</th>
-                                            <th>帳號</th>
-                                            <th>聯絡電話</th>
-                                            <th>電子信箱</th>
-                                            <th>部門名稱</th>
-                                            <th>部門地點</th>
-                                            <th>等級</th>
-                                            <th>狀態</th>
-                                            <th>入職日</th>
-                                            <th>相片</th>
+                                            <th>優惠券名稱</th>
+                                            <th>折抵金額</th>
+                                            <th>優惠券狀態</th>
+                                            <th>優惠券圖片</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -89,7 +82,7 @@
 <div th:include="admin/load/js :: chat"></div>
 
 <script th:src="@{/admin/js/admin.js}"></script>
-<script th:src="@{/admin/js/employee/employee.js}"></script>
+<script th:src="@{/admin/js/coupon/coupon.js}"></script>
 
 </body>
 </html>

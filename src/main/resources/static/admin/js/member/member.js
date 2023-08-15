@@ -104,6 +104,40 @@ $(function() {
 					return row.GENDER;
 				}
 			}
+		],
+		columns: [
+			{
+				data: "MEM_ID",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_NAME",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_ACCOUNT",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_PHONE",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_EMAIL",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_ADDRESS",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_BIRTHDAY",
+				defaultContent: ""
+			},
+			{
+				data: "GENDER",
+				defaultContent: ""
+			}
 		]
     });
 

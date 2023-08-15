@@ -93,7 +93,7 @@ public class CouponManagement {
 		String output = gson.toJson(coupon);
 
 		pResponse.setCharacterEncoding("utf-8");
-
+		
 		try {
 			PrintWriter out;
 			out = pResponse.getWriter();

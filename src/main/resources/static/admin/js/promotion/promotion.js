@@ -4,7 +4,7 @@ $(function() {
 		serverSide: true,
 		processing: true,
 		ordering: true,
-        ajax: "employeeTables",
+        ajax: "promotionTables",
         aaSorting: [],
         oLanguage: {
 			sProcessing: "處理中...",
@@ -33,164 +33,114 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
-				data: "EMP_ID",
+				data: "PM_ID",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_ID;
+					return row.PM_ID;
 				}
 			},
 			{
 				targets: [1],
-				data: "EMP_NAME",
+				data: "PM_NAME",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_NAME;
+					return row.PM_NAME;
 				}
 			},
 			{
 				targets: [2],
-				data: "EMP_ACCOUNT",
+				data: "PM_DESCRIPTION",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_ACCOUNT;
+					return row.PM_DESCRIPTION;
 				}
 			},
 			{
 				targets: [3],
-				data: "EMP_PHONE",
+				data: "PM_DISCOUNT",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_PHONE;
+					return row.PM_DISCOUNT;
 				}
 			},
 			{
 				targets: [4],
-				data: "EMP_EMAIL",
+				data: "PM_START",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.EMP_EMAIL;
+					return row.PM_START;
 				}
 			},
 			{
 				targets: [5],
-				data: "DEPT_NAME",
+				data: "PM_END",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.DEPT_NAME;
+					return row.PM_END;
 				}
 			},
 			{
 				targets: [6],
-				data: "DEPT_LOC",
+				data: "STATUS",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.DEPT_LOC;
+					return row.STATUS;
 				}
 			},
 			{
 				targets: [7],
-				data: "EMP_LEVEL",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					if(data == 0){
-						return '最高管理員'
-					} else if (data == 1){
-						return '一般管理員'
-					} else {
-						return '尚未填寫'
-					}
-				}
-			},
-			{
-				targets: [8],
-				data: "EMP_STATUS",
+				data: "PM_REGULARLY",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
 					if(data == 1){
-						return '啟用'
+						return '例行'
 					} else {
-						return '停權'
-					}
-				}
-			},
-			{
-				targets: [9],
-				data: "EMP_HIREDATE",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.EMP_HIREDATE;
-				}
-			},
-			{
-				targets: [10],
-				data: "EMP_PICTURE",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					if (row.EMP_PICTURE != '' && row.EMP_PICTURE != null) {
-						return "<img src='" + row.EMP_PICTURE + "' width='90px' height='110px' />";
-					} else {
-						return "<div class=\"preview\"><img class=\"mapImg\"><span class=\"text\">預覽圖</span></div>"
+						return '非例行'
 					}
 				}
 			}
 		],
 		columns: [
 			{
-				data: "EMP_ID",
+				data: "PM_ID",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_NAME",
+				data: "PM_NAME",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_ACCOUNT",
+				data: "PM_DESCRIPTION",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_PHONE",
+				data: "PM_DISCOUNT",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_EMAIL",
+				data: "PM_START",
 				defaultContent: ""
 			},
 			{
-				data: "DEPT_NAME",
+				data: "PM_END",
 				defaultContent: ""
 			},
 			{
-				data: "DEPT_LOC",
+				data: "STATUS",
 				defaultContent: ""
 			},
 			{
-				data: "EMP_LEVEL",
-				defaultContent: ""
-			},
-			{
-				data: "EMP_STATUS",
-				defaultContent: ""
-			},
-			{
-				data: "EMP_HIREDATE",
-				defaultContent: ""
-			},
-			{
-				data: "EMP_PICTURE",
+				data: "PM_REGULARLY",
 				defaultContent: ""
 			}
 		]
     });
 });
-

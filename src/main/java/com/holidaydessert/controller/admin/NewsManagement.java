@@ -93,7 +93,7 @@ public class NewsManagement {
 		String output = gson.toJson(news);
 
 		pResponse.setCharacterEncoding("utf-8");
-
+		
 		try {
 			PrintWriter out;
 			out = pResponse.getWriter();

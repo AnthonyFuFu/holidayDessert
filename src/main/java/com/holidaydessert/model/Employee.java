@@ -18,8 +18,11 @@ import lombok.ToString;
 public class Employee extends Base {
 	
 	private String empId;              // 管理員ID
+	private String deptId;             // 部門ID
 	private String empName;            // 姓名
 	private String empPhone;           // 電話
+	private String empJob;			   // 職稱
+	private String empSalary;		   // 薪水
 	private String empPicture;         // 照片路徑
 	private String empAccount;         // 帳號
 	private String empPassword;        // 密碼

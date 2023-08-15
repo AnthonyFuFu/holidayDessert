@@ -93,7 +93,7 @@ public class CompanyManagement {
 		String output = gson.toJson(companyInformation);
 
 		pResponse.setCharacterEncoding("utf-8");
-
+		
 		try {
 			PrintWriter out;
 			out = pResponse.getWriter();

@@ -93,7 +93,7 @@ public class OrderManagement {
 		String output = gson.toJson(mainOrder);
 
 		pResponse.setCharacterEncoding("utf-8");
-
+		
 		try {
 			PrintWriter out;
 			out = pResponse.getWriter();
