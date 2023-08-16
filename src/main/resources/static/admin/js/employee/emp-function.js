@@ -1,10 +1,10 @@
 $(function() {
-	$('#company-table').DataTable({
+	$('#emp-function-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
 		ordering: true,
-        ajax: "companyTables",
+        ajax: "empFunctionTables",
         aaSorting: [],
         oLanguage: {
 			sProcessing: "處理中...",
@@ -33,71 +33,76 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
-				data: "COM_ID",
+				data: "FUNC_ID",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_ID;
+					return row.FUNC_ID;
 				}
 			},
 			{
 				targets: [1],
-				data: "COM_NAME",
+				data: "FUNC_NAME",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_NAME;
+					return row.FUNC_NAME;
 				}
 			},
 			{
 				targets: [2],
-				data: "COM_ADDRESS",
+				data: "FUNC_LINK",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_ADDRESS;
+					return row.FUNC_LINK;
 				}
 			},
 			{
 				targets: [3],
-				data: "COM_PHONE",
+				data: "FUNC_STATUS",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_PHONE;
+					if(data == 1){
+						return '啟用'
+					} else {
+						return '停用'
+					}
 				}
 			},
 			{
 				targets: [4],
-				data: "COM_MEMO",
+				data: "FUNC_ICON",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_MEMO;
+					return '<i class="material-icons">'+ data +'</i>'+ data;
 				}
 			}
 		],
 		columns: [
 			{
-				data: "COM_ID",
+				data: "FUNC_ID",
 				defaultContent: ""
 			},
 			{
-				data: "COM_NAME",
+				data: "FUNC_NAME",
 				defaultContent: ""
 			},
 			{
-				data: "COM_ADDRESS",
+				data: "FUNC_LINK",
 				defaultContent: ""
 			},
 			{
-				data: "COM_PHONE",
+				data: "FUNC_STATUS",
 				defaultContent: ""
 			},
 			{
-				data: "COM_MEMO",
+				data: "FUNC_ICON",
 				defaultContent: ""
 			}
 		]
     });
 });
+

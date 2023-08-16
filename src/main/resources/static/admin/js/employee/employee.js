@@ -1,5 +1,5 @@
 $(function() {
-	$('.basic-dataTable').DataTable({
+	$('#employee-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,

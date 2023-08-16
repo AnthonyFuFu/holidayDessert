@@ -19,16 +19,41 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 	
 	@Override
 	public List<Map<String, Object>> list(EmpFunction empFunction) {
+
+		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT * FROM holiday_dessert.emp_function ";
-
+		
+		if (empFunction.getSearchText() != null && empFunction.getSearchText().length() > 0) {
+			String[] searchText = empFunction.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(FUNC_NAME, ?) > 0"
+					+  " OR INSTR(FUNC_LINK, ?) > 0 "
+					+  " OR INSTR(FUNC_ICON, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		
 		if(sql.indexOf("WHERE") > 0) {
 			sql += " AND FUNC_STATUS = 1 ";
 		} else {
 			sql += " WHERE FUNC_STATUS = 1 ";
 		}
 		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		if (empFunction.getStart() != null && !"".equals(empFunction.getStart())) {
+			sql += " LIMIT " + empFunction.getStart() + "," + empFunction.getLength();
+		}
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
 		
 		if (list != null && list.size() > 0) {
 			return list;
@@ -45,13 +70,31 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 		
 		String sql = " SELECT COUNT(*) AS COUNT "
 				   + " FROM holiday_dessert.emp_function ";
+
+		if (empFunction.getSearchText() != null && empFunction.getSearchText().length() > 0) {
+			String[] searchText = empFunction.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(FUNC_NAME, ?) > 0"
+					+  " OR INSTR(FUNC_LINK, ?) > 0 "
+					+  " OR INSTR(FUNC_ICON, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
 		
 		if(sql.indexOf("WHERE") > 0) {
 			sql += " AND FUNC_STATUS = 1 ";
 		} else {
 			sql += " WHERE FUNC_STATUS = 1 ";
 		}
-		
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 

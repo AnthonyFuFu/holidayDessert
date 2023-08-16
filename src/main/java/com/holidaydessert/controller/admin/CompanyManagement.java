@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.CompanyInformation;
+import com.holidaydessert.model.Department;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CompanyInformationService;
+import com.holidaydessert.service.DepartmentService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,6 +48,9 @@ public class CompanyManagement {
 	
 	@Autowired
 	private CompanyInformationService companyInformationService;
+	
+	@Autowired
+	private DepartmentService departmentService;
 
 	private Gson gson = new Gson();
 	
@@ -104,4 +109,44 @@ public class CompanyManagement {
 
 	}
 	
+	@GetMapping("/departmentTables")
+	public void departmentTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Department department, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		Department departmentData = new Department();
+
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+
+		departmentData.setStart(start);
+		departmentData.setLength(length);
+		departmentData.setSearchText(searchValue);
+		
+		List<Map<String, Object>> departmentList = departmentService.list(departmentData);
+
+		if (departmentList == null) {
+			departmentList = new ArrayList<Map<String, Object>>();
+		}
+
+		int count = departmentService.getCount(departmentData);
+
+		department.setRecordsFiltered(count);
+		department.setRecordsTotal(count);
+		department.setData(departmentList);
+		department.setDraw(Integer.valueOf(draw));
+
+		String output = gson.toJson(department);
+
+		pResponse.setCharacterEncoding("utf-8");
+		
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

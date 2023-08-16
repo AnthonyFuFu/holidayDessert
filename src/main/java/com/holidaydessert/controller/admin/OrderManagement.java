@@ -25,8 +25,10 @@ import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.MainOrder;
+import com.holidaydessert.model.OrderDetail;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.MainOrderService;
+import com.holidaydessert.service.OrderDetailService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -46,6 +48,9 @@ public class OrderManagement {
 	
 	@Autowired
 	private MainOrderService mainOrderService;
+	
+	@Autowired
+	private OrderDetailService orderDetailService;
 
 	private Gson gson = new Gson();
 	
@@ -91,6 +96,46 @@ public class OrderManagement {
 		mainOrder.setDraw(Integer.valueOf(draw));
 		
 		String output = gson.toJson(mainOrder);
+
+		pResponse.setCharacterEncoding("utf-8");
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@GetMapping("/orderDetailTables")
+	public void orderDetailTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute OrderDetail orderDetail, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		OrderDetail orderDetailData = new OrderDetail();
+
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+
+		orderDetailData.setStart(start);
+		orderDetailData.setLength(length);
+		orderDetailData.setSearchText(searchValue);
+		
+		List<Map<String, Object>> orderDetailList = orderDetailService.list(orderDetailData);
+
+		if (orderDetailList == null) {
+			orderDetailList = new ArrayList<Map<String, Object>>();
+		}
+
+		int count = orderDetailService.getCount(orderDetailData);
+
+		orderDetail.setRecordsFiltered(count);
+		orderDetail.setRecordsTotal(count);
+		orderDetail.setData(orderDetailList);
+		orderDetail.setDraw(Integer.valueOf(draw));
+		System.out.println(orderDetailList);
+		String output = gson.toJson(orderDetail);
 
 		pResponse.setCharacterEncoding("utf-8");
 		try {

@@ -22,8 +22,8 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT ORD_SUBTOTAL, ORD_TOTAL, ORD_STATUS, DATE_FORMAT(ORD_CREATE, '%Y-%m-%d') ORD_CREATE, ORD_RECIPIENT, ORD_RECIPIENT_PHONE, "
-				   + " ORD_PAYMENT, ORD_DELIVERY, ORD_ADDRESS, ORD_NOTE, ORD_DELIVERY_FEE, od.*, PD_NAME "
+		String sql = " SELECT ORD_SUBTOTAL, ORD_TOTAL, ORD_STATUS, DATE_FORMAT(ORD_CREATE, '%Y-%m-%d %H:%i:%s') ORD_CREATE, ORD_RECIPIENT, ORD_RECIPIENT_PHONE, "
+				   + " ORD_PAYMENT, ORD_DELIVERY, ORD_ADDRESS, od.*, PD_NAME "
 				   + " FROM holiday_dessert.order_detail od "
 				   + " LEFT JOIN main_order mo ON od.ORD_ID = mo.ORD_ID "
 				   + " LEFT JOIN product p ON p.PD_ID = od.PD_ID ";
@@ -37,23 +37,13 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
 				} else {
 					sql += " ( ";
 				}
-				sql += " INSTR(ORD_STATUS, ?) > 0"
-					+  " OR INSTR(ORD_RECIPIENT, ?) > 0 "
-					+  " OR INSTR(ORD_RECIPIENT_PHONE, ?) > 0 "
-					+  " OR INSTR(ORD_PAYMENT, ?) > 0 "
-					+  " OR INSTR(ORD_DELIVERY, ?) > 0 "
-					+  " OR INSTR(ORD_NOTE, ?) > 0 "
-					+  " OR INSTR(ORD_DELIVERY_FEE, ?) > 0 "
+				sql += " INSTR(ORD_RECIPIENT, ?) > 0"
+					+  " OR INSTR(od.ORD_ID, ?) > 0 "
 					+  " OR INSTR(PD_NAME, ?) > 0 "
 					+  " ) ";
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
 			}
 		}
 
@@ -90,20 +80,10 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
 				} else {
 					sql += " ( ";
 				}
-				sql += " INSTR(ORD_STATUS, ?) > 0"
-					+  " OR INSTR(ORD_RECIPIENT, ?) > 0 "
-					+  " OR INSTR(ORD_RECIPIENT_PHONE, ?) > 0 "
-					+  " OR INSTR(ORD_PAYMENT, ?) > 0 "
-					+  " OR INSTR(ORD_DELIVERY, ?) > 0 "
-					+  " OR INSTR(ORD_NOTE, ?) > 0 "
-					+  " OR INSTR(ORD_DELIVERY_FEE, ?) > 0 "
+				sql += " INSTR(ORD_RECIPIENT, ?) > 0"
+					+  " OR INSTR(od.ORD_ID, ?) > 0 "
 					+  " OR INSTR(PD_NAME, ?) > 0 "
 					+  " ) ";
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);

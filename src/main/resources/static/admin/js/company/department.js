@@ -1,10 +1,10 @@
 $(function() {
-	$('#company-table').DataTable({
+	$('#department-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
 		ordering: true,
-        ajax: "companyTables",
+        ajax: "departmentTables",
         aaSorting: [],
         oLanguage: {
 			sProcessing: "處理中...",
@@ -33,69 +33,43 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
-				data: "COM_ID",
+				data: "DEPT_ID",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_ID;
+					return row.DEPT_ID;
 				}
 			},
 			{
 				targets: [1],
-				data: "COM_NAME",
+				data: "DEPT_NAME",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_NAME;
+					return row.DEPT_NAME;
 				}
 			},
 			{
 				targets: [2],
-				data: "COM_ADDRESS",
+				data: "DEPT_LOC",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_ADDRESS;
-				}
-			},
-			{
-				targets: [3],
-				data: "COM_PHONE",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.COM_PHONE;
-				}
-			},
-			{
-				targets: [4],
-				data: "COM_MEMO",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.COM_MEMO;
+					return row.DEPT_LOC;
 				}
 			}
 		],
 		columns: [
 			{
-				data: "COM_ID",
+				data: "DEPT_ID",
 				defaultContent: ""
 			},
 			{
-				data: "COM_NAME",
+				data: "DEPT_NAME",
 				defaultContent: ""
 			},
 			{
-				data: "COM_ADDRESS",
-				defaultContent: ""
-			},
-			{
-				data: "COM_PHONE",
-				defaultContent: ""
-			},
-			{
-				data: "COM_MEMO",
+				data: "DEPT_LOC",
 				defaultContent: ""
 			}
 		]

@@ -6,10 +6,12 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
 
 import com.holidaydessert.dao.DepartmentDao;
 import com.holidaydessert.model.Department;
 
+@Repository
 public class DepartmentDaoImpl implements DepartmentDao {
 
 	@Autowired
@@ -18,9 +20,32 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	@Override
 	public List<Map<String, Object>> list(Department department) {
 
+		List<Object> args = new ArrayList<>();
+		
 		String sql = " SELECT * FROM holiday_dessert.department ";
-
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		
+		if (department.getSearchText() != null && department.getSearchText().length() > 0) {
+			String[] searchText = department.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(DEPT_NAME, ?) > 0"
+					+  " OR INSTR(DEPT_LOC, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		
+		if (department.getStart() != null && !"".equals(department.getStart())) {
+			sql += " LIMIT " + department.getStart() + "," + department.getLength();
+		}
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
 		
 		if (list != null && list.size() > 0) {
 			return list;
@@ -28,6 +53,33 @@ public class DepartmentDaoImpl implements DepartmentDao {
 			return null;
 		}
 		
+	}
+
+	@Override
+	public int getCount(Department department) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM holiday_dessert.department ";
+
+		if (department.getSearchText() != null && department.getSearchText().length() > 0) {
+			String[] searchText = department.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(DEPT_NAME, ?) > 0"
+					+  " OR INSTR(DEPT_LOC, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 
 	@Override

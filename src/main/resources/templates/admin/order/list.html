@@ -42,7 +42,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>訂單清單</h2>
+                            <h2>訂單管理</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -57,26 +57,60 @@
                             </ul>
                         </div>
                         <div class="body">
-                            <div class="table-responsive">
-                                <table id="dynamic-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
-                                    <thead>
-                                        <tr>
-                                        	<th>收件人</th>
-                                            <th>性別</th>
-                                            <th>電子信箱</th>
-                                            <th>聯絡電話</th>
-                                            <th>收件地址</th>
-                                            <th>收件方式</th>
-                                            <th>小計(未扣cupon折扣)</th>
-                                            <th>總計(扣除cupon折扣)</th>
-                                            <th>運費</th>
-                                            <th>訂單狀態</th>
-                                            <th>付款方式</th>
-                                            <th>訂單備註</th>
-                                            <th>使用優惠券</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                        	<div class="row clearfix">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                        <li role="presentation" class="active"><a href="#order_animation" data-toggle="tab">訂單清單</a></li>
+                                        <li role="presentation"><a href="#order_detail_animation" data-toggle="tab">訂單明細</a></li>
+                                    </ul>
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane fade in active" id="order_animation">
+                            				<div class="table-responsive">
+                                				<table id="order-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>ID</th>
+                                        					<th>收件人</th>
+                                            				<th>性別</th>
+                                            				<th>電子信箱</th>
+                                            				<th>聯絡電話</th>
+                                            				<th>收件地址</th>
+                                            				<th>方式</th>
+                                            				<th>小計(未扣cupon)</th>
+                                            				<th>總計(扣除cupon)</th>
+                                            				<th>運費</th>
+                                            				<th>訂單狀態</th>
+                                            				<th>付款方式</th>
+                                            				<th>備註</th>
+                                            				<th>優惠券</th>
+                                            				<th>下訂時間</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
+                        				</div>
+                                        <div role="tabpanel" class="tab-pane fade" id="order_detail_animation">
+                                        	<div class="table-responsive">
+                               					<table id="order-detail-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>訂單ID</th>
+                                        					<th>收件人</th>
+                                            				<th>聯絡電話</th>
+                                            				<th>訂單品項</th>
+                                            				<th>訂單數量</th>
+                                            				<th>訂單原價</th>
+                                            				<th>訂單優惠後價格</th>
+                                            				<th>訂單創建時間</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -91,7 +125,7 @@
 
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/order/order.js}"></script>
-
+<script th:src="@{/admin/js/order/order-detail.js}"></script>
 </body>
 </html>
 	

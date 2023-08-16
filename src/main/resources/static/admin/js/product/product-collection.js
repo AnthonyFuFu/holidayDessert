@@ -1,10 +1,10 @@
 $(function() {
-	$('#company-table').DataTable({
+	$('#product-collection-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
 		ordering: true,
-        ajax: "companyTables",
+        ajax: "productCollectionTables",
         aaSorting: [],
         oLanguage: {
 			sProcessing: "處理中...",
@@ -33,69 +33,56 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
-				data: "COM_ID",
+				data: "PDC_ID",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_ID;
+					return row.PDC_ID;
 				}
 			},
 			{
 				targets: [1],
-				data: "COM_NAME",
+				data: "PDC_NAME",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_NAME;
+					return row.PDC_NAME;
 				}
 			},
 			{
 				targets: [2],
-				data: "COM_ADDRESS",
+				data: "PDC_KEYWORD",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_ADDRESS;
+					return row.PDC_KEYWORD;
 				}
 			},
 			{
 				targets: [3],
-				data: "COM_PHONE",
+				data: "STATUS",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.COM_PHONE;
-				}
-			},
-			{
-				targets: [4],
-				data: "COM_MEMO",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.COM_MEMO;
+					return row.STATUS;
 				}
 			}
 		],
 		columns: [
 			{
-				data: "COM_ID",
+				data: "PDC_ID",
 				defaultContent: ""
 			},
 			{
-				data: "COM_NAME",
+				data: "PDC_NAME",
 				defaultContent: ""
 			},
 			{
-				data: "COM_ADDRESS",
+				data: "PDC_KEYWORD",
 				defaultContent: ""
 			},
 			{
-				data: "COM_PHONE",
-				defaultContent: ""
-			},
-			{
-				data: "COM_MEMO",
+				data: "STATUS",
 				defaultContent: ""
 			}
 		]

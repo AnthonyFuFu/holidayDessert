@@ -4,11 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.DepartmentDao;
 import com.holidaydessert.model.Department;
 import com.holidaydessert.service.DepartmentService;
 
+@Service
 public class DepartmentServiceImpl implements DepartmentService {
 	
 	@Autowired
@@ -19,6 +21,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 		return departmentDao.list(department);
 	}
 
+	@Override
+	public int getCount(Department department) {
+		return departmentDao.getCount(department);
+	}
+	
 	@Override
 	public void add(Department department) {
 		departmentDao.add(department);

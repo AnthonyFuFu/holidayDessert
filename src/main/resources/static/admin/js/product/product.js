@@ -1,5 +1,5 @@
 $(function() {
-	$('.basic-dataTable').DataTable({
+	$('#product-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
@@ -51,6 +51,15 @@ $(function() {
 			},
 			{
 				targets: [2],
+				data: "PDC_NAME",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.PDC_NAME;
+				}
+			},
+			{
+				targets: [3],
 				data: "PD_PRICE",
 				searching: false,
 				orderable: false,
@@ -59,7 +68,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [3],
+				targets: [4],
 				data: "PD_DESCRIPTION",
 				searching: false,
 				orderable: false,
@@ -68,12 +77,21 @@ $(function() {
 				}
 			},
 			{
-				targets: [4],
+				targets: [5],
 				data: "STATUS",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.STATUS;
+				}
+			},
+			{
+				targets: [6],
+				data: "PD_UPDATE_TIME",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.PD_UPDATE_TIME;
 				}
 			}
 		],
@@ -87,6 +105,10 @@ $(function() {
 				defaultContent: ""
 			},
 			{
+				data: "PDC_NAME",
+				defaultContent: ""
+			},
+			{
 				data: "PD_PRICE",
 				defaultContent: ""
 			},
@@ -96,6 +118,10 @@ $(function() {
 			},
 			{
 				data: "STATUS",
+				defaultContent: ""
+			},
+			{
+				data: "PD_UPDATE_TIME",
 				defaultContent: ""
 			}
 		]

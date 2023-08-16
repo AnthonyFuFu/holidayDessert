@@ -23,8 +23,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
+import com.holidaydessert.model.EmpFunction;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.service.AuthorityService;
+import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
 
 import io.swagger.annotations.Api;
@@ -45,6 +47,9 @@ public class EmployeeManagement {
 	
 	@Autowired
 	private EmployeeService employeeService;
+	
+	@Autowired
+	private EmpFunctionService empFunctionService;
 
 	private Gson gson = new Gson();
 	
@@ -102,5 +107,45 @@ public class EmployeeManagement {
 		}
 
 	}
-	
+
+	@GetMapping("/empFunctionTables")
+	public void empFunctionTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute EmpFunction empFunction, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		EmpFunction empFunctionData = new EmpFunction();
+
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+
+		empFunctionData.setStart(start);
+		empFunctionData.setLength(length);
+		empFunctionData.setSearchText(searchValue);
+		
+		List<Map<String, Object>> empFunctionList = empFunctionService.list(empFunctionData);
+
+		if (empFunctionList == null) {
+			empFunctionList = new ArrayList<Map<String, Object>>();
+		}
+
+		int count = empFunctionService.getCount(empFunctionData);
+
+		empFunction.setRecordsFiltered(count);
+		empFunction.setRecordsTotal(count);
+		empFunction.setData(empFunctionList);
+		empFunction.setDraw(Integer.valueOf(draw));
+		
+		String output = gson.toJson(empFunction);
+
+		pResponse.setCharacterEncoding("utf-8");
+		
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 }

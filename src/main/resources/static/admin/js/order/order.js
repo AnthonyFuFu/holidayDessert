@@ -1,5 +1,5 @@
 $(function() {
-	$('.basic-dataTable').DataTable({
+	$('#order-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
@@ -33,6 +33,15 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
+				data: "ORD_ID",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.ORD_ID;
+				}
+			},
+			{
+				targets: [1],
 				data: "ORD_RECIPIENT",
 				searching: false,
 				orderable: false,
@@ -41,7 +50,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [1],
+				targets: [2],
 				data: "MEM_GENDER",
 				searching: false,
 				orderable: false,
@@ -50,7 +59,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [2],
+				targets: [3],
 				data: "MEM_EMAIL",
 				searching: false,
 				orderable: false,
@@ -59,7 +68,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [3],
+				targets: [4],
 				data: "ORD_RECIPIENT_PHONE",
 				searching: false,
 				orderable: false,
@@ -68,7 +77,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [4],
+				targets: [5],
 				data: "ORD_ADDRESS",
 				searching: false,
 				orderable: false,
@@ -77,7 +86,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [5],
+				targets: [6],
 				data: "ORD_DELIVERY",
 				searching: false,
 				orderable: false,
@@ -92,7 +101,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [6],
+				targets: [7],
 				data: "ORD_SUBTOTAL",
 				searching: false,
 				orderable: false,
@@ -101,7 +110,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [7],
+				targets: [8],
 				data: "ORD_TOTAL",
 				searching: false,
 				orderable: false,
@@ -110,7 +119,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [8],
+				targets: [9],
 				data: "ORD_DELIVERY_FEE",
 				searching: false,
 				orderable: false,
@@ -119,7 +128,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [9],
+				targets: [10],
 				data: "ORD_STATUS",
 				searching: false,
 				orderable: false,
@@ -136,7 +145,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [10],
+				targets: [11],
 				data: "ORD_PAYMENT",
 				searching: false,
 				orderable: false,
@@ -151,7 +160,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [11],
+				targets: [12],
 				data: "ORD_NOTE",
 				searching: false,
 				orderable: false,
@@ -164,16 +173,30 @@ $(function() {
 				}
 			},
 			{
-				targets: [12],
+				targets: [13],
 				data: "COUPON_USED",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
 					return row.COUPON_USED;
 				}
+			},
+			{
+				targets: [14],
+				data: "ORD_CREATE",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.ORD_CREATE;
+				}
 			}
+			
 		],
 		columns: [
+			{
+				data: "ORD_ID",
+				defaultContent: ""
+			},
 			{
 				data: "ORD_RECIPIENT",
 				defaultContent: ""
@@ -224,6 +247,10 @@ $(function() {
 			},
 			{
 				data: "COUPON_USED",
+				defaultContent: ""
+			},
+			{
+				data: "ORD_CREATE",
 				defaultContent: ""
 			}
 		]

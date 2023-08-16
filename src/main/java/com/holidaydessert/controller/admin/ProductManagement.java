@@ -25,7 +25,9 @@ import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Product;
+import com.holidaydessert.model.ProductCollection;
 import com.holidaydessert.service.AuthorityService;
+import com.holidaydessert.service.ProductCollectionService;
 import com.holidaydessert.service.ProductService;
 
 import io.swagger.annotations.Api;
@@ -46,6 +48,9 @@ public class ProductManagement {
 	
 	@Autowired
 	private ProductService productService;
+	
+	@Autowired
+	private ProductCollectionService productCollectionService;
 
 	private Gson gson = new Gson();
 	
@@ -103,4 +108,46 @@ public class ProductManagement {
 		}
 
 	}
+	
+	@GetMapping("/productCollectionTables")
+	public void productCollectionTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute ProductCollection productCollection, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		ProductCollection productCollectionData = new ProductCollection();
+
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+
+		productCollectionData.setStart(start);
+		productCollectionData.setLength(length);
+		productCollectionData.setSearchText(searchValue);
+		
+		List<Map<String, Object>> productCollectionList = productCollectionService.list(productCollectionData);
+
+		if (productCollectionList == null) {
+			productCollectionList = new ArrayList<Map<String, Object>>();
+		}
+
+		int count = productCollectionService.getCount(productCollectionData);
+
+		productCollection.setRecordsFiltered(count);
+		productCollection.setRecordsTotal(count);
+		productCollection.setData(productCollectionList);
+		productCollection.setDraw(Integer.valueOf(draw));
+		
+		String output = gson.toJson(productCollection);
+
+		pResponse.setCharacterEncoding("utf-8");
+		
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 }

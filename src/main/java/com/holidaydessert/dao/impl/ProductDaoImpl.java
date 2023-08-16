@@ -22,7 +22,7 @@ public class ProductDaoImpl implements ProductDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT * FROM ( SELECT PD_ID, PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, "
+		String sql = " SELECT * FROM ( SELECT PD_ID, p.PDC_ID, PDC_NAME, PD_NAME, PD_PRICE, PD_DESCRIPTION, "
 				   + " PD_DISPLAY_QUANTITY, PD_STATUS, PD_IS_DEL, PD_CREATE_BY, PD_UPDATE_BY, "
 				   + " DATE_FORMAT(PD_CREATE_TIME, '%Y-%m-%d %H:%i:%s') PD_CREATE_TIME, "
 				   + " DATE_FORMAT(PD_UPDATE_TIME, '%Y-%m-%d %H:%i:%s') PD_UPDATE_TIME, "
@@ -30,7 +30,8 @@ public class ProductDaoImpl implements ProductDao {
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
 				   + " END AS STATUS "
-				   + " FROM holiday_dessert.product "
+				   + " FROM holiday_dessert.product p "
+				   + " LEFT JOIN product_collection pc ON p.PDC_ID = pc.PDC_ID "
 				   + ") AS subquery ";
 		
 		if (product.getSearchText() != null && product.getSearchText().length() > 0) {
@@ -42,7 +43,7 @@ public class ProductDaoImpl implements ProductDao {
 				} else {
 					sql += " ( ";
 				}
-				sql += " INSTR(PDC_ID, ?) > 0"
+				sql += " INSTR(PDC_NAME, ?) > 0"
 					+  " OR INSTR(PD_NAME, ?) > 0 "
 					+  " OR INSTR(PD_PRICE, ?) > 0 "
 					+  " OR INSTR(PD_DESCRIPTION, ?) > 0 "
@@ -63,7 +64,11 @@ public class ProductDaoImpl implements ProductDao {
 		} else {
 			sql += " WHERE PD_IS_DEL = 0 ";
 		}
-		
+
+		if (product.getStart() != null && !"".equals(product.getStart())) {
+			sql += " LIMIT " + product.getStart() + "," + product.getLength();
+		}
+
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
 		
 		if (list != null && list.size() > 0) {
@@ -80,12 +85,13 @@ public class ProductDaoImpl implements ProductDao {
 		List<Object> args = new ArrayList<>();
 
 		String sql = " SELECT COUNT(*) AS COUNT "
-				   + " FROM ( SELECT *, "
+				   + " FROM ( SELECT p.*, pc.PDC_NAME, "
 				   + " CASE PD_STATUS "
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
 				   + " END AS STATUS "
-				   + " FROM holiday_dessert.product "
+				   + " FROM holiday_dessert.product p "
+				   + " LEFT JOIN product_collection pc ON p.PDC_ID = pc.PDC_ID "
 				   + ") AS subquery ";
 
 		if (product.getSearchText() != null && product.getSearchText().length() > 0) {
@@ -97,19 +103,19 @@ public class ProductDaoImpl implements ProductDao {
 				} else {
 					sql += " ( ";
 				}
-				sql += " INSTR(PDC_ID, ?) > 0"
+				sql += " INSTR(PDC_NAME, ?) > 0"
 					+  " OR INSTR(PD_NAME, ?) > 0 "
 					+  " OR INSTR(PD_PRICE, ?) > 0 "
 					+  " OR INSTR(PD_DESCRIPTION, ?) > 0 "
 					+  " OR INSTR(PD_DISPLAY_QUANTITY, ?) > 0 "
 					+  " OR INSTR(STATUS, ?) > 0 "
 					+  " ) ";
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
 			}
 		}
 
