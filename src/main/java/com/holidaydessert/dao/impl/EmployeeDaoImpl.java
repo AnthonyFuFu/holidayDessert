@@ -22,10 +22,12 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT emp.*,dept.DEPT_NAME,dept.DEPT_LOC "
+		String sql = " SELECT emp.EMP_ID, emp.DEPT_ID, EMP_NAME, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, "
+				   + " EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS, DATE_FORMAT(EMP_HIREDATE, '%Y-%m-%d') EMP_HIREDATE, "
+				   + " dept.DEPT_NAME,dept.DEPT_LOC "
 				   + " FROM holiday_dessert.employee emp "
 				   + " LEFT JOIN department dept ON dept.DEPT_ID = emp.DEPT_ID ";
-
+		
 		if (employee.getSearchText() != null && employee.getSearchText().length() > 0) {
 			String[] searchText = employee.getSearchText().split(" ");
 			sql += " WHERE ";
@@ -203,7 +205,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		Employee user = new Employee();
 		if (!list.isEmpty()) {
 	        Map<String, Object> resultMap = list.get(0);
-	        System.out.println(resultMap);
 	        String empId = String.valueOf(resultMap.get("EMP_ID"));
 	        String empName = String.valueOf(resultMap.get("EMP_NAME"));
 	        String deptId = String.valueOf(resultMap.get("DEPT_ID"));

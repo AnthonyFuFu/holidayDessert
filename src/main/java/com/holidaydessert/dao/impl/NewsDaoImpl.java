@@ -24,9 +24,9 @@ public class NewsDaoImpl implements NewsDao {
 		
 		String sql = " SELECT * FROM ( SELECT "		   
 				   + " NEWS_ID, PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
-				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
-				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
-				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d') NEWS_CREATE, "
+				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d %H:%i:%s') NEWS_START, "
+				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d %H:%i:%s') NEWS_END, "
+				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d %H:%i:%s') NEWS_CREATE, "
 				   + " CASE NEWS_STATUS "
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "

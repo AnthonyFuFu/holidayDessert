@@ -93,7 +93,7 @@ public class MemberManagement {
 		String output = gson.toJson(member);
 
 		pResponse.setCharacterEncoding("utf-8");
-
+		
 		try {
 			PrintWriter out;
 			out = pResponse.getWriter();

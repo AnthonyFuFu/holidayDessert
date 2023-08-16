@@ -23,7 +23,10 @@ public class MemberDaoImpl implements MemberDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT * FROM ( "
-				   + " SELECT *,CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER "
+				   + " SELECT MEM_ID, MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, "
+				   + " MEM_EMAIL, MEM_ADDRESS, DATE_FORMAT(MEM_BIRTHDAY, '%Y-%m-%d') MEM_BIRTHDAY, "
+				   + " MEM_STATUS, MEM_VERIFICATION_STATUS, MEM_VERIFICATION_CODE, "
+				   + " CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER "
 				   + " FROM holiday_dessert.member "
 				   + ") AS subquery ";
 		
