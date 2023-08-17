@@ -41,4 +41,9 @@ public class DepartmentServiceImpl implements DepartmentService {
 		departmentDao.delete(department);
 	}
 
+	@Override
+	public List<Map<String, Object>> getList() {
+		return departmentDao.getList();
+	}
+
 }

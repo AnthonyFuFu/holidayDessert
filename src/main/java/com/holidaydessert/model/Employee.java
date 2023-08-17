@@ -24,6 +24,7 @@ public class Employee extends Base {
 	private String empJob;			   // 職稱
 	private String empSalary;		   // 薪水
 	private String empPicture;         // 照片路徑
+	private String empImage;       	   // 照片名稱
 	private String empAccount;         // 帳號
 	private String empPassword;        // 密碼
 	private String empEmail;           // 信箱

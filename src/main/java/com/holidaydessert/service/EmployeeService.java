@@ -13,6 +13,7 @@ public interface EmployeeService {
 	public void add(Employee employee);
 	public void update(Employee employee);
 	public void resign(Employee employee);
+	public Employee getData(Employee employee);
 	public Employee login(Employee employee);
 	
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -16,16 +17,21 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.EmpFunction;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.service.AuthorityService;
+import com.holidaydessert.service.CommonService;
+import com.holidaydessert.service.DepartmentService;
 import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
 
@@ -39,6 +45,9 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "員工管理")
 public class EmployeeManagement {
 
+	@Value("${admin.upload.file.path}")
+	private String ADMIN_UPLOAD_FILE_PATH;
+	
 	@Value("${web.path}")
 	private String WEB_PATH;
 	
@@ -50,6 +59,12 @@ public class EmployeeManagement {
 	
 	@Autowired
 	private EmpFunctionService empFunctionService;
+
+	@Autowired
+	private DepartmentService departmentService;
+	
+	@Autowired
+	private CommonService commonService;
 
 	private Gson gson = new Gson();
 	
@@ -148,4 +163,120 @@ public class EmployeeManagement {
 		}
 
 	}
+	
+	@PostMapping("/addEmployee")
+	public String addEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		List<Map<String, Object>> departmentList = departmentService.getList();
+		try {
+			Employee employee = new Employee();
+			model.addAttribute("departmentList", departmentList);
+			model.addAttribute("employee", employee);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/employee/employeeForm";
+	}
+	
+	@PostMapping("/updateEmployee")
+	public String updateEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Employee employee, Model model) throws Exception {
+
+		List<Map<String, Object>> departmentList = departmentService.getList();
+		try {
+			employee = employeeService.getData(employee);
+			model.addAttribute("departmentList", departmentList);
+			model.addAttribute("employee", employee);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/employee/employeeForm";
+	}
+	
+	@PostMapping("/employeeAddSubmit")
+	public String employeeAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Employee employee,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			String osName = System.getProperty("os.name").toLowerCase();
+
+			if (osName.contains("win")) {
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\location\\"));
+			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/location/"));
+			} else if (osName.contains("mac")) {
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/location/"));
+			} else {
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/location/"));
+			}
+			employee.setEmpPicture(WEB_PATH + "admin/upload/images/employee/" + employee.getEmpImage());
+			employeeService.add(employee);
+
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/admin/employee/list");
+
+		return "admin/toPath";
+	}
+	
+	@PostMapping("/employeeUpdateSubmit")
+	public String employeeUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Employee employee,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam(value = "originalImage", required = false) String originalImage, HttpServletRequest pRequest,
+			Model model) throws Exception {
+		
+		try {
+			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
+			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
+				employee.setEmpImage(originalImage);
+			} else {
+				String osName = System.getProperty("os.name").toLowerCase();
+				if (osName.contains("win")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\employee\\");
+					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\employee\\"));
+				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/employee/");
+					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
+				} else if (osName.contains("mac")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/employee/");
+					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
+				} else {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/employee/");
+					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
+				}
+			}
+			employee.setEmpPicture(WEB_PATH + "admin/upload/images/employee/" + employee.getEmpImage());
+			employeeService.update(employee);
+			
+			model.addAttribute("PATH", "/admin/employee/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
+	@PostMapping("/resignEmployee")
+	public String resignEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Employee employee, Model model) throws Exception {
+
+		try {
+			employeeService.resign(employee);
+			model.addAttribute("PATH", "/admin/employee/list");
+
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
 }

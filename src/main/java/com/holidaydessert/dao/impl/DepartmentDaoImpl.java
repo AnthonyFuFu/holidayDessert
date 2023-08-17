@@ -129,4 +129,21 @@ public class DepartmentDaoImpl implements DepartmentDao {
 		
 	}
 
+	@Override
+	public List<Map<String, Object>> getList() {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.department ";
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+		
+	}
+
 }

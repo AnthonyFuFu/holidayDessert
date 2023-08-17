@@ -39,7 +39,7 @@ MEM_VERIFICATION_CODE VARCHAR(100),
 CONSTRAINT unikey_MEM_ACCOUNT unique(MEM_ACCOUNT)
 );
 INSERT INTO member(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS)
-VALUES  ('傅寶貝', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
+VALUES  ('傅勝宏', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
 		('嘉寶貝', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1),
         ('傅貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
         ('傅寶', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
@@ -57,7 +57,7 @@ RCP_PHONE varchar(10) not null,
 constraint receipt_information_member_fk foreign key (MEM_ID) references member(MEM_ID)
 );
 insert into receipt_information(MEM_ID,RCP_NAME,RCP_CVS,RCP_PHONE)
-values ('1','傅寶貝','全家中壢中山店','0999000000');
+values ('1','傅勝宏','全家中壢中山店','0999000000');
 
 -- ================== CREATE TABLE(管理員相關）================== --
 
@@ -79,7 +79,8 @@ EMP_NAME VARCHAR(20) NOT NULL,
 EMP_PHONE VARCHAR(10) NOT NULL,
 EMP_JOB VARCHAR(30) NOT NULL,
 EMP_SALARY INT(10) NOT NULL,
-EMP_PICTURE VARCHAR(100),
+EMP_PICTURE VARCHAR(300),
+EMP_IMAGE VARCHAR(100),
 EMP_ACCOUNT VARCHAR(20) NOT NULL,
 EMP_PASSWORD VARCHAR(20) NOT NULL,
 EMP_EMAIL VARCHAR(40) NOT NULL,
@@ -89,9 +90,9 @@ EMP_HIREDATE date not null DEFAULT (CURRENT_DATE),
 CONSTRAINT unikey_EMP_ACCOUNT unique(EMP_ACCOUNT),
 CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DEPT_ID)
 );
-INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
-VALUES  ('傅寶貝', '1', '0912345678', '軟體工程師', '46250','http://localhost:8080/holidayDessert/admin/upload/user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
-		('嘉寶貝', '2', '0987654321', '行銷+美編', '31500','http://localhost:8080/holidayDessert/admin/upload/user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
+INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
+VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','http://localhost:8080/holidayDessert/admin/upload/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
+		('嘉寶貝', '2', '0987654321', '行銷+美編', '31500','http://localhost:8080/holidayDessert/admin/upload/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
         
 -- 功能-- 
 CREATE TABLE emp_function(

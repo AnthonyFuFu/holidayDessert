@@ -1,6 +1,7 @@
 package com.holidaydessert.service.impl;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -82,6 +83,7 @@ public class CommonServiceImpl implements CommonService {
 //        return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
 //
 //    }
+	
 	// 將檔案儲存
 	public void saveUploadedFiles(List<MultipartFile> files, String UPLOADED_FOLDER) throws IOException {
 		for (MultipartFile file : files) {
@@ -93,31 +95,26 @@ public class CommonServiceImpl implements CommonService {
 			Files.write(path, bytes);
 		}
 	}
-
+	
 	public void saveUploadedFiles(MultipartFile files, String UPLOADED_FOLDER) throws IOException {
 		byte[] bytes = files.getBytes();
 		Path path = Paths.get(UPLOADED_FOLDER + files.getOriginalFilename());
 		Files.write(path, bytes);
 	}
-
-	/**
-	 * 上傳機制，回傳以年日月時分秒ID組成的檔名
-	 * 
-	 * @param filePath
-	 * @param fileStream
-	 * @param fileName
-	 * @param id
-	 * @param extension
-	 * @return String fileName
-	 * @throws IOException
-	 */
+	
 	public String saveByDateNameUploadedFiles(MultipartFile files, String UploadedFolder) throws IOException {
 
 		byte[] bytes = files.getBytes();
 		String fileName = "";
-
+		
+		File folder = new File(UploadedFolder);
+		if (!folder.exists()) {
+		    // 如果資料夾不存在，則建立該資料夾
+		    folder.mkdirs();
+		}
+		
 		// 若上傳檔案為空則回傳原本檔名
-		if (files == null || "".equals(files.toString())) {
+		if (files == null || files.isEmpty()) {
 			return files.getOriginalFilename();
 		}
 		// 以"年月日時分秒ID副檔名"來重新命名檔案
@@ -126,12 +123,12 @@ public class CommonServiceImpl implements CommonService {
 
 		try {
 			Path path = Paths.get(UploadedFolder + fileName);
-
 			Files.write(path, bytes);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return fileName;
+
 	}
 
 	public void deleteUploadedFiles(String fileName, String UPLOADED_FOLDER) throws IOException {
@@ -233,6 +230,7 @@ public class CommonServiceImpl implements CommonService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
 	}
 
 }

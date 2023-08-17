@@ -22,7 +22,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT emp.EMP_ID, emp.DEPT_ID, EMP_NAME, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, "
+		String sql = " SELECT emp.EMP_ID, emp.DEPT_ID, EMP_NAME, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, "
 				   + " EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS, DATE_FORMAT(EMP_HIREDATE, '%Y-%m-%d') EMP_HIREDATE, "
 				   + " dept.DEPT_NAME,dept.DEPT_LOC "
 				   + " FROM holiday_dessert.employee emp "
@@ -134,8 +134,8 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " INSERT INTO holiday_dessert.employee "
-				   + " (EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS, EMP_HIREDATE) "
-				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) ";
+				   + " (EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS, EMP_HIREDATE) "
+				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) ";
 		
 		args.add(employee.getEmpName());
 		args.add(employee.getDeptId());
@@ -143,6 +143,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		args.add(employee.getEmpJob());
 		args.add(employee.getEmpSalary());
 		args.add(employee.getEmpPicture());
+		args.add(employee.getEmpImage());
 		args.add(employee.getEmpAccount());
 		args.add(employee.getEmpPassword());
 		args.add(employee.getEmpEmail());
@@ -159,7 +160,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.employee "
-				   + " SET EMP_NAME = ?, DEPT_ID = ?, EMP_PHONE = ?, EMP_JOB = ?, EMP_SALARY = ?, EMP_PICTURE = ?, EMP_ACCOUNT = ?, EMP_PASSWORD = ?, EMP_EMAIL = ?, EMP_LEVEL = ? "
+				   + " SET EMP_NAME = ?, DEPT_ID = ?, EMP_PHONE = ?, EMP_JOB = ?, EMP_SALARY = ?, EMP_PICTURE = ?, EMP_IMAGE = ?, EMP_ACCOUNT = ?, EMP_PASSWORD = ?, EMP_EMAIL = ?, EMP_LEVEL = ? "
 				   + " WHERE EMP_ID = ? ";
 		
 		args.add(employee.getEmpName());
@@ -168,6 +169,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		args.add(employee.getEmpJob());
 		args.add(employee.getEmpSalary());
 		args.add(employee.getEmpPicture());
+		args.add(employee.getEmpImage());
 		args.add(employee.getEmpAccount());
 		args.add(employee.getEmpPassword());
 		args.add(employee.getEmpEmail());
@@ -187,6 +189,54 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 		jdbcTemplate.update(sql, new Object[] { employee.getEmpId() });
 		
+	}
+
+	@Override
+	public Employee getData(Employee employee) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.employee "
+				   + " WHERE EMP_ID = ? ";
+		
+		args.add(employee.getEmpId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Employee user = new Employee();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String empId = String.valueOf(resultMap.get("EMP_ID"));
+	        String empName = String.valueOf(resultMap.get("EMP_NAME"));
+	        String deptId = String.valueOf(resultMap.get("DEPT_ID"));
+	        String empPhone = String.valueOf(resultMap.get("EMP_PHONE"));
+	        String empJob = String.valueOf(resultMap.get("EMP_JOB"));
+	        String empSalary = String.valueOf(resultMap.get("EMP_SALARY"));
+	        String empPicture = String.valueOf(resultMap.get("EMP_PICTURE"));
+	        String empImage = String.valueOf(resultMap.get("EMP_IMAGE"));
+	        String empAccount = String.valueOf(resultMap.get("EMP_ACCOUNT"));
+	        String empPassword = String.valueOf(resultMap.get("EMP_PASSWORD"));
+	        String empEmail = String.valueOf(resultMap.get("EMP_EMAIL"));
+	        String empLevel = String.valueOf(resultMap.get("EMP_LEVEL"));
+	        String empStatus = String.valueOf(resultMap.get("EMP_STATUS"));
+	        String empHiredate = String.valueOf(resultMap.get("EMP_HIREDATE"));
+	        
+	        user.setEmpId(empId);
+	        user.setDeptId(deptId);
+	        user.setEmpName(empName);
+	        user.setEmpPhone(empPhone);
+	        user.setEmpJob(empJob);
+	        user.setEmpSalary(empSalary);
+	        user.setEmpPicture(empPicture);
+	        user.setEmpImage(empImage);
+	        user.setEmpAccount(empAccount);
+	        user.setEmpPassword(empPassword);
+	        user.setEmpEmail(empEmail);
+	        user.setEmpLevel(empLevel);
+	        user.setEmpStatus(empStatus);
+	        user.setEmpHiredate(empHiredate);
+	    }
+		return user == null ? null : user;
 	}
 
 	@Override
@@ -212,6 +262,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        String empJob = String.valueOf(resultMap.get("EMP_JOB"));
 	        String empSalary = String.valueOf(resultMap.get("EMP_SALARY"));
 	        String empPicture = String.valueOf(resultMap.get("EMP_PICTURE"));
+	        String empImage = String.valueOf(resultMap.get("EMP_IMAGE"));
 	        String empAccount = String.valueOf(resultMap.get("EMP_ACCOUNT"));
 	        String empPassword = String.valueOf(resultMap.get("EMP_PASSWORD"));
 	        String empEmail = String.valueOf(resultMap.get("EMP_EMAIL"));
@@ -226,6 +277,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        user.setEmpJob(empJob);
 	        user.setEmpSalary(empSalary);
 	        user.setEmpPicture(empPicture);
+	        user.setEmpImage(empImage);
 	        user.setEmpAccount(empAccount);
 	        user.setEmpPassword(empPassword);
 	        user.setEmpEmail(empEmail);

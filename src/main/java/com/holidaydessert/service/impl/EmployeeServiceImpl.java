@@ -42,6 +42,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	public Employee getData(Employee employee) {
+		return employeeDao.getData(employee);
+	}
+	
+	@Override
 	public Employee login(Employee employee) {
 		return employeeDao.login(employee);
 	}
