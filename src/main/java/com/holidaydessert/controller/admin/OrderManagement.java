@@ -134,7 +134,7 @@ public class OrderManagement {
 		orderDetail.setRecordsTotal(count);
 		orderDetail.setData(orderDetailList);
 		orderDetail.setDraw(Integer.valueOf(draw));
-		System.out.println(orderDetailList);
+		
 		String output = gson.toJson(orderDetail);
 
 		pResponse.setCharacterEncoding("utf-8");

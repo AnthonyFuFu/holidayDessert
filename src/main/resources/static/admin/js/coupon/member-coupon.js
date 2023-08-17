@@ -1,10 +1,10 @@
 $(function() {
-	$('#coupon-table').DataTable({
+	$('#member-coupon-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
 		ordering: true,
-        ajax: "couponTables",
+        ajax: "memberCouponTables",
         aaSorting: [],
         oLanguage: {
 			sProcessing: "處理中...",
@@ -33,11 +33,11 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
-				data: "CP_ID",
+				data: "MEM_NAME",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.CP_ID;
+					return row.MEM_NAME;
 				}
 			},
 			{
@@ -60,26 +60,52 @@ $(function() {
 			},
 			{
 				targets: [3],
-				data: "STATUS",
+				data: "MEM_CP_START",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.STATUS;
+					return row.MEM_CP_START;
 				}
 			},
 			{
 				targets: [4],
-				data: "CP_PIC",
+				data: "MEM_CP_END",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.CP_PIC;
+					return row.MEM_CP_END;
+				}
+			},
+			{
+				targets: [5],
+				data: "MEM_CP_STATUS",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					if(data == 1){
+						return '可用'
+					} else {
+						return '不可用'
+					}
+				}
+			},
+			{
+				targets: [6],
+				data: "MEM_CP_RECORD",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					if(data == null){
+						return '未使用'
+					} else {
+						return data;
+					}
 				}
 			}
 		],
 		columns: [
 			{
-				data: "CP_ID",
+				data: "MEM_NAME",
 				defaultContent: ""
 			},
 			{
@@ -91,11 +117,19 @@ $(function() {
 				defaultContent: ""
 			},
 			{
-				data: "STATUS",
+				data: "MEM_CP_START",
 				defaultContent: ""
 			},
 			{
-				data: "CP_PIC",
+				data: "MEM_CP_END",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_CP_STATUS",
+				defaultContent: ""
+			},
+			{
+				data: "MEM_CP_RECORD",
 				defaultContent: ""
 			}
 		]

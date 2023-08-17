@@ -1,10 +1,10 @@
 $(function() {
-	$('#promotion-table').DataTable({
+	$('#promotion-detail-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
 		ordering: true,
-        ajax: "promotionTables",
+        ajax: "promotionDetailTables",
         aaSorting: [],
         oLanguage: {
 			sProcessing: "處理中...",
@@ -33,15 +33,6 @@ $(function() {
 		columnDefs: [
 			{
 				targets: [0],
-				data: "PM_ID",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.PM_ID;
-				}
-			},
-			{
-				targets: [1],
 				data: "PM_NAME",
 				searching: false,
 				orderable: false,
@@ -50,7 +41,42 @@ $(function() {
 				}
 			},
 			{
+				targets: [1],
+				data: "PM_STATUS",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					if(data == 1){
+						return '上架'
+					} else {
+						return '下架'
+					}
+				}
+			},
+			{
 				targets: [2],
+				data: "PD_NAME",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.PD_NAME;
+				}
+			},
+			{
+				targets: [3],
+				data: "PD_STATUS",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					if(data == 1){
+						return '上架'
+					} else {
+						return '下架'
+					}
+				}
+			},
+			{
+				targets: [4],
 				data: "PM_DESCRIPTION",
 				searching: false,
 				orderable: false,
@@ -59,7 +85,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [3],
+				targets: [5],
 				data: "PM_DISCOUNT",
 				searching: false,
 				orderable: false,
@@ -68,34 +94,43 @@ $(function() {
 				}
 			},
 			{
-				targets: [4],
-				data: "PM_START",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.PM_START;
-				}
-			},
-			{
-				targets: [5],
-				data: "PM_END",
-				searching: false,
-				orderable: false,
-				render: function(data, type, row, meta) {
-					return row.PM_END;
-				}
-			},
-			{
 				targets: [6],
-				data: "STATUS",
+				data: "PD_PRICE",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.STATUS;
+					return row.PD_PRICE;
 				}
 			},
 			{
 				targets: [7],
+				data: "PMD_PD_DISCOUNT_PRICE",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.PMD_PD_DISCOUNT_PRICE;
+				}
+			},
+			{
+				targets: [8],
+				data: "PMD_START",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.PMD_START;
+				}
+			},
+			{
+				targets: [9],
+				data: "PMD_END",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.PMD_END;
+				}
+			},
+			{
+				targets: [10],
 				data: "PM_REGULARLY",
 				searching: false,
 				orderable: false,
@@ -110,11 +145,19 @@ $(function() {
 		],
 		columns: [
 			{
-				data: "PM_ID",
+				data: "PM_NAME",
 				defaultContent: ""
 			},
 			{
-				data: "PM_NAME",
+				data: "PM_STATUS",
+				defaultContent: ""
+			},
+			{
+				data: "PD_NAME",
+				defaultContent: ""
+			},
+			{
+				data: "PD_STATUS",
 				defaultContent: ""
 			},
 			{
@@ -126,15 +169,19 @@ $(function() {
 				defaultContent: ""
 			},
 			{
-				data: "PM_START",
+				data: "PD_PRICE",
 				defaultContent: ""
 			},
 			{
-				data: "PM_END",
+				data: "PMD_PD_DISCOUNT_PRICE",
 				defaultContent: ""
 			},
 			{
-				data: "STATUS",
+				data: "PMD_START",
+				defaultContent: ""
+			},
+			{
+				data: "PMD_END",
 				defaultContent: ""
 			},
 			{

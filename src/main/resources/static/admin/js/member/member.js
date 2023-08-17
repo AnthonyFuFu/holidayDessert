@@ -1,5 +1,5 @@
 $(function() {
-	$('.basic-dataTable').DataTable({
+	$('#member-table').DataTable({
         responsive: true,
         bAutoWidth: false,
 		serverSide: true,

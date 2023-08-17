@@ -1,5 +1,5 @@
 $(function() {
-	$('.basic-dataTable').DataTable({
+	$('#news-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
 		processing: true,
@@ -60,6 +60,15 @@ $(function() {
 			},
 			{
 				targets: [3],
+				data: "PM_NAME",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return row.PM_NAME;
+				}
+			},
+			{
+				targets: [4],
 				data: "STATUS",
 				searching: false,
 				orderable: false,
@@ -68,7 +77,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [4],
+				targets: [5],
 				data: "NEWS_START",
 				searching: false,
 				orderable: false,
@@ -77,7 +86,7 @@ $(function() {
 				}
 			},
 			{
-				targets: [5],
+				targets: [6],
 				data: "NEWS_END",
 				searching: false,
 				orderable: false,
@@ -97,6 +106,10 @@ $(function() {
 			},
 			{
 				data: "NEWS_CONTENT",
+				defaultContent: ""
+			},
+			{
+				data: "PM_NAME",
 				defaultContent: ""
 			},
 			{

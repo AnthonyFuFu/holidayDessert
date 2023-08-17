@@ -23,7 +23,11 @@ public class NewsDaoImpl implements NewsDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT * FROM ( SELECT "		   
-				   + " NEWS_ID, PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+				   + " NEWS_ID, n.PM_ID, "
+				   + " CASE WHEN n.PM_ID IS NULL THEN '未搭配優惠活動' "
+				   + " ELSE PM_NAME "
+				   + " END AS PM_NAME, "
+				   + " NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
 				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d %H:%i:%s') NEWS_START, "
 				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d %H:%i:%s') NEWS_END, "
 				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d %H:%i:%s') NEWS_CREATE, "
@@ -31,7 +35,8 @@ public class NewsDaoImpl implements NewsDao {
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
 				   + " END AS STATUS "
-				   + " FROM holiday_dessert.news "
+				   + " FROM holiday_dessert.news n "
+				   + " LEFT JOIN promotion p ON p.PM_ID = n.PM_ID "
 				   + ") AS subquery ";
 		
 		if (news.getSearchText() != null && news.getSearchText().length() > 0) {
@@ -45,8 +50,10 @@ public class NewsDaoImpl implements NewsDao {
 				}
 				sql += " INSTR(NEWS_NAME, ?) > 0"
 					+  " OR INSTR(NEWS_CONTENT, ?) > 0 "
+					+  " OR INSTR(PM_NAME, ?) > 0 "
 					+  " OR INSTR(STATUS, ?) > 0 "
 					+  " ) ";
+		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -73,12 +80,13 @@ public class NewsDaoImpl implements NewsDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT COUNT(*) AS COUNT "
-				   + " FROM ( SELECT *, "
+				   + " FROM ( SELECT n.*,p.PM_NAME, "
 				   + " CASE NEWS_STATUS "
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
 				   + " END AS STATUS "
-				   + " FROM holiday_dessert.news "
+				   + " FROM holiday_dessert.news n "
+				   + " LEFT JOIN promotion p ON p.PM_ID = n.PM_ID "
 				   + ") AS subquery ";
 		
 		if (news.getSearchText() != null && news.getSearchText().length() > 0) {
@@ -92,8 +100,10 @@ public class NewsDaoImpl implements NewsDao {
 				}
 				sql += " INSTR(NEWS_NAME, ?) > 0"
 					+  " OR INSTR(NEWS_CONTENT, ?) > 0 "
+					+  " OR INSTR(PM_NAME, ?) > 0 "
 					+  " OR INSTR(STATUS, ?) > 0 "
 					+  " ) ";
+		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);

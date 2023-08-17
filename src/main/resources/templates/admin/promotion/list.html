@@ -64,14 +64,14 @@
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <!-- Nav tabs -->
                                     <ul class="nav nav-tabs tab-nav-right" role="tablist">
-                                        <li role="presentation" class="active"><a href="#home_animation_2" data-toggle="tab">優惠活動清單</a></li>
-                                        <li role="presentation"><a href="#profile_animation_2" data-toggle="tab">優惠活動明細</a></li>
+                                        <li role="presentation" class="active"><a href="#promotion_animation" data-toggle="tab">優惠活動清單</a></li>
+                                        <li role="presentation"><a href="#promotion_detail_animation" data-toggle="tab">優惠活動明細</a></li>
                                     </ul>
                                     <!-- Tab panes -->
                                     <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane fade in active" id="home_animation_2">
+                                        <div role="tabpanel" class="tab-pane fade in active" id="promotion_animation">
                             				<div class="table-responsive">
-                                				<table id="dynamic-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                				<table id="promotion-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
                                     				<thead>
                                         				<tr>
                                         					<th>ID</th>
@@ -87,10 +87,27 @@
                                 				</table>
                             				</div>
                         				</div>
-                                        <div role="tabpanel" class="tab-pane fade" id="profile_animation_2">
-                                        
+                                        <div role="tabpanel" class="tab-pane fade" id="promotion_detail_animation">
+                                        	<div class="table-responsive">
+                                				<table id="promotion-detail-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>活動名稱</th>
+                                            				<th>活動狀態</th>
+                                            				<th>商品名稱</th>
+                                            				<th>商品狀態</th>
+                                            				<th>活動描述</th>
+                                            				<th>折扣幅度</th>
+                                            				<th>商品價格</th>
+                                            				<th>商品活動優惠價</th>
+                                            				<th>特價開始時間</th>
+                                            				<th>特價結束時間</th>
+                                            				<th>活動例行性</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>
@@ -108,6 +125,7 @@
 
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/promotion/promotion.js}"></script>
+<script th:src="@{/admin/js/promotion/promotion-detail.js}"></script>
 
 </body>
 </html>

@@ -25,7 +25,9 @@ import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Promotion;
+import com.holidaydessert.model.PromotionDetail;
 import com.holidaydessert.service.AuthorityService;
+import com.holidaydessert.service.PromotionDetailService;
 import com.holidaydessert.service.PromotionService;
 
 import io.swagger.annotations.Api;
@@ -46,6 +48,9 @@ public class PromotionManagement {
 	
 	@Autowired
 	private PromotionService promotionService;
+	
+	@Autowired
+	private PromotionDetailService promotionDetailService;
 
 	private Gson gson = new Gson();
 	
@@ -103,4 +108,46 @@ public class PromotionManagement {
 		}
 
 	}
+	
+	@GetMapping("/promotionDetailTables")
+	public void promotionDetailTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		PromotionDetail promotionDetailData = new PromotionDetail();
+
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+
+		promotionDetailData.setStart(start);
+		promotionDetailData.setLength(length);
+		promotionDetailData.setSearchText(searchValue);
+		
+		List<Map<String, Object>> promotionDetailList = promotionDetailService.list(promotionDetailData);
+
+		if (promotionDetailList == null) {
+			promotionDetailList = new ArrayList<Map<String, Object>>();
+		}
+
+		int count = promotionDetailService.getCount(promotionDetailData);
+
+		promotionDetail.setRecordsFiltered(count);
+		promotionDetail.setRecordsTotal(count);
+		promotionDetail.setData(promotionDetailList);
+		promotionDetail.setDraw(Integer.valueOf(draw));
+		
+		String output = gson.toJson(promotionDetail);
+
+		pResponse.setCharacterEncoding("utf-8");
+		
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
 }

@@ -42,7 +42,7 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>優惠券清單</h2>
+                            <h2>優惠券管理</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
@@ -57,18 +57,49 @@
                             </ul>
                         </div>
                         <div class="body">
-                            <div class="table-responsive">
-                                <table id="dynamic-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
-                                    <thead>
-                                        <tr>
-                                        	<th>ID</th>
-                                            <th>優惠券名稱</th>
-                                            <th>折抵金額</th>
-                                            <th>優惠券狀態</th>
-                                            <th>優惠券圖片</th>
-                                        </tr>
-                                    </thead>
-                                </table>
+                        	<div class="row clearfix">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                        <li role="presentation" class="active"><a href="#coupon_animation" data-toggle="tab">優惠券清單</a></li>
+                                        <li role="presentation"><a href="#member_coupon_animation" data-toggle="tab">會員優惠券發放明細</a></li>
+                                    </ul>
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane fade in active" id="coupon_animation">
+                            				<div class="table-responsive">
+                                				<table id="coupon-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>ID</th>
+                                            				<th>優惠券名稱</th>
+                                            				<th>折抵金額</th>
+                                            				<th>優惠券狀態</th>
+                                            				<th>優惠券圖片</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
+                        				</div>
+                                        <div role="tabpanel" class="tab-pane fade" id="member_coupon_animation">
+                                        	<div class="table-responsive">
+                                				<table id="member-coupon-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>會員名稱</th>
+                                            				<th>優惠券名稱</th>
+                                            				<th>折抵金額</th>
+                                            				<th>發放日期</th>
+                                            				<th>有效期限</th>
+                                            				<th>是否使用</th>
+                                            				<th>使用日期</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -83,6 +114,7 @@
 
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/coupon/coupon.js}"></script>
+<script th:src="@{/admin/js/coupon/member-coupon.js}"></script>
 
 </body>
 </html>

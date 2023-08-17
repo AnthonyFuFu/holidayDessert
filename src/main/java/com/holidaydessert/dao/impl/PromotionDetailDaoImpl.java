@@ -23,7 +23,7 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 
 		List<Object> args = new ArrayList<>();
 
-		String sql = " SELECT PM_NAME,PM_DESCRIPTION,PM_DISCOUNT,PM_STATUS, "
+		String sql = " SELECT PM_NAME, PM_DESCRIPTION, PM_DISCOUNT, PM_REGULARLY, PM_STATUS, "
 				   + " DATE_FORMAT(PM_START, '%Y-%m-%d %H:%i:%s') PM_START, "
 				   + " DATE_FORMAT(PM_END, '%Y-%m-%d %H:%i:%s') PM_END, "
 				   + " PMD_ID, pmd.PD_ID, pmd.PM_ID, PMD_PD_DISCOUNT_PRICE, "
@@ -68,7 +68,11 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 		} else {
 			sql += " WHERE PD_IS_DEL = 0 ";
 		}
-		
+
+		if (promotionDetail.getStart() != null && !"".equals(promotionDetail.getStart())) {
+			sql += " LIMIT " + promotionDetail.getStart() + "," + promotionDetail.getLength();
+		}
+
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
 		
 		if (list != null && list.size() > 0) {

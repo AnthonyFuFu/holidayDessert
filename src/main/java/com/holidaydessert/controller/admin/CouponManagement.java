@@ -25,8 +25,10 @@ import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Coupon;
 import com.holidaydessert.model.Employee;
+import com.holidaydessert.model.MemberCoupon;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CouponService;
+import com.holidaydessert.service.MemberCouponService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +49,9 @@ public class CouponManagement {
 	@Autowired
 	private CouponService couponService;
 
+	@Autowired
+	private MemberCouponService memberCouponService;
+	
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -91,6 +96,47 @@ public class CouponManagement {
 		coupon.setDraw(Integer.valueOf(draw));
 
 		String output = gson.toJson(coupon);
+
+		pResponse.setCharacterEncoding("utf-8");
+		
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	@GetMapping("/memberCouponTables")
+	public void memberCouponTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute MemberCoupon memberCoupon, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		MemberCoupon memberCouponData = new MemberCoupon();
+
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+
+		memberCouponData.setStart(start);
+		memberCouponData.setLength(length);
+		memberCouponData.setSearchText(searchValue);
+		
+		List<Map<String, Object>> memberCouponList = memberCouponService.list(memberCouponData);
+
+		if (memberCouponList == null) {
+			memberCouponList = new ArrayList<Map<String, Object>>();
+		}
+
+		int count = memberCouponService.getCount(memberCouponData);
+
+		memberCoupon.setRecordsFiltered(count);
+		memberCoupon.setRecordsTotal(count);
+		memberCoupon.setData(memberCouponList);
+		memberCoupon.setDraw(Integer.valueOf(draw));
+		
+		String output = gson.toJson(memberCoupon);
 
 		pResponse.setCharacterEncoding("utf-8");
 		
