@@ -70,7 +70,7 @@ public class EmployeeManagement {
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
 	@ApiOperation(value = "員工清單", httpMethod = "GET", notes = "進行員工查詢")
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute("employeeSession") Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -164,13 +164,19 @@ public class EmployeeManagement {
 
 	}
 	
-	@PostMapping("/addEmployee")
+	@RequestMapping(value = "/addEmployee" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String addEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
 		List<Map<String, Object>> departmentList = departmentService.getList();
 		try {
 			Employee employee = new Employee();
+			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("departmentList", departmentList);
 			model.addAttribute("employee", employee);
 		} catch (JSONException e) {
@@ -179,13 +185,19 @@ public class EmployeeManagement {
 		return "admin/employee/employeeForm";
 	}
 	
-	@PostMapping("/updateEmployee")
+	@RequestMapping(value = "/updateEmployee" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Employee employee, Model model) throws Exception {
 
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
 		List<Map<String, Object>> departmentList = departmentService.getList();
 		try {
 			employee = employeeService.getData(employee);
+			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("departmentList", departmentList);
 			model.addAttribute("employee", employee);
 			model.addAttribute("MESSAGE", "資料修改成功");
