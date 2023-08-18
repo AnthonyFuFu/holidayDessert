@@ -195,7 +195,7 @@ $(function() {
 //		$("#mainForm").attr("action", "/tkbrule/areaLocation/addLocation");
 //		$("#mainForm").submit();
 //	})
-//
+
 //	$("#dynamic-table").on("click", ".btn-delete", function() {
 //		if (confirm("確定刪除嗎？")) {
 //			$("#id").val($(this).data('id'));
@@ -203,7 +203,7 @@ $(function() {
 //			$("#mainForm").submit();
 //		}
 //	})
-//
+
 //	$("#add-submit").on("click", function() {
 //		let result = checkValue();
 //		if (result) {
@@ -216,82 +216,87 @@ $(function() {
 //			$("#mainForm").submit();
 //		}
 //	})
-//
-//	$("#update-submit").on("click", function() {
-//		let result = checkValue();
-//		if (result) {
-//			if ($("#status_check").prop("checked")) {
-//				$("#status").val("1");
-//			} else {
-//				$("#status").val("0");
-//			}
-//			let url = new URL(location.href);
-//			let area = url.searchParams.get('area_id');
-//			$("#mainForm").attr("action", "/tkbrule/areaLocation/locationUpdateSubmit?area=" + area);
-//			$("#mainForm").submit();
-//		}
-//	})
-//
-//	function checkValue() {
-//		let checkValue = true;
-//		if (!$("#name").val()) {
-//			alert("請輸入學堂名稱")
-//			checkValue = false;
-//		} else if ($("#name").val().length > 20) {
-//			alert("區域請勿超過20字")
-//			checkValue = false;
-//		} else if ($("#area_id").val() == 'N') {
-//			alert("請選擇區域")
-//			checkValue = false;
-//		} else if ($("#website_code").val() == '0') {
-//			alert("請選擇品牌")
-//			checkValue = false;
-//		} else if (!$("#tel").val()) {
-//			alert("請輸入電話號碼")
-//			checkValue = false;
-//		} else if (!isTel($("#tel").val())) {
-//			alert("請輸入正確電話號碼")
-//			checkValue = false;
-//		} else if (!$("#address").val()) {
-//			alert("請輸入地址")
-//			checkValue = false;
-//		} else if (!$("#url").val()) {
-//			alert("請輸入GOOGLE MAP URL")
-//			checkValue = false;
-//		} else if (!$("#sort").val()) {
-//			alert("請輸入排序")
-//			checkValue = false;
-//		} else if (!$("#do_business_time").val()) {
-//			alert("請輸入諮詢時間")
-//			checkValue = false;
-//		} else if (!$("#share_url").val()) {
-//			alert("請輸入分享地圖URL")
-//			checkValue = false;
-//		}
-//		if ($("#website_code").val() == 'T') {
-//			if ($("#type").val() == 'N') {
-//				alert("請輸入判別數位學堂或諮詢據點")
-//				checkValue = false;
-//			}
-//			if (!$("#branch_no").val()) {
-//				alert("請輸入館別編號")
-//				checkValue = false;
-//			}
-//		}
-//		
-//		if ($("#id").val() == null || $("#id").val() == "") {
-//			if ($("#imageFile").val() == "") {
-//				alert("請選擇圖片");
-//				return false;
-//			}
-//			$("#mainForm").attr("action", "addSubmit");
-//		} else {
-//			$("#mainForm").attr("action", "updateSubmit");
-//		}
-//
-//		return checkValue;
-//	}
-//
+	$(function () {
+    	$('#update-submit').on('click', function () {
+			let result = checkValue();
+        	if (result == true) {
+            	showSuccessMessage();
+            	employeeUpdateSubmit()
+        	} else if (type === false) {
+            	showConfirmMessage();
+        	}
+    	});
+	});
+	
+	function showSuccessMessage() {
+   		swal("修改完成", "", "success");
+	}
+	
+	function showConfirmMessage() {
+    	swal({
+        	title: "Are you sure?",
+        	text: "You will not be able to recover this imaginary file!",
+        	type: "warning",
+        	showCancelButton: true,
+        	confirmButtonColor: "#DD6B55",
+        	confirmButtonText: "Yes, delete it!",
+        	closeOnConfirm: false
+    	}, function () {
+        	swal("Deleted!", "Your imaginary file has been deleted.", "success");
+    	});
+	}
+	
+	function employeeUpdateSubmit() {
+		$("#mainForm").attr("action", "/holidayDessert/admin/employee/employeeUpdateSubmit");
+		$("#mainForm").submit();
+	}
+
+	function checkValue() {
+		let checkValue = true;
+		if (!$("#empAccount").val()) {
+			alert("請輸入員工帳號")
+			checkValue = false;
+		} else if (!$("#empPassword").val()) {
+			alert("請輸入員工密碼")
+			checkValue = false;
+		} else if ($("#department").val() == '0') {
+			alert("請選擇部門")
+			checkValue = false;
+		} else if (!$("#empName").val()) {
+			alert("員工姓名")
+			checkValue = false;
+		} else if (!$("#empPhone").val()) {
+			alert("請輸入行動電話號碼")
+			checkValue = false;
+		} else if (!isCellphone($("#empPhone").val())) {
+			alert("請輸入正確行動電話號碼")
+			checkValue = false;
+		} else if (!$("#empEmail").val()) {
+			alert("請輸入電子信箱")
+			checkValue = false;
+		} else if (!isEmail($("#empEmail").val())) {
+			alert("請輸入正確電子信箱")
+			checkValue = false;
+		} else if (!$("#empJob").val()) {
+			alert("請輸入職稱")
+			checkValue = false;
+		} else if (!$("#empSalary").val()) {
+			alert("請輸入薪水")
+			checkValue = false;
+		}
+		
+		if ($("#empId").val() == null || $("#empId").val() == "") {
+			if ($("#imageFile").val() == "") {
+				alert("請選擇圖片");
+				return false;
+			}
+			$("#mainForm").attr("action", "addSubmit");
+		} else {
+			$("#mainForm").attr("action", "updateSubmit");
+		}
+		return checkValue;
+	}
+
 //	$('#imageFile').ace_file_input({
 //		no_file: 'No File ...',
 //		btn_choose: 'Choose',
@@ -352,3 +357,50 @@ $(function() {
 
 });
 
+//驗證連結網址是否有效
+function checkURL(obj) {
+	if ($.trim(obj.val()) != "" && obj.val().match(/http(s)?:////([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
+   ) == null) {
+	obj.focus();
+		return "\n請輸入正確連結網址，EX：http://www.google.com";
+	} else {
+		return "";
+	}
+}
+//RFC822 正規則
+function isEmail(email){
+	return /^([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x22([^\x0d\x22\x5c\x80-\xff]|\x5c[\x00-\x7f])*\x22))*\x40([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d)(\x2e([^\x00-\x20\x22\x28\x29\x2c\x2e\x3a-\x3c\x3e\x40\x5b-\x5d\x7f-\xff]+|\x5b([^\x0d\x5b-\x5d\x80-\xff]|\x5c[\x00-\x7f])*\x5d))*$/.test(email);	
+}
+//手機格式 正規則
+function isCellphone(cellphone){
+	return /^[09]{2}[0-9]{8}$/.test(cellphone);	
+}
+//身份證驗證正規則
+function checkTwID(id){
+	
+	//建立字母分數陣列(A~Z)
+	var city = new Array(
+	1,10,19,28,37,46,55,64,39,73,82, 2,11,
+	20,48,29,38,47,56,65,74,83,21, 3,12,30
+	)
+	id = id.toUpperCase();
+	// 使用「正規表達式」檢驗格式
+	if (id.search(/^[A-Z](1|2)\d{8}$/i) == -1) {
+		alert('基本格式錯誤');
+		return false;
+	} 
+	else {
+	//將字串分割為陣列(IE必需這麼做才不會出錯)
+		id = id.split('');
+	//計算總分
+	var total = city[id[0].charCodeAt(0)-65];
+	for(var i=1; i<=8; i++){
+		total += eval(id[i]) * (9 - i);
+	}
+	//補上檢查碼(最後一碼)
+	total += eval(id[9]);
+	
+	//檢查比對碼(餘數應為0);
+	return ((total%10 == 0 ));
+	}
+}

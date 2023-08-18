@@ -193,8 +193,8 @@ public class EmployeeManagement {
 		Authority authority = new Authority();
 		authority.setEmpId(employeeSession.getEmpId());
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		List<Map<String, Object>> departmentList = departmentService.getList();
+		System.out.println(departmentList);
 		try {
 			employee = employeeService.getData(employee);
 			model.addAttribute("authorityList", authorityList);
