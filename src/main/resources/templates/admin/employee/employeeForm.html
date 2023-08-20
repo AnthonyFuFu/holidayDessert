@@ -108,7 +108,7 @@
 									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                         <label for="department">請選擇部門</label>
                                     </div>
-                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
                                     	<select id="department" class="form-control show-tick" th:field="*{deptId}">
                                         	<option value="0">-- 請選擇 --</option>
                                         	<option th:each="department:${departmentList}"
@@ -132,7 +132,7 @@
                                 
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-                                        <label for="empPhone">行動電話</label>
+                                        <label for="empPhone">電話號碼</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
@@ -169,6 +169,19 @@
                                     </div>
                                 </div>
                                 
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="empLevel">等級</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="empLevel" class="form-control" th:field="*{empLevel}" placeholder="請輸入等級(0:最高管理員 1:一般管理員)">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                  <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
                                         <label for="empSalary">薪水</label>
@@ -191,22 +204,21 @@
                                     	<input type="file" id="imageFile" name="imageFile" />
                                     	
 										<div id="preview" th:if="*{empPicture} !=null and *{empPicture} != '' " class="form-group">
-											<img id="mapImg" th:src="*{empPicture}" style="height:110px;width:90px;" >
+											<img id="empImg" th:src="*{empPicture}" style="height:110px;width:90px;" >
 										</div>
 										<div id="preview" th:if="*{empPicture} eq null or *{empPicture} eq '' " class="form-group">
-											<img id="mapImg"><span class="text">預覽圖</span>
+											<img id="empImg"><span class="text">預覽圖</span>
 										</div>
 										<input type="hidden" id="originalImage" name="originalImage" th:value="*{empImage}" th:if="*{empImage}!=null"/>
                                     </div>
                                 </div>
-                                
                                 <div class="row clearfix">
                                 	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
                                 	<div class="row clearfix">
                                 		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{empId} eq null" data-type="success">新 增</button>
-                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{empId} ne null" data-type="success">修 改</button>
-                                    		<button id="backBtn" class="btn" type="button" onclick="history.back()">返回列表</button>
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{empId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{empId} ne null" type="button">修 改</button>
+                                    		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
                                 		</div>
                                     </div>
                                 </div>
@@ -217,9 +229,11 @@
             </div>
         </div>
     </section>
+    
+    
+    
 <div th:include="admin/load/js :: js"></div>
 <div th:include="admin/load/js :: jquery-datatable"></div>
-<div th:include="admin/load/js :: chat"></div>
 
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/employee/employee.js}"></script>

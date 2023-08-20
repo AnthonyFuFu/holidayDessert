@@ -188,7 +188,7 @@ public class EmployeeManagement {
 	@RequestMapping(value = "/updateEmployee" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Employee employee, Model model) throws Exception {
-
+		
 		// 權限
 		Authority authority = new Authority();
 		authority.setEmpId(employeeSession.getEmpId());
@@ -208,7 +208,7 @@ public class EmployeeManagement {
 		return "admin/employee/employeeForm";
 	}
 	
-	@PostMapping("/employeeAddSubmit")
+	@RequestMapping(value = "/employeeAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String employeeAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Employee employee,
 			@RequestParam(value = "imageFile") MultipartFile imageFile,
@@ -218,15 +218,15 @@ public class EmployeeManagement {
 			String osName = System.getProperty("os.name").toLowerCase();
 
 			if (osName.contains("win")) {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\location\\"));
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\employee\\"));
 			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/location/"));
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
 			} else if (osName.contains("mac")) {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/location/"));
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
 			} else {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/location/"));
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
 			}
-			employee.setEmpPicture(WEB_PATH + "admin/upload/images/employee/" + employee.getEmpImage());
+			employee.setEmpPicture(WEB_PATH + "holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
 			employeeService.add(employee);
 
 			model.addAttribute("MESSAGE", "資料新增成功");
@@ -235,12 +235,12 @@ public class EmployeeManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/admin/employee/list");
+		model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
 
 		return "admin/toPath";
 	}
 	
-	@PostMapping("/employeeUpdateSubmit")
+	@RequestMapping(value = "/employeeUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String employeeUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Employee employee,
 			@RequestParam(value = "imageFile") MultipartFile imageFile,
@@ -267,10 +267,10 @@ public class EmployeeManagement {
 					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
 				}
 			}
-			employee.setEmpPicture(WEB_PATH + "admin/upload/images/employee/" + employee.getEmpImage());
+			employee.setEmpPicture(WEB_PATH + "holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
 			employeeService.update(employee);
 			
-			model.addAttribute("PATH", "/admin/employee/list");
+			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -283,7 +283,7 @@ public class EmployeeManagement {
 
 		try {
 			employeeService.resign(employee);
-			model.addAttribute("PATH", "/admin/employee/list");
+			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
 
 		} catch (JSONException e) {
 			e.printStackTrace();

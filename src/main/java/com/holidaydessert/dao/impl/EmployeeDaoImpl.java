@@ -135,7 +135,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		
 		String sql = " INSERT INTO holiday_dessert.employee "
 				   + " (EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS, EMP_HIREDATE) "
-				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, NOW()) ";
+				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW()) ";
 		
 		args.add(employee.getEmpName());
 		args.add(employee.getDeptId());
@@ -148,7 +148,6 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		args.add(employee.getEmpPassword());
 		args.add(employee.getEmpEmail());
 		args.add(employee.getEmpLevel());
-		args.add(employee.getEmpStatus());
 
 		jdbcTemplate.update(sql, args.toArray());
 		

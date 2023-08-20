@@ -184,183 +184,145 @@ $(function() {
 		]
     });
     
-    $("#employee-table").on("click", ".btn-update", function() {
-		var empId = $(this).data('id');
-		var action = "/holidayDessert/admin/employee/updateEmployee";
-		var url = window.location.origin + action + "?empId=" + empId;
+    $("#btn-add").on("click", function() {
+		let action = "/holidayDessert/admin/employee/addEmployee";
+		let url = window.location.origin + action;
 		window.location.href = url;
 	});
 	
-//	$(".btn-add").on("click", function() {
-//		$("#mainForm").attr("action", "/tkbrule/areaLocation/addLocation");
-//		$("#mainForm").submit();
-//	})
-
-//	$("#dynamic-table").on("click", ".btn-delete", function() {
-//		if (confirm("確定刪除嗎？")) {
-//			$("#id").val($(this).data('id'));
-//			$("#mainForm").attr("action", "/tkbrule/areaLocation/deleteLocation");
-//			$("#mainForm").submit();
-//		}
-//	})
-
-//	$("#add-submit").on("click", function() {
-//		let result = checkValue();
-//		if (result) {
-//			if ($("#status_check").prop("checked")) {
-//				$("#status").val("1");
-//			} else {
-//				$("#status").val("0");
-//			}
-//			$("#mainForm").attr("action", "/tkbrule/areaLocation/locationAddSubmit");
-//			$("#mainForm").submit();
-//		}
-//	})
-	$(function () {
-    	$('#update-submit').on('click', function () {
-			let result = checkValue();
-        	if (result == true) {
-            	showSuccessMessage();
-            	employeeUpdateSubmit()
-        	} else if (type === false) {
-            	showConfirmMessage();
-        	}
-    	});
+    $("#employee-table").on("click", ".btn-update", function() {
+		let empId = $(this).data('id');
+		let action = "/holidayDessert/admin/employee/updateEmployee";
+		let url = window.location.origin + action + "?empId=" + empId;
+		window.location.href = url;
 	});
 	
-	function showSuccessMessage() {
-   		swal("修改完成", "", "success");
+	$("#employee-table").on("click", ".btn-delete", function() {
+		if (confirm("確定離職嗎？")) {
+			$("#id").val($(this).data('id'));
+			$("#mainForm").attr("action", "resignEmployee");
+			$("#mainForm").submit();
+		}
+	})
+	
+	$('#add-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+            success("新增完成");
+        }
+    });
+    
+    $('#update-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+            success("修改完成");
+        }
+    });
+    
+	function success(message) {
+   		swal({
+        	title: message,
+        	type: "success",
+        	showCancelButton: false,
+        	confirmButtonColor: "#3085d6",
+        	confirmButtonText: "確定"
+    	}, function(result) {
+			if (result == true && message == "新增完成") {
+            	$("#mainForm").attr("action", "employeeAddSubmit");
+            	$("#mainForm").submit();
+        	} else if (result == true && message == "修改完成") {
+				$("#mainForm").attr("action", "employeeUpdateSubmit");
+            	$("#mainForm").submit();
+			}
+    	})
 	}
 	
-	function showConfirmMessage() {
+	function warning(message) {
     	swal({
-        	title: "Are you sure?",
-        	text: "You will not be able to recover this imaginary file!",
+        	title: message,
         	type: "warning",
-        	showCancelButton: true,
         	confirmButtonColor: "#DD6B55",
-        	confirmButtonText: "Yes, delete it!",
+        	confirmButtonText: "確定",
         	closeOnConfirm: false
-    	}, function () {
-        	swal("Deleted!", "Your imaginary file has been deleted.", "success");
     	});
-	}
-	
-	function employeeUpdateSubmit() {
-		$("#mainForm").attr("action", "/holidayDessert/admin/employee/employeeUpdateSubmit");
-		$("#mainForm").submit();
 	}
 
 	function checkValue() {
 		let checkValue = true;
 		if (!$("#empAccount").val()) {
-			alert("請輸入員工帳號")
+			warning("請輸入員工帳號");
 			checkValue = false;
 		} else if (!$("#empPassword").val()) {
-			alert("請輸入員工密碼")
+			warning("請輸入員工密碼");
 			checkValue = false;
 		} else if ($("#department").val() == '0') {
-			alert("請選擇部門")
+			warning("請選擇部門");
 			checkValue = false;
 		} else if (!$("#empName").val()) {
-			alert("員工姓名")
+			warning("員工姓名");
 			checkValue = false;
 		} else if (!$("#empPhone").val()) {
-			alert("請輸入行動電話號碼")
+			warning("請輸入電話號碼");
 			checkValue = false;
-		} else if (!isCellphone($("#empPhone").val())) {
-			alert("請輸入正確行動電話號碼")
+		} else if (!isTel($("#empPhone").val())) {
+			warning("請輸入正確電話號碼");
 			checkValue = false;
 		} else if (!$("#empEmail").val()) {
-			alert("請輸入電子信箱")
+			warning("請輸入電子信箱");
 			checkValue = false;
 		} else if (!isEmail($("#empEmail").val())) {
-			alert("請輸入正確電子信箱")
+			warning("請輸入正確電子信箱");
 			checkValue = false;
 		} else if (!$("#empJob").val()) {
-			alert("請輸入職稱")
+			warning("請輸入職稱");
 			checkValue = false;
 		} else if (!$("#empSalary").val()) {
-			alert("請輸入薪水")
+			warning("請輸入薪水");
+			checkValue = false;
+		} else if (checkImage() == false) {
+			warning("請選擇圖片格式文件");
 			checkValue = false;
 		}
 		
 		if ($("#empId").val() == null || $("#empId").val() == "") {
 			if ($("#imageFile").val() == "") {
-				alert("請選擇圖片");
+				warning("請選擇圖片");
 				return false;
 			}
-			$("#mainForm").attr("action", "addSubmit");
-		} else {
-			$("#mainForm").attr("action", "updateSubmit");
 		}
+		
 		return checkValue;
 	}
+	
+	function checkImage() {
+        let imageFile = $('#imageFile')[0];
+        if (imageFile.files.length > 0) {
+            let file = imageFile.files[0];
+            let allowedTypes = ['image/jpg','image/jpeg','image/png','image/gif'];
 
-//	$('#imageFile').ace_file_input({
-//		no_file: 'No File ...',
-//		btn_choose: 'Choose',
-//		btn_change: 'Change',
-//		droppable: false,
-//		onchange: null,
-//		thumbnail: false, //| true | large
-//		//whitelist:'gif|png|jpg|jpeg'
-//		allowExt: ["jpeg", "jpg", "png", "gif"]
-//		//blacklist:'exe|php'
-//		//onchange:''
-//		//
-//	}).on('file.error.ace', function(event, info) {
-//		alert("請選擇符合的圖片格式【jpeg、jpg、png、gif】");
-//	});
-//
-//	$("#imageFile").change(addimage);
-//
-//	$("a.remove").on("click", function() {
-//		$("#mapImg").removeAttr("src");
-//	})
-//
-//	function addimage() {
-//		let mapImg = $("#mapImg");
-//		mapImg.attr('src', URL.createObjectURL(this.files[0]));
-//	};
-//
-//	function isTel(phone) {
-//		const regex = /(\d{2,3}-?|\(\d{2,3}\))\d{3,4}-?\d{4}|09\d{2}(\d{6}|-\d{3}-\d{3})/;
-//		return regex.test(phone);
-//	}
-//
-//	$(function() {
-//		// 初始高度
-//		$('#file_info').each(function() {
-//			this.style.height = (this.scrollHeight) + 'px';
-//		});
-//		$('#remark').each(function() {
-//			this.style.height = (this.scrollHeight) + 'px';
-//		});
-//		$('#do_business_time').each(function() {
-//			this.style.height = (this.scrollHeight) + 'px';
-//		});
-//		// 輸入調整高度
-//		$('#file_info').on('input', function() {
-//			this.style.height = 'auto';
-//			this.style.height = this.scrollHeight + 'px';
-//		});
-//		$('#remark').on('input', function() {
-//			this.style.height = 'auto';
-//			this.style.height = this.scrollHeight + 'px';
-//		});
-//		$('#do_business_time').on('input', function() {
-//			this.style.height = 'auto';
-//			this.style.height = this.scrollHeight + 'px';
-//		});
-//	});
+            if (allowedTypes.indexOf(file.type) === -1) {
+				warning("請選擇圖片格式文件 (JPG, JPEG, PNG 或 GIF)");
+                return false;
+            }
+            return true;
+        }
+    };
+	
+	$("#imageFile").change(addimage);
+
+	function addimage() {
+		if (checkImage() == true){
+			let empImg = $("#empImg");
+			empImg.attr('src', URL.createObjectURL(this.files[0]));
+		}
+	};
 
 });
 
 //驗證連結網址是否有效
 function checkURL(obj) {
 	if ($.trim(obj.val()) != "" && obj.val().match(/http(s)?:////([\w-]+\.)+[\w-]+(\/[\w- .\/?%&=]*)?/
-   ) == null) {
+		) == null) {
 	obj.focus();
 		return "\n請輸入正確連結網址，EX：http://www.google.com";
 	} else {
@@ -375,31 +337,33 @@ function isEmail(email){
 function isCellphone(cellphone){
 	return /^[09]{2}[0-9]{8}$/.test(cellphone);	
 }
+//電話格式 正規則
+function isTel(phone) {
+	const regex = /(\d{2,3}-?|\(\d{2,3}\))\d{3,4}-?\d{4}|09\d{2}(\d{6}|-\d{3}-\d{3})/;
+	return regex.test(phone);
+}
 //身份證驗證正規則
 function checkTwID(id){
-	
 	//建立字母分數陣列(A~Z)
-	var city = new Array(
-	1,10,19,28,37,46,55,64,39,73,82, 2,11,
-	20,48,29,38,47,56,65,74,83,21, 3,12,30
+	let city = new Array(
+		1,10,19,28,37,46,55,64,39,73,82, 2,11,
+		20,48,29,38,47,56,65,74,83,21, 3,12,30
 	)
 	id = id.toUpperCase();
 	// 使用「正規表達式」檢驗格式
 	if (id.search(/^[A-Z](1|2)\d{8}$/i) == -1) {
 		alert('基本格式錯誤');
 		return false;
-	} 
-	else {
+	} else {
 	//將字串分割為陣列(IE必需這麼做才不會出錯)
-		id = id.split('');
+	id = id.split('');
 	//計算總分
-	var total = city[id[0].charCodeAt(0)-65];
-	for(var i=1; i<=8; i++){
+	let total = city[id[0].charCodeAt(0)-65];
+	for(let i=1; i<=8; i++){
 		total += eval(id[i]) * (9 - i);
 	}
 	//補上檢查碼(最後一碼)
 	total += eval(id[9]);
-	
 	//檢查比對碼(餘數應為0);
 	return ((total%10 == 0 ));
 	}
