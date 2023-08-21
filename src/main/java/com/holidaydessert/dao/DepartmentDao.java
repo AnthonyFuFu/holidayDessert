@@ -13,6 +13,7 @@ public interface DepartmentDao {
 	public void add(Department department);
 	public void update(Department department);
 	public void delete(Department department);
+	public Department getData(Department department);
 	public List<Map<String, Object>> getList();
 	
 }

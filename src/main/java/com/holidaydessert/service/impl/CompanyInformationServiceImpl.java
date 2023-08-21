@@ -42,6 +42,11 @@ public class CompanyInformationServiceImpl implements CompanyInformationService 
 	}
 
 	@Override
+	public CompanyInformation getData(CompanyInformation companyInformation) {
+		return companyInformationDao.getData(companyInformation);
+	}
+
+	@Override
 	public List<Map<String, Object>> frontList(CompanyInformation companyInformation) {
 		return companyInformationDao.frontList(companyInformation);
 	}

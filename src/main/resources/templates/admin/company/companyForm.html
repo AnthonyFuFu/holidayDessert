@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/load/css :: css"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 店鋪管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
+</head>
+<body class="theme-red">
+
+    <!-- Page Loader -->
+    <div th:include="admin/load/pageloader :: pageloader" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <div th:include="admin/load/searchbar :: searchbar" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+    <nav th:include="admin/load/navbar :: navbar" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:include="admin/load/leftsidebar :: leftsidebar" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+        
+        <!-- Right Sidebar -->
+        <aside th:include="admin/load/rightsidebar :: rightsidebar" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+        
+			<!-- breadcrumbs -->
+            <div th:include="admin/load/breadcrumbs :: employee" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                        	<h2 th:text="${companyInformation.comId != null and companyInformation.comId != '' ? '店鋪 - 修改' : '店鋪 - 新增'}"></h2>
+                        </div>
+                        <div class="body">
+							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${companyInformation}" enctype="multipart/form-data">
+								
+								<input id="comId" type="hidden" th:field="*{comId}">
+								
+								<div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="comName">店鋪名稱</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="comName" class="form-control" th:field="*{comName}" placeholder="請輸入店鋪名稱">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="comAddress">店鋪地址</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="comAddress" class="form-control" th:field="*{comAddress}" placeholder="請輸入店鋪地址">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            	
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="comPhone">店鋪電話號碼</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="comPhone" class="form-control" th:field="*{comPhone}" placeholder="請輸入店鋪電話號碼">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="comMemo">店鋪詳細資訊</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="comMemo" class="form-control" th:field="*{comMemo}" placeholder="請輸入店鋪詳細資訊">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
+                                	<div class="row clearfix">
+                                		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{comId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{comId} ne null" type="button">修 改</button>
+                                    		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
+                                		</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<div th:include="admin/load/js :: js"></div>
+<div th:include="admin/load/js :: jquery-datatable"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/company/company.js}"></script>
+</body>
+</html>
+	

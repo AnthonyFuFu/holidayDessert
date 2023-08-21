@@ -184,7 +184,7 @@ $(function() {
 		]
     });
     
-    $("#btn-add").on("click", function() {
+    $("#btn-add-employee").on("click", function() {
 		let action = "/holidayDessert/admin/employee/addEmployee";
 		let url = window.location.origin + action;
 		window.location.href = url;

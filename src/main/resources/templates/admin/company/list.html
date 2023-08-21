@@ -3,6 +3,7 @@
 <head th:include="admin/load/css :: css"></head>
 <head>
 <title>[[${@environment.getProperty('html.title')}]] - 公司管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
 </head>
 <body class="theme-red">
 
@@ -68,6 +69,7 @@
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane fade in active" id="company_animation">
                             				<div class="table-responsive">
+                            				<label id="btn-add-company" class="btn waves-effect" style="margin:15px 20px">新增公司</label>
                                					<table id="company-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
                                     				<thead>
                                         				<tr>
@@ -76,6 +78,7 @@
                                             				<th>公司地址</th>
                                             				<th>聯絡電話</th>
                                            					<th>詳細資訊</th>
+                                           					<th>功能</th>
                                         				</tr>
                                     				</thead>
                                 				</table>
@@ -83,12 +86,14 @@
                         				</div>
                                         <div role="tabpanel" class="tab-pane fade" id="department_animation">
                                         	<div class="table-responsive">
+                            				<label id="btn-add-department" class="btn waves-effect" style="margin:15px 20px">新增部門</label>
                                					<table id="department-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
                                     				<thead>
                                         				<tr>
                                         					<th>ID</th>
                                             				<th>部門名稱</th>
                                             				<th>部門地址</th>
+                                            				<th>功能</th>
                                         				</tr>
                                     				</thead>
                                 				</table>

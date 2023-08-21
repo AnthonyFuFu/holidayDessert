@@ -42,6 +42,11 @@ public class DepartmentServiceImpl implements DepartmentService {
 	}
 
 	@Override
+	public Department getData(Department department) {
+		return departmentDao.getData(department);
+	}
+	
+	@Override
 	public List<Map<String, Object>> getList() {
 		return departmentDao.getList();
 	}

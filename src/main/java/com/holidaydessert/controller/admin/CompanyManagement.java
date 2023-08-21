@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -149,4 +150,149 @@ public class CompanyManagement {
 		}
 
 	}
+
+	@RequestMapping(value = "/addCompany" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addCompany(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			CompanyInformation companyInformation = new CompanyInformation();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("companyInformation", companyInformation);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/company/companyForm";
+	}
+	
+	@RequestMapping(value = "/updateCompany" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateCompany(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute CompanyInformation companyInformation, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			companyInformation = companyInformationService.getData(companyInformation);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("companyInformation", companyInformation);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/company/companyForm";
+	}
+
+	@RequestMapping(value = "/companyAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String companyAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute CompanyInformation companyInformation,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			companyInformationService.add(companyInformation);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/companyUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String companyUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute CompanyInformation companyInformation,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			companyInformationService.update(companyInformation);
+			model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/addDepartment" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addDepartment(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			Department department = new Department();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("department", department);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/company/departmentForm";
+	}
+	
+	@RequestMapping(value = "/updateDepartment" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateDepartment(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Department department, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			department = departmentService.getData(department);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("department", department);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/company/departmentForm";
+	}
+
+	@RequestMapping(value = "/departmentAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String departmentAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Department department,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			departmentService.add(department);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/departmentUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String departmentUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Department department,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			departmentService.update(department);
+			model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
 }

@@ -13,6 +13,7 @@ public interface CompanyInformationService {
 	public void add(CompanyInformation companyInformation);
 	public void update(CompanyInformation companyInformation);
 	public void delete(CompanyInformation companyInformation);
+	public CompanyInformation getData(CompanyInformation companyInformation);
 	
 	// front
 	public List<Map<String, Object>> frontList(CompanyInformation companyInformation);

@@ -130,6 +130,33 @@ public class DepartmentDaoImpl implements DepartmentDao {
 	}
 
 	@Override
+	public Department getData(Department department) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.department "
+				   + " WHERE DEPT_ID = ? ";
+		
+		args.add(department.getDeptId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Department dept = new Department();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String deptId = String.valueOf(resultMap.get("DEPT_ID"));
+	        String deptName = String.valueOf(resultMap.get("DEPT_NAME"));
+	        String deptLoc = String.valueOf(resultMap.get("DEPT_LOC"));
+	        
+	        dept.setDeptId(deptId);
+	        dept.setDeptName(deptName);
+	        dept.setDeptLoc(deptLoc);
+	        
+	    }
+		return dept == null ? null : dept;
+	}
+
+	@Override
 	public List<Map<String, Object>> getList() {
 
 		List<Object> args = new ArrayList<>();
