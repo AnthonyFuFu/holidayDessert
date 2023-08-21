@@ -1,23 +1,56 @@
-.mapImg {
-	min-width: 180px;
+#empImg ,.empImg{
+	min-width: 80px;
 	border: 1px solid lightgray;
 	display: inline-block;
-	min-height: 130px;
-	max-width: 300px;
+	min-height: 110px;
+	max-width: 110px;
 	position: relative;
 	z-index: 1;
 }
 
-.preview {
+#preview ,.preview{
 	display: inline-block;
 	position: relative;
+}
+
+#preview span.text{
+	position: absolute;
+	display: inline-block;
+	top: 50%;
+	transform: translate(-145%, -50%);
+	color: lightgray;
 }
 
 .preview span.text {
 	position: absolute;
 	display: inline-block;
+	white-space: nowrap;
 	left: 50%;
 	top: 50%;
 	transform: translate(-50%, -50%);
 	color: lightgray;
+}
+
+#imageFile {
+	display: none;
+}
+
+.upload-file {
+	border-radius: 4px;
+	padding: 6px 12px;
+	cursor: pointer;
+}
+
+.upload-file::before {
+	content: '選擇檔案';
+	display: inline-block;
+	background-color: #428bca;
+	color: #fff;
+	border-radius: 4px;
+	padding: 6px 12px;
+	cursor: pointer;
+}
+
+.upload-file:hover::before {
+	background-color: #3276b1;
 }

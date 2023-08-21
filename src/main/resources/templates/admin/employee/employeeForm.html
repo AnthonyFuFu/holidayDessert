@@ -4,34 +4,6 @@
 <head>
 <title>[[${@environment.getProperty('html.title')}]] - 員工管理</title>
 <link rel="stylesheet" th:href="@{/admin/css/employee.css}" />
-
-<style>
-
-  #imageFile {
-    display: none;
-  }
-
-  .upload-file {
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
-  }
-
-  .upload-file::before {
-    content: '選擇檔案';
-    display: inline-block;
-    background-color: #428bca;
-    color: #fff;
-    border-radius: 4px;
-    padding: 6px 12px;
-    cursor: pointer;
-  }
-
-  .upload-file:hover::before {
-    background-color: #3276b1;
-  }
-  
-</style>
 </head>
 <body class="theme-red">
 
@@ -229,8 +201,6 @@
             </div>
         </div>
     </section>
-    
-    
     
 <div th:include="admin/load/js :: js"></div>
 <div th:include="admin/load/js :: jquery-datatable"></div>

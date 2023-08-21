@@ -169,9 +169,9 @@ $(function() {
             	data: "EMP_PICTURE",
             	render: function(data, type, row, meta) {
                 	if (row.EMP_PICTURE != '' && row.EMP_PICTURE != null) {
-                    	return "<img src='" + row.EMP_PICTURE + "' width='90px' height='110px' />";
+                    	return "<div class=\"preview\"><img class=\"empImg\" src='" + row.EMP_PICTURE + "' /></div>";
                 	} else {
-                    	return "<div class=\"preview\"><img class=\"mapImg\"><span class=\"text\">預覽圖</span></div>";
+                    	return "<div class=\"preview\"><img class=\"empImg\"><span class=\"text\">預覽圖</span></div>";
                 	}
             	}
         	},
