@@ -50,9 +50,8 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/employee/addEmployee}">新增員工</a></li>
+                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/employee/addEmpFunction}">新增功能</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -70,7 +69,6 @@
                                     <div class="tab-content">
                                         <div role="tabpanel" class="tab-pane fade in active" id="employee_animation">
                             				<div class="table-responsive">
-                            				<label id="btn-add-employee" class="btn waves-effect" style="margin:15px 20px">新增員工</label>
                                 				<table id="employee-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
                                     				<thead>
                                         				<tr>
@@ -101,6 +99,7 @@
                                             				<th>連結</th>
                                             				<th>狀態</th>
                                             				<th>ICON</th>
+                                            				<th>功能</th>
                                         				</tr>
                                     				</thead>
                                 				</table>

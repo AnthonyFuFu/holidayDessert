@@ -101,12 +101,6 @@ $(function() {
 		]
     });
     
-    $("#btn-add-company").on("click", function() {
-		let action = "/holidayDessert/admin/company/addCompany";
-		let url = window.location.origin + action;
-		window.location.href = url;
-	});
-	
     $("#company-table").on("click", ".btn-update", function() {
 		let comId = $(this).data('id');
 		let action = "/holidayDessert/admin/company/updateCompany";

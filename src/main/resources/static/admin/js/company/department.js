@@ -81,12 +81,6 @@ $(function() {
 		]
     });
     
-    $("#btn-add-department").on("click", function() {
-		let action = "/holidayDessert/admin/company/addDepartment";
-		let url = window.location.origin + action;
-		window.location.href = url;
-	});
-	
     $("#department-table").on("click", ".btn-update", function() {
 		let deptId = $(this).data('id');
 		let action = "/holidayDessert/admin/company/updateDepartment";
