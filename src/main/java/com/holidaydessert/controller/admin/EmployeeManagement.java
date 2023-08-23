@@ -194,7 +194,7 @@ public class EmployeeManagement {
 		authority.setEmpId(employeeSession.getEmpId());
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> departmentList = departmentService.getList();
-		System.out.println(departmentList);
+		
 		try {
 			employee = employeeService.getData(employee);
 			model.addAttribute("authorityList", authorityList);
@@ -285,6 +285,78 @@ public class EmployeeManagement {
 			employeeService.resign(employee);
 			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
 
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/addEmpFunction" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addEmpFunction(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			EmpFunction empFunction = new EmpFunction();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("empFunction", empFunction);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/employee/empFunctionForm";
+	}
+	
+	@RequestMapping(value = "/updateEmpFunction" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateEmpFunction(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute EmpFunction empFunction, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			empFunction = empFunctionService.getData(empFunction);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("empFunction", empFunction);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/employee/empFunctionForm";
+	}
+	
+	@RequestMapping(value = "/empFunctionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String empFunctionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute EmpFunction empFunction,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			empFunctionService.add(empFunction);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
+
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/empFunctionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String empFunctionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute EmpFunction empFunction,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			empFunctionService.update(empFunction);
+			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

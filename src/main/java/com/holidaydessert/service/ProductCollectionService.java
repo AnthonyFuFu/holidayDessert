@@ -13,6 +13,8 @@ public interface ProductCollectionService {
 	public void add(ProductCollection productCollection);
 	public void update(ProductCollection productCollection);
 	public void takeDown(ProductCollection productCollection);
+	public ProductCollection getData(ProductCollection productCollection);
+	public List<Map<String, Object>> getList();
 	
 	// front
 	public List<Map<String, Object>> frontList(ProductCollection productCollection);

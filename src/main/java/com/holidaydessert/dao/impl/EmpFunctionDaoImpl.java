@@ -131,6 +131,40 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 	}
 
 	@Override
+	public EmpFunction getData(EmpFunction empFunction) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.emp_function "
+				   + " WHERE FUNC_ID = ? ";
+		
+		args.add(empFunction.getFuncId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		EmpFunction function = new EmpFunction();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String funcId = String.valueOf(resultMap.get("FUNC_ID"));
+	        String funcName = String.valueOf(resultMap.get("FUNC_NAME"));
+	        String funcLayer = String.valueOf(resultMap.get("FUNC_LAYER"));
+	        String funcParentId = String.valueOf(resultMap.get("FUNC_PARENT_ID"));
+	        String funcLink = String.valueOf(resultMap.get("FUNC_LINK"));
+	        String funcStatus = String.valueOf(resultMap.get("FUNC_STATUS"));
+	        String funcIcon = String.valueOf(resultMap.get("FUNC_ICON"));
+	        
+	        function.setFuncId(funcId);
+	        function.setFuncName(funcName);
+	        function.setFuncLayer(funcLayer);
+	        function.setFuncParentId(funcParentId);
+	        function.setFuncLink(funcLink);
+	        function.setFuncStatus(funcStatus);
+	        function.setFuncIcon(funcIcon);
+	    }
+		return function == null ? null : function;
+	}
+
+	@Override
 	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction) {
 
 		String sql = " SELECT FUNC_ID FROM holiday_dessert.emp_function "

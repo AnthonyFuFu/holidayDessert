@@ -42,6 +42,11 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public Product getData(Product product) {
+		return productDao.getData(product);
+	}
+
+	@Override
 	public List<Map<String, Object>> frontNewList(Product product) {
 		return productDao.frontNewList(product);
 	}

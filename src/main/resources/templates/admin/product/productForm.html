@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/load/css :: css"></head>
 <head>
-<title>[[${@environment.getProperty('html.title')}]] - 員工管理</title>
+<title>[[${@environment.getProperty('html.title')}]] - 商品管理</title>
 <link rel="stylesheet" th:href="@{/admin/css/common.css}" />
 </head>
 <body class="theme-red">
@@ -43,59 +43,46 @@
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                        	<h2 th:text="${employee.empId != null and employee.empId != '' ? '員工 - 修改' : '員工 - 新增'}"></h2>
+                        	<h2 th:text="${product.pdId != null and product.pdId != '' ? '商品 - 修改' : '商品 - 新增'}"></h2>
                         </div>
                         <div class="body">
-							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${employee}" enctype="multipart/form-data">
+							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${product}" enctype="multipart/form-data">
 								
-								<input id="empId" type="hidden" th:field="*{empId}">
+								<input id="pdId" type="hidden" th:field="*{pdId}">
 								
 								<div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label for="empAccount">員工帳號</label>
+                                        <label for="pdName">商品名稱</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="empAccount" class="form-control" th:field="*{empAccount}" placeholder="請輸入帳號">
+                                                <input type="text" id="pdName" class="form-control" th:field="*{pdName}" placeholder="請輸入商品名稱">
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label for="empPassword">員工密碼</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="empPassword" class="form-control" th:field="*{empPassword}" placeholder="請輸入密碼">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            	
 								<div class="row clearfix">
 									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label for="department">請選擇部門</label>
+                                        <label for="productCollection">請選擇商品分類</label>
                                     </div>
                                 	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
-                                    	<select id="department" class="form-control show-tick" th:field="*{deptId}">
+                                    	<select id="productCollection" class="form-control show-tick" th:field="*{pdcId}">
                                         	<option value="0">-- 請選擇 --</option>
-                                        	<option th:each="department:${departmentList}" th:value="${department.DEPT_ID}" th:text="${department.DEPT_LOC+ '-' +department.DEPT_NAME}"></option>
+                                        	<option th:each="productCollection:${productCollectionList}" th:value="${productCollection.PDC_ID}" th:text="${productCollection.PDC_NAME}"></option>
                                     	</select>
                                 	</div>
                             	</div>
 								
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                        <label for="empName">員工姓名</label>
+                                        <label for="pdPrice">商品原價</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="empName" class="form-control" th:field="*{empName}" placeholder="請輸入姓名">
+                                                <input type="text" id="pdPrice" class="form-control" th:field="*{pdPrice}" placeholder="請輸入商品原價">
                                             </div>
                                         </div>
                                     </div>
@@ -103,51 +90,12 @@
                                 
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-                                        <label for="empPhone">電話號碼</label>
+                                        <label for="pdDescription">商品資訊</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="empPhone" class="form-control" th:field="*{empPhone}" placeholder="請輸入連絡電話">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-                                        <label for="empEmail">電子信箱</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="empEmail" class="form-control" th:field="*{empEmail}" placeholder="請輸入E-mail">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-                                        <label for="empJob">職稱</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="empJob" class="form-control" th:field="*{empJob}" placeholder="請輸入職稱">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                
-                                <div class="row clearfix">
-                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-                                        <label for="empLevel">等級</label>
-                                    </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="empLevel" class="form-control" th:field="*{empLevel}" placeholder="請輸入等級(0:最高管理員 1:一般管理員)">
+                                                <input type="text" id="pdDescription" class="form-control" th:field="*{pdDescription}" placeholder="請輸入商品資訊">
                                             </div>
                                         </div>
                                     </div>
@@ -155,12 +103,12 @@
                                 
                                  <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-                                        <label for="empSalary">薪水</label>
+                                        <label for="pdDisplayQuantity">商品圖片陳列數量</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
                                         <div class="form-group">
                                             <div class="form-line">
-                                                <input type="text" id="empSalary" class="form-control" th:field="*{empSalary}" placeholder="請輸入薪水">
+                                                <input type="text" id="pdDisplayQuantity" class="form-control" th:field="*{pdDisplayQuantity}" placeholder="請輸入商品圖片陳列數量">
                                             </div>
                                         </div>
                                     </div>
@@ -168,27 +116,38 @@
                                 
                                 <div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-                                        <label for="empImage">員工圖片</label>
+                                        <label for="pdStatus">前台商品狀態</label>
                                     </div>
                                     <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-										<label class="upload-file" for="imageFile"> 上傳圖片</label>
-                                    	<input type="file" id="imageFile" name="imageFile" />
-                                    	
-										<div id="preview" th:if="*{empPicture} !=null and *{empPicture} != '' " class="form-group">
-											<img id="empImg" th:src="*{empPicture}" style="height:110px;width:90px;" >
-										</div>
-										<div id="preview" th:if="*{empPicture} eq null or *{empPicture} eq '' " class="form-group">
-											<img id="empImg"><span class="text">預覽圖</span>
-										</div>
-										<input type="hidden" id="originalImage" name="originalImage" th:value="*{empImage}" th:if="*{empImage}!=null"/>
+                                        <div class="form-group">
+                                        	<div class="switch">
+                                        		<input type="hidden" id="pdStatus" th:field="*{pdStatus}" />
+                                            	<label>前台下架<input type="checkbox" id="checkStatus" class="form-control" th:checked="*{pdStatus} == '0' ? 'false' : 'true'"><span class="lever switch-col-cyan"></span>前台上架</label>
+                                        	</div>
+                                        </div>
                                     </div>
                                 </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pdIsDel">商品狀態</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="switch">
+                                        		<input type="hidden" id="pdIsDel" th:field="*{pdIsDel}" />
+                                            	<label>下架<input type="checkbox" id="checkIsDel" class="form-control" th:checked="*{pdIsDel} == '0' ? 'false' : 'true'"><span class="lever switch-col-cyan"></span>上架</label>
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
                                 <div class="row clearfix">
                                 	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
                                 	<div class="row clearfix">
                                 		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{empId} eq null" type="button">新 增</button>
-                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{empId} ne null" type="button">修 改</button>
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{pdId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{pdId} ne null" type="button">修 改</button>
                                     		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
                                 		</div>
                                     </div>
@@ -205,7 +164,7 @@
 <div th:include="admin/load/js :: jquery-datatable"></div>
 
 <script th:src="@{/admin/js/admin.js}"></script>
-<script th:src="@{/admin/js/employee/employee.js}"></script>
+<script th:src="@{/admin/js/product/product.js}"></script>
 
 </body>
 </html>

@@ -133,7 +133,7 @@ public class ProductDaoImpl implements ProductDao {
 
 		List<Object> args = new ArrayList<>();
 
-		String sql = " INSERT INTO holiday_dessert.employee "
+		String sql = " INSERT INTO holiday_dessert.product "
 				   + " (PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS, "
 				   + " PD_IS_DEL, PD_CREATE_BY, PD_CREATE_TIME, PD_UPDATE_BY, PD_UPDATE_TIME) "
 				   + " VALUES(?, ?, ?, ?, ?, ?, 0, ?, NOW(), ?, NOW()) ";
@@ -189,6 +189,48 @@ public class ProductDaoImpl implements ProductDao {
 		
 		jdbcTemplate.update(sql, args.toArray());
 		
+	}
+
+	@Override
+	public Product getData(Product product) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.product "
+				   + " WHERE PD_ID = ? ";
+		
+		args.add(product.getPdId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Product item = new Product();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String pdId = String.valueOf(resultMap.get("PD_ID"));
+	        String pdcId = String.valueOf(resultMap.get("PDC_ID"));
+	        String pdName = String.valueOf(resultMap.get("PD_NAME"));
+	        String pdPrice = String.valueOf(resultMap.get("PD_PRICE"));
+	        String pdDescription = String.valueOf(resultMap.get("PD_DESCRIPTION"));
+	        String pdDisplayQuantity = String.valueOf(resultMap.get("PD_DISPLAY_QUANTITY"));
+	        String pdStatus = String.valueOf(resultMap.get("PD_STATUS"));
+	        String pdCreateBy = String.valueOf(resultMap.get("PD_CREATE_BY"));
+	        String pdCreateTime = String.valueOf(resultMap.get("PD_CREATE_TIME"));
+	        String pdUpdateBy = String.valueOf(resultMap.get("PD_UPDATE_BY"));
+	        String pdUpdateTime = String.valueOf(resultMap.get("PD_UPDATE_TIME"));
+	        
+	        item.setPdId(pdId);
+	        item.setPdcId(pdcId);
+	        item.setPdName(pdName);
+	        item.setPdPrice(pdPrice);
+	        item.setPdDescription(pdDescription);
+	        item.setPdDisplayQuantity(pdDisplayQuantity);
+	        item.setPdStatus(pdStatus);
+	        item.setPdCreateBy(pdCreateBy);
+	        item.setPdCreateTime(pdCreateTime);
+	        item.setPdUpdateBy(pdUpdateBy);
+	        item.setPdUpdateTime(pdUpdateTime);
+	    }
+		return item == null ? null : item;
 	}
 
 	@Override

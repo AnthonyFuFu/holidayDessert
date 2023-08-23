@@ -66,25 +66,101 @@ $(function() {
 				render: function(data, type, row, meta) {
 					return row.STATUS;
 				}
+			},
+			{
+				targets: [4],
+				data: "PDC_ID",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.PDC_ID + "'><i class='material-icons'>edit</i></button> ";
+				}
 			}
 		],
 		columns: [
-			{
-				data: "PDC_ID",
-				defaultContent: ""
-			},
-			{
-				data: "PDC_NAME",
-				defaultContent: ""
-			},
-			{
-				data: "PDC_KEYWORD",
-				defaultContent: ""
-			},
-			{
-				data: "STATUS",
-				defaultContent: ""
-			}
+			{ data: "PDC_ID" },
+			{ data: "PDC_NAME" },
+			{ data: "PDC_KEYWORD" },
+			{ data: "STATUS" },
+        	{
+            	data: "PDC_ID",
+            	render: function(data, type, row, meta) {
+                	return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.PDC_ID + "'><i class='material-icons'>edit</i></button> ";
+            	}
+        	}
 		]
     });
+    
+    
+    $("#product-collection-table").on("click", ".btn-update", function() {
+		let pdcId = $(this).data('id');
+		let action = "/holidayDessert/admin/product/updateProductCollection";
+		let url = window.location.origin + action + "?pdcId=" + pdcId;
+		window.location.href = url;
+	});
+    
+	$('#add-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+            success("新增完成");
+        }
+    });
+    
+    $('#update-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+            success("修改完成");
+        }
+    });
+    
+	function success(message) {
+   		swal({
+        	title: message,
+        	type: "success",
+        	showCancelButton: false,
+        	confirmButtonColor: "#3085d6",
+        	confirmButtonText: "確定"
+    	}, function(result) {
+			if (result == true && message == "新增完成") {
+            	$("#mainForm").attr("action", "productCollectionAddSubmit");
+            	$("#mainForm").submit();
+        	} else if (result == true && message == "修改完成") {
+				$("#mainForm").attr("action", "productCollectionUpdateSubmit");
+            	$("#mainForm").submit();
+			}
+    	})
+	}
+	
+	function warning(message) {
+    	swal({
+        	title: message,
+        	type: "warning",
+        	confirmButtonColor: "#DD6B55",
+        	confirmButtonText: "確定",
+        	closeOnConfirm: false
+    	});
+	}
+
+	function checkValue() {
+		let checkValue = true;
+		if (!$("#pdcName").val()) {
+			warning("請輸入商品分類名稱");
+			checkValue = false;
+		} else if (!$("#pdcKeyword").val()) {
+			warning("請輸入商品分類關鍵字");
+			checkValue = false;
+		}
+		return checkValue;
+	}
+	
+	function statusCheck(){
+		if ($("#checkStatus").prop("checked")) {
+			$("#pdcStatus").val("1");
+		} else {
+			$("#pdcStatus").val("0");
+		}
+	}
+	
 });

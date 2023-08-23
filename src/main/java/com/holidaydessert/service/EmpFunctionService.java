@@ -12,6 +12,7 @@ public interface EmpFunctionService {
 	public int getCount(EmpFunction empFunction);
 	public void add(EmpFunction empFunction);
 	public void update(EmpFunction empFunction);
+	public EmpFunction getData(EmpFunction empFunction);
 	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction);
 	
 }

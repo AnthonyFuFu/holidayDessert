@@ -42,6 +42,16 @@ public class ProductCollectionServiceImpl implements ProductCollectionService {
 	}
 
 	@Override
+	public ProductCollection getData(ProductCollection productCollection) {
+		return productCollectionDao.getData(productCollection);
+	}
+
+	@Override
+	public List<Map<String, Object>> getList() {
+		return productCollectionDao.getList();
+	}
+
+	@Override
 	public List<Map<String, Object>> frontList(ProductCollection productCollection) {
 		return productCollectionDao.frontList(productCollection);
 	}

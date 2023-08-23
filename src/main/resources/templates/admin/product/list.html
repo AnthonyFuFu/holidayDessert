@@ -49,9 +49,8 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                                        <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
+                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/addProduct}">新增商品</a></li>
+                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/addProductCollection}">新增商品分類</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -79,6 +78,7 @@
                                             				<th>商品敘述</th>
                                             				<th>商品狀態</th>
                                             				<th>最新修改時間</th>
+                                            				<th>功能</th>
                                         				</tr>
                                     				</thead>
                                 				</table>
@@ -93,6 +93,7 @@
                                         					<th>分類名稱</th>
                                             				<th>關鍵字</th>
                                             				<th>分類狀態</th>
+                                            				<th>功能</th>
                                         				</tr>
                                     				</thead>
                                 				</table>

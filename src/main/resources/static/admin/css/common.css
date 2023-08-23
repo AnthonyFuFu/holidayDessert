@@ -54,3 +54,8 @@
 .upload-file:hover::before {
 	background-color: #3276b1;
 }
+
+.switch {
+	padding: 7px;
+}
+

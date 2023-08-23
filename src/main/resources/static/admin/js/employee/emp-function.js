@@ -115,6 +115,7 @@ $(function() {
 	$('#add-submit').on('click', function () {
 		let result = checkValue();
         if (result == true) {
+			statusCheck();
             success("新增完成");
         }
     });
@@ -122,6 +123,7 @@ $(function() {
     $('#update-submit').on('click', function () {
 		let result = checkValue();
         if (result == true) {
+			statusCheck();
             success("修改完成");
         }
     });
@@ -162,14 +164,19 @@ $(function() {
 		} else if (!$("#funcLink").val()) {
 			warning("請輸入連結");
 			checkValue = false;
-		} else if (!$("#funcStatus").val()) {
-			warning("請輸入狀態");
-			checkValue = false;
 		} else if (!$("#funcIcon").val()) {
 			warning("請輸入ICON");
 			checkValue = false;
 		}
 		return checkValue;
+	}
+	
+	function statusCheck(){
+		if ($("#checkStatus").prop("checked")) {
+			$("#funcStatus").val("1");
+		} else {
+			$("#funcStatus").val("0");
+		}
 	}
 	
 });

@@ -13,6 +13,7 @@ public interface ProductDao {
 	public void add(Product product);
 	public void update(Product product);
 	public void delete(Product product);
+	public Product getData(Product product);
 	
 	// front
 	public List<Map<String, Object>> frontNewList(Product product);

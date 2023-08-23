@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -148,6 +149,157 @@ public class ProductManagement {
 			e.printStackTrace();
 		}
 
+	}
+
+	@RequestMapping(value = "/addProduct" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addProduct(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
+		
+		try {
+			Product product = new Product();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productCollectionList", productCollectionList);
+			model.addAttribute("product", product);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/product/productForm";
+	}
+	
+	@RequestMapping(value = "/updateProduct" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateProduct(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Product product, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
+		
+		try {
+			product = productService.getData(product);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productCollectionList", productCollectionList);
+			model.addAttribute("product", product);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/product/productForm";
+	}
+	
+	@RequestMapping(value = "/productAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String productAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Product product,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			product.setPdCreateBy(employeeSession.getEmpName());
+			product.setPdUpdateBy(employeeSession.getEmpName());
+			productService.add(product);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/productUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String productUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Product product,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			product.setPdUpdateBy(employeeSession.getEmpName());
+			productService.update(product);
+			model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/addProductCollection" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addProductCollection(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			ProductCollection productCollection = new ProductCollection();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productCollection", productCollection);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/product/productCollectionForm";
+	}
+	
+	@RequestMapping(value = "/updateProductCollection" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateProductCollection(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute ProductCollection productCollection, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			productCollection = productCollectionService.getData(productCollection);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productCollection", productCollection);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/product/productCollectionForm";
+	}
+	
+	@RequestMapping(value = "/productCollectionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String productCollectionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute ProductCollection productCollection,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			productCollectionService.add(productCollection);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/productCollectionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String productCollectionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute ProductCollection productCollection,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			productCollectionService.update(productCollection);
+			model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
 	}
 	
 }
