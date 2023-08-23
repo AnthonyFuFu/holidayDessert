@@ -40,5 +40,10 @@ public class CouponServiceImpl implements CouponService{
 	public void takeDown(Coupon coupon) {
 		couponDao.takeDown(coupon);
 	}
+
+	@Override
+	public Coupon getData(Coupon coupon) {
+		return couponDao.getData(coupon);
+	}
 	
 }

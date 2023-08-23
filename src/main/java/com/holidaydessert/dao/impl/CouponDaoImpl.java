@@ -140,4 +140,35 @@ public class CouponDaoImpl implements CouponDao {
 		
 	}
 
+	@Override
+	public Coupon getData(Coupon coupon) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.coupon "
+				   + " WHERE CP_ID = ? ";
+		
+		args.add(coupon.getCpId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Coupon item = new Coupon();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String cpId = String.valueOf(resultMap.get("CP_ID"));
+	        String cpName = String.valueOf(resultMap.get("CP_NAME"));
+	        String cpDiscount = String.valueOf(resultMap.get("CP_DISCOUNT"));
+	        String cpStatus = String.valueOf(resultMap.get("CP_STATUS"));
+	        String cpPic = String.valueOf(resultMap.get("CP_PIC"));
+	        
+	        item.setCpId(cpId);
+	        item.setCpName(cpName);
+	        item.setCpDiscount(cpDiscount);
+	        item.setCpStatus(cpStatus);
+	        item.setCpPic(cpPic);
+	        
+	    }
+		return item == null ? null : item;
+	}
+
 }

@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -148,6 +149,78 @@ public class CouponManagement {
 			e.printStackTrace();
 		}
 
+	}
+	
+	@RequestMapping(value = "/addCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			Coupon coupon = new Coupon();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("coupon", coupon);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/coupon/couponForm";
+	}
+	
+	@RequestMapping(value = "/updateCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Coupon coupon, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			coupon = couponService.getData(coupon);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("coupon", coupon);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/coupon/couponForm";
+	}
+	
+	@RequestMapping(value = "/couponAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String couponAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Coupon coupon,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			couponService.add(coupon);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/couponUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String couponUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Coupon coupon,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			couponService.update(coupon);
+			model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
 	}
 	
 }

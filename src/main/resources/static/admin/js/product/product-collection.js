@@ -91,7 +91,6 @@ $(function() {
 		]
     });
     
-    
     $("#product-collection-table").on("click", ".btn-update", function() {
 		let pdcId = $(this).data('id');
 		let action = "/holidayDessert/admin/product/updateProductCollection";

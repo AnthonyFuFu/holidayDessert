@@ -49,9 +49,8 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
+                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/coupon/addCoupon}">新增優惠券</a></li>
                                         <li><a href="javascript:void(0);">Action</a></li>
-                                        <li><a href="javascript:void(0);">Another action</a></li>
-                                        <li><a href="javascript:void(0);">Something else here</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -76,6 +75,7 @@
                                             				<th>折抵金額</th>
                                             				<th>優惠券狀態</th>
                                             				<th>優惠券圖片</th>
+                                            				<th>功能</th>
                                         				</tr>
                                     				</thead>
                                 				</table>

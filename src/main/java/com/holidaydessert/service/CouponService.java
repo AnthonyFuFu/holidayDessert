@@ -13,5 +13,6 @@ public interface CouponService {
 	public void add(Coupon coupon);
 	public void update(Coupon coupon);
 	public void takeDown(Coupon coupon);
+	public Coupon getData(Coupon coupon);
 	
 }

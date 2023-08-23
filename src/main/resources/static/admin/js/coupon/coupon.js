@@ -75,29 +75,135 @@ $(function() {
 				render: function(data, type, row, meta) {
 					return row.CP_PIC;
 				}
+			},
+			{
+				targets: [5],
+				data: "CP_ID",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.CP_ID + "'><i class='material-icons'>edit</i></button> ";
+				}
 			}
 		],
 		columns: [
-			{
-				data: "CP_ID",
-				defaultContent: ""
-			},
-			{
-				data: "CP_NAME",
-				defaultContent: ""
-			},
-			{
-				data: "CP_DISCOUNT",
-				defaultContent: ""
-			},
-			{
-				data: "STATUS",
-				defaultContent: ""
-			},
-			{
-				data: "CP_PIC",
-				defaultContent: ""
-			}
+			{ data: "CP_ID" },
+			{ data: "CP_NAME" },
+			{ data: "CP_DISCOUNT" },
+			{ data: "STATUS" },
+			{ data: "CP_PIC" },
+        	{
+            	data: "CP_ID",
+            	render: function(data, type, row, meta) {
+                	return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.CP_ID + "'><i class='material-icons'>edit</i></button> ";
+            	}
+        	}
 		]
     });
+    
+    $("#coupon-table").on("click", ".btn-update", function() {
+		let cpId = $(this).data('id');
+		let action = "/holidayDessert/admin/coupon/updateCoupon";
+		let url = window.location.origin + action + "?cpId=" + cpId;
+		window.location.href = url;
+	});
+    
+	$('#add-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+            success("新增完成");
+        }
+    });
+    
+    $('#update-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+            success("修改完成");
+        }
+    });
+    
+	function success(message) {
+   		swal({
+        	title: message,
+        	type: "success",
+        	showCancelButton: false,
+        	confirmButtonColor: "#3085d6",
+        	confirmButtonText: "確定"
+    	}, function(result) {
+			if (result == true && message == "新增完成") {
+            	$("#mainForm").attr("action", "couponAddSubmit");
+            	$("#mainForm").submit();
+        	} else if (result == true && message == "修改完成") {
+				$("#mainForm").attr("action", "couponUpdateSubmit");
+            	$("#mainForm").submit();
+			}
+    	})
+	}
+	
+	function warning(message) {
+    	swal({
+        	title: message,
+        	type: "warning",
+        	confirmButtonColor: "#DD6B55",
+        	confirmButtonText: "確定",
+        	closeOnConfirm: false
+    	});
+	}
+
+	function checkValue() {
+		let checkValue = true;
+		if (!$("#cpName").val()) {
+			warning("請輸入優惠券名稱");
+			checkValue = false;
+		} else if (!$("#cpDiscount").val()) {
+			warning("請輸入折抵金額");
+			checkValue = false;
+		} else if (checkImage() == false) {
+			warning("請選擇圖片格式文件");
+			checkValue = false;
+		}
+		
+		if ($("#cpId").val() == null || $("#cpId").val() == "") {
+			if ($("#imageFile").val() == "") {
+				warning("請選擇圖片");
+				return false;
+			}
+		}
+		
+		return checkValue;
+	}
+	
+	function statusCheck(){
+		if ($("#checkStatus").prop("checked")) {
+			$("#cpStatus").val("1");
+		} else {
+			$("#cpStatus").val("0");
+		}
+	}
+	
+	function checkImage() {
+        let imageFile = $('#imageFile')[0];
+        if (imageFile.files.length > 0) {
+            let file = imageFile.files[0];
+            let allowedTypes = ['image/jpg','image/jpeg','image/png','image/gif'];
+
+            if (allowedTypes.indexOf(file.type) === -1) {
+				warning("請選擇圖片格式文件 (JPG, JPEG, PNG 或 GIF)");
+                return false;
+            }
+            return true;
+        }
+    };
+	
+	$("#imageFile").change(addimage);
+
+	function addimage() {
+		if (checkImage() == true){
+			let couponImg = $("#couponImg");
+			couponImg.attr('src', URL.createObjectURL(this.files[0]));
+		}
+	};
+	
 });
