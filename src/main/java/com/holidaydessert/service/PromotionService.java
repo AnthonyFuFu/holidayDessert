@@ -13,6 +13,7 @@ public interface PromotionService {
 	public void add(Promotion promotion);
 	public void update(Promotion promotion);
 	public void takeDown(Promotion promotion);
+	public List<Map<String, Object>> getList();
 	
 	// front
 	public List<Map<String, Object>> nearestStartList(Promotion promotion);

@@ -38,12 +38,18 @@ public class BannerDaoImpl implements BannerDao {
 
 	@Override
 	public void add(Banner banner) {
+
+		List<Object> args = new ArrayList<>();
 		
 		String sql = " INSERT INTO holiday_dessert.banner "
-				   + " (NEWS_ID, BAN_PIC) "
-				   + " VALUES(?, ?) ";
-		
-		jdbcTemplate.update(sql, new Object[] {banner.getNewsId(), banner.getBanPic() });
+				   + " (NEWS_ID, BAN_PICTURE, BAN_IMAGE) "
+				   + " VALUES(?, ?, ?) ";
+
+		args.add(banner.getNewsId());
+		args.add(banner.getBanPicture());
+		args.add(banner.getBanImage());
+
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 

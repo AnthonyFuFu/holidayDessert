@@ -102,11 +102,19 @@ public class CouponDaoImpl implements CouponDao {
 	@Override
 	public void add(Coupon coupon) {
 
-		String sql = " INSERT INTO holiday_dessert.coupon "
-				   + " (CP_NAME, CP_DISCOUNT, CP_STATUS, CP_PIC) "
-				   + " VALUES(?, ?, ?, ?) ";
+		List<Object> args = new ArrayList<>();
 		
-		jdbcTemplate.update(sql, new Object[] { coupon.getCpName(), coupon.getCpDiscount(), coupon.getCpStatus(), coupon.getCpPic() });
+		String sql = " INSERT INTO holiday_dessert.coupon "
+				   + " (CP_NAME, CP_DISCOUNT, CP_STATUS, CP_PICTURE, CP_IMAGE) "
+				   + " VALUES(?, ?, ?, ?, ?) ";
+
+		args.add(coupon.getCpName());
+		args.add(coupon.getCpDiscount());
+		args.add(coupon.getCpStatus());
+		args.add(coupon.getCpPicture());
+		args.add(coupon.getCpImage());
+
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
@@ -116,13 +124,14 @@ public class CouponDaoImpl implements CouponDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.coupon "
-				   + " SET CP_NAME = ?, CP_DISCOUNT = ?, CP_STATUS = ?, CP_PIC = ? "
+				   + " SET CP_NAME = ?, CP_DISCOUNT = ?, CP_STATUS = ?, CP_PICTURE = ?, CP_IMAGE = ? "
 				   + " WHERE CP_ID = ? ";
 		
 		args.add(coupon.getCpName());
 		args.add(coupon.getCpDiscount());
 		args.add(coupon.getCpStatus());
-		args.add(coupon.getCpPic());
+		args.add(coupon.getCpPicture());
+		args.add(coupon.getCpImage());
 		args.add(coupon.getCpId());
 		
 		jdbcTemplate.update(sql, args.toArray());
@@ -131,12 +140,17 @@ public class CouponDaoImpl implements CouponDao {
 
 	@Override
 	public void takeDown(Coupon coupon) {
+
+		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.coupon "
 				   + " SET CP_STATUS = ? "
 				   + " WHERE CP_ID = ? ";
-		
-		jdbcTemplate.update(sql, new Object[] { coupon.getCpStatus(), coupon.getCpId() });
+
+		args.add(coupon.getCpStatus());
+		args.add(coupon.getCpId());
+
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
@@ -159,13 +173,15 @@ public class CouponDaoImpl implements CouponDao {
 	        String cpName = String.valueOf(resultMap.get("CP_NAME"));
 	        String cpDiscount = String.valueOf(resultMap.get("CP_DISCOUNT"));
 	        String cpStatus = String.valueOf(resultMap.get("CP_STATUS"));
-	        String cpPic = String.valueOf(resultMap.get("CP_PIC"));
+	        String cpPicture = String.valueOf(resultMap.get("CP_PICTURE"));
+	        String cpImage = String.valueOf(resultMap.get("CP_IMAGE"));
 	        
 	        item.setCpId(cpId);
 	        item.setCpName(cpName);
 	        item.setCpDiscount(cpDiscount);
 	        item.setCpStatus(cpStatus);
-	        item.setCpPic(cpPic);
+	        item.setCpPicture(cpPicture);
+	        item.setCpImage(cpImage);
 	        
 	    }
 		return item == null ? null : item;

@@ -163,6 +163,25 @@ public class PromotionDaoImpl implements PromotionDao {
 	}
 
 	@Override
+	public List<Map<String, Object>> getList() {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.promotion "
+				   + " WHERE PM_STATUS = 1 "
+				   + " AND CURDATE() BETWEEN PM_START AND PM_END ";
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+
+	}
+
+	@Override
 	public List<Map<String, Object>> nearestStartList(Promotion promotion) {
 		
 		String sql = " SELECT PM_ID, PM_NAME, PM_DESCRIPTION, PM_DISCOUNT, "

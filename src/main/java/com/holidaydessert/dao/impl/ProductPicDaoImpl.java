@@ -43,12 +43,13 @@ public class ProductPicDaoImpl implements ProductPicDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " INSERT INTO holiday_dessert.product_pic "
-				   + " (PD_ID, PD_PIC, PD_PIC_SORT) "
-				   + " VALUES(?, ?, ?) ";
+				   + " (PD_ID, PD_PIC_SORT, PD_PICTURE, PD_IMAGE) "
+				   + " VALUES(?, ?, ?, ?) ";
 		
 		args.add(productPic.getPdId());
-		args.add(productPic.getPdPic());
 		args.add(productPic.getPdPicSort());
+		args.add(productPic.getPdPicture());
+		args.add(productPic.getPdImage());
 		
 		jdbcTemplate.update(sql, args.toArray());
 		
@@ -60,10 +61,12 @@ public class ProductPicDaoImpl implements ProductPicDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.product_pic "
-				   + " SET PD_PIC_SORT = ?, "
+				   + " SET PD_PIC_SORT = ?, PD_PICTURE = ?, PD_IMAGE = ? "
 				   + " WHERE PD_PIC_ID = ? ";
 		
 		args.add(productPic.getPdPicSort());
+		args.add(productPic.getPdPicture());
+		args.add(productPic.getPdImage());
 		args.add(productPic.getPdPicId());
 		
 		jdbcTemplate.update(sql, args.toArray());

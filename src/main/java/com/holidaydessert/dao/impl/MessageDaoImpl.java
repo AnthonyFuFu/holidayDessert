@@ -65,15 +65,16 @@ public class MessageDaoImpl implements MessageDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " INSERT INTO holiday_dessert.product_pic "
-				   + " (EMP_ID, MEM_ID, MSG_CONTENT, MSG_TIME, MSG_DIRECTION, MSG_PIC) "
-				   + " VALUES(?, ?, ?, ?, ?, ?) ";
+				   + " (EMP_ID, MEM_ID, MSG_CONTENT, MSG_TIME, MSG_DIRECTION, MSG_PICTURE, MSG_IMAGE) "
+				   + " VALUES(?, ?, ?, ?, ?, ?, ?) ";
 		
 		args.add(message.getEmpId());
 		args.add(message.getMemId());
 		args.add(message.getMsgContent());
 		args.add(message.getMsgTime());
 		args.add(message.getMsgDirection());
-		args.add(message.getMsgPic());
+		args.add(message.getMsgPicture());
+		args.add(message.getMsgImage());
 		
 		jdbcTemplate.update(sql, args.toArray());
 		

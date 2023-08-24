@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
@@ -28,6 +30,7 @@ import com.holidaydessert.model.Coupon;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.MemberCoupon;
 import com.holidaydessert.service.AuthorityService;
+import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.CouponService;
 import com.holidaydessert.service.MemberCouponService;
 
@@ -41,6 +44,9 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "優惠券管理")
 public class CouponManagement {
 
+	@Value("${admin.upload.file.path}")
+	private String ADMIN_UPLOAD_FILE_PATH;
+	
 	@Value("${web.path}")
 	private String WEB_PATH;
 	
@@ -52,7 +58,10 @@ public class CouponManagement {
 
 	@Autowired
 	private MemberCouponService memberCouponService;
-	
+
+	@Autowired
+	private CommonService commonService;
+
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -194,10 +203,24 @@ public class CouponManagement {
 	@RequestMapping(value = "/couponAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String couponAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Coupon coupon,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
 		try {
+			String osName = System.getProperty("os.name").toLowerCase();
+
+			if (osName.contains("win")) {
+				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\"));
+			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
+			} else if (osName.contains("mac")) {
+				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
+			} else {
+				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
+			}
+			coupon.setCpPicture(WEB_PATH + "holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
 			couponService.add(coupon);
+			
 			model.addAttribute("MESSAGE", "資料新增成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -212,9 +235,32 @@ public class CouponManagement {
 	@RequestMapping(value = "/couponUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String couponUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Coupon coupon,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam(value = "originalImage", required = false) String originalImage,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
+			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
+			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
+				coupon.setCpImage(originalImage);
+			} else {
+				String osName = System.getProperty("os.name").toLowerCase();
+				if (osName.contains("win")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\");
+					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\"));
+				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
+				} else if (osName.contains("mac")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
+				} else {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
+				}
+			}
+			coupon.setCpPicture(WEB_PATH + "holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
+			
 			couponService.update(coupon);
 			model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
 		} catch (JSONException e) {

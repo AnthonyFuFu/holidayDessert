@@ -244,8 +244,8 @@ public class EmployeeManagement {
 	public String employeeUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Employee employee,
 			@RequestParam(value = "imageFile") MultipartFile imageFile,
-			@RequestParam(value = "originalImage", required = false) String originalImage, HttpServletRequest pRequest,
-			Model model) throws Exception {
+			@RequestParam(value = "originalImage", required = false) String originalImage,
+			HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
 			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url

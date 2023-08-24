@@ -13,6 +13,7 @@ public interface NewsDao {
 	public void add(News news);
 	public void update(News news);
 	public void delete(News news);
+	public News getData(News news);
 	
 	// front
 	public List<Map<String, Object>> frontList(News news);

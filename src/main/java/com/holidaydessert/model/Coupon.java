@@ -19,6 +19,7 @@ public class Coupon extends Base {
 	private String cpName;             // 優惠券名稱
 	private String cpDiscount;         // 優惠券折扣價格
 	private String cpStatus;           // 優惠券狀態(0:下架 1:上架)
-	private String cpPic;              // 優惠券圖片
+	private String cpPicture;          // 優惠券圖片路徑
+	private String cpImage;            // 優惠券圖片名稱
 
 }

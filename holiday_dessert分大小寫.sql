@@ -40,9 +40,9 @@ CONSTRAINT unikey_MEM_ACCOUNT unique(MEM_ACCOUNT)
 );
 INSERT INTO member(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS)
 VALUES  ('傅勝宏', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
-		('嘉寶貝', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1),
-        ('傅貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
-        ('傅寶', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
+		('嘉', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1),
+        ('貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
+        ('傅', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
         ('傅', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1)
         ;
 
@@ -92,7 +92,7 @@ CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DE
 );
 INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
 VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','http://localhost:8080/holidayDessert/admin/upload/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
-		('嘉寶貝', '2', '0987654321', '行銷+美編', '31500','http://localhost:8080/holidayDessert/admin/upload/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
+		('嘉', '2', '0987654321', '行銷+美編', '31500','http://localhost:8080/holidayDessert/admin/upload/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
         
 -- 功能-- 
 CREATE TABLE emp_function(
@@ -155,7 +155,8 @@ VALUES (null,'1','慶祝父親節','慶祝父親節，全館88折',CONCAT(CURDAT
 create table banner(
 BAN_ID	int auto_increment not null primary key,
 NEWS_ID	 int not null,
-BAN_PIC VARCHAR(100),
+BAN_PICTURE VARCHAR(300),
+BAN_IMAGE VARCHAR(100),
 CONSTRAINT banner_news_FK FOREIGN KEY (NEWS_ID) references news(NEWS_ID)
 );
 
@@ -172,7 +173,8 @@ create table message(
 	MSG_CONTENT varchar(3000),
 	MSG_TIME datetime default current_timestamp on update current_timestamp not null,
 	MSG_DIRECTION INT(1) not null,
-    MSG_PIC VARCHAR(100),
+    MSG_PICTURE VARCHAR(300),
+    MSG_IMAGE VARCHAR(100),
     constraint message_employee_fk foreign key (EMP_ID) references employee(EMP_ID),
     constraint message_member_fk foreign key (MEM_ID) references member(MEM_ID)
 );
@@ -210,15 +212,16 @@ create table product(
 );
 insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS, PD_IS_DEL,
 					PD_CREATE_BY,PD_CREATE_TIME,PD_UPDATE_BY,PD_UPDATE_TIME)
-values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1, 0,'嘉寶貝',NOW(),'嘉寶貝',NOW()),
-       (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1, 0,'嘉寶貝',NOW(),'嘉寶貝',NOW());
+values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1, 0,'嘉',NOW(),'嘉',NOW()),
+       (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1, 0,'嘉',NOW(),'嘉',NOW());
 
 -- 商品圖片 --
 create table product_pic (
 	PD_PIC_ID int auto_increment not null primary key,
     PD_ID int,
     PD_PIC_SORT int,
-    PD_PIC VARCHAR(100),
+    PD_PICTURE VARCHAR(300),
+    PD_IMAGE VARCHAR(100),
     constraint product_pic_product_fk foreign key (PD_ID) references product(PD_ID)
 );
 insert into product_pic(PD_ID, PD_PIC_SORT)
@@ -262,12 +265,13 @@ create table coupon(
     CP_NAME varchar(45) not null,
     CP_DISCOUNT int not null,
     CP_STATUS INT(1) not null,
-    CP_PIC VARCHAR(100)
+    CP_PICTURE VARCHAR(300),
+    CP_IMAGE VARCHAR(100)
 );
 insert into coupon(CP_NAME, CP_DISCOUNT, CP_STATUS)
 values ('50元購物金', 50, 1),
        ('10元折價券', 10, 0);
- 
+       
 -- 會員優惠券 --
 create table member_coupon(
 	MEM_CP_ID int auto_increment not null primary key,

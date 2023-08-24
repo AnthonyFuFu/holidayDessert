@@ -69,11 +69,15 @@ $(function() {
 			},
 			{
 				targets: [4],
-				data: "CP_PIC",
+				data: "CP_PICTURE",
 				searching: false,
 				orderable: false,
 				render: function(data, type, row, meta) {
-					return row.CP_PIC;
+					if (row.CP_PICTURE != '' && row.CP_PICTURE != null) {
+						return "<div class=\"preview\"><img class=\"couponImg\" src='" + row.CP_PICTURE + "' /></div>";
+					} else {
+						return "<div class=\"preview\"><img class=\"couponImg\"><span class=\"text\">預覽圖</span></div>"
+					}
 				}
 			},
 			{
@@ -91,7 +95,16 @@ $(function() {
 			{ data: "CP_NAME" },
 			{ data: "CP_DISCOUNT" },
 			{ data: "STATUS" },
-			{ data: "CP_PIC" },
+        	{
+            	data: "CP_PICTURE",
+            	render: function(data, type, row, meta) {
+                	if (row.CP_PICTURE != '' && row.CP_PICTURE != null) {
+                    	return "<div class=\"preview\"><img class=\"couponImg\" src='" + row.CP_PICTURE + "' /></div>";
+                	} else {
+                    	return "<div class=\"preview\"><img class=\"couponImg\"><span class=\"text\">預覽圖</span></div>";
+                	}
+            	}
+        	},
         	{
             	data: "CP_ID",
             	render: function(data, type, row, meta) {

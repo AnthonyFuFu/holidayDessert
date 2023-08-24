@@ -93,37 +93,117 @@ $(function() {
 				render: function(data, type, row, meta) {
 					return row.NEWS_END;
 				}
+			},
+			{
+				targets: [7],
+				data: "NEWS_ID",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.NEWS_ID + "'><i class='material-icons'>edit</i></button> ";
+				}
 			}
 		],
 		columns: [
-			{
-				data: "NEWS_ID",
-				defaultContent: ""
-			},
-			{
-				data: "NEWS_NAME",
-				defaultContent: ""
-			},
-			{
-				data: "NEWS_CONTENT",
-				defaultContent: ""
-			},
-			{
-				data: "PM_NAME",
-				defaultContent: ""
-			},
-			{
-				data: "STATUS",
-				defaultContent: ""
-			},
-			{
-				data: "NEWS_START",
-				defaultContent: ""
-			},
-			{
-				data: "NEWS_END",
-				defaultContent: ""
-			}
+			{ data: "NEWS_ID" },
+			{ data: "NEWS_NAME" },
+			{ data: "NEWS_CONTENT" },
+			{ data: "PM_NAME" },
+			{ data: "STATUS" },
+			{ data: "NEWS_START" },
+			{ data: "NEWS_END" },
+        	{
+            	data: "NEWS_ID",
+            	render: function(data, type, row, meta) {
+                	return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.NEWS_ID + "'><i class='material-icons'>edit</i></button> ";
+            	}
+        	}
 		]
     });
+    
+    $("#news-table").on("click", ".btn-update", function() {
+		let newsId = $(this).data('id');
+		let action = "/holidayDessert/admin/news/updateNews";
+		let url = window.location.origin + action + "?newsId=" + newsId;
+		window.location.href = url;
+	});
+    
+	$('#add-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+            success("新增完成");
+        }
+    });
+    
+    $('#update-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+            success("修改完成");
+        }
+    });
+    
+	function success(message) {
+   		swal({
+        	title: message,
+        	type: "success",
+        	showCancelButton: false,
+        	confirmButtonColor: "#3085d6",
+        	confirmButtonText: "確定"
+    	}, function(result) {
+			if (result == true && message == "新增完成") {
+            	$("#mainForm").attr("action", "newsAddSubmit");
+            	$("#mainForm").submit();
+        	} else if (result == true && message == "修改完成") {
+				$("#mainForm").attr("action", "newsUpdateSubmit");
+            	$("#mainForm").submit();
+			}
+    	})
+	}
+	
+	function warning(message) {
+    	swal({
+        	title: message,
+        	type: "warning",
+        	confirmButtonColor: "#DD6B55",
+        	confirmButtonText: "確定",
+        	closeOnConfirm: false
+    	});
+	}
+
+	function checkValue() {
+		let checkValue = true;
+		if (!$("#newsName").val()) {
+			warning("請輸入最新消息名稱");
+			checkValue = false;
+		} else if (!$("#newsContent").val()) {
+			warning("請輸入最新消息內容");
+			checkValue = false;
+		} else if (!$("#newsStart").val()) {
+			warning("請選擇開始時間");
+			checkValue = false;
+		} else if (!$("#newsEnd").val()) {
+			warning("請選擇結束時間");
+			checkValue = false;
+		}
+		return checkValue;
+	}
+
+	function statusCheck(){
+		if ($("#checkStatus").prop("checked")) {
+			$("#newsStatus").val("1");
+		} else {
+			$("#newsStatus").val("0");
+		}
+	}
+	
+    autosize($('textarea.auto-growth'));
+    $('.datepicker').bootstrapMaterialDatePicker({
+        format: 'YYYY-MM-DD',
+        clearButton: true,
+        weekStart: 1,
+        time: false
+    });
+    
 });

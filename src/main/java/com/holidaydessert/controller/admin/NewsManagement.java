@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -27,6 +28,7 @@ import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.News;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.NewsService;
+import com.holidaydessert.service.PromotionService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -47,6 +49,9 @@ public class NewsManagement {
 	@Autowired
 	private NewsService newsService;
 
+	@Autowired
+	private PromotionService promotionService;
+	
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -102,6 +107,82 @@ public class NewsManagement {
 			e.printStackTrace();
 		}
 
+	}
+
+	@RequestMapping(value = "/addNews" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addNews(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> promotionList = promotionService.getList();
+		
+		try {
+			News news = new News();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("promotionList", promotionList);
+			model.addAttribute("news", news);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/news/newsForm";
+	}
+	
+	@RequestMapping(value = "/updateNews" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateNews(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute News news, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> promotionList = promotionService.getList();
+		
+		try {
+			news = newsService.getData(news);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("promotionList", promotionList);
+			model.addAttribute("news", news);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/news/newsForm";
+	}
+	
+	@RequestMapping(value = "/newsAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String newsAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute News news,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			newsService.add(news);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/news/list");
+
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/newsUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String newsUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute News news,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			newsService.update(news);
+			model.addAttribute("PATH", "/holidayDessert/admin/news/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
 	}
 	
 }
