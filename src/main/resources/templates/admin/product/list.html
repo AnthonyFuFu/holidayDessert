@@ -116,7 +116,12 @@
 																<div class="carousel-inner" role="listbox">
 																	<div class="item" th:each="productPic, iterStat : ${product.productPicList}"
 																		th:classappend="${iterStat.index == 0} ? 'active'">
-																		<img th:src="${productPic.PD_PICTURE}">
+																		<img th:src="${productPic.PD_PICTURE}"
+																			th:if="${productPic.PD_PICTURE}">
+																		<img th:unless="${productPic.PD_PICTURE}"
+																			src="http://placehold.it/500x300"
+																			class="img-responsive">
+
 																		<div class="carousel-caption">
 																			<h5 th:text="${product.PD_NAME}"></h5>
 																		</div>
