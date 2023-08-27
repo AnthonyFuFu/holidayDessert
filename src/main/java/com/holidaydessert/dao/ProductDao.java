@@ -14,6 +14,7 @@ public interface ProductDao {
 	public void update(Product product);
 	public void delete(Product product);
 	public Product getData(Product product);
+	public List<Map<String, Object>> getPicList();
 	
 	// front
 	public List<Map<String, Object>> frontNewList(Product product);

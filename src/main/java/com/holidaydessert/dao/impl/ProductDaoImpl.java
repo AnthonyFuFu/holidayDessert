@@ -234,6 +234,27 @@ public class ProductDaoImpl implements ProductDao {
 	}
 
 	@Override
+	public List<Map<String, Object>> getPicList() {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT PD_ID, p.PDC_ID, PDC_NAME, PD_NAME, PD_PRICE, PD_DESCRIPTION, "
+				   + " PD_DISPLAY_QUANTITY, PD_STATUS, PD_IS_DEL, PD_CREATE_BY, PD_UPDATE_BY "
+				   + " FROM holiday_dessert.product p "
+				   + " LEFT JOIN product_collection pc ON p.PDC_ID = pc.PDC_ID "
+				   + " WHERE PD_IS_DEL = 0 ";
+
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+
+	}
+
+	@Override
 	public List<Map<String, Object>> frontNewList(Product product) {
 
 		String sql = " SELECT p.PD_ID, PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, "

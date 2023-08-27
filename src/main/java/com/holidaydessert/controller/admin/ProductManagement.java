@@ -27,8 +27,10 @@ import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Product;
 import com.holidaydessert.model.ProductCollection;
+import com.holidaydessert.model.ProductPic;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.ProductCollectionService;
+import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
 
 import io.swagger.annotations.Api;
@@ -52,7 +54,10 @@ public class ProductManagement {
 	
 	@Autowired
 	private ProductCollectionService productCollectionService;
-
+	
+	@Autowired
+	private ProductPicService productPicService;
+	
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -64,7 +69,16 @@ public class ProductManagement {
 		authority.setEmpId(employeeSession.getEmpId());
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
+		List<Map<String, Object>> productList = productService.getPicList();
+		for (int i = 0; i < productList.size(); i++) {
+			ProductPic productPic = new ProductPic();
+			productPic.setPdId(productList.get(i).get("PD_ID").toString());
+			List<Map<String, Object>> productPicList = productPicService.list(productPic);
+			productList.get(i).put("productPicList", productPicList);
+		}
+		
 		model.addAttribute("authorityList", authorityList);
+		model.addAttribute("productList", productList);
 		return "admin/product/list";
 
 	}

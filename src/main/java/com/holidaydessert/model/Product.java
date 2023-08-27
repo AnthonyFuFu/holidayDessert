@@ -1,5 +1,8 @@
 package com.holidaydessert.model;
 
+import java.util.List;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,5 +30,7 @@ public class Product extends Base {
 	private String pdCreateTime;       // 商品創建時間
 	private String pdUpdateBy;         // 商品最後修改人
 	private String pdUpdateTime;       // 商品最後修改時間
+	
+	private List<Map<String, Object>> productPicList;
 	
 }
