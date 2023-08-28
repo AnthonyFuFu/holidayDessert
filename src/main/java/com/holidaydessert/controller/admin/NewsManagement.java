@@ -24,9 +24,11 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
+import com.holidaydessert.model.Banner;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.News;
 import com.holidaydessert.service.AuthorityService;
+import com.holidaydessert.service.BannerService;
 import com.holidaydessert.service.NewsService;
 import com.holidaydessert.service.PromotionService;
 
@@ -52,6 +54,9 @@ public class NewsManagement {
 	@Autowired
 	private PromotionService promotionService;
 	
+	@Autowired
+	private BannerService bannerService;
+	
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -63,7 +68,17 @@ public class NewsManagement {
 		authority.setEmpId(employeeSession.getEmpId());
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
+		List<Map<String, Object>> newsList = newsService.getListForBanner();
+		
+		for (int i = 0; i < newsList.size(); i++) {
+			Banner banner = new Banner();
+			banner.setNewsId(newsList.get(i).get("NEWS_ID").toString());
+			List<Map<String, Object>> bannerList = bannerService.list(banner);
+			newsList.get(i).put("bannerList", bannerList);
+		}
+		
 		model.addAttribute("authorityList", authorityList);
+		model.addAttribute("newsList", newsList);
 		return "admin/news/list";
 
 	}

@@ -47,6 +47,11 @@ public class NewsServiceImpl implements NewsService {
 	}
 
 	@Override
+	public List<Map<String, Object>> getListForBanner() {
+		return newsDao.getListForBanner();
+	}
+
+	@Override
 	public List<Map<String, Object>> frontList(News news) {
 		return newsDao.frontList(news);
 	}

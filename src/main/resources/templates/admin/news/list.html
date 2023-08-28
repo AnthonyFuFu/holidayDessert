@@ -66,7 +66,6 @@
                                     </ul>
                                     <!-- Tab panes -->
                                     <div class="tab-content">
-                                    
                                         <div role="tabpanel" class="tab-pane fade in active" id="news_animation">
                                         	<div class="table-responsive">
                                 				<table id="news-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
@@ -87,9 +86,44 @@
                             			</div>
                             			
                                         <div role="tabpanel" class="tab-pane fade" id="banner_animation">
-
+                                        	<div class="row">
+												<!-- With Captions -->
+												<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" th:each="news : ${newsList}">
+													<div class="card">
+														<div class="body">
+															<div th:id="'banner_'+${news.NEWS_ID}" class="carousel slide" data-ride="carousel">
+																<!-- Indicators -->
+																<ol class="carousel-indicators">
+																	<li th:each="banner, iterStat : ${news.bannerList}" th:data-target="'#banner_'+${news.NEWS_ID}" th:data-slide-to="${iterStat.index}" th:class="${iterStat.index == 0} ? 'active'"></li>
+																</ol>
+																<div class="carousel-inner" role="listbox">
+																	<div th:if="${news.bannerList}" class="item" th:each="banner, iterStat : ${news.bannerList}" th:classappend="${iterStat.index == 0} ? 'active'">
+																		<img th:src="${banner.BAN_PICTURE}" th:if="${banner.BAN_PICTURE}">
+																		<img th:unless="${banner.BAN_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
+																		<div class="carousel-caption">
+																			<h5 th:text="${news.NEWS_NAME}"></h5>
+																		</div>
+																	</div>
+																	<div th:unless="${news.bannerList}">
+																		<img src="http://placehold.it/500x300" class="img-responsive">
+																	</div>
+																</div>
+																<!-- Controls -->
+																<a class="left carousel-control" th:href="'#banner_'+${news.NEWS_ID}" role="button" data-slide="prev">
+																	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+																	<span class="sr-only">Previous</span>
+																</a>
+																<a class="right carousel-control" th:href="'#banner_'+${news.NEWS_ID}" role="button" data-slide="next">
+																	<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+																	<span class="sr-only">Next</span>
+																</a>
+															</div>
+														</div>
+													</div>
+												</div>
+												<!-- #END# With Captions -->
+											</div>
                                         </div>
-                                        
                                     </div>
                                 </div>
                             </div>

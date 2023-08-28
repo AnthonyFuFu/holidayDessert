@@ -207,6 +207,27 @@ public class NewsDaoImpl implements NewsDao {
 	}
 
 	@Override
+	public List<Map<String, Object>> getListForBanner() {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT NEWS_ID, PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "
+				   + " DATE_FORMAT(NEWS_START, '%Y-%m-%d') NEWS_START, "
+				   + " DATE_FORMAT(NEWS_END, '%Y-%m-%d') NEWS_END, "
+				   + " DATE_FORMAT(NEWS_CREATE, '%Y-%m-%d %H:%i:%s') NEWS_CREATE "
+				   + " FROM holiday_dessert.news ";
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+
+	}
+
+	@Override
 	public List<Map<String, Object>> frontList(News news) {
 
 		String sql = " SELECT NEWS_ID, PM_ID, NEWS_NAME, NEWS_CONTENT, NEWS_STATUS, "

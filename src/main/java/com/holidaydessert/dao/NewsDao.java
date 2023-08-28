@@ -14,6 +14,7 @@ public interface NewsDao {
 	public void update(News news);
 	public void delete(News news);
 	public News getData(News news);
+	public List<Map<String, Object>> getListForBanner();
 	
 	// front
 	public List<Map<String, Object>> frontList(News news);

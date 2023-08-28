@@ -106,33 +106,29 @@
 												<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" th:each="product : ${productList}">
 													<div class="card">
 														<div class="body">
-															<div th:id="${product.PD_ID}" class="carousel slide" data-ride="carousel">
+															<div th:id="'productPic_'+${product.PD_ID}" class="carousel slide" data-ride="carousel">
 																<!-- Indicators -->
 																<ol class="carousel-indicators">
-																	<li th:each="productPic, iterStat : ${product.productPicList}" th:data-target="'#'+${product.PD_ID}"
-																		th:data-slide-to="${iterStat.index}"
-																		th:class="${iterStat.index == 0} ? 'active'"></li>
+																	<li th:each="productPic, iterStat : ${product.productPicList}" th:data-target="'#productPic_'+${product.PD_ID}" th:data-slide-to="${iterStat.index}" th:class="${iterStat.index == 0} ? 'active'"></li>
 																</ol>
 																<div class="carousel-inner" role="listbox">
-																	<div class="item" th:each="productPic, iterStat : ${product.productPicList}"
-																		th:classappend="${iterStat.index == 0} ? 'active'">
-																		<img th:src="${productPic.PD_PICTURE}"
-																			th:if="${productPic.PD_PICTURE}">
-																		<img th:unless="${productPic.PD_PICTURE}"
-																			src="http://placehold.it/500x300"
-																			class="img-responsive">
-
+																	<div th:if="${product.productPicList}" class="item" th:each="productPic, iterStat : ${product.productPicList}" th:classappend="${iterStat.index == 0} ? 'active'">
+																		<img th:if="${productPic.PD_PICTURE}" th:src="${productPic.PD_PICTURE}">
+																		<img th:unless="${productPic.PD_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
 																		<div class="carousel-caption">
 																			<h5 th:text="${product.PD_NAME}"></h5>
 																		</div>
 																	</div>
+																	<div th:unless="${product.productPicList}">
+																		<img src="http://placehold.it/500x300" class="img-responsive">
+																	</div>
 																</div>
 																<!-- Controls -->
-																<a class="left carousel-control" th:href="'#'+${product.PD_ID}" role="button" data-slide="prev">
+																<a class="left carousel-control" th:href="'#productPic_'+${product.PD_ID}" role="button" data-slide="prev">
 																	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
 																	<span class="sr-only">Previous</span>
 																</a>
-																<a class="right carousel-control" th:href="'#'+${product.PD_ID}" role="button" data-slide="next">
+																<a class="right carousel-control" th:href="'#productPic_'+${product.PD_ID}" role="button" data-slide="next">
 																	<span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
 																	<span class="sr-only">Next</span>
 																</a>

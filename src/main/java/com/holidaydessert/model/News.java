@@ -1,5 +1,8 @@
 package com.holidaydessert.model;
 
+import java.util.List;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,5 +26,7 @@ public class News extends Base {
 	private String newsStart;		   // 開始時間
 	private String newsEnd;			   // 結束時間
 	private String newsCreate;		   // 發布時間
+
+	private List<Map<String, Object>> bannerList;
 	
 }
