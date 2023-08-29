@@ -96,15 +96,39 @@
                                         </div>
                                         
                                         <div role="tabpanel" class="tab-pane fade" id="receipt_information_animation">
-                                        
+                                        	<div class="table-responsive">
+                                				<table id="receipt-information-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>ID</th>
+                                            				<th>會員ID</th>
+                                            				<th>收貨者姓名</th>
+                                            				<th>超商收貨地址</th>
+                                            				<th>收件人地址</th>
+                                            				<th>收件人聯絡電話</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
                                         </div>
                                         
                                         <div role="tabpanel" class="tab-pane fade" id="cart_animation">
-                                        
+                                        	<div class="table-responsive">
+                                				<table id="cart-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                            				<th>會員姓名</th>
+                                            				<th>會員帳號</th>
+                                            				<th>會員性別</th>
+                                            				<th>會員電話</th>
+                                            				<th>會員信箱</th>
+                                            				<th>商品名稱</th>
+                                            				<th>商品個數</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
                                         </div>
-                                        
-                                        
-                                        
                                         
                                     </div>
                                 </div>
@@ -122,6 +146,8 @@
 
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/member/member.js}"></script>
+<script th:src="@{/admin/js/member/receipt-information.js}"></script>
+<script th:src="@{/admin/js/member/cart.js}"></script>
 
 </body>
 </html>

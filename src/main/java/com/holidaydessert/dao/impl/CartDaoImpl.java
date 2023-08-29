@@ -22,10 +22,13 @@ public class CartDaoImpl implements CartDao {
 		
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT m.MEM_ID,MEM_NAME,MEM_ACCOUNT,MEM_GENDER,MEM_PHONE,MEM_EMAIL,CART_PD_QUANTITY,p.* "
+		String sql = " SELECT * FROM ( SELECT m.MEM_ID, MEM_NAME, MEM_ACCOUNT, MEM_GENDER, MEM_PHONE, "
+				   + " MEM_EMAIL, CART_PD_QUANTITY, PD_NAME, PD_IS_DEL, "
+				   + " CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER "
 				   + " FROM holiday_dessert.cart c "
 				   + " LEFT JOIN product p ON p.PD_ID = c.PD_ID "
-				   + " LEFT JOIN member m ON m.MEM_ID = c.MEM_ID ";
+				   + " LEFT JOIN member m ON m.MEM_ID = c.MEM_ID "
+				   + " ) AS subquery ";
 		
 		if (cart.getSearchText() != null && cart.getSearchText().length() > 0) {
 			String[] searchText = cart.getSearchText().split(" ");
@@ -38,13 +41,11 @@ public class CartDaoImpl implements CartDao {
 				}
 				sql += " INSTR(MEM_NAME, ?) > 0"
 					+  " OR INSTR(MEM_ACCOUNT, ?) > 0 "
-					+  " OR INSTR(MEM_GENDER, ?) > 0 "
+					+  " OR INSTR(GENDER, ?) > 0 "
 					+  " OR INSTR(MEM_PHONE, ?) > 0 "
 					+  " OR INSTR(MEM_EMAIL, ?) > 0 "
 					+  " OR INSTR(PD_NAME, ?) > 0 "
-					+  " OR INSTR(PD_DESCRIPTION, ?) > 0 "
 					+  " ) ";
-		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -80,9 +81,13 @@ public class CartDaoImpl implements CartDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM ( SELECT m.MEM_ID, MEM_NAME, MEM_ACCOUNT, MEM_GENDER, MEM_PHONE, "
+				   + " MEM_EMAIL,CART_PD_QUANTITY, PD_NAME, PD_IS_DEL, "
+				   + " CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER "
 				   + " FROM holiday_dessert.cart c "
 				   + " LEFT JOIN product p ON p.PD_ID = c.PD_ID "
-				   + " LEFT JOIN member m ON m.MEM_ID = c.MEM_ID ";
+				   + " LEFT JOIN member m ON m.MEM_ID = c.MEM_ID "
+				   + ") AS subquery ";
 		
 		if (cart.getSearchText() != null && cart.getSearchText().length() > 0) {
 			String[] searchText = cart.getSearchText().split(" ");
@@ -95,13 +100,11 @@ public class CartDaoImpl implements CartDao {
 				}
 				sql += " INSTR(MEM_NAME, ?) > 0"
 					+  " OR INSTR(MEM_ACCOUNT, ?) > 0 "
-					+  " OR INSTR(MEM_GENDER, ?) > 0 "
+					+  " OR INSTR(GENDER, ?) > 0 "
 					+  " OR INSTR(MEM_PHONE, ?) > 0 "
 					+  " OR INSTR(MEM_EMAIL, ?) > 0 "
 					+  " OR INSTR(PD_NAME, ?) > 0 "
-					+  " OR INSTR(PD_DESCRIPTION, ?) > 0 "
 					+  " ) ";
-		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
