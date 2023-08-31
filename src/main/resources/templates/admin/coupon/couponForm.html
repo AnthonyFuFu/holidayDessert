@@ -99,7 +99,7 @@
                                     	<input type="file" id="imageFile" name="imageFile" />
                                     	
 										<div id="preview" th:if="*{cpPicture} !=null and *{cpPicture} != '' " class="form-group">
-											<img id="couponImg" th:src="*{cpPicture}">
+											<img id="couponImg" th:src="@{|@{~}/*{cpPicture}|}">
 										</div>
 										<div id="preview" th:if="*{cpPicture} eq null or *{cpPicture} eq '' " class="form-group">
 											<img id="couponImg"><span class="couponText">預覽圖</span>

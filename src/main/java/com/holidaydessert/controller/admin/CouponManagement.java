@@ -47,9 +47,6 @@ public class CouponManagement {
 	@Value("${admin.upload.file.path}")
 	private String ADMIN_UPLOAD_FILE_PATH;
 	
-	@Value("${web.path}")
-	private String WEB_PATH;
-	
 	@Autowired
 	private AuthorityService authorityService;
 	
@@ -218,7 +215,7 @@ public class CouponManagement {
 			} else {
 				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
 			}
-			coupon.setCpPicture(WEB_PATH + "holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
+			coupon.setCpPicture("holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
 			couponService.add(coupon);
 			
 			model.addAttribute("MESSAGE", "資料新增成功");
@@ -259,7 +256,7 @@ public class CouponManagement {
 					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
 				}
 			}
-			coupon.setCpPicture(WEB_PATH + "holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
+			coupon.setCpPicture("holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
 			
 			couponService.update(coupon);
 			model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");

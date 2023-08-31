@@ -1,4 +1,8 @@
 $(function() {
+	
+	let port = window.location.port;
+	let httpUrl = window.location.protocol + '//' + window.location.hostname + (port ? ':' + port : '') + '/';
+	
 	$('#employee-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
@@ -138,7 +142,7 @@ $(function() {
 				orderable: false,
 				render: function(data, type, row, meta) {
 					if (row.EMP_PICTURE != '' && row.EMP_PICTURE != null) {
-						return "<div class=\"preview\"><img class=\"empImg\" src='" + row.EMP_PICTURE + "' /></div>";
+						return "<div class=\"preview\"><img class=\"empImg\" src='" + httpUrl + row.EMP_PICTURE + "' /></div>";
 					} else {
 						return "<div class=\"preview\"><img class=\"empImg\"><span class=\"text\">預覽圖</span></div>"
 					}
@@ -169,7 +173,7 @@ $(function() {
             	data: "EMP_PICTURE",
             	render: function(data, type, row, meta) {
                 	if (row.EMP_PICTURE != '' && row.EMP_PICTURE != null) {
-                    	return "<div class=\"preview\"><img class=\"empImg\" src='" + row.EMP_PICTURE + "' /></div>";
+                    	return "<div class=\"preview\"><img class=\"empImg\" src='" + httpUrl + row.EMP_PICTURE + "' /></div>";
                 	} else {
                     	return "<div class=\"preview\"><img class=\"empImg\"><span class=\"text\">預覽圖</span></div>";
                 	}
@@ -269,6 +273,9 @@ $(function() {
 			checkValue = false;
 		} else if (!$("#empJob").val()) {
 			warning("請輸入職稱");
+			checkValue = false;
+		} else if ($("#empLevel").val() == 'N') {
+			warning("請選擇等級");
 			checkValue = false;
 		} else if (!$("#empSalary").val()) {
 			warning("請輸入薪水");

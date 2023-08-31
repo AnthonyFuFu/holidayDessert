@@ -48,9 +48,6 @@ public class EmployeeManagement {
 	@Value("${admin.upload.file.path}")
 	private String ADMIN_UPLOAD_FILE_PATH;
 	
-	@Value("${web.path}")
-	private String WEB_PATH;
-	
 	@Autowired
 	private AuthorityService authorityService;
 	
@@ -226,7 +223,7 @@ public class EmployeeManagement {
 			} else {
 				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
 			}
-			employee.setEmpPicture(WEB_PATH + "holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
+			employee.setEmpPicture("holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
 			employeeService.add(employee);
 
 			model.addAttribute("MESSAGE", "資料新增成功");
@@ -267,7 +264,7 @@ public class EmployeeManagement {
 					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
 				}
 			}
-			employee.setEmpPicture(WEB_PATH + "holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
+			employee.setEmpPicture("holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
 			employeeService.update(employee);
 			
 			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");

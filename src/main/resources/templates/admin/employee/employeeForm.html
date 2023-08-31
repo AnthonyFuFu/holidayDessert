@@ -144,12 +144,12 @@
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
                                         <label for="empLevel">等級</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="empLevel" class="form-control" th:field="*{empLevel}" placeholder="請輸入等級(0:最高管理員 1:一般管理員)">
-                                            </div>
-                                        </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
+                                    	<select id="empLevel" class="form-control show-tick" th:field="*{empLevel}">
+                                        	<option value="N">-- 請選擇 --</option>
+                                        	<option value="0"> 最高管理員 </option>
+                                        	<option value="1"> 一般管理員 </option>
+                                    	</select>
                                     </div>
                                 </div>
                                 
@@ -175,7 +175,7 @@
                                     	<input type="file" id="imageFile" name="imageFile" />
                                     	
 										<div id="preview" th:if="*{empPicture} !=null and *{empPicture} != '' " class="form-group">
-											<img id="empImg" th:src="*{empPicture}" style="height:110px;width:90px;" >
+											<img id="empImg" th:src="@{|@{~}/*{empPicture}|}" style="height:110px;width:90px;" >
 										</div>
 										<div id="preview" th:if="*{empPicture} eq null or *{empPicture} eq '' " class="form-group">
 											<img id="empImg"><span class="text">預覽圖</span>

@@ -1,4 +1,8 @@
 $(function() {
+	
+	let port = window.location.port;
+	let httpUrl = window.location.protocol + '//' + window.location.hostname + (port ? ':' + port : '') + '/';
+	
 	$('#coupon-table').DataTable({
         bAutoWidth: false,
 		serverSide: true,
@@ -74,7 +78,7 @@ $(function() {
 				orderable: false,
 				render: function(data, type, row, meta) {
 					if (row.CP_PICTURE != '' && row.CP_PICTURE != null) {
-						return "<div class=\"preview\"><img class=\"couponImg\" src='" + row.CP_PICTURE + "' /></div>";
+						return "<div class=\"preview\"><img class=\"couponImg\" src='" + httpUrl + row.CP_PICTURE + "' /></div>";
 					} else {
 						return "<div class=\"preview\"><img class=\"couponImg\"><span class=\"text\">預覽圖</span></div>"
 					}
@@ -99,7 +103,7 @@ $(function() {
             	data: "CP_PICTURE",
             	render: function(data, type, row, meta) {
                 	if (row.CP_PICTURE != '' && row.CP_PICTURE != null) {
-                    	return "<div class=\"preview\"><img class=\"couponImg\" src='" + row.CP_PICTURE + "' /></div>";
+                    	return "<div class=\"preview\"><img class=\"couponImg\" src='" + httpUrl + row.CP_PICTURE + "' /></div>";
                 	} else {
                     	return "<div class=\"preview\"><img class=\"couponImg\"><span class=\"text\">預覽圖</span></div>";
                 	}
