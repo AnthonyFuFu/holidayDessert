@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/load/css :: css"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 商品管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
+</head>
+<body class="theme-red">
+
+    <!-- Page Loader -->
+    <div th:include="admin/load/pageloader :: pageloader" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <div th:include="admin/load/searchbar :: searchbar" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+    <nav th:include="admin/load/navbar :: navbar" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:include="admin/load/leftsidebar :: leftsidebar" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+        
+        <!-- Right Sidebar -->
+        <aside th:include="admin/load/rightsidebar :: rightsidebar" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+        
+			<!-- breadcrumbs -->
+            <div th:include="admin/load/breadcrumbs :: employee" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                        	<h2 th:text="${product.pdId != null and product.pdId != '' ? '商品 - 修改' : '商品 - 新增'}"></h2>
+                        </div>
+                        <div class="body">
+							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${product}" enctype="multipart/form-data">
+								
+								<input id="pdId" type="hidden" th:field="*{pdId}">
+								
+								<div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="pdName">商品名稱</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pdName" class="form-control" th:field="*{pdName}" placeholder="請輸入商品名稱">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+								<div class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="productCollection">請選擇商品分類</label>
+                                    </div>
+                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
+                                    	<select id="productCollection" class="form-control show-tick" th:field="*{pdcId}">
+                                        	<option value="0">-- 請選擇 --</option>
+                                        	<option th:each="productCollection:${productCollectionList}" th:value="${productCollection.PDC_ID}" th:text="${productCollection.PDC_NAME}"></option>
+                                    	</select>
+                                	</div>
+                            	</div>
+								
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="pdPrice">商品原價</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pdPrice" class="form-control" th:field="*{pdPrice}" placeholder="請輸入商品原價">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pdDescription">商品資訊</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pdDescription" class="form-control" th:field="*{pdDescription}" placeholder="請輸入商品資訊">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                 <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pdDisplayQuantity">商品圖片陳列數量</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pdDisplayQuantity" class="form-control" th:field="*{pdDisplayQuantity}" placeholder="請輸入商品圖片陳列數量">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pdStatus">前台商品狀態</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="switch">
+                                        		<input type="hidden" id="pdStatus" th:field="*{pdStatus}" />
+                                            	<label>前台下架<input type="checkbox" id="checkStatus" class="form-control" th:checked="*{pdStatus} == '0' ? 'false' : 'true'"><span class="lever switch-col-cyan"></span>前台上架</label>
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pdIsDel">商品狀態</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="switch">
+                                        		<input type="hidden" id="pdIsDel" th:field="*{pdIsDel}" />
+                                            	<label>下架<input type="checkbox" id="checkIsDel" class="form-control" th:checked="*{pdIsDel} == '0' ? 'false' : 'true'"><span class="lever switch-col-cyan"></span>上架</label>
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
+                                	<div class="row clearfix">
+                                		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{pdId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{pdId} ne null" type="button">修 改</button>
+                                    		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
+                                		</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<div th:include="admin/load/js :: js"></div>
+<div th:include="admin/load/js :: jquery-datatable"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/product/product.js}"></script>
+
+</body>
+</html>
+	

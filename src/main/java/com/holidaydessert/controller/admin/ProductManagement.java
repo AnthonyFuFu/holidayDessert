@@ -316,4 +316,52 @@ public class ProductManagement {
 		return "admin/toPath";
 	}
 	
+	@RequestMapping(value = "/addProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addProductPic(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
+		
+		try {
+			Product product = new Product();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productCollectionList", productCollectionList);
+			model.addAttribute("product", product);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/product/productPicForm";
+	}
+	
+	@RequestMapping(value = "/updateProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateProductPic(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Product product,@ModelAttribute ProductPic productPic, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
+		
+		productPic.setPdId(product.getPdId());
+		List<Map<String, Object>> productPicList = productPicService.list(productPic);
+		
+		try {
+			product = productService.getData(product);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productCollectionList", productCollectionList);
+			model.addAttribute("product", product);
+			model.addAttribute("productPicList", productPicList);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/product/productPicForm";
+	}
+	
 }

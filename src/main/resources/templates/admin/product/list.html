@@ -123,6 +123,7 @@
 																		<img src="http://placehold.it/500x300" class="img-responsive">
 																	</div>
 																</div>
+																<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/updateProductPic?pdId=}+${product.PD_ID}">修改</a>
 																<!-- Controls -->
 																<a class="left carousel-control" th:href="'#productPic_'+${product.PD_ID}" role="button" data-slide="prev">
 																	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
