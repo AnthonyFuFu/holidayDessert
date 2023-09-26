@@ -84,6 +84,39 @@ public class ProductPicDaoImpl implements ProductPicDao {
 	}
 
 	@Override
+	public ProductPic getData(ProductPic productPic) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT pic.*,pd.PD_NAME FROM holiday_dessert.product_pic pic "
+				   + " LEFT JOIN product pd on pd.PD_ID = pic.PD_ID "
+				   + " WHERE PD_PIC_ID = ? ";
+		
+		args.add(productPic.getPdPicId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		ProductPic pic = new ProductPic();
+		if (!list.isEmpty()) {
+	        Map<String, Object> resultMap = list.get(0);
+	        String pdPicId = String.valueOf(resultMap.get("PD_PIC_ID"));
+	        String pdId = String.valueOf(resultMap.get("PD_ID"));
+	        String pdPicSort = String.valueOf(resultMap.get("PD_PIC_SORT"));
+	        String pdPicture = String.valueOf(resultMap.get("PD_PICTURE"));
+	        String pdImage = String.valueOf(resultMap.get("PD_IMAGE"));
+	        String pdName = String.valueOf(resultMap.get("PD_NAME"));
+	        
+	        pic.setPdPicId(pdPicId);
+	        pic.setPdId(pdId);
+	        pic.setPdPicSort(pdPicSort);
+	        pic.setPdPicture(pdPicture);
+	        pic.setPdImage(pdImage);
+	        pic.setPdName(pdName);
+	    }
+		return pic == null ? null : pic;
+	}
+
+	@Override
 	public List<Map<String, Object>> frontRandList(ProductPic productPic) {
 
 		List<Object> args = new ArrayList<>();

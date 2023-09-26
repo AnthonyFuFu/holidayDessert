@@ -12,6 +12,7 @@ public interface ProductPicService {
 	public void add(ProductPic productPic);
 	public void update(ProductPic productPic);
 	public void delete(ProductPic productPic);
+	public ProductPic getData(ProductPic productPic);
 	
 	// front
 	public List<Map<String, Object>> frontRandList(ProductPic productPic);

@@ -37,6 +37,11 @@ public class ProductPicServiceImpl implements ProductPicService {
 	}
 
 	@Override
+	public ProductPic getData(ProductPic productPic) {
+		return productPicDao.getData(productPic);
+	}
+
+	@Override
 	public List<Map<String, Object>> frontRandList(ProductPic productPic) {
 		return productPicDao.frontRandList(productPic);
 	}

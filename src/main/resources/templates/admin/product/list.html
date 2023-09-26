@@ -113,7 +113,7 @@
 																</ol>
 																<div class="carousel-inner" role="listbox">
 																	<div th:if="${product.productPicList}" class="item" th:each="productPic, iterStat : ${product.productPicList}" th:classappend="${iterStat.index == 0} ? 'active'">
-																		<img th:if="${productPic.PD_PICTURE}" th:src="${productPic.PD_PICTURE}">
+																		<img th:if="${productPic.PD_PICTURE}" th:src="@{|@{~}/${productPic.PD_PICTURE}|}">
 																		<img th:unless="${productPic.PD_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
 																		<div class="carousel-caption">
 																			<h5 th:text="${product.PD_NAME}"></h5>
@@ -123,7 +123,7 @@
 																		<img src="http://placehold.it/500x300" class="img-responsive">
 																	</div>
 																</div>
-																<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/updateProductPic?pdId=}+${product.PD_ID}">修改</a>
+																<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/editProductPic?pdId=}+${product.PD_ID}">修改</a>
 																<!-- Controls -->
 																<a class="left carousel-control" th:href="'#productPic_'+${product.PD_ID}" role="button" data-slide="prev">
 																	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
