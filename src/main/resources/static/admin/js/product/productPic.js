@@ -1,16 +1,8 @@
 $(function() {
     
-    $("#product-table").on("click", ".btn-update", function() {
-		let pdId = $(this).data('id');
-		let action = "/holidayDessert/admin/product/updateProduct";
-		let url = window.location.origin + action + "?pdId=" + pdId;
-		window.location.href = url;
-	});
-    
 	$('#add-submit').on('click', function () {
 		let result = checkValue();
         if (result == true) {
-			isDeleteCheck();
             success("新增完成");
         }
     });
@@ -18,7 +10,6 @@ $(function() {
     $('#update-submit').on('click', function () {
 		let result = checkValue();
         if (result == true) {
-			isDeleteCheck();
             success("修改完成");
         }
     });
@@ -32,10 +23,10 @@ $(function() {
         	confirmButtonText: "確定"
     	}, function(result) {
 			if (result == true && message == "新增完成") {
-            	$("#mainForm").attr("action", "productAddSubmit");
+            	$("#mainForm").attr("action", "productPicAddSubmit");
             	$("#mainForm").submit();
         	} else if (result == true && message == "修改完成") {
-				$("#mainForm").attr("action", "productUpdateSubmit");
+				$("#mainForm").attr("action", "productPicUpdateSubmit");
             	$("#mainForm").submit();
 			}
     	})
@@ -50,15 +41,39 @@ $(function() {
         	closeOnConfirm: false
     	});
 	}
-
+	
+	function deletePic(message,pdPicId) {
+		swal({
+			title: message,
+			text: "被刪去的圖片無法復原 ! 確認刪除?",
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#DD6B55",
+			confirmButtonText: "刪除",
+			cancelButtonText: "取消",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}, function(result) {
+			if (result == true) {
+				swal("已刪除", "", "success");
+				productPicDelete(pdPicId);
+			} else {
+				swal("已取消", "", "error");
+			}
+		});
+	}
+	
 	function checkValue() {
 		let checkValue = true;
-		if (checkImage() == false) {
+		if (!$("#pdPicSort").val()) {
+			warning("圖片排序");
+			checkValue = false;
+		} else if (checkImage() == false) {
 			warning("請選擇圖片格式文件");
 			checkValue = false;
 		}
 		
-		if ($("#cpId").val() == null || $("#cpId").val() == "") {
+		if ($("#pdPicId").val() == null || $("#pdPicId").val() == "") {
 			if ($("#imageFile").val() == "") {
 				warning("請選擇圖片");
 				return false;
@@ -66,14 +81,6 @@ $(function() {
 		}
 		
 		return checkValue;
-	}
-	
-	function isDeleteCheck(){
-		if ($("#checkIsDel").prop("checked")) {
-			$("#pdIsDel").val("0");
-		} else {
-			$("#pdIsDel").val("1");
-		}
 	}
 	
 	function checkImage() {
@@ -90,13 +97,38 @@ $(function() {
         }
     };
 	
-	$("#imageFile").change(addimage);
+	$("#imageFile").change(addImage);
 
-	function addimage() {
+	function addImage() {
 		if (checkImage() == true){
-			let couponImg = $("#couponImg");
-			couponImg.attr('src', URL.createObjectURL(this.files[0]));
+			let pdImg = $("#pdImg");
+			pdImg.attr('src', URL.createObjectURL(this.files[0]));
 		}
 	};
+	
+	$(".btn-close").click(function(){
+		let pdPicId = $(this).data('id');
+		deletePic("確認刪除",pdPicId);
+	});
+	
+	function productPicDelete(pdPicId){
+		
+		$.ajax({
+			url : "productPicDelete",
+			cache: false,
+			async: false,
+			type : "POST",
+			dataType : 'text',
+			data : {
+				pdPicId:pdPicId
+			},
+			success : function(msg) {
+				
+			},
+			error : function(xhr, ajaxOptions, thrownError) {
+				alert('error');
+			}
+		});
+	}
 	
 });

@@ -58,6 +58,7 @@
 						<div class="body">
 							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${productPic}" enctype="multipart/form-data">
 								<input id="pdPicId" type="hidden" th:field="*{pdPicId}">
+								<input id="pdId" type="hidden" th:field="*{pdId}">
 								<div class="row clearfix">
 									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
 										<label for="pdName">商品</label>
@@ -89,33 +90,22 @@
 									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
 										<label for="imageFile">商品圖片</label>
 									</div>
-									
-<!-- 									<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7"> -->
-<!-- 										<label class="upload-file" for="imageFile"> 上傳圖片</label> -->
-<!--                                     	<input type="file" id="imageFile" name="imageFile" /> -->
-                                    	
-<!-- 										<div id="preview" th:if="*{empPicture} !=null and *{empPicture} != '' " class="form-group"> -->
-<!-- 											<img id="empImg" th:src="@{|@{~}/*{empPicture}|}" style="height:110px;width:90px;" > -->
-<!-- 										</div> -->
-<!-- 										<div id="preview" th:if="*{empPicture} eq null or *{empPicture} eq '' " class="form-group"> -->
-<!-- 											<img id="empImg"><span class="text">預覽圖</span> -->
-<!-- 										</div> -->
-<!-- 										<input type="hidden" id="originalImage" name="originalImage" th:value="*{empImage}" th:if="*{empImage}!=null"/> -->
-<!--                                     </div> -->
-									
 									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+										<label class="upload-file" for="imageFile"> 上傳圖片</label>
+                                    	<input type="file" id="imageFile" name="imageFile" />
 										<div class="card">
 											<div class="body">
 												<div th:id="*{pdPicId}" class="carousel slide" data-ride="carousel">
 													<div class="carousel-inner" role="listbox">
-														<div class="item active">
-															<img th:if="*{pdPicture}" th:src="@{|@{~}/*{pdPicture}|}">
-															<img th:unless="*{pdPicture}" src="http://placehold.it/500x300" class="img-responsive">
+														<div id="preview" class="item active">
+															<img id="pdImg" th:if="*{pdPicture} != 'null' and *{pdPicture} != null" th:src="@{|@{~}/*{pdPicture}|}">
+															<img id="pdImg" th:if="*{pdPicture} == 'null' or *{pdPicture} == null" src="http://placehold.it/500x300" class="img-responsive">
 														</div>
 													</div>
 												</div>
 											</div>
 										</div>
+										<input type="hidden" id="originalImage" name="originalImage" th:value="*{pdImage}" th:if="*{pdImage}!=null"/>
 									</div>
 								</div>
 								

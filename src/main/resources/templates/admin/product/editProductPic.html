@@ -60,6 +60,7 @@
 								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" th:each="productPic : ${productPicList}">
 									<div class="card">
 										<div class="body">
+											<div><img class="btn-close" th:data-id="${productPic.PD_PIC_ID}" th:src="@{/admin/upload/btn_close_m.png}" /></div>
 											<div th:id="'productPic_'+${productPic.PD_PIC_ID}" class="carousel slide" data-ride="carousel">
 												<!-- Wrapper for slides -->
 												<div class="carousel-inner" role="listbox">
@@ -68,7 +69,7 @@
 														<img th:unless="${productPic.PD_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
 													</div>
 												</div>
-												<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/updateProductPic?pdPicId=}+${productPic.PD_PIC_ID}">重新上傳圖片</a>
+												<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/updateProductPic?pdPicId=}+${productPic.PD_PIC_ID}">修改商品圖片</a>
 											</div>
 										</div>
 									</div>

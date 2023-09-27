@@ -77,3 +77,21 @@
 	padding: 7px;
 }
 
+.btn-close {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  transition: All 0.4s ease-in-out;
+  -webkit-transition: All 0.4s ease-in-out;
+  -moz-transition: All 0.4s ease-in-out;
+  -o-transition: All 0.4s ease-in-out;
+  z-index: 55;
+}
+
+.btn-close:hover {
+  transform: rotate(360deg);
+  -webkit-transform: rotate(360deg);
+  -moz-transform: rotate(360deg);
+  -o-transform: rotate(360deg);
+  -ms-transform: rotate(360deg);
+}

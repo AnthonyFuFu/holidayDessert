@@ -19,8 +19,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
@@ -29,6 +31,7 @@ import com.holidaydessert.model.Product;
 import com.holidaydessert.model.ProductCollection;
 import com.holidaydessert.model.ProductPic;
 import com.holidaydessert.service.AuthorityService;
+import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.ProductCollectionService;
 import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
@@ -43,8 +46,8 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "商品管理")
 public class ProductManagement {
 
-	@Value("${web.path}")
-	private String WEB_PATH;
+	@Value("${admin.upload.file.path}")
+	private String ADMIN_UPLOAD_FILE_PATH;
 	
 	@Autowired
 	private AuthorityService authorityService;
@@ -57,7 +60,10 @@ public class ProductManagement {
 	
 	@Autowired
 	private ProductPicService productPicService;
-	
+
+	@Autowired
+	private CommonService commonService;
+
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -380,6 +386,86 @@ public class ProductManagement {
 			e.printStackTrace();
 		}
 		return "admin/product/productPicForm";
+	}
+	
+
+	@RequestMapping(value = "/productPicAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String productPicAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute ProductPic productPic,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			String osName = System.getProperty("os.name").toLowerCase();
+
+			if (osName.contains("win")) {
+				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\productPic\\"));
+			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
+			} else if (osName.contains("mac")) {
+				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
+			} else {
+				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
+			}
+			productPic.setPdPicture("holidayDessert/admin/upload/images/productPic/" + productPic.getPdImage());
+			
+			productPicService.add(productPic);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/product/editProductPic?pdId="+productPic.getPdId());
+
+		return "admin/toPath";
+	}
+
+	@RequestMapping(value = "/productPicUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String productPicUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute ProductPic productPic,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam(value = "originalImage", required = false) String originalImage,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
+			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
+				productPic.setPdImage(originalImage);
+			} else {
+				String osName = System.getProperty("os.name").toLowerCase();
+				if (osName.contains("win")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\");
+					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\productPic\\"));
+				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
+				} else if (osName.contains("mac")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
+				} else {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
+				}
+			}
+			productPic.setPdPicture("holidayDessert/admin/upload/images/productPic/" + productPic.getPdImage());
+			
+			productPicService.update(productPic);
+			model.addAttribute("PATH", "/holidayDessert/admin/product/editProductPic?pdId="+productPic.getPdId());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/productPicDelete" , method = {RequestMethod.POST})
+	public String productPicDelete(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute ProductPic productPic, Model model, HttpServletRequest request) {
+		
+		productPic = productPicService.getData(productPic);
+		productPicService.delete(productPic);
+		model.addAttribute("PATH", "/holidayDessert/admin/product/editProductPic?pdId="+productPic.getPdId());
+		return "admin/toPath";
 	}
 	
 }
