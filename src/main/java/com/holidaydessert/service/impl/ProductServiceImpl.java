@@ -45,7 +45,12 @@ public class ProductServiceImpl implements ProductService {
 	public Product getData(Product product) {
 		return productDao.getData(product);
 	}
-
+	
+	@Override
+	public List<Map<String, Object>> getList() {
+		return productDao.getList();
+	}
+	
 	@Override
 	public List<Map<String, Object>> getPicList() {
 		return productDao.getPicList();

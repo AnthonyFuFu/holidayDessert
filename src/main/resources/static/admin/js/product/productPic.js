@@ -66,7 +66,10 @@ $(function() {
 	function checkValue() {
 		let checkValue = true;
 		if (!$("#pdPicSort").val()) {
-			warning("圖片排序");
+			warning("請輸入圖片排序");
+			checkValue = false;
+		} else if ($("#pdName").val() == '0') {
+			warning("請選擇商品");
 			checkValue = false;
 		} else if (checkImage() == false) {
 			warning("請選擇圖片格式文件");
@@ -122,13 +125,16 @@ $(function() {
 			data : {
 				pdPicId:pdPicId
 			},
-			success : function(msg) {
-				
+			success : function(result) {
+				let url = window.location.origin + "/holidayDessert/admin/product/" + result;
+				window.location.href = url;
 			},
-			error : function(xhr, ajaxOptions, thrownError) {
-				alert('error');
+			error : function(err, tst, xhr) {
+				alert(JSON.stringify(err.responseText));
+				alert('送單異常');
 			}
 		});
+		
 	}
 	
 });

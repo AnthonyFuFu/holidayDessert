@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -355,11 +356,14 @@ public class ProductManagement {
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		product = productService.getData(product);
 		
+		List<Map<String, Object>> productList = productService.getList();
+		
 		try {
 			ProductPic productPic = new ProductPic();
 			productPic.setPdId(product.getPdId());
 			productPic.setPdName(product.getPdName());
 			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productList", productList);
 			model.addAttribute("productPic", productPic);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -459,13 +463,14 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/productPicDelete" , method = {RequestMethod.POST})
+	@ResponseBody
 	public String productPicDelete(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute ProductPic productPic, Model model, HttpServletRequest request) {
 		
 		productPic = productPicService.getData(productPic);
 		productPicService.delete(productPic);
-		model.addAttribute("PATH", "/holidayDessert/admin/product/editProductPic?pdId="+productPic.getPdId());
-		return "admin/toPath";
+		
+		return "editProductPic?pdId="+productPic.getPdId();
 	}
 	
 }
