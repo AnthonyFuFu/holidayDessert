@@ -55,6 +55,11 @@ function register() {
 	setTimeout(window.open('/holidayDessert/member/register'), 500);
 	//$(location).attr("href", "/forecast/member/register");
 }
+
+function googleLogin() {
+	setTimeout(window.open('/forecast/google/login'), 500);
+}
+
 function forgetPD() {
 	$(location).attr("href", "/holidayDessert/member/forgetPD");
 }

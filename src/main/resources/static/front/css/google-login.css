@@ -1,0 +1,133 @@
+/* @font-face { */
+/*     font-family: 'Roboto'; */
+/*     font-style: normal; */
+/*     font-weight: 400; */
+/*     src: url(//fonts.gstatic.com/s/roboto/v18/KFOmCnqEu92Fr1Mu4mxP.ttf)format('truetype'); */
+/* } */
+
+/* @font-face { */
+/*     font-family: 'Roboto'; */
+/*     font-style: normal; */
+/*     font-weight: 500; */
+/*     src: url(//fonts.gstatic.com/s/roboto/v18/KFOlCnqEu92Fr1MmEU9fBBc9.ttf)format('truetype'); */
+/* } */
+
+/* @font-face { */
+/*     font-family: 'Google Sans'; */
+/*     font-style: normal; */
+/*     font-weight: 400; */
+/*     src: url(//fonts.gstatic.com/s/googlesans/v14/4UaGrENHsxJlGDuGo1OIlL3Owps.ttf)format('truetype'); */
+/* } */
+
+/* @font-face { */
+/*     font-family: 'Google Sans'; */
+/*     font-style: normal; */
+/*     font-weight: 500; */
+/*     src: url(//fonts.gstatic.com/s/googlesans/v14/4UabrENHsxJlGDuGo1OIlLU94YtzCwM.ttf)format('truetype'); */
+/* } */
+
+.google-logo-class {
+    display: block
+}
+
+.google-wide {
+    display: inline-block
+}
+
+.google-block-align {
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    -webkit-transition: background-color .218s, border-color .218s;
+    transition: background-color .218s, border-color .218s;
+    background-color: #fff;
+    background-image: none;
+    border: 1px solid #dadce0;
+    color: #3c4043;
+    cursor: pointer;
+    font-family: "Google Sans", arial, sans-serif;
+    font-size: 14px;
+    height: 40px;
+    letter-spacing: 0.25px;
+    outline: none;
+    overflow: hidden;
+    padding: 0 12px;
+    position: relative;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: auto
+}
+
+@media screen and (-ms-high-contrast:active) {
+    .google-block-align {
+        border: 2px solid windowText;
+        color: windowText;
+    }
+}
+
+.google-block-align.google-block-rounded {
+    -webkit-border-radius: 20px;
+    border-radius: 20px
+}
+
+.google-block-align .google-logo-align {
+    height: 18px;
+    margin-right: 8px;
+    min-width: 18px;
+    width: 18px
+}
+
+.google-block-align .google-align {
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: space-between;
+    -webkit-flex-wrap: nowrap;
+    flex-wrap: nowrap;
+    height: 100%;
+    position: relative;
+    width: 100%
+}
+
+.google-block-align .google-login {
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+    font-family: "Google Sans", arial, sans-serif;
+    font-weight: 500;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    vertical-align: top
+}
+
+.google-block-align .google-hover {
+    -webkit-transition: background-color .218s;
+    transition: background-color .218s;
+    bottom: 0;
+    left: 0;
+    position: absolute;
+    right: 0;
+    top: 0
+}
+
+.google-block-align:hover,
+.google-block-align:focus {
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    border-color: #d2e3fc;
+    outline: none
+}
+
+.google-block-align:hover .google-hover,
+.google-block-align:focus .google-hover {
+    background: rgba(66, 133, 244, .04)
+}
+
+.google-block-align:active .google-hover {
+    background: rgba(66, 133, 244, .1)
+}

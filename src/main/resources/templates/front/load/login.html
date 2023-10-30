@@ -24,6 +24,20 @@
 				<div class="btn-display">
 					<div class="btn-login" onclick="login()">登入</div>
 					<div class="btn-login" onclick="register()">註冊</div>
+					
+						<div id="google-container" onclick="googleLogin()" class="google-wide" style="padding: 2px 10px;">
+							<div tabindex="0" role="button" aria-labelledby="button-label" class="google-block-align google-block-rounded">
+								<div class="google-hover"></div>
+								<div class="google-align">
+									<div class="google-logo-align">
+										<img th:src="@{/front/images/google-logo.svg}" alt="Google Logo" class="google-logo-class">
+									</div>
+									<span class="google-login">使用 Google 帳戶登入</span>
+								</div>
+							</div>
+						</div>
+						
+						
 				</div>
 			</form>
 		</article>
