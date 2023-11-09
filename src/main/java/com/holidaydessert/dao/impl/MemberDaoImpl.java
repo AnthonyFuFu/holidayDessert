@@ -272,4 +272,49 @@ public class MemberDaoImpl implements MemberDao {
 		return user == null ? null : user;
 	}
 	
+	@Override
+	public Member getDataByGoogleUid(String googleUid) {
+
+		List<Object> args = new ArrayList<>();
+
+		String sql = " SELECT * FROM holiday_dessert.member "
+				   + " WHERE GOOGLE_UID = ? ";
+
+		args.add(googleUid);
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Member user = new Member();
+		if (!list.isEmpty()) {
+			Map<String, Object> resultMap = list.get(0);
+	        String memId = String.valueOf(resultMap.get("MEM_ID"));
+	        String memName = String.valueOf(resultMap.get("MEM_NAME"));
+	        String memAccount = String.valueOf(resultMap.get("MEM_ACCOUNT"));
+	        String memPassword = String.valueOf(resultMap.get("MEM_PASSWORD"));
+	        String memGender = String.valueOf(resultMap.get("MEM_GENDER"));
+	        String memPhone = String.valueOf(resultMap.get("MEM_PHONE"));
+	        String memEmail = String.valueOf(resultMap.get("MEM_EMAIL"));
+	        String memAddress = String.valueOf(resultMap.get("MEM_ADDRESS"));
+	        String memBirthday = String.valueOf(resultMap.get("MEM_BIRTHDAY"));
+	        String memStatus = String.valueOf(resultMap.get("MEM_STATUS")).equals("true") ? "1": "0";
+	        String memVerificationStatus = String.valueOf(resultMap.get("MEM_VERIFICATION_STATUS")).equals("true") ? "1": "0";
+	        String memVerificationCode = String.valueOf(resultMap.get("MEM_VERIFICATION_CODE"));
+	        
+	        user.setMemId(memId);
+	        user.setMemName(memName);
+	        user.setMemAccount(memAccount);
+	        user.setMemPassword(memPassword);
+	        user.setMemGender(memGender);
+	        user.setMemPhone(memPhone);
+	        user.setMemEmail(memEmail);
+	        user.setMemAddress(memAddress);
+	        user.setMemBirthday(memBirthday);
+	        user.setMemStatus(memStatus);
+	        user.setMemVerificationStatus(memVerificationStatus);
+	        user.setMemVerificationCode(memVerificationCode);
+	        
+	    }
+		return user == null ? null : user;
+	}
+	
 }

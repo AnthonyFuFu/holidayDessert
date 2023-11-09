@@ -57,7 +57,7 @@ function register() {
 }
 
 function googleLogin() {
-	setTimeout(window.open('/forecast/google/login'), 500);
+	setTimeout(window.open('/holidayDessert/google/login'), 500);
 }
 
 function forgetPD() {

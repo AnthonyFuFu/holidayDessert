@@ -3,6 +3,7 @@ package com.holidaydessert.controller;
 import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.google.common.base.Optional;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.MemberService;
 
@@ -109,14 +109,15 @@ public class FrontLoginController {
 		HttpSession session = pRequest.getSession();
 
 		// 獲取google用戶的屬性
-//		if (principal instanceof OAuth2User) {
-//			OAuth2User oAuth2User = (OAuth2User) principal;
-//			String oAuth2UserSub = (String) oAuth2User.getAttribute("sub");
-//			Optional<MemberAccount> optional = memberAccountService.getDataByGoogleUid(oAuth2UserSub);
-//			MemberAccount data = optional.orElse(null);
-//			// 落點專案已有帳號
-//			if (data != null) {
-//				try {
+		if (principal instanceof OAuth2User) {
+			OAuth2User oAuth2User = (OAuth2User) principal;
+			String oAuth2UserSub = (String) oAuth2User.getAttribute("sub");
+			Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
+			Member data = optional.orElse(null);
+			// 落點專案已有帳號
+			if (data != null) {
+				
+				try {
 //					Identity identity = new Identity();
 //					identity.setName("前台");
 //					Authorization authorization = new Authorization();
@@ -171,18 +172,17 @@ public class FrontLoginController {
 //					loginLog.setCategory("前台");
 //					loginLog.setIp(ip);
 //					loginLogService.add(loginLog);
-//
-//				} catch (Exception ex) {
-//					ex.printStackTrace();
-//				}
-//			}
-//		}
+
+				} catch (Exception ex) {
+					ex.printStackTrace();
+				}
+			}
+		}
 
 		RedirectView redirectView = new RedirectView();
-		redirectView.setUrl("/forecast/index"); // 設置要跳轉的URL
+		redirectView.setUrl("/holidayDessert/index"); // 設置要跳轉的URL
 		return redirectView;
 	}
-	
 	
 	private String getRemoteHost(HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
@@ -197,10 +197,5 @@ public class FrontLoginController {
 		}
 		return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
 	}
-	
-	
-	
-	
-	
 	
 }

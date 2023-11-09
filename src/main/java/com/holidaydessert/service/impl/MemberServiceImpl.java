@@ -2,6 +2,7 @@ package com.holidaydessert.service.impl;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -60,5 +61,10 @@ public class MemberServiceImpl implements MemberService {
 	public Member login(Member member) {
 		return memberDao.login(member);
 	}
-
+	
+	@Override
+	public Optional<Member> getDataByGoogleUid(String googleUid) {
+		return Optional.ofNullable(memberDao.getDataByGoogleUid(googleUid));
+	}
+	
 }

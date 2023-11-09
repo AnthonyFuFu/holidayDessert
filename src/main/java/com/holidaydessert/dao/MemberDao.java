@@ -19,5 +19,6 @@ public interface MemberDao {
 	public void updateVerification(Member member);
 	public void updatePassword(Member member);
 	public Member login(Member member);
+	public Member getDataByGoogleUid(String googleUid);
 	
 }
