@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
@@ -29,6 +32,7 @@ import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.News;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.BannerService;
+import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.NewsService;
 import com.holidaydessert.service.PromotionService;
 
@@ -42,8 +46,8 @@ import io.swagger.annotations.ApiOperation;
 @Api(tags = "最新消息管理")
 public class NewsManagement {
 
-	@Value("${web.path}")
-	private String WEB_PATH;
+	@Value("${admin.upload.file.path}")
+	private String ADMIN_UPLOAD_FILE_PATH;
 	
 	@Autowired
 	private AuthorityService authorityService;
@@ -56,7 +60,10 @@ public class NewsManagement {
 	
 	@Autowired
 	private BannerService bannerService;
-	
+
+	@Autowired
+	private CommonService commonService;
+
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -198,6 +205,156 @@ public class NewsManagement {
 			e.printStackTrace();
 		}
 		return "admin/toPath";
+	}
+
+	@RequestMapping(value = "/editBanner" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String editBanner(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute News news,@ModelAttribute Banner banner, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		banner.setNewsId(news.getNewsId());
+		List<Map<String, Object>> bannerList = bannerService.list(banner);
+		
+		try {
+			news = newsService.getData(news);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("news", news);
+			model.addAttribute("bannerList", bannerList);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/news/editBanner";
+	}
+
+	@RequestMapping(value = "/addBanner" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addBanner(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute News news, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		news = newsService.getData(news);
+		
+		List<Map<String, Object>> newsList = newsService.getList();
+		
+		try {
+			Banner banner = new Banner();
+			banner.setNewsId(news.getNewsId());
+			banner.setNewsName(news.getNewsName());
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("newsList", newsList);
+			model.addAttribute("banner", banner);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/news/bannerForm";
+	}
+	
+	@RequestMapping(value = "/updateBanner" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateBanner(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Banner banner, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			banner = bannerService.getData(banner);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("banner", banner);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/news/bannerForm";
+	}
+	
+
+	@RequestMapping(value = "/bannerAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String bannerAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Banner banner,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			HttpServletRequest pRequest, Model model) throws Exception {
+
+		try {
+			String osName = System.getProperty("os.name").toLowerCase();
+
+			if (osName.contains("win")) {
+				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\banner\\"));
+			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
+			} else if (osName.contains("mac")) {
+				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
+			} else {
+				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
+			}
+			banner.setBanPicture("holidayDessert/admin/upload/images/banner/" + banner.getBanImage());
+			
+			bannerService.add(banner);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/news/editBanner?newsId="+banner.getNewsId());
+
+		return "admin/toPath";
+	}
+
+	@RequestMapping(value = "/bannerUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String bannerUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Banner banner,
+			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam(value = "originalImage", required = false) String originalImage,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
+			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
+				banner.setBanImage(originalImage);
+			} else {
+				String osName = System.getProperty("os.name").toLowerCase();
+				if (osName.contains("win")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\banner\\");
+					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\banner\\"));
+				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/banner/");
+					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
+				} else if (osName.contains("mac")) {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/banner/");
+					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
+				} else {
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/banner/");
+					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
+				}
+			}
+			banner.setBanPicture("holidayDessert/admin/upload/images/banner/" + banner.getBanImage());
+			
+			bannerService.update(banner);
+			model.addAttribute("PATH", "/holidayDessert/admin/news/editBanner?newsId="+banner.getNewsId());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/bannerDelete" , method = {RequestMethod.POST})
+	@ResponseBody
+	public String bannerDelete(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Banner banner, Model model, HttpServletRequest request) {
+		
+		banner = bannerService.getData(banner);
+		bannerService.delete(banner);
+		
+		return "editBanner?newsId="+banner.getNewsId();
 	}
 	
 }

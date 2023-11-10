@@ -439,16 +439,16 @@ public class ProductManagement {
 			} else {
 				String osName = System.getProperty("os.name").toLowerCase();
 				if (osName.contains("win")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\");
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\productPic\\");
 					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\productPic\\"));
 				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/productPic/");
 					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
 				} else if (osName.contains("mac")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/productPic/");
 					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
 				} else {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
+					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/productPic/");
 					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
 				}
 			}

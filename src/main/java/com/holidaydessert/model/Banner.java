@@ -17,5 +17,7 @@ public class Banner {
 	private String newsId;             // 公告ID
 	private String banPicture;         // 公告Banner圖片路徑
 	private String banImage;           // 公告Banner圖片名稱
+
+	private String newsName;           // 最新消息名稱
 	
 }

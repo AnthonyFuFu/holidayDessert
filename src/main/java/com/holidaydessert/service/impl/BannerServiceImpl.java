@@ -27,10 +27,20 @@ public class BannerServiceImpl implements BannerService{
 	}
 
 	@Override
+	public void update(Banner banner) {
+		bannerDao.update(banner);
+	}
+
+	@Override
 	public void delete(Banner banner) {
 		bannerDao.delete(banner);
 	}
 
+	@Override
+	public Banner getData(Banner banner) {
+		return bannerDao.getData(banner);
+	}
+	
 	@Override
 	public List<Map<String, Object>> frontRandList(Banner banner) {
 		return bannerDao.frontRandList(banner);

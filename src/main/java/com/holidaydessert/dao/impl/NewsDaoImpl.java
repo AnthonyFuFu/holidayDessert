@@ -207,6 +207,24 @@ public class NewsDaoImpl implements NewsDao {
 	}
 
 	@Override
+	public List<Map<String, Object>> getList() {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.news "
+				   + " WHERE NEWS_STATUS = 1 ";
+
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+
+	}
+
+	@Override
 	public List<Map<String, Object>> getListForBanner() {
 
 		List<Object> args = new ArrayList<>();

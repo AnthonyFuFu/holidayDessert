@@ -41,16 +41,13 @@ public class FrontLoginController {
 		
 		String memEmail = pRequest.getParameter("memEmail") != null ? pRequest.getParameter("memEmail") : "";
 		String memPassword = pRequest.getParameter("memPassword") != null ? pRequest.getParameter("memPassword") : "";
-		System.out.println(memEmail);
-		System.out.println(memPassword);
+		
 		Map<String, Object> map = new HashMap<>();
 		
 		try {
-			
 			Member member = new Member();
 			member.setMemEmail(memEmail);
 			member.setMemPassword(memPassword);
-			
 			Member login = memberService.login(member);
 			
 			//檢查帳號密碼是否符合
@@ -114,10 +111,11 @@ public class FrontLoginController {
 			String oAuth2UserSub = (String) oAuth2User.getAttribute("sub");
 			Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
 			Member data = optional.orElse(null);
-			// 落點專案已有帳號
+			// 專案已有帳號
 			if (data != null) {
-				
 				try {
+					System.out.println(ip+"-"+session);
+					
 //					Identity identity = new Identity();
 //					identity.setName("前台");
 //					Authorization authorization = new Authorization();
@@ -130,16 +128,13 @@ public class FrontLoginController {
 //						data.setIdentity_id(String.valueOf(identity_id));
 //						memberAccountService.updateIdentity(data);
 //					}
-//
 //					MemberDetail memberDetail2 = new MemberDetail();
 //					memberDetail2.setMember_id(data.getId());
 //					int detailCount = memberDetailService.getCountByMember(memberDetail2);
-//
 //					List<Map<String, Object>> checkPreset = memberAccountService.getMembetPreset(data);
 //					if (checkPreset != null) {
 //						memberAccountService.updateExamNull(data);
 //					}
-//
 //					if (detailCount == 0 || checkPreset != null) {
 //						// 更新帳號權限
 //						Identity identity2 = new Identity();
@@ -150,21 +145,18 @@ public class FrontLoginController {
 //						memberAccount2.setIdentity_id(String.valueOf(identity_id));
 //						memberAccount2.setId(data.getId());
 //						memberAccountService.updateIdentity(memberAccount2);
-//
 //						data.setLevel("3");
 //						data.setIdentity_id(String.valueOf(identity_id));
-//
 //					}
-//
 //					if (!"".equals(data.getLevel()) && data.getLevel() != null
 //							&& Integer.valueOf(data.getLevel()) <= 2) {
 //						addMemberDetailCookie(data.getExam_number_id(), pRequest, pResponse);
 //					}
-//
-//					// session登錄
-//					session.setAttribute("memberAccountSession", data);
-//					session.setMaxInactiveInterval(60 * 60);
-//
+
+					// session登錄
+					session.setAttribute("memberSession", data);
+					session.setMaxInactiveInterval(60 * 60);
+
 //					LoginLog loginLog = new LoginLog();
 //					loginLog.setGoogle_uid(oAuth2UserSub);
 //					loginLog.setStatus("Y");
@@ -178,7 +170,6 @@ public class FrontLoginController {
 				}
 			}
 		}
-
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/holidayDessert/index"); // 設置要跳轉的URL
 		return redirectView;

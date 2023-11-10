@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/load/css :: css"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 商品管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
+</head>
+<body class="theme-red">
+
+    <!-- Page Loader -->
+    <div th:include="admin/load/pageloader :: pageloader" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <div th:include="admin/load/searchbar :: searchbar" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+    <nav th:include="admin/load/navbar :: navbar" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:include="admin/load/leftsidebar :: leftsidebar" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+        
+        <!-- Right Sidebar -->
+        <aside th:include="admin/load/rightsidebar :: rightsidebar" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+        
+			<!-- breadcrumbs -->
+            <div th:include="admin/load/breadcrumbs :: employee" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+			<div class="row clearfix">
+				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+					<div class="card">
+						<div class="header">
+            				<h2 th:text="${productPic.pdName != null and productPic.pdPicId != '' ? productPic.pdName : '商品'}+' '+${productPic.pdPicId != null and productPic.pdPicId != '' ? '圖片 - 修改' : '圖片 - 新增'}"></h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                            			<li><a href="#"onclick="history.back()">返回列表</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+						</div>
+						
+						<div class="body">
+							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${productPic}" enctype="multipart/form-data">
+								<input id="pdPicId" type="hidden" th:field="*{pdPicId}">
+								
+								<div th:if="*{pdId}" class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+										<label for="pdName">商品</label>
+									</div>
+									<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+										<div class="form-group">
+											<div class="form-line">
+												<input id="pdId" type="hidden" th:field="*{pdId}">
+												<input type="text" id="pdName" th:field="*{pdName}" class="form-control" disabled>
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div th:unless="*{pdId}" class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="pdName">請選擇商品</label>
+                                    </div>
+                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
+                                    	<select id="pdName" class="form-control show-tick" th:field="*{pdId}">
+                                        	<option value="0">-- 請選擇 --</option>
+                                        	<option th:each="product:${productList}" th:value="${product.PD_ID}" th:text="${product.PD_NAME}"></option>
+                                    	</select>
+                                	</div>
+                            	</div>
+								
+								<div class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+										<label for="pdPicSort">圖片排序</label>
+									</div>
+									<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+										<div class="form-group">
+											<div class="form-line">
+												<input type="text" id="pdPicSort" th:field="*{pdPicSort}" class="form-control">
+											</div>
+										</div>
+									</div>
+								</div>
+								
+								<div class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+										<label for="imageFile">商品圖片</label>
+									</div>
+									<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+										<label class="upload-file" for="imageFile"> 上傳圖片</label>
+                                    	<input type="file" id="imageFile" name="imageFile" />
+										<div class="card">
+											<div class="body">
+												<div th:id="*{pdPicId}" class="carousel slide" data-ride="carousel">
+													<div class="carousel-inner" role="listbox">
+														<div id="preview" class="item active">
+															<img id="pdImg" th:if="*{pdPicture} != 'null' and *{pdPicture} != null" th:src="@{|@{~}/*{pdPicture}|}">
+															<img id="pdImg" th:if="*{pdPicture} == 'null' or *{pdPicture} == null" src="http://placehold.it/500x300" class="img-responsive">
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+										<input type="hidden" id="originalImage" name="originalImage" th:value="*{pdImage}" th:if="*{pdImage}!=null"/>
+									</div>
+								</div>
+								
+								<div class="row clearfix">
+                                	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
+                                	<div class="row clearfix">
+                                		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{pdPicId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{pdPicId} ne null" type="button">修 改</button>
+                                    		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
+                                		</div>
+                                    </div>
+                                </div>
+								
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+    </section>
+    
+<div th:include="admin/load/js :: js"></div>
+<div th:include="admin/load/js :: jquery-datatable"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/product/productPic.js}"></script>
+
+</body>
+</html>
+	

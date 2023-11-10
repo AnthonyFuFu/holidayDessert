@@ -36,14 +36,15 @@ MEM_BIRTHDAY DATE NOT NULL,
 MEM_STATUS INT(1) DEFAULT(1),
 MEM_VERIFICATION_STATUS INT(1) DEFAULT(1),
 MEM_VERIFICATION_CODE VARCHAR(100),
+MEM_GOOGLE_UID VARCHAR(100),
 CONSTRAINT unikey_MEM_ACCOUNT unique(MEM_ACCOUNT)
 );
-INSERT INTO member(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS)
-VALUES  ('傅勝宏', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
-		('嘉', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1),
-        ('貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
-        ('傅', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1),
-        ('傅', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1)
+INSERT INTO member(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS,MEM_GOOGLE_UID)
+VALUES  ('傅勝宏', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+		('嘉', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1,NULL),
+        ('貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('傅', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('傅', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL)
         ;
 
 -- 常用收貨資訊 --
@@ -91,8 +92,8 @@ CONSTRAINT unikey_EMP_ACCOUNT unique(EMP_ACCOUNT),
 CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DEPT_ID)
 );
 INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
-VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','http://localhost:8080/holidayDessert/admin/upload/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
-		('嘉', '2', '0987654321', '行銷+美編', '31500','http://localhost:8080/holidayDessert/admin/upload/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
+VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
+		('嘉', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
         
 -- 功能-- 
 CREATE TABLE emp_function(

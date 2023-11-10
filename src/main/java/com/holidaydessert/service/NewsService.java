@@ -14,6 +14,7 @@ public interface NewsService {
 	public void update(News news);
 	public void delete(News news);
 	public News getData(News news);
+	public List<Map<String, Object>> getList();
 	public List<Map<String, Object>> getListForBanner();
 	
 	// front
