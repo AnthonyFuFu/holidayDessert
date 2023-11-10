@@ -50,7 +50,7 @@
                                     </a>
                                     <ul class="dropdown-menu pull-right">
                             			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/addNews}">新增最新消息</a></li>
-                                        <li><a href="javascript:void(0);">Action</a></li>
+                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/addBanner}">新增最新消息圖片</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -98,7 +98,7 @@
 																</ol>
 																<div class="carousel-inner" role="listbox">
 																	<div th:if="${news.bannerList}" class="item" th:each="banner, iterStat : ${news.bannerList}" th:classappend="${iterStat.index == 0} ? 'active'">
-																		<img th:src="${banner.BAN_PICTURE}" th:if="${banner.BAN_PICTURE}">
+																		<img th:if="${banner.BAN_PICTURE}" th:src="@{|@{~}/${banner.BAN_PICTURE}|}">
 																		<img th:unless="${banner.BAN_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
 																		<div class="carousel-caption">
 																			<h5 th:text="${news.NEWS_NAME}"></h5>
@@ -108,6 +108,7 @@
 																		<img src="http://placehold.it/500x300" class="img-responsive">
 																	</div>
 																</div>
+																<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/editBanner?newsId=}+${news.NEWS_ID}">修改</a>
 																<!-- Controls -->
 																<a class="left carousel-control" th:href="'#banner_'+${news.NEWS_ID}" role="button" data-slide="prev">
 																	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

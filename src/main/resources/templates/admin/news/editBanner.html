@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/load/css :: css"></head>
 <head>
-<title>[[${@environment.getProperty('html.title')}]] - 商品圖片管理</title>
+<title>[[${@environment.getProperty('html.title')}]] - 最新消息圖片管理</title>
 <link rel="stylesheet" th:href="@{/admin/css/common.css}" />
 </head>
 <body class="theme-red">
@@ -36,20 +36,20 @@
         <div class="container-fluid">
         
 			<!-- breadcrumbs -->
-            <div th:include="admin/load/breadcrumbs :: employee" class="row clearfix block-header"></div>
+            <div th:include="admin/load/breadcrumbs :: news" class="row clearfix block-header"></div>
             <!-- #END# breadcrumbs -->
 			<div class="row clearfix">
 				<div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
 					<div class="card">
 						<div class="header">
-            				<h2 th:text="${product.pdName}+' '+${product.pdId != null and product.pdId != '' ? '圖片 - 修改' : '圖片 - 新增'}"></h2>
+            				<h2 th:text="${news.newsName}+' '+${news.newsId != null and news.newsId != '' ? '圖片 - 修改' : '圖片 - 新增'}"></h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/addProductPic?pdId=}+${product.pdId}">新增商品圖片</a></li>
+                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/addBanner?newsId=}+${news.newsId}">新增最新消息圖片</a></li>
                             			<li><a href="#"onclick="history.back()">返回列表</a></li>
                                     </ul>
                                 </li>
@@ -57,19 +57,19 @@
 						</div>
 						<div class="body">
 							<div class="row clearfix">
-								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" th:each="productPic : ${productPicList}">
+								<div class="col-lg-4 col-md-4 col-sm-6 col-xs-12" th:each="banner : ${bannerList}">
 									<div class="card">
 										<div class="body">
-											<div><img class="btn-close" th:data-id="${productPic.PD_PIC_ID}" th:src="@{/admin/upload/btn_close_m.png}" /></div>
-											<div th:id="'productPic_'+${productPic.PD_PIC_ID}" class="carousel slide" data-ride="carousel">
+											<div><img class="btn-close" th:data-id="${banner.BAN_ID}" th:src="@{/admin/upload/btn_close_m.png}" /></div>
+											<div th:id="'banner_'+${banner.BAN_ID}" class="carousel slide" data-ride="carousel">
 												<!-- Wrapper for slides -->
 												<div class="carousel-inner" role="listbox">
 													<div class="item active">
-														<img th:if="${productPic.PD_PICTURE}" th:src="@{|@{~}/${productPic.PD_PICTURE}|}">
-														<img th:unless="${productPic.PD_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
+														<img th:if="${banner.BAN_PICTURE}" th:src="@{|@{~}/${banner.BAN_PICTURE}|}">
+														<img th:unless="${banner.BAN_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
 													</div>
 												</div>
-												<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/updateProductPic?pdPicId=}+${productPic.PD_PIC_ID}">修改商品圖片</a>
+												<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/updateBanner?banId=}+${banner.BAN_ID}">修改最新消息圖片</a>
 											</div>
 										</div>
 									</div>
@@ -86,7 +86,7 @@
 <div th:include="admin/load/js :: jquery-datatable"></div>
 
 <script th:src="@{/admin/js/admin.js}"></script>
-<script th:src="@{/admin/js/product/productPic.js}"></script>
+<script th:src="@{/admin/js/news/banner.js}"></script>
 
 </body>
 </html>
