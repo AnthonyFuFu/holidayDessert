@@ -265,5 +265,81 @@ public class CouponManagement {
 		}
 		return "admin/toPath";
 	}
+
+	@RequestMapping(value = "/issueCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String issueCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			Coupon coupon = new Coupon();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("coupon", coupon);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/coupon/memberCouponForm";
+	}
+
+	@RequestMapping(value = "/issueDailyCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String issueDailyCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			Coupon coupon = new Coupon();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("coupon", coupon);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/coupon/couponForm";
+	}
+
+	@RequestMapping(value = "/issueWeeklyCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String issueWeeklyCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			Coupon coupon = new Coupon();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("coupon", coupon);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/coupon/couponForm";
+	}
+
+	@RequestMapping(value = "/issueMonthlyCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String issueMonthlyCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			Coupon coupon = new Coupon();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("coupon", coupon);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/coupon/couponForm";
+	}
 	
 }
