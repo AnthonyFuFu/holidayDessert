@@ -30,5 +30,7 @@ public class Member extends Base {
 	private String memVerificationStatus;// 會員驗證狀態(1:開通 0:停權)
 	private String memVerificationCode;// 會員驗證碼
 	private String memGoogleUid;	   // 會員googleUid
+
+	private String totalExpense;	   // 總金額
 	
 }

@@ -28,6 +28,16 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	public List<Map<String, Object>> issueCouponList(Member member) {
+		return memberDao.issueCouponList(member);
+	}
+
+	@Override
+	public int getIssueCouponCount(Member member) {
+		return memberDao.getIssueCouponCount(member);
+	}
+	
+	@Override
 	public void register(Member member) {
 		memberDao.register(member);
 	}

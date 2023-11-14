@@ -10,6 +10,8 @@ public interface MemberDao {
 	// back
 	public List<Map<String, Object>> list(Member member);
 	public int getCount(Member member);
+	public List<Map<String, Object>> issueCouponList(Member member);
+	public int getIssueCouponCount(Member member);
 	
 	// front
 	public void register(Member member);

@@ -28,11 +28,13 @@ import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Coupon;
 import com.holidaydessert.model.Employee;
+import com.holidaydessert.model.Member;
 import com.holidaydessert.model.MemberCoupon;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.CouponService;
 import com.holidaydessert.service.MemberCouponService;
+import com.holidaydessert.service.MemberService;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -58,6 +60,9 @@ public class CouponManagement {
 
 	@Autowired
 	private CommonService commonService;
+	
+	@Autowired
+	private MemberService memberService;
 
 	private Gson gson = new Gson();
 	
@@ -144,6 +149,52 @@ public class CouponManagement {
 		memberCoupon.setDraw(Integer.valueOf(draw));
 		
 		String output = gson.toJson(memberCoupon);
+
+		pResponse.setCharacterEncoding("utf-8");
+		
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+	
+	@GetMapping("/issueCouponTables")
+	public void issueCouponTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		Member memberData = new Member();
+
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+		
+		memberData.setStart(start);
+		memberData.setLength(length);
+		memberData.setSearchText(searchValue);
+		
+		// 判斷一個字串是否為數字
+		if (searchValue.matches("\\d+")) {
+			memberData.setTotalExpense(searchValue);
+		}
+		
+		List<Map<String, Object>> couponList = memberService.issueCouponList(memberData);
+
+		if (couponList == null) {
+			couponList = new ArrayList<Map<String, Object>>();
+		}
+
+		int count = memberService.getIssueCouponCount(memberData);
+
+		member.setRecordsFiltered(count);
+		member.setRecordsTotal(count);
+		member.setData(couponList);
+		member.setDraw(Integer.valueOf(draw));
+
+		String output = gson.toJson(member);
 
 		pResponse.setCharacterEncoding("utf-8");
 		
@@ -276,70 +327,57 @@ public class CouponManagement {
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
 		try {
-			Coupon coupon = new Coupon();
 			model.addAttribute("authorityList", authorityList);
-			model.addAttribute("coupon", coupon);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		return "admin/coupon/memberCouponForm";
 	}
 
-	@RequestMapping(value = "/issueDailyCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueDailyCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+	@RequestMapping(value = "/issueDailyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String issueDailyCouponSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest,Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;
+		String couponId = pRequest.getParameter("couponId")!=null ? pRequest.getParameter("couponId") : null;
+		
+		Coupon coupon = new Coupon();
+		coupon.setCpId(couponId);
 		
 		try {
-			Coupon coupon = new Coupon();
-			model.addAttribute("authorityList", authorityList);
-			model.addAttribute("coupon", coupon);
-		} catch (JSONException e) {
+			memberCouponService.batchAddOneDayCoupon(coupon, members);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
 			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
 		}
-		return "admin/coupon/couponForm";
+		model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+
+		return "admin/toPath";
 	}
 
-	@RequestMapping(value = "/issueWeeklyCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueWeeklyCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+	@RequestMapping(value = "/issueWeeklyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String issueWeeklyCouponSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+
+		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;
+		String couponId = pRequest.getParameter("couponId")!=null ? pRequest.getParameter("couponId") : null;
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		Coupon coupon = new Coupon();
+		coupon.setCpId(couponId);
 		
 		try {
-			Coupon coupon = new Coupon();
-			model.addAttribute("authorityList", authorityList);
-			model.addAttribute("coupon", coupon);
-		} catch (JSONException e) {
+			memberCouponService.batchAddOneWeekCoupon(coupon, members);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
 			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
 		}
-		return "admin/coupon/couponForm";
+		model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+
+		return "admin/toPath";
 	}
 
-	@RequestMapping(value = "/issueMonthlyCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueMonthlyCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
-		try {
-			Coupon coupon = new Coupon();
-			model.addAttribute("authorityList", authorityList);
-			model.addAttribute("coupon", coupon);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/coupon/couponForm";
-	}
-	
 }

@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/load/css :: css"></head>
 <head>
-<title>[[${@environment.getProperty('html.title')}]] - 優惠券管理</title>
+<title>[[${@environment.getProperty('html.title')}]] - 優惠券發放</title>
 <link rel="stylesheet" th:href="@{/admin/css/common.css}" />
 </head>
 <body class="theme-red">
@@ -42,63 +42,51 @@
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
+                    
                         <div class="header">
-                            <h2>優惠券管理</h2>
+                            <h2>優惠券發放</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/coupon/addCoupon}">新增優惠券</a></li>
-                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/coupon/issueCoupon}">發放優惠券</a></li>
+                            			<li><a href="javascript:void(0)" onclick="issueDailyCoupon()">發放優惠券(當日)</a></li>
+                            			<li><a href="javascript:void(0)" onclick="issueWeeklyCoupon()">發放優惠券(一週)</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
+                        
+						<a href="javascript:void(0)" onclick="checkAll()">全選</a>
+						
                         <div class="body">
                         	<div class="row clearfix">
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <!-- Nav tabs -->
+                                	<!-- Nav tabs -->
                                     <ul class="nav nav-tabs tab-nav-right" role="tablist">
-                                        <li role="presentation" class="active"><a href="#coupon_animation" data-toggle="tab">優惠券清單</a></li>
-                                        <li role="presentation"><a href="#member_coupon_animation" data-toggle="tab">會員優惠券發放明細</a></li>
+                                        <li role="presentation" class="active"><a href="#issue-coupon_animation" data-toggle="tab">預計發放名單</a></li>
                                     </ul>
                                     <!-- Tab panes -->
                                     <div class="tab-content">
-                                        <div role="tabpanel" class="tab-pane fade in active" id="coupon_animation">
+                                        <div role="tabpanel" class="tab-pane fade in active" id="issue-coupon_animation">
                             				<div class="table-responsive">
-                                				<table id="coupon-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                				<table id="issue-coupon-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
                                     				<thead>
                                         				<tr>
                                         					<th>ID</th>
-                                            				<th>優惠券名稱</th>
-                                            				<th>折抵金額</th>
-                                            				<th>優惠券狀態</th>
-                                            				<th>優惠券圖片</th>
-                                            				<th>功能</th>
+                                            				<th>名字</th>
+                                            				<th>性別</th>
+                                            				<th>帳號</th>
+                                            				<th>聯絡電話</th>
+                                            				<th>電子信箱</th>
+                                            				<th>生日</th>
+                                            				<th>總金額</th>
                                         				</tr>
                                     				</thead>
                                 				</table>
                             				</div>
                         				</div>
-                                        <div role="tabpanel" class="tab-pane fade" id="member_coupon_animation">
-                                        	<div class="table-responsive">
-                                				<table id="member-coupon-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
-                                    				<thead>
-                                        				<tr>
-                                        					<th>會員名稱</th>
-                                            				<th>優惠券名稱</th>
-                                            				<th>折抵金額</th>
-                                            				<th>發放日期</th>
-                                            				<th>有效期限</th>
-                                            				<th>是否使用</th>
-                                            				<th>使用日期</th>
-                                        				</tr>
-                                    				</thead>
-                                				</table>
-                            				</div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -108,13 +96,11 @@
             </div>
         </div>
     </section>
-<!-- <div th:if="${employeeSession != null}" th:include="front/chat :: chat"></div> -->
+    
 <div th:include="admin/load/js :: js"></div>
 <div th:include="admin/load/js :: jquery-datatable"></div>
-<div th:include="admin/load/js :: chat"></div>
 
 <script th:src="@{/admin/js/admin.js}"></script>
-<script th:src="@{/admin/js/coupon/coupon.js}"></script>
 <script th:src="@{/admin/js/coupon/member-coupon.js}"></script>
 
 </body>
