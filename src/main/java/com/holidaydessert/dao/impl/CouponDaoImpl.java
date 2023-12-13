@@ -187,4 +187,22 @@ public class CouponDaoImpl implements CouponDao {
 		return item == null ? null : item;
 	}
 
+	@Override
+	public List<Map<String, Object>> getList() {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.coupon "
+				   + " WHERE CP_STATUS = '1' ";
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+		
+	}
+
 }

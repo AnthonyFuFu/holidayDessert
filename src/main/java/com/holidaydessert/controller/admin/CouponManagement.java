@@ -325,9 +325,10 @@ public class CouponManagement {
 		Authority authority = new Authority();
 		authority.setEmpId(employeeSession.getEmpId());
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
+		List<Map<String, Object>> couponList = couponService.getList();
 		try {
 			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("couponList", couponList);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -337,7 +338,7 @@ public class CouponManagement {
 	@RequestMapping(value = "/issueDailyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String issueDailyCouponSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			HttpServletRequest pRequest,Model model) throws Exception {
-		
+
 		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;
 		String couponId = pRequest.getParameter("couponId")!=null ? pRequest.getParameter("couponId") : null;
 		
@@ -360,7 +361,7 @@ public class CouponManagement {
 	@RequestMapping(value = "/issueWeeklyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String issueWeeklyCouponSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-
+		
 		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;
 		String couponId = pRequest.getParameter("couponId")!=null ? pRequest.getParameter("couponId") : null;
 		

@@ -45,5 +45,10 @@ public class CouponServiceImpl implements CouponService{
 	public Coupon getData(Coupon coupon) {
 		return couponDao.getData(coupon);
 	}
+
+	@Override
+	public List<Map<String, Object>> getList() {
+		return couponDao.getList();
+	}
 	
 }

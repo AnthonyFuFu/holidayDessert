@@ -14,5 +14,6 @@ public interface CouponService {
 	public void update(Coupon coupon);
 	public void takeDown(Coupon coupon);
 	public Coupon getData(Coupon coupon);
+	public List<Map<String, Object>> getList();
 	
 }

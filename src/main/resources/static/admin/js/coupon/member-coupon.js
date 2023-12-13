@@ -323,25 +323,57 @@ function checkAll() {
 }
 
 function issueDailyCoupon(){
-	
-	var checkArray = new Array();
-	var checkList;
+	var memberArray = new Array();
+	var memberList;
 	$("input[name='selectList']:checked").each(function(i) {
-		checkArray[i] = this.value;
+		memberArray[i] = this.id;
 	});
-	checkList = checkArray.join(",");
-	alert(checkList)
+	memberList = memberArray.join(",");
+	$("[name='members']").val(memberList);
+	
+	if($("[name='couponId']").val() == '0'){
+		alert("請選擇優惠券！");
+		return false;
+	} else if ($("[name='members']").val() == ''){
+		alert("請選擇要發放的會員！");
+		return false;
+	}
+	var check = false;
+	check = confirm("【提醒您，發放後無法修改，您確定要發放這些優惠券嗎？】");
+
+	if (check == true) {
+		var link = "/holidayDessert/admin/coupon/issueDailyCouponSubmit";
+		$("#issueCoupon").attr("action", link);
+		$("#issueCoupon").submit();
+	}
+	
 }
 
 function issueWeeklyCoupon(){
-	
-	var checkArray = new Array();
-	var checkList;
+	var memberArray = new Array();
+	var memberList;
 	$("input[name='selectList']:checked").each(function(i) {
-		checkArray[i] = this.value;
+		memberArray[i] = this.id;
 	});
-	checkList = checkArray.join(",");
-	alert(checkList)
+	memberList = memberArray.join(",");
+	$("[name='members']").val(memberList);
+	
+	if($("[name='couponId']").val() == '0'){
+		alert("請選擇優惠券！");
+		return false;
+	} else if ($("[name='members']").val() == ''){
+		alert("請選擇要發放的會員！");
+		return false;
+	}
+	
+	var check = false;
+	check = confirm("【提醒您，發放後無法修改，您確定要發放這些優惠券嗎？】");
+
+	if (check == true) {
+		var link = "/holidayDessert/admin/coupon/issueWeeklyCouponSubmit";
+		$("#issueCoupon").attr("action", link);
+		$("#issueCoupon").submit();
+	}
 	
 }
 
