@@ -143,4 +143,96 @@ $(function() {
 			}
 		]
     });
+    
+	$('#add-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+			regularlyCheck();
+            success("新增完成");
+        }
+    });
+    
+    $('#update-submit').on('click', function () {
+		let result = checkValue();
+        if (result == true) {
+			statusCheck();
+			regularlyCheck();
+            success("修改完成");
+        }
+    });
+    
+	function success(message) {
+   		swal({
+        	title: message,
+        	type: "success",
+        	showCancelButton: false,
+        	confirmButtonColor: "#3085d6",
+        	confirmButtonText: "確定"
+    	}, function(result) {
+			if (result == true && message == "新增完成") {
+            	$("#mainForm").attr("action", "promotionAddSubmit");
+            	$("#mainForm").submit();
+        	} else if (result == true && message == "修改完成") {
+				$("#mainForm").attr("action", "promotionUpdateSubmit");
+            	$("#mainForm").submit();
+			}
+    	})
+	}
+	
+	function warning(message) {
+    	swal({
+        	title: message,
+        	type: "warning",
+        	confirmButtonColor: "#DD6B55",
+        	confirmButtonText: "確定",
+        	closeOnConfirm: false
+    	});
+	}
+
+	function checkValue() {
+		let checkValue = true;
+		if (!$("#pmName").val()) {
+			warning("請輸入優惠活動名稱");
+			checkValue = false;
+		} else if (!$("#pmDescription").val()) {
+			warning("請輸入活動描述");
+			checkValue = false;
+		} else if (!$("#pmDiscount").val()) {
+			warning("請輸入折扣幅度");
+			checkValue = false;
+		} else if (!$("#pmStart").val()) {
+			warning("請選擇開始時間");
+			checkValue = false;
+		} else if (!$("#pmEnd").val()) {
+			warning("請選擇結束時間");
+			checkValue = false;
+		}
+		return checkValue;
+	}
+
+	function statusCheck(){
+		if ($("#checkStatus").prop("checked")) {
+			$("#pmStatus").val("1");
+		} else {
+			$("#pmStatus").val("0");
+		}
+	}
+	
+	function regularlyCheck(){
+		if ($("#checkRegularly").prop("checked")) {
+			$("#pmRegularly").val("1");
+		} else {
+			$("#pmRegularly").val("0");
+		}
+	}
+	
+    autosize($('textarea.auto-growth'));
+    $('.datepicker').bootstrapMaterialDatePicker({
+        format: 'YYYY-MM-DD',
+        clearButton: true,
+        weekStart: 1,
+        time: false
+    });
+    
 });

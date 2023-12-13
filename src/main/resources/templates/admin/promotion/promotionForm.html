@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/load/css :: css"></head>
+<head th:include="admin/load/css :: datetime-picker"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 優惠活動管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
+</head>
+<body class="theme-red">
+
+    <!-- Page Loader -->
+    <div th:include="admin/load/pageloader :: pageloader" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <div th:include="admin/load/searchbar :: searchbar" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+    <nav th:include="admin/load/navbar :: navbar" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:include="admin/load/leftsidebar :: leftsidebar" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+        
+        <!-- Right Sidebar -->
+        <aside th:include="admin/load/rightsidebar :: rightsidebar" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+        
+			<!-- breadcrumbs -->
+            <div th:include="admin/load/breadcrumbs :: promotion" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                        	<h2 th:text="${promotion.pmId != null and promotion.pmId != '' ? '優惠活動 - 修改' : '優惠活動 - 新增'}"></h2>
+                        </div>
+                        <div class="body">
+							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${promotion}" enctype="multipart/form-data">
+								
+								<input id="pmId" type="hidden" th:field="*{pmId}">
+								
+								<div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="pmName">優惠活動名稱</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pmName" class="form-control" th:field="*{pmName}" placeholder="請輸入優惠活動名稱">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+								<div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="pmDescription">活動描述</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pmDescription" class="form-control" th:field="*{pmDescription}" placeholder="請輸入活動描述">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+								<div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="pmDiscount">折扣幅度</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pmDiscount" class="form-control" th:field="*{pmDiscount}" placeholder="請輸入折扣幅度">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pmRegularly">活動例行性</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="switch">
+                                        		<input type="hidden" id="pmRegularly" th:field="*{pmRegularly}" />
+                                            	<label>下架<input type="checkbox" id="checkRegularly" class="form-control" th:checked="*{pmRegularly} == '0' ? 'false' : 'true'"><span class="lever switch-col-cyan"></span>上架</label>
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pmStatus">活動狀態</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="switch">
+                                        		<input type="hidden" id="pmStatus" th:field="*{pmStatus}" />
+                                            	<label>下架<input type="checkbox" id="checkStatus" class="form-control" th:checked="*{pmStatus} == '0' ? 'false' : 'true'"><span class="lever switch-col-cyan"></span>上架</label>
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pmStart">前台顯示開始時間</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="form-line">
+                                            	<input type="text" id="pmStart" class="datepicker form-control" placeholder="請選擇開始時間" th:field="*{pmStart}">
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pmEnd">前台顯示結束時間</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="form-line">
+                                            	<input type="text" id="pmEnd" class="datepicker form-control" placeholder="請選擇結束時間" th:field="*{pmEnd}">
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
+                                	<div class="row clearfix">
+                                		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{pmId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{pmId} ne null" type="button">修 改</button>
+                                    		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
+                                		</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<div th:include="admin/load/js :: js"></div>
+<div th:include="admin/load/js :: jquery-datatable"></div>
+<div th:include="admin/load/js :: datetime-picker"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/promotion/promotion.js}"></script>
+</body>
+</html>
+	

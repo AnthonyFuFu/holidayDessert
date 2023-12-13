@@ -50,5 +50,10 @@ public class PromotionServiceImpl implements PromotionService {
 	public List<Map<String, Object>> nearestStartList(Promotion promotion) {
 		return promotionDao.nearestStartList(promotion);
 	}
-
+	
+	@Override
+	public Promotion getData(Promotion promotion) {
+		return promotionDao.getData(promotion);
+	}
+	
 }

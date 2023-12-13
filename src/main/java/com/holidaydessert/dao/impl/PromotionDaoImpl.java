@@ -202,4 +202,42 @@ public class PromotionDaoImpl implements PromotionDao {
 
 	}
 
+	@Override
+	public Promotion getData(Promotion promotion) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.promotion "
+				   + " WHERE PM_ID = ? ";
+		
+		args.add(promotion.getPmId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		Promotion item = new Promotion();
+		if (!list.isEmpty()) {
+			
+	        Map<String, Object> resultMap = list.get(0);
+	        String pmId = String.valueOf(resultMap.get("PM_ID"));
+	        String pmName = String.valueOf(resultMap.get("PM_NAME"));
+	        String pmDescription = String.valueOf(resultMap.get("PM_DESCRIPTION"));
+	        String pmDiscount = String.valueOf(resultMap.get("PM_DISCOUNT"));
+	        String pmRegularly = String.valueOf(resultMap.get("PM_REGULARLY"));
+	        String pmStatus = String.valueOf(resultMap.get("PM_STATUS"));
+	        String pmStart = String.valueOf(resultMap.get("PM_START"));
+	        String pmEnd = String.valueOf(resultMap.get("PM_END"));
+	        
+	        item.setPmId(pmId);
+	        item.setPmName(pmName);
+	        item.setPmDescription(pmDescription);
+	        item.setPmDiscount(pmDiscount);
+	        item.setPmRegularly(pmRegularly);
+	        item.setPmStatus(pmStatus);
+	        item.setPmStart(pmStart);
+	        item.setPmEnd(pmEnd);
+	        
+	    }
+		return item == null ? null : item;
+	}
+
 }

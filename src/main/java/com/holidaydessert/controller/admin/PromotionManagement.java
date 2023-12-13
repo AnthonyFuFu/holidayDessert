@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -148,6 +149,77 @@ public class PromotionManagement {
 			e.printStackTrace();
 		}
 
+	}
+
+	@RequestMapping(value = "/addPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addPromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			Promotion promotion = new Promotion();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("promotion", promotion);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/promotion/promotionForm";
+	}
+	
+	@RequestMapping(value = "/updatePromotion" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updatePromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Promotion promotion, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		
+		try {
+			promotion = promotionService.getData(promotion);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("promotion", promotion);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/promotion/promotionForm";
+	}
+	
+
+	@RequestMapping(value = "/promotionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String promotionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Promotion promotion, HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			promotionService.add(promotion);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+		
+		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/promotionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String promotionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Promotion promotion, HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			promotionService.update(promotion);
+			model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
 	}
 	
 }

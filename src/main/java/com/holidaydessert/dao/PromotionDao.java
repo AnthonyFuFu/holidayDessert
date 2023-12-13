@@ -17,5 +17,5 @@ public interface PromotionDao {
 	
 	// front
 	public List<Map<String, Object>> nearestStartList(Promotion promotion);
-	
+	public Promotion getData(Promotion promotion);
 }
