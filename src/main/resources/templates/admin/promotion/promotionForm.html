@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/load/css :: css"></head>
 <head th:include="admin/load/css :: datetime-picker"></head>
+<head th:include="admin/load/css :: nouislider"></head>
 <head>
 <title>[[${@environment.getProperty('html.title')}]] - 優惠活動管理</title>
 <link rel="stylesheet" th:href="@{/admin/css/common.css}" />
@@ -76,18 +77,21 @@
                                         </div>
                                     </div>
                                 </div>
-                                
 								<div class="row clearfix">
                                     <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
                                         <label for="pmDiscount">折扣幅度</label>
                                     </div>
-                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-                                        <div class="form-group">
-                                            <div class="form-line">
-                                                <input type="text" id="pmDiscount" class="form-control" th:field="*{pmDiscount}" placeholder="請輸入折扣幅度">
-                                            </div>
-                                        </div>
-                                    </div>
+									<div class="body">
+										<div class="row clearfix">
+											<div class="col-lg-8 col-md-8 col-sm-6 col-xs-6">
+                                                <input type="hidden" id="pmDiscount" th:field="*{pmDiscount}">
+												<div id="nouislider"></div>
+												<div class="m-t-20 font-12">
+													<b>折數: </b><span class="js-nouislider-value"></span>
+												</div>
+											</div>
+										</div>
+									</div>
                                 </div>
                                 
                                 <div class="row clearfix">
@@ -165,9 +169,10 @@
 <div th:include="admin/load/js :: js"></div>
 <div th:include="admin/load/js :: jquery-datatable"></div>
 <div th:include="admin/load/js :: datetime-picker"></div>
+<div th:include="admin/load/js :: nouislider"></div>
 
 <script th:src="@{/admin/js/admin.js}"></script>
-<script th:src="@{/admin/js/promotion/promotion.js}"></script>
+<script th:src="@{/admin/js/promotion/promotionForm.js}"></script>
 </body>
 </html>
 	

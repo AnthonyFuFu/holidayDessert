@@ -12,9 +12,9 @@ public interface PromotionDetailService {
 	public List<Map<String, Object>> list(PromotionDetail promotionDetail);
 	public int getCount(PromotionDetail promotionDetail);
 	public void addOne(PromotionDetail promotionDetail);
-	public void batchAddPromotion(Promotion promotion, String[] productId, String[] productPrice);
-	public void batchAddOneDayPromotion(Promotion promotion, String[] productId, String[] productPrice);
-	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId, String[] productPrice);
+	public void batchAddPromotion(Promotion promotion, String[] productId);
+	public void batchAddOneDayPromotion(Promotion promotion, String[] productId);
+	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId);
 	public void update(PromotionDetail promotionDetail);
 	
 	// front

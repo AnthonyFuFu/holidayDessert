@@ -33,18 +33,18 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
 	}
 
 	@Override
-	public void batchAddPromotion(Promotion promotion, String[] productId, String[] productPrice) {
-		promotionDetailDao.batchAddPromotion(promotion, productId, productPrice);
+	public void batchAddPromotion(Promotion promotion, String[] productId) {
+		promotionDetailDao.batchAddPromotion(promotion, productId);
 	}
 
 	@Override
-	public void batchAddOneDayPromotion(Promotion promotion, String[] productId, String[] productPrice) {
-		promotionDetailDao.batchAddOneDayPromotion(promotion, productId, productPrice);
+	public void batchAddOneDayPromotion(Promotion promotion, String[] productId) {
+		promotionDetailDao.batchAddOneDayPromotion(promotion, productId);
 	}
 
 	@Override
-	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId, String[] productPrice) {
-		promotionDetailDao.batchAddOneWeekPromotion(promotion, productId, productPrice);
+	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId) {
+		promotionDetailDao.batchAddOneWeekPromotion(promotion, productId);
 	}
 
 	@Override

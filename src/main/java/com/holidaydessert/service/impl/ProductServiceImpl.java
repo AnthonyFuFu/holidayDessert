@@ -57,6 +57,16 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public List<Map<String, Object>> issuePromotionList(Product product) {
+		return productDao.issuePromotionList(product);
+	}
+	
+	@Override
+	public int getIssuePromotionCount(Product product) {
+		return productDao.getIssuePromotionCount(product);
+	}
+	
+	@Override
 	public List<Map<String, Object>> frontNewList(Product product) {
 		return productDao.frontNewList(product);
 	}

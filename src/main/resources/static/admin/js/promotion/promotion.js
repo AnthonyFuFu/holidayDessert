@@ -106,6 +106,15 @@ $(function() {
 						return '非例行'
 					}
 				}
+			},
+			{
+				targets: [8],
+				data: "PM_ID",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.PM_ID + "'><i class='material-icons'>edit</i></button> ";
+				}
 			}
 		],
 		columns: [
@@ -140,99 +149,21 @@ $(function() {
 			{
 				data: "PM_REGULARLY",
 				defaultContent: ""
-			}
+			},
+        	{
+            	data: "PM_ID",
+            	render: function(data, type, row, meta) {
+                	return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.PM_ID + "'><i class='material-icons'>edit</i></button> ";
+            	}
+        	}
 		]
     });
     
-	$('#add-submit').on('click', function () {
-		let result = checkValue();
-        if (result == true) {
-			statusCheck();
-			regularlyCheck();
-            success("新增完成");
-        }
-    });
-    
-    $('#update-submit').on('click', function () {
-		let result = checkValue();
-        if (result == true) {
-			statusCheck();
-			regularlyCheck();
-            success("修改完成");
-        }
-    });
-    
-	function success(message) {
-   		swal({
-        	title: message,
-        	type: "success",
-        	showCancelButton: false,
-        	confirmButtonColor: "#3085d6",
-        	confirmButtonText: "確定"
-    	}, function(result) {
-			if (result == true && message == "新增完成") {
-            	$("#mainForm").attr("action", "promotionAddSubmit");
-            	$("#mainForm").submit();
-        	} else if (result == true && message == "修改完成") {
-				$("#mainForm").attr("action", "promotionUpdateSubmit");
-            	$("#mainForm").submit();
-			}
-    	})
-	}
-	
-	function warning(message) {
-    	swal({
-        	title: message,
-        	type: "warning",
-        	confirmButtonColor: "#DD6B55",
-        	confirmButtonText: "確定",
-        	closeOnConfirm: false
-    	});
-	}
-
-	function checkValue() {
-		let checkValue = true;
-		if (!$("#pmName").val()) {
-			warning("請輸入優惠活動名稱");
-			checkValue = false;
-		} else if (!$("#pmDescription").val()) {
-			warning("請輸入活動描述");
-			checkValue = false;
-		} else if (!$("#pmDiscount").val()) {
-			warning("請輸入折扣幅度");
-			checkValue = false;
-		} else if (!$("#pmStart").val()) {
-			warning("請選擇開始時間");
-			checkValue = false;
-		} else if (!$("#pmEnd").val()) {
-			warning("請選擇結束時間");
-			checkValue = false;
-		}
-		return checkValue;
-	}
-
-	function statusCheck(){
-		if ($("#checkStatus").prop("checked")) {
-			$("#pmStatus").val("1");
-		} else {
-			$("#pmStatus").val("0");
-		}
-	}
-	
-	function regularlyCheck(){
-		if ($("#checkRegularly").prop("checked")) {
-			$("#pmRegularly").val("1");
-		} else {
-			$("#pmRegularly").val("0");
-		}
-	}
-	
-    autosize($('textarea.auto-growth'));
-    $('.datepicker').bootstrapMaterialDatePicker({
-        format: 'YYYY-MM-DD',
-        clearButton: true,
-        weekStart: 1,
-        time: false
-    });
+    $("#promotion-table").on("click", ".btn-update", function() {
+		let pmId = $(this).data('id');
+		let action = "/holidayDessert/admin/promotion/updatePromotion";
+		let url = window.location.origin + action + "?pmId=" + pmId;
+		window.location.href = url;
+	});
     
 });

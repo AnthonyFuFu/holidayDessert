@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head th:include="admin/load/css :: css"></head>
 <head>
-<title>[[${@environment.getProperty('html.title')}]] - 優惠券發放</title>
+<title>[[${@environment.getProperty('html.title')}]] - 安排優惠活動</title>
 <link rel="stylesheet" th:href="@{/admin/css/common.css}" />
 </head>
 <body class="theme-red">
@@ -36,39 +36,39 @@
         <div class="container-fluid">
         
 			<!-- breadcrumbs -->
-            <div th:include="admin/load/breadcrumbs :: coupon" class="row clearfix block-header"></div>
+            <div th:include="admin/load/breadcrumbs :: promotion" class="row clearfix block-header"></div>
             <!-- #END# breadcrumbs -->
             
             <div class="row clearfix">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <div class="card">
                         <div class="header">
-                            <h2>優惠券發放</h2>
+                            <h2>安排優惠活動</h2>
                             <ul class="header-dropdown m-r--5">
                                 <li class="dropdown">
                                     <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                            			<li><a href="javascript:void(0)" onclick="issueDailyCoupon()">發放優惠券(當日)</a></li>
-                            			<li><a href="javascript:void(0)" onclick="issueWeeklyCoupon()">發放優惠券(一週)</a></li>
+                            			<li><a href="javascript:void(0)" onclick="issueDailyPromotion()">安排優惠活動(當日)</a></li>
+                            			<li><a href="javascript:void(0)" onclick="issueWeeklyPromotion()">安排優惠活動(一週)</a></li>
                                     </ul>
                                 </li>
                             </ul>
                         </div>
                         
                         <div class="body">
-							<form class="form-horizontal" role="form" id="issueCoupon" method="POST" enctype="multipart/form-data">
-								<input type="hidden" name="members">
+							<form class="form-horizontal" role="form" id="issuePromotion" method="POST" enctype="multipart/form-data">
+								<input type="hidden" name="products">
 								
 								<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
-                                    <label for="coupon-id">優惠券種類</label>
+                                    <label for="promotion-id">優惠活動種類</label>
                                 </div>
 								<div>
-									<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left: 0; padding-right: 30px">
-										<select id="coupon-id" class="form-control show-tick" name="couponId">
+									<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left: 0; padding-right: 30px" >
+										<select id="promotion-id" class="form-control show-tick" name="promotionId">
 											<option value="0">-- 請選擇 --</option>
-											<option th:each="coupon:${couponList}" th:value="${coupon.CP_ID}" th:text="${coupon.CP_NAME}"></option>
+											<option th:each="promotion:${promotionList}" th:value="${promotion.PM_ID}" th:text="${promotion.PM_NAME}"></option>
 										</select>
 									</div>
 								</div>
@@ -76,23 +76,20 @@
 									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 										<!-- Nav tabs -->
 										<ul class="nav nav-tabs tab-nav-right" role="tablist">
-											<li role="presentation" class="active"><a href="#issue-coupon_animation" data-toggle="tab">預計發放名單</a></li>
+											<li role="presentation" class="active"><a href="#issue-promotion_animation" data-toggle="tab">預計安排優惠商品</a></li>
 										</ul>
 										<!-- Tab panes -->
 										<div class="tab-content">
-											<div role="tabpanel" class="tab-pane fade in active" id="issue-coupon_animation">
+											<div role="tabpanel" class="tab-pane fade in active" id="issue-promotion_animation">
 												<div class="table-responsive">
-													<table id="issue-coupon-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+													<table id="issue-promotion-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
 														<thead>
 															<tr>
 																<th><a href="javascript:void(0)" onclick="checkAll()">全選</a></th>
-																<th>名字</th>
-																<th>性別</th>
-																<th>帳號</th>
-																<th>聯絡電話</th>
-																<th>電子信箱</th>
-																<th>生日</th>
-																<th>總金額</th>
+																<th>商品分類名稱</th>
+																<th>商品名稱</th>
+																<th>商品資訊</th>
+																<th>商品原價</th>
 															</tr>
 														</thead>
 													</table>
@@ -113,7 +110,7 @@
 <div th:include="admin/load/js :: jquery-datatable"></div>
 
 <script th:src="@{/admin/js/admin.js}"></script>
-<script th:src="@{/admin/js/coupon/member-coupon.js}"></script>
+<script th:src="@{/admin/js/promotion/promotion-detail.js}"></script>
 
 </body>
 </html>

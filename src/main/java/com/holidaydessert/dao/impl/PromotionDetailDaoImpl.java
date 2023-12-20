@@ -9,8 +9,10 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.holidaydessert.dao.PromotionDetailDao;
+import com.holidaydessert.model.Product;
 import com.holidaydessert.model.Promotion;
 import com.holidaydessert.model.PromotionDetail;
+import com.holidaydessert.service.ProductService;
 
 @Repository
 public class PromotionDetailDaoImpl implements PromotionDetailDao {
@@ -18,6 +20,9 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+	@Autowired
+	private ProductService productService;
+	
 	@Override
 	public List<Map<String, Object>> list(PromotionDetail promotionDetail) {
 
@@ -150,7 +155,7 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 	}
 
 	@Override
-	public void batchAddPromotion(Promotion promotion, String[] productId, String[] productPrice) {
+	public void batchAddPromotion(Promotion promotion, String[] productId) {
 
 		List<Object> args = new ArrayList<>();
 		
@@ -159,6 +164,9 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 		
 		if(productId.length > 0) {
 			for(int i=0; i<productId.length; i++) {
+				Product product = new Product();
+				product.setPdId(productId[i]);
+				product = productService.getData(product);
 				if(i == 0) {
 					sql += " VALUES(?, ?, CONCAT(?, ' 00:00:00'), CONCAT(?, ' 23:59:59'), ?) ";
 				} else {
@@ -168,14 +176,14 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 				args.add(promotion.getPmId());
 				args.add(promotion.getPmStart());
 				args.add(promotion.getPmEnd());
-				args.add(Math.round(Double.valueOf(productPrice[i]) * Double.valueOf(promotion.getPmDiscount())* 100.0) / 100.0);
+				args.add(Math.round(Double.valueOf(product.getPdPrice()) * Double.valueOf(promotion.getPmDiscount())* 100.0) / 100.0);
 			}
 		}
 		jdbcTemplate.update(sql, args.toArray());
 	}
 
 	@Override
-	public void batchAddOneDayPromotion(Promotion promotion, String[] productId, String[] productPrice) {
+	public void batchAddOneDayPromotion(Promotion promotion, String[] productId) {
 		
 		List<Object> args = new ArrayList<>();
 		
@@ -184,6 +192,9 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 		
 		if(productId.length > 0) {
 			for(int i=0; i<productId.length; i++) {
+				Product product = new Product();
+				product.setPdId(productId[i]);
+				product = productService.getData(product);
 				if(i == 0) {
 					sql += " VALUES(?, ?, CONCAT(CURDATE(), ' 00:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 23:59:59'), ?) ";
 				} else {
@@ -191,14 +202,14 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 				}
 				args.add(productId[i]);
 				args.add(promotion.getPmId());
-				args.add(Math.round(Double.valueOf(productPrice[i]) * Double.valueOf(promotion.getPmDiscount())* 100.0) / 100.0);
+				args.add(Math.round(Double.valueOf(product.getPdPrice()) * Double.valueOf(promotion.getPmDiscount())* 100.0) / 100.0);
 			}
 		}
 		jdbcTemplate.update(sql, args.toArray());
 	}
 	
 	@Override
-	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId, String[] productPrice) {
+	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId) {
 		
 		List<Object> args = new ArrayList<>();
 
@@ -207,6 +218,9 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 		
 		if(productId.length > 0) {
 			for(int i=0; i<productId.length; i++) {
+				Product product = new Product();
+				product.setPdId(productId[i]);
+				product = productService.getData(product);
 				if(i == 0) {
 					sql += " VALUES(?, ?, CONCAT(CURDATE(), ' 00:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 23:59:59'), ?) ";
 				} else {
@@ -214,7 +228,7 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 				}
 				args.add(productId[i]);
 				args.add(promotion.getPmId());
-				args.add(Math.round(Double.valueOf(productPrice[i]) * Double.valueOf(promotion.getPmDiscount())* 100.0) / 100.0);
+				args.add(Math.round(Double.valueOf(product.getPdPrice()) * Double.valueOf(promotion.getPmDiscount())* 100.0) / 100.0);
 			}
 		}
 		jdbcTemplate.update(sql, args.toArray());

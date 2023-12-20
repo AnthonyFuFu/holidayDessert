@@ -120,11 +120,21 @@ public class PromotionDaoImpl implements PromotionDao {
 	@Override
 	public void add(Promotion promotion) {
 
+		List<Object> args = new ArrayList<>();
+		
 		String sql = " INSERT INTO holiday_dessert.promotion "
 				   + " (PM_NAME, PM_DESCRIPTION, PM_DISCOUNT, PM_REGULARLY, PM_STATUS, PM_START, PM_END) "
 				   + " VALUES(?, ?, ?, ?, ?, CONCAT( ?, ' 00:00:00'), CONCAT( ?, ' 23:59:59')) ";
-
-		jdbcTemplate.update(sql, new Object[] { promotion.getPmName(), promotion.getPmDescription(), promotion.getPmDiscount(), promotion.getPmStatus() });
+		
+		args.add(promotion.getPmName());
+		args.add(promotion.getPmDescription());
+		args.add(promotion.getPmDiscount());
+		args.add(promotion.getPmRegularly());
+		args.add(promotion.getPmStatus());
+		args.add(promotion.getPmStart());
+		args.add(promotion.getPmEnd());
+		
+		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 
@@ -207,7 +217,10 @@ public class PromotionDaoImpl implements PromotionDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT * FROM holiday_dessert.promotion "
+		String sql = " SELECT PM_ID, PM_NAME, PM_DESCRIPTION, PM_DISCOUNT, PM_REGULARLY, PM_STATUS, "
+				   + " DATE_FORMAT(PM_START, '%Y-%m-%d') PM_START, "
+				   + " DATE_FORMAT(PM_END, '%Y-%m-%d') PM_END "
+				   + " FROM holiday_dessert.promotion "
 				   + " WHERE PM_ID = ? ";
 		
 		args.add(promotion.getPmId());

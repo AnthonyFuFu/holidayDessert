@@ -271,7 +271,91 @@ public class ProductDaoImpl implements ProductDao {
 		}
 
 	}
+	
+	@Override
+	public List<Map<String, Object>> issuePromotionList(Product product) {
 
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM ( "
+				   + " SELECT p.PD_ID, pmd.PM_ID, p.PDC_ID, PDC_NAME, PD_NAME, PD_DESCRIPTION, PD_PRICE, pm.PM_NAME "
+				   + " FROM product p "
+				   + " LEFT JOIN product_collection pc ON p.PDC_ID = pc.PDC_ID "
+				   + " LEFT JOIN promotion_detail pmd ON p.PD_ID = pmd.PD_ID "
+				   + " LEFT JOIN promotion pm ON pmd.PM_ID = pm.PM_ID "
+				   + " WHERE p.PD_STATUS = 1 "
+				   + " AND p.PD_IS_DEL = 0 "
+				   + " ) AS subquery "
+				   + " WHERE PM_NAME IS NULL ";
+		
+		if (product.getSearchText() != null && product.getSearchText().length() > 0){
+			String[] searchText = product.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(PDC_NAME, ?) > 0"
+					+  " OR INSTR(PD_NAME, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		
+		if (product.getStart() != null && !"".equals(product.getStart())) {
+			sql += " LIMIT " + product.getStart() + "," + product.getLength();
+		}
+
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+
+	}
+	
+	@Override
+	public int getIssuePromotionCount(Product product) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM ( "
+				   + " SELECT p.PD_ID, pmd.PM_ID, p.PDC_ID, PDC_NAME, PD_NAME, PD_DESCRIPTION, PD_PRICE, pm.PM_NAME "
+				   + " FROM product p "
+				   + " LEFT JOIN product_collection pc ON p.PDC_ID = pc.PDC_ID "
+				   + " LEFT JOIN promotion_detail pmd ON p.PD_ID = pmd.PD_ID "
+				   + " LEFT JOIN promotion pm ON pmd.PM_ID = pm.PM_ID "
+				   + " WHERE p.PD_STATUS = 1 "
+				   + " AND p.PD_IS_DEL = 0 "
+				   + " ) AS subquery "
+				   + " WHERE PM_NAME IS NULL ";
+
+		if (product.getSearchText() != null && product.getSearchText().length() > 0){
+			String[] searchText = product.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(PDC_NAME, ?) > 0"
+					+  " OR INSTR(PD_NAME, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
+	}
+	
 	@Override
 	public List<Map<String, Object>> frontNewList(Product product) {
 
@@ -368,5 +452,5 @@ public class ProductDaoImpl implements ProductDao {
 		}
 		
 	}
-
+	
 }
