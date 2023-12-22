@@ -202,7 +202,7 @@ $(function() {
 			sProcessing: "處理中...",
 			sLengthMenu: "顯示 _MENU_ 筆",
 			sZeroRecords: "目前無資料",
-			sEmptyTable: "目前無資料",
+			sEmptyTable: "目前無可安排的優惠活動 ( 所有商品皆有優惠活動 )",
 			sInfo: "目前顯示： 第 _START_ 筆 到 第 _END_ 筆， 共有 _TOTAL_ 筆",
 			sInfoEmpty: "找尋不到相關資料",
 			sInfoFiltered: "(已過濾 _MAX_ 筆)",
@@ -293,6 +293,13 @@ $(function() {
 		]
     });
 });
+
+//function getProducts(){
+//	let promotionId = $("[name='promotionId']").val()
+//    let dataTable = $('#issue-promotion-table').DataTable();
+//    let url = 'issuePromotionTables?promotionId=' + promotionId;
+//    dataTable.ajax.url(url).load();
+//}
 
 var check = false;
 //全選

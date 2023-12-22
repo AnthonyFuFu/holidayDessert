@@ -65,7 +65,7 @@
                                     <label for="promotion-id">優惠活動種類</label>
                                 </div>
 								<div>
-									<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left: 0; padding-right: 30px" >
+									<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left: 0; padding-right: 30px">
 										<select id="promotion-id" class="form-control show-tick" name="promotionId">
 											<option value="0">-- 請選擇 --</option>
 											<option th:each="promotion:${promotionList}" th:value="${promotion.PM_ID}" th:text="${promotion.PM_NAME}"></option>

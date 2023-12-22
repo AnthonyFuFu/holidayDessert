@@ -181,7 +181,7 @@ public class MemberDaoImpl implements MemberDao {
 				   + " AND m.MEM_STATUS = 1 "
 				   + " AND m.MEM_VERIFICATION_STATUS = 1 "
 				   + " GROUP BY m.MEM_ID, m.MEM_NAME, m.MEM_ACCOUNT, m.MEM_PHONE, m.MEM_EMAIL, m.MEM_GENDER "
-				   + ") AS subquery ";
+				   + " ) AS subquery ";
 
 		if (member.getTotalExpense() != null && member.getSearchText() != null && member.getSearchText().length() > 0) {
 

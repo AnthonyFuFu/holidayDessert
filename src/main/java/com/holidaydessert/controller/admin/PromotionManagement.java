@@ -155,23 +155,21 @@ public class PromotionManagement {
 		}
 
 	}
-	
-	@GetMapping("/issuePromotionTables")
+	@RequestMapping(value = "/issuePromotionTables", method = { RequestMethod.GET, RequestMethod.POST })
 	public void issuePromotionTables(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute Product product, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Product productData = new Product();
 		
 		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
 		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
 		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
 		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
 		
+		Product productData = new Product();
 		productData.setStart(start);
 		productData.setLength(length);
 		productData.setSearchText(searchValue);
 		
 		List<Map<String, Object>> productList = productService.issuePromotionList(productData);
-		
 		if (productList == null) {
 			productList = new ArrayList<Map<String, Object>>();
 		}
