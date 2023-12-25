@@ -253,7 +253,45 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 		jdbcTemplate.update(sql, args.toArray());
 		
 	}
+	
+	@Override
+	public PromotionDetail getData(PromotionDetail promotionDetail) {
 
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT PMD_ID, PD_ID, PM_ID, "
+				   + " DATE_FORMAT(PMD_START, '%Y-%m-%d') PMD_START, "
+				   + " DATE_FORMAT(PMD_END, '%Y-%m-%d') PMD_END, "
+				   + " PMD_PD_DISCOUNT_PRICE "
+				   + " FROM holiday_dessert.promotion_detail "
+				   + " WHERE PMD_ID = ? ";
+		
+		args.add(promotionDetail.getPmdId());
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		PromotionDetail item = new PromotionDetail();
+		if (!list.isEmpty()) {
+			
+	        Map<String, Object> resultMap = list.get(0);
+	        String pmdId = String.valueOf(resultMap.get("PMD_ID"));
+	        String pdId = String.valueOf(resultMap.get("PD_ID"));
+	        String pmId = String.valueOf(resultMap.get("PM_ID"));
+	        String pmdStart = String.valueOf(resultMap.get("PMD_START"));
+	        String pmdEnd = String.valueOf(resultMap.get("PMD_END"));
+	        String pmdPdDiscountPrice = String.valueOf(resultMap.get("PMD_PD_DISCOUNT_PRICE"));
+	        
+	        item.setPmdId(pmdId);
+	        item.setPdId(pdId);
+	        item.setPmId(pmId);
+	        item.setStart(pmdStart);
+	        item.setPmdEnd(pmdEnd);
+	        item.setPmdPdDiscountPrice(pmdPdDiscountPrice);
+	        
+	    }
+		return item == null ? null : item;
+	}
+	
 	@Override
 	public List<Map<String, Object>> frontList(PromotionDetail promotionDetail) {
 

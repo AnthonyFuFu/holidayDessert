@@ -141,6 +141,15 @@ $(function() {
 						return '非例行'
 					}
 				}
+			},
+			{
+				targets: [11],
+				data: "PMD_ID",
+				searching: false,
+				orderable: false,
+				render: function(data, type, row, meta) {
+					return " <button class='btn btn-default btn-circle waves-effect waves-circle waves-float btn-update' data-id='" + row.PMD_ID + "'><i class='material-icons'>edit</i></button> ";
+				}
 			}
 		],
 		columns: [
@@ -187,9 +196,20 @@ $(function() {
 			{
 				data: "PM_REGULARLY",
 				defaultContent: ""
+			},
+			{
+				data: "PMD_ID",
+				defaultContent: ""
 			}
 		]
     });
+    
+    $("#promotion-detail-table").on("click", ".btn-update", function() {
+		let pmdId = $(this).data('id');
+		let action = "/holidayDessert/admin/promotion/updateOneProductPromotion";
+		let url = window.location.origin + action + "?pmdId=" + pmdId;
+		window.location.href = url;
+	});
     
     $('#issue-promotion-table').DataTable({
         bAutoWidth: false,

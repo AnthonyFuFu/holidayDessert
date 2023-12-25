@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:include="admin/load/css :: css"></head>
+<head th:include="admin/load/css :: datetime-picker"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 單品優惠活動管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
+</head>
+<body class="theme-red">
+
+    <!-- Page Loader -->
+    <div th:include="admin/load/pageloader :: pageloader" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+    
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+    
+    <!-- Search Bar -->
+    <div th:include="admin/load/searchbar :: searchbar" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+    
+    <!-- Top Bar -->
+    <nav th:include="admin/load/navbar :: navbar" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:include="admin/load/leftsidebar :: leftsidebar" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+        
+        <!-- Right Sidebar -->
+        <aside th:include="admin/load/rightsidebar :: rightsidebar" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+        
+			<!-- breadcrumbs -->
+            <div th:include="admin/load/breadcrumbs :: promotion" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+            
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                        	<h2 th:text="${promotionDetail.pmdId != null and promotionDetail.pmdId != '' ? '單品優惠活動 - 修改' : '單品優惠活動 - 新增'}"></h2>
+                        </div>
+                        <div class="body">
+							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${promotionDetail}" enctype="multipart/form-data">
+								
+								<input id="pmdId" type="hidden" th:field="*{pmdId}">
+								
+								<div class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="product">請選擇商品</label>
+                                    </div>
+                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
+                                    	<select id="product" class="form-control show-tick" th:field="*{pdId}">
+                                        	<option value="0">-- 請選擇 --</option>
+                                        	<option th:each="product:${productList}" th:data-price="${product.PD_PRICE}" th:value="${product.PD_ID}" th:text="${product.PD_NAME}"></option>
+                                    	</select>
+                                	</div>
+                            	</div>
+                            	
+								<div class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="promotion">請選擇優惠活動</label>
+                                    </div>
+                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
+                                    	<select id="promotion" class="form-control show-tick" th:field="*{pmId}">
+                                        	<option value="0">-- 請選擇 --</option>
+                                        	<option th:each="promotion:${promotionList}" th:data-pmdiscount="${promotion.PM_DISCOUNT}" th:value="${promotion.PM_ID}" th:text="${promotion.PM_NAME}"></option>
+                                    	</select>
+                                	</div>
+                            	</div>
+                            	
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pmdStart">優惠活動開始時間</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="form-line">
+                                            	<input type="text" id="pmdStart" class="datepicker form-control" placeholder="請選擇開始時間" th:field="*{pmdStart}">
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
+                                        <label for="pmdEnd">優惠活動結束時間</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="form-line">
+                                            	<input type="text" id="pmdEnd" class="datepicker form-control" placeholder="請選擇結束時間" th:field="*{pmdEnd}">
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="pmdPdDiscountPrice">商品活動優惠價</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="pmdPdDiscountPrice" class="form-control" th:field="*{pmdPdDiscountPrice}" placeholder="請輸入商品活動優惠價">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div class="row clearfix">
+                                	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
+                                	<div class="row clearfix">
+                                		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{pmdId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{pmdId} ne null" type="button">修 改</button>
+                                    		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
+                                		</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+<div th:include="admin/load/js :: js"></div>
+<div th:include="admin/load/js :: jquery-datatable"></div>
+<div th:include="admin/load/js :: datetime-picker"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/promotion/oneProductPromotionForm.js}"></script>
+
+</body>
+</html>
+	

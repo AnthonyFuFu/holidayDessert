@@ -53,6 +53,11 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
 	}
 
 	@Override
+	public PromotionDetail getData(PromotionDetail promotionDetail) {
+		return promotionDetailDao.getData(promotionDetail);
+	}
+	
+	@Override
 	public List<Map<String, Object>> frontList(PromotionDetail promotionDetail) {
 		return promotionDetailDao.frontList(promotionDetail);
 	}

@@ -16,6 +16,7 @@ public interface PromotionDetailService {
 	public void batchAddOneDayPromotion(Promotion promotion, String[] productId);
 	public void batchAddOneWeekPromotion(Promotion promotion, String[] productId);
 	public void update(PromotionDetail promotionDetail);
+	public PromotionDetail getData(PromotionDetail promotionDetail);
 	
 	// front
 	public List<Map<String, Object>> frontList(PromotionDetail promotionDetail);

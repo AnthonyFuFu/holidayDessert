@@ -330,5 +330,85 @@ public class PromotionManagement {
 
 		return "admin/toPath";
 	}
+	
+	@RequestMapping(value = "/addOneProductPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String addOneProductPromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> productList = productService.issueOneProductList();
+		List<Map<String, Object>> promotionList = promotionService.getList();
+		
+		try {
+			PromotionDetail promotionDetail = new PromotionDetail();
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productList", productList);
+			model.addAttribute("promotionList", promotionList);
+			model.addAttribute("promotionDetail", promotionDetail);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/promotion/oneProductPromotionForm";
+	}
+	
+	@RequestMapping(value = "/updateOneProductPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String updateOneProductPromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute PromotionDetail promotionDetail, Model model) throws Exception {
+		
+		// 權限
+		Authority authority = new Authority();
+		authority.setEmpId(employeeSession.getEmpId());
+		List<Map<String, Object>> authorityList = authorityService.list(authority);
+		List<Map<String, Object>> productList = productService.getList();
+		List<Map<String, Object>> promotionList = promotionService.getList();
+		
+		try {
+			promotionDetail = promotionDetailService.getData(promotionDetail);
+			model.addAttribute("authorityList", authorityList);
+			model.addAttribute("productList", productList);
+			model.addAttribute("promotionList", promotionList);
+			model.addAttribute("promotionDetail", promotionDetail);
+			model.addAttribute("MESSAGE", "資料修改成功");
+		} catch (JSONException e) {
+			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
+			e.printStackTrace();
+		}
+		return "admin/promotion/oneProductPromotionForm";
+	}
 
+	@RequestMapping(value = "/oneProductPromotionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String oneProductPromotionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute PromotionDetail promotionDetail,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			promotionDetailService.addOne(promotionDetail);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+
+		return "admin/toPath";
+	}
+
+	@RequestMapping(value = "/oneProductPromotionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String oneProductPromotionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute PromotionDetail promotionDetail,
+			HttpServletRequest pRequest, Model model) throws Exception {
+		
+		try {
+			promotionDetailService.update(promotionDetail);
+			model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return "admin/toPath";
+	}
+	
 }

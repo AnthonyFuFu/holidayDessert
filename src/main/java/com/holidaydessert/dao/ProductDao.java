@@ -17,6 +17,7 @@ public interface ProductDao {
 	public List<Map<String, Object>> getList();
 	public List<Map<String, Object>> getPicList();
 	public List<Map<String, Object>> issuePromotionList(Product product);
+	public List<Map<String, Object>> issueOneProductList();
 	public int getIssuePromotionCount(Product product);
 	
 	// front
