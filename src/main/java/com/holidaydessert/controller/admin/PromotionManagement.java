@@ -381,8 +381,7 @@ public class PromotionManagement {
 
 	@RequestMapping(value = "/oneProductPromotionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String oneProductPromotionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
-			@ModelAttribute PromotionDetail promotionDetail,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
 			promotionDetailService.addOne(promotionDetail);
@@ -399,8 +398,7 @@ public class PromotionManagement {
 
 	@RequestMapping(value = "/oneProductPromotionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String oneProductPromotionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
-			@ModelAttribute PromotionDetail promotionDetail,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
 			promotionDetailService.update(promotionDetail);

@@ -1,5 +1,5 @@
 $(function() {
-
+	
 	$('#add-submit').on('click', function () {
 		let result = checkValue();
         if (result == true) {
@@ -56,10 +56,13 @@ $(function() {
 		} else if (!$("#pmdEnd").val()) {
 			warning("請選擇優惠活動結束時間");
 			checkValue = false;
+		} else if($('#pmdStart').val() > $('#pmdEnd').val()){
+			warning("開始時間不得大於結束時間");
+			checkValue = false;
 		} else if (!$("#pmdPdDiscountPrice").val()) {
 			warning("請輸入商品活動優惠價");
 			checkValue = false;
-		} else if ($("#pmdPdDiscountPrice").val() == 0) {
+		} else if ($("#pmdPdDiscountPrice").val() == 0 || $("#pmdPdDiscountPrice").val() == 'null') {
 			warning("商品活動優惠價不得為0");
 			checkValue = false;
 		} else if ($("#pmdPdDiscountPrice").val() > $('#product option:selected').data('price')) {
@@ -77,30 +80,26 @@ $(function() {
         time: false
     });
     
+	setMinDate();
 });
 
-$('#product').on('change', function() {
+$('#product, #promotion').on('change', function() {
 	let pdPrice = $('#product option:selected').data('price') ? $('#product option:selected').data('price') : 0;
 	let pmdiscount = $('#promotion option:selected').data('pmdiscount') ? $('#promotion option:selected').data('pmdiscount') : 0;
+	let pmdPdDiscountPrice = Math.round(pdPrice*pmdiscount).toString();
 	if($('#promotion').val() == '1'){
 		$("#pmdPdDiscountPrice").val('0')
-		$('#pmdPdDiscountPrice').prop('disabled', false);
 	} else {
-		$('#pmdPdDiscountPrice').val(pdPrice*pmdiscount);
-		$('#pmdPdDiscountPrice').prop('disabled', true);
+		$("#pmdPdDiscountPrice").val('')
+		$('#pmdPdDiscountPrice').attr('placeholder', pmdPdDiscountPrice);
 	}
 });
 
-$('#promotion').on('change', function() {
-	let pdPrice = $('#product option:selected').data('price') ? $('#product option:selected').data('price') : 0;
-	let pmdiscount = $('#promotion option:selected').data('pmdiscount') ? $('#promotion option:selected').data('pmdiscount') : 0;
-	if($('#promotion').val() == '1'){
-		$("#pmdPdDiscountPrice").val('0')
-		$('#pmdPdDiscountPrice').prop('disabled', false);
-	} else {
-		$('#pmdPdDiscountPrice').val(pdPrice*pmdiscount);
-		$('#pmdPdDiscountPrice').prop('disabled', true);
-	}
+$('#pmdStart').on('change', function() {
+	setMinDate();
 });
 
+function setMinDate() {
+	$('#pmdEnd').bootstrapMaterialDatePicker('setMinDate', $('#pmdStart').val());
+}
 

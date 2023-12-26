@@ -6,11 +6,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.Setter;
+import lombok.ToString;
 
 @Getter
 @Setter
 @Builder
 @NonNull
+@ToString
 @NoArgsConstructor
 @AllArgsConstructor
 public class PromotionDetail extends Base {
@@ -21,4 +23,5 @@ public class PromotionDetail extends Base {
 	private String pmdStart;           // 起始時間
 	private String pmdEnd;             // 截止時間
 	private String pmdPdDiscountPrice; // 商品活動優惠價
+
 }

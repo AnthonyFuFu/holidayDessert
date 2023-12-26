@@ -63,6 +63,9 @@ $(function() {
 		} else if (!$("#pmEnd").val()) {
 			warning("請選擇結束時間");
 			checkValue = false;
+		} else if($('#pmStart').val() > $('#pmEnd').val()){
+			warning("開始時間不得大於結束時間");
+			checkValue = false;
 		}
 		return checkValue;
 	}
@@ -91,6 +94,8 @@ $(function() {
         time: false
     });
     
+	setMinDate();
+	
     //noUISlider
     var pmDis = $("#pmDiscount").val() != '' ? $("#pmDiscount").val()*100 : 100;
     var sliderBasic = document.getElementById('nouislider');
@@ -122,3 +127,12 @@ $(function() {
 	}
     
 });
+
+$('#pmStart').on('change', function() {
+	setMinDate();
+});
+
+function setMinDate() {
+	$('#pmEnd').bootstrapMaterialDatePicker('setMinDate', $('#pmStart').val());
+}
+

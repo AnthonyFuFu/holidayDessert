@@ -186,6 +186,9 @@ $(function() {
 		} else if (!$("#newsEnd").val()) {
 			warning("請選擇結束時間");
 			checkValue = false;
+		} else if($('#newsStart').val() > $('#newsEnd').val()){
+			warning("開始時間不得大於結束時間");
+			checkValue = false;
 		}
 		return checkValue;
 	}
@@ -206,4 +209,14 @@ $(function() {
         time: false
     });
     
+	setMinDate();
 });
+
+$('#newsStart').on('change', function() {
+	setMinDate();
+});
+
+function setMinDate() {
+	$('#newsEnd').bootstrapMaterialDatePicker('setMinDate', $('#newsStart').val());
+}
+

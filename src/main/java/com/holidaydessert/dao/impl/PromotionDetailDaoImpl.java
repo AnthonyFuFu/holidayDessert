@@ -240,7 +240,7 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " UPDATE holiday_dessert.promotion_detail "
-				   + " SET PD_ID = ?, PM_ID = ?, PMD_START = ?, PMD_END = ?, PMD_PD_DISCOUNT_PRICE = ? "
+				   + " SET PD_ID = ?, PM_ID = ?, PMD_START = CONCAT(?, ' 00:00:00'), PMD_END = CONCAT(?, ' 23:59:59'), PMD_PD_DISCOUNT_PRICE = ? "
 				   + " WHERE PMD_ID = ? ";
 		
 		args.add(promotionDetail.getPdId());
@@ -284,10 +284,9 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 	        item.setPmdId(pmdId);
 	        item.setPdId(pdId);
 	        item.setPmId(pmId);
-	        item.setStart(pmdStart);
+	        item.setPmdStart(pmdStart);
 	        item.setPmdEnd(pmdEnd);
 	        item.setPmdPdDiscountPrice(pmdPdDiscountPrice);
-	        
 	    }
 		return item == null ? null : item;
 	}
