@@ -10,6 +10,7 @@ public interface EmployeeService {
 	// back
 	public List<Map<String, Object>> list(Employee employee);
 	public int getCount(Employee employee);
+	public String getNextId();
 	public void add(Employee employee);
 	public void update(Employee employee);
 	public void resign(Employee employee);

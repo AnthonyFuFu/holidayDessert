@@ -13,6 +13,6 @@ public interface EmpFunctionDao {
 	public void add(EmpFunction empFunction);
 	public void update(EmpFunction empFunction);
 	public EmpFunction getData(EmpFunction empFunction);
-	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction);
+	public List<Map<String, Object>> getAdminListToAuth();
 	
 }

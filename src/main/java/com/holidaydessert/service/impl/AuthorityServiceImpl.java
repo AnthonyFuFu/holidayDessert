@@ -28,10 +28,15 @@ public class AuthorityServiceImpl implements AuthorityService {
 	}
 
 	@Override
-	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction) {
-		authorityDao.batchAdd(employee, empFunction);
+	public void addAdminAuthority(Employee employee, List<Map<String, Object>> empFunction) {
+		authorityDao.addAdminAuthority(employee, empFunction);
 	}
-
+	
+	@Override
+	public void addStaffAuthority(Employee employee, List<Map<String, Object>> empFunction) {
+		authorityDao.addStaffAuthority(employee, empFunction);
+	}
+	
 	@Override
 	public void update(Authority authority) {
 		authorityDao.update(authority);

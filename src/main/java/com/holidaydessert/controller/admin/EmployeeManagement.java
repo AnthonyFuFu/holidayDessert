@@ -62,7 +62,7 @@ public class EmployeeManagement {
 	
 	@Autowired
 	private CommonService commonService;
-
+	
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
@@ -120,6 +120,47 @@ public class EmployeeManagement {
 
 	}
 
+//	@GetMapping("/authorityTables")
+//	public void authorityTables(@SessionAttribute("employeeSession") Employee employeeSession,
+//			@ModelAttribute Authority authority, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+//		Authority authorityData = new Authority();
+//
+//		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+//		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+//		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+//		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+//
+//		authorityData.setStart(start);
+//		authorityData.setLength(length);
+//		authorityData.setSearchText(searchValue);
+//		
+//		List<Map<String, Object>> authorityList = authorityService.list(authorityData);
+//
+//		if (authorityList == null) {
+//			authorityList = new ArrayList<Map<String, Object>>();
+//		}
+//
+//		int count = authorityService.getCount(authorityData);
+//
+//		authority.setRecordsFiltered(count);
+//		authority.setRecordsTotal(count);
+//		authority.setData(authorityList);
+//		authority.setDraw(Integer.valueOf(draw));
+//		
+//		String output = gson.toJson(authority);
+//
+//		pResponse.setCharacterEncoding("utf-8");
+//		
+//		try {
+//			PrintWriter out;
+//			out = pResponse.getWriter();
+//			out.write(output);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+//
+//	}
+	
 	@GetMapping("/empFunctionTables")
 	public void empFunctionTables(@SessionAttribute("employeeSession") Employee employeeSession,
 			@ModelAttribute EmpFunction empFunction, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
@@ -225,7 +266,17 @@ public class EmployeeManagement {
 			}
 			employee.setEmpPicture("holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
 			employeeService.add(employee);
-
+			
+			String id = employeeService.getNextId();
+			employee.setEmpId(id);
+			
+			List<Map<String, Object>> adminList = empFunctionService.getAdminListToAuth();
+			if (employee.getEmpLevel().equals("0")) {
+				authorityService.addAdminAuthority(employee, adminList);
+			} else {
+				authorityService.addStaffAuthority(employee, adminList);
+			}
+			
 			model.addAttribute("MESSAGE", "資料新增成功");
 		} catch (Exception e) {
 			e.printStackTrace();

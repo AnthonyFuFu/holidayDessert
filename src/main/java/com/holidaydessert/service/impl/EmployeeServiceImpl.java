@@ -27,6 +27,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	@Override
+	public String getNextId() {
+		return employeeDao.getNextId();
+	}
+
+	@Override
 	public void add(Employee employee) {
 		employeeDao.add(employee);
 	}

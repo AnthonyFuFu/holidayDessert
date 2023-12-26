@@ -58,7 +58,7 @@ public class AuthorityDaoImpl implements AuthorityDao{
 	}
 	
 	@Override
-	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction) {
+	public void addAdminAuthority(Employee employee, List<Map<String, Object>> empFunction) {
 		
 		List<Object> args = new ArrayList<>();
 		
@@ -79,6 +79,31 @@ public class AuthorityDaoImpl implements AuthorityDao{
 		
 		jdbcTemplate.update(sql, args.toArray());
 		
+	}
+	
+	@Override
+	public void addStaffAuthority(Employee employee, List<Map<String, Object>> empFunction) {
+	    
+	    List<Object> args = new ArrayList<>();
+	    
+	    String sql = " INSERT INTO holiday_dessert.authority "
+	               + " (EMP_ID, FUNC_ID, AUTH_STATUS) VALUES ";
+	    
+	    if (empFunction.size() > 0) {
+	        for (int i = 0; i < empFunction.size(); i++) {
+	            if (i > 0) {
+	                sql += ",";
+	            }
+	            if (empFunction.get(i).get("FUNC_ID").toString().equals("1") || empFunction.get(i).get("FUNC_ID").toString().equals("2")) {
+	                sql += "(?, ?, 0) ";
+	            } else {
+	                sql += "(?, ?, 1) ";
+	            }
+	            args.add(employee.getEmpId());
+	            args.add(empFunction.get(i).get("FUNC_ID"));
+	        }
+	    }
+	    jdbcTemplate.update(sql, args.toArray());
 	}
 
 	@Override

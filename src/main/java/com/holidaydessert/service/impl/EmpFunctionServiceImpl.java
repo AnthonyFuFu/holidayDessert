@@ -42,8 +42,8 @@ public class EmpFunctionServiceImpl implements EmpFunctionService {
 	}
 	
 	@Override
-	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction) {
-		return empFunctionDao.getIdToAuth(empFunction);
+	public List<Map<String, Object>> getAdminListToAuth() {
+		return empFunctionDao.getAdminListToAuth();
 	}
 
 }

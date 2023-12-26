@@ -11,7 +11,8 @@ public interface AuthorityDao {
 	// back
 	public List<Map<String, Object>> list(Authority authority);
 	public int getCount(Authority authority);
-	public void batchAdd(Employee employee, List<Map<String, Object>> empFunction);
+	public void addAdminAuthority(Employee employee, List<Map<String, Object>> empFunction);
+	public void addStaffAuthority(Employee employee, List<Map<String, Object>> empFunction);
 	public void update(Authority authority);
 	
 }

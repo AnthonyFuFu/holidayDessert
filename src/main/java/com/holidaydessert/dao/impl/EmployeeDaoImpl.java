@@ -129,6 +129,20 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	}
 
 	@Override
+	public String getNextId() {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT EMP_ID "
+				   + " FROM holiday_dessert.employee "
+				   + " ORDER BY EMP_ID DESC "
+				   + " LIMIT 1 ";
+
+		return jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("EMP_ID").toString();
+		
+	}
+
+	@Override
 	public void add(Employee employee) {
 
 		List<Object> args = new ArrayList<>();
@@ -136,7 +150,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 		String sql = " INSERT INTO holiday_dessert.employee "
 				   + " (EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS, EMP_HIREDATE) "
 				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 1, NOW()) ";
-		
+
 		args.add(employee.getEmpName());
 		args.add(employee.getDeptId());
 		args.add(employee.getEmpPhone());

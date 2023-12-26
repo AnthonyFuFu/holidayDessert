@@ -165,7 +165,7 @@ public class EmpFunctionDaoImpl implements EmpFunctionDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> getIdToAuth(EmpFunction empFunction) {
+	public List<Map<String, Object>> getAdminListToAuth() {
 
 		String sql = " SELECT FUNC_ID FROM holiday_dessert.emp_function "
 				   + " WHERE FUNC_STATUS = 1 ";
