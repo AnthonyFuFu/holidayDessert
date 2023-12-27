@@ -38,8 +38,27 @@ public class AuthorityDaoImpl implements AuthorityDao{
 		}
 
 	}
+	
+	@Override
+	public List<Map<String, Object>> getAuthorityList(Authority authority) {
+		
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT a.*,ef.FUNC_NAME FROM holiday_dessert.authority a "
+				   + " LEFT JOIN holiday_dessert.emp_function ef on ef.FUNC_ID = a.FUNC_ID "
+				   + " WHERE EMP_ID = ? ";
+		
+		args.add(authority.getEmpId());
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
 
-
+	}
+	
 	@Override
 	public int getCount(Authority authority) {
 		

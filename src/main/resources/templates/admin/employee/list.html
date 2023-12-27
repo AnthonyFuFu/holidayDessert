@@ -107,7 +107,18 @@
                                         </div>
                                         
                                         <div role="tabpanel" class="tab-pane fade" id="authority_animation">
-
+                            				<div class="table-responsive">
+                                				<table id="authority-table" class="table table-bordered table-striped table-hover basic-dataTable dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>ID</th>
+                                            				<th>名字</th>
+                                            				<th>相片</th>
+                                            				<th>權限管理</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
                                         </div>
                                         
                                     </div>
@@ -127,6 +138,7 @@
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/employee/employee.js}"></script>
 <script th:src="@{/admin/js/employee/emp-function.js}"></script>
+<script th:src="@{/admin/js/employee/authority.js}"></script>
 
 </body>
 </html>

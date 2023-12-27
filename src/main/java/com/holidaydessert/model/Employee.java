@@ -1,5 +1,8 @@
 package com.holidaydessert.model;
 
+import java.util.List;
+import java.util.Map;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,5 +34,7 @@ public class Employee extends Base {
 	private String empLevel;           // 等級(0:最高管理員 1:一般管理員)
 	private String empStatus;          // 狀態(0:停權 1:啟用)
 	private String empHiredate;        // 入職日
+	
+	private List<Map<String, Object>> authorityList;
 	
 }

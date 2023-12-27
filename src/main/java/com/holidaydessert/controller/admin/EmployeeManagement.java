@@ -120,46 +120,53 @@ public class EmployeeManagement {
 
 	}
 
-//	@GetMapping("/authorityTables")
-//	public void authorityTables(@SessionAttribute("employeeSession") Employee employeeSession,
-//			@ModelAttribute Authority authority, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-//		Authority authorityData = new Authority();
-//
-//		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-//		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-//		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-//		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-//
-//		authorityData.setStart(start);
-//		authorityData.setLength(length);
-//		authorityData.setSearchText(searchValue);
-//		
-//		List<Map<String, Object>> authorityList = authorityService.list(authorityData);
-//
-//		if (authorityList == null) {
-//			authorityList = new ArrayList<Map<String, Object>>();
-//		}
-//
-//		int count = authorityService.getCount(authorityData);
-//
-//		authority.setRecordsFiltered(count);
-//		authority.setRecordsTotal(count);
-//		authority.setData(authorityList);
-//		authority.setDraw(Integer.valueOf(draw));
-//		
-//		String output = gson.toJson(authority);
-//
-//		pResponse.setCharacterEncoding("utf-8");
-//		
-//		try {
-//			PrintWriter out;
-//			out = pResponse.getWriter();
-//			out.write(output);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//
-//	}
+	@GetMapping("/authorityTables")
+	public void authorityTables(@SessionAttribute("employeeSession") Employee employeeSession,
+			@ModelAttribute Employee employee, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+		Employee employeeData = new Employee();
+		Authority authority = new Authority();
+		
+		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
+		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
+		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
+		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
+
+		employeeData.setStart(start);
+		employeeData.setLength(length);
+		employeeData.setSearchText(searchValue);
+
+		List<Map<String, Object>> employeeList = employeeService.list(employeeData);
+
+		if (employeeList == null) {
+			employeeList = new ArrayList<Map<String, Object>>();
+		}
+
+		for(int i=0; i<employeeList.size(); i++) {
+			authority.setEmpId(employeeList.get(i).get("EMP_ID").toString());
+			List<Map<String, Object>> authList = authorityService.getAuthorityList(authority);
+			employeeList.get(i).put("AUTH_LIST", authList);
+		}
+		
+		int count = employeeService.getCount(employeeData);
+		
+		employee.setRecordsFiltered(count);
+		employee.setRecordsTotal(count);
+		employee.setData(employeeList);
+		employee.setDraw(Integer.valueOf(draw));
+		
+		String output = gson.toJson(employee);
+
+		pResponse.setCharacterEncoding("utf-8");
+		
+		try {
+			PrintWriter out;
+			out = pResponse.getWriter();
+			out.write(output);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
 	
 	@GetMapping("/empFunctionTables")
 	public void empFunctionTables(@SessionAttribute("employeeSession") Employee employeeSession,
