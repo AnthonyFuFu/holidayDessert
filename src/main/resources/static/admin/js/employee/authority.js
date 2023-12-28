@@ -78,7 +78,7 @@ $(function() {
 							authList +=
 							`<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
 								<div class="form-group"><div class="switch">
-                                <label>${auth.FUNC_NAME}<input type="checkbox" id="checkStatus" class="form-control" checked="${auth.AUTH_STATUS == 1 ? 'true' : 'false'}"><span class="lever switch-col-cyan"></span></label>
+                                <label>${auth.FUNC_NAME}<input type="checkbox" id="checkStatus" class="form-control" ${auth.AUTH_STATUS == 1 ? 'checked' : ''}><span class="lever switch-col-cyan"></span></label>
                                 </div></div>
                              </div>`
 						});
