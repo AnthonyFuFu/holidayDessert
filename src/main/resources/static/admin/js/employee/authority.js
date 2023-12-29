@@ -78,7 +78,7 @@ $(function() {
 							authList +=
 							`<div class="col-lg-3 col-md-3 col-sm-3 col-xs-3">
 								<div class="form-group"><div class="switch">
-                                <label>${auth.FUNC_NAME}<input type="checkbox" id="checkStatus" class="form-control" ${auth.AUTH_STATUS == 1 ? 'checked' : ''}><span class="lever switch-col-cyan"></span></label>
+                                <label onclick="authChange()">${auth.FUNC_NAME}<input type="checkbox" class="form-control auth" data-empid="${auth.EMP_ID}" data-funcid="${auth.FUNC_ID}" ${auth.AUTH_STATUS == 1 ? 'checked' : ''}><span class="lever switch-col-cyan"></span></label>
                                 </div></div>
                              </div>`
 						});
@@ -105,6 +105,42 @@ $(function() {
         	{ data: "AUTH_LIST" }
 		]
     });
-    
 });
+
+function statusCheck() {
+	if ($("#checkStatus").prop("checked")) {
+		$("#pdStatus").val("1");
+	} else {
+		$("#pdStatus").val("0");
+	}
+}
+
+function authChange() {
+	
+	let label = $(event.currentTarget);
+	if (!label.hasClass('clicked')) {
+		let empId = label.find('.auth').attr('data-empid');
+		let funcId = label.find('.auth').attr('data-funcid');
+		let authStatus = label.find('.auth').prop('checked') == true ? '0' : '1';
+		authUpdate(empId,funcId,authStatus)
+		label.addClass('clicked');
+	} else {
+		label.removeClass('clicked');
+	}
+	
+};
+
+function authUpdate(empId, funcId, authStatus) {
+	$.ajax({
+		url: "authUpdateSubmit",
+		cache: false,
+		async: false,
+		type: "POST",
+		data: {
+			empId: empId,
+			funcId: funcId,
+			authStatus: authStatus
+		}
+	});
+}
 

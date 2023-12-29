@@ -8,6 +8,7 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -416,6 +417,22 @@ public class EmployeeManagement {
 			e.printStackTrace();
 		}
 		return "admin/toPath";
+	}
+	
+	@RequestMapping(value = "/authUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public void authUpdateSubmit(HttpServletRequest pRequest, HttpServletResponse pResponse, HttpSession session, Model model) {
+		
+		String empId = pRequest.getParameter("empId")!=null ? pRequest.getParameter("empId") : "";
+		String funcId = pRequest.getParameter("funcId")!=null ? pRequest.getParameter("funcId") : "";
+		String authStatus = pRequest.getParameter("authStatus")!=null ? pRequest.getParameter("authStatus") : "";
+		
+		Authority authority = new Authority();
+		authority.setEmpId(empId);
+		authority.setFuncId(funcId);
+		authority.setAuthStatus(authStatus);
+		
+		authorityService.update(authority);
+		
 	}
 	
 }
