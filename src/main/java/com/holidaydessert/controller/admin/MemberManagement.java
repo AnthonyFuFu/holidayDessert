@@ -29,6 +29,7 @@ import com.holidaydessert.model.Member;
 import com.holidaydessert.model.ReceiptInformation;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CartService;
+import com.holidaydessert.service.ChatRoomService;
 import com.holidaydessert.service.MemberService;
 import com.holidaydessert.service.ReceiptInformationService;
 
@@ -56,6 +57,9 @@ public class MemberManagement {
 
 	@Autowired
 	private CartService cartService;
+
+	@Autowired
+	private ChatRoomService chatRoomService;
 	
 	private Gson gson = new Gson();
 	
@@ -68,6 +72,9 @@ public class MemberManagement {
 		authority.setEmpId(employeeSession.getEmpId());
 		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		
+		List<Map<String, Object>> chatRoomList = chatRoomService.getAllChatRoom();
+		
+		model.addAttribute("chatRoomList", chatRoomList);
 		model.addAttribute("authorityList", authorityList);
 		return "admin/member/list";
 

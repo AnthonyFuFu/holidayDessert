@@ -76,8 +76,20 @@
                         				</div>
                         				
                                         <div role="tabpanel" class="tab-pane fade" id="message_animation">
-                                        
-                                        </div>
+											<div class="row">
+												<div th:each="chatRoom : ${chatRoomList}" class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
+													<div class="info-box bg-cyan hover-zoom-effect hover-expand-effect chat-room" th:data-roomurl="${chatRoom.ROOM_URL}">
+														<div class="icon">
+															<i class="material-icons">email</i>
+														</div>
+														<div class="content">
+															<div class="number" th:text="${chatRoom.MEM_NAME}"></div>
+															<div class="text" th:text="${'共'+chatRoom.MSG_COUNT+'則訊息'}"></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
                                         
                                         <div role="tabpanel" class="tab-pane fade" id="receipt_information_animation">
                                         	<div class="table-responsive">
@@ -130,6 +142,7 @@
 
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/member/member.js}"></script>
+<script th:src="@{/admin/js/member/chat-room.js}"></script>
 <script th:src="@{/admin/js/member/receipt-information.js}"></script>
 <script th:src="@{/admin/js/member/cart.js}"></script>
 

@@ -3,6 +3,7 @@ USE holiday_dessert;
 
 DROP TABLE IF EXISTS product_pic;
 DROP TABLE IF EXISTS message;
+DROP TABLE IF EXISTS chat_room;
 DROP TABLE IF EXISTS promotion_detail;
 DROP TABLE IF EXISTS product;
 DROP TABLE IF EXISTS product_collection;
@@ -93,7 +94,7 @@ CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DE
 );
 INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
 VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
-		('嘉', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
+		('嘉嘉', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
         
 -- 功能-- 
 CREATE TABLE emp_function(
@@ -133,7 +134,15 @@ VALUES  (1,1,1),
 		(1,5,1),
 		(1,6,1),
 		(1,7,1),
-		(1,8,1);
+		(1,8,1),
+        (2,1,0),
+		(2,2,0),
+		(2,3,1),
+		(2,4,1),
+		(2,5,1),
+		(2,6,1),
+		(2,7,1),
+		(2,8,1);
 
 -- 最新消息 --
 create table news(
@@ -165,24 +174,36 @@ insert into banner(NEWS_ID)
 VALUES ('1');
 
 -- ================== CREATE TABLE(客服相關）================== --
+-- 聊天室 --
+create table chat_room(
+	ROOM_ID int auto_increment not null primary key,
+	ROOM_URL VARCHAR(300),
+    ROOM_STATUS INT(1) not null,
+    ROOM_UPDATE_STATUS INT(1) not null,
+    ROOM_LAST_UPDATE datetime
+);
+insert into chat_room (ROOM_URL,ROOM_STATUS,ROOM_UPDATE_STATUS,ROOM_LAST_UPDATE)
+value('chatRoomUrl',1,0,NOW());
 
 -- 客服聊天紀錄 --
 create table message(
 	MSG_ID int auto_increment not null primary key,
 	EMP_ID int not null,
 	MEM_ID int not null,
+	ROOM_ID int not null,
 	MSG_CONTENT varchar(3000),
 	MSG_TIME datetime default current_timestamp on update current_timestamp not null,
 	MSG_DIRECTION INT(1) not null,
     MSG_PICTURE VARCHAR(300),
     MSG_IMAGE VARCHAR(100),
     constraint message_employee_fk foreign key (EMP_ID) references employee(EMP_ID),
-    constraint message_member_fk foreign key (MEM_ID) references member(MEM_ID)
+    constraint message_member_fk foreign key (MEM_ID) references member(MEM_ID),
+    constraint message_chat_room_fk foreign key (ROOM_ID) references chat_room(ROOM_ID)
 );
 
-insert into message (EMP_ID,MEM_ID,MSG_CONTENT,MSG_DIRECTION)
-value(1,1,"HI",0),
-	 (1,1,"Hello",0);
+insert into message (EMP_ID,MEM_ID,ROOM_ID,MSG_CONTENT,MSG_DIRECTION)
+value(1,1,1,"HI",0),
+	 (1,1,1,"Hello",0);
 
 -- 商品分類 --
 create table product_collection(

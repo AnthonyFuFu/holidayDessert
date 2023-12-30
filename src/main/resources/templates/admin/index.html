@@ -36,9 +36,10 @@
 			<!-- breadcrumbs -->
             <div th:include="admin/load/breadcrumbs :: index" class="row clearfix block-header"></div>
             <!-- #END# breadcrumbs -->
+            <div th:if="${employeeSession != null}"> [[${employeeSession.empName}]], [[${employeeSession.empAccount}]], [[${employeeSession.empPassword}]] </div>
+            
         </div>
     </section>
-<div th:if="${employeeSession != null}"> [[${employeeSession.empName}]], [[${employeeSession.empAccount}]], [[${employeeSession.empPassword}]] </div>
 <!-- <div th:if="${employeeSession != null}" th:include="front/chat :: chat"></div> -->
 
 <div th:include="admin/load/js :: js"></div>
