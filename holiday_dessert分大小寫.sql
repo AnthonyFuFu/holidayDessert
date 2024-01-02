@@ -89,6 +89,7 @@ EMP_EMAIL VARCHAR(40) NOT NULL,
 EMP_LEVEL INT(2) NOT NULL,
 EMP_STATUS INT(1) NOT NULL default '1',
 EMP_HIREDATE date not null DEFAULT (CURRENT_DATE),
+EMP_THEME VARCHAR(40),
 CONSTRAINT unikey_EMP_ACCOUNT unique(EMP_ACCOUNT),
 CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DEPT_ID)
 );

@@ -16,5 +16,6 @@ public interface EmployeeService {
 	public void resign(Employee employee);
 	public Employee getData(Employee employee);
 	public Employee login(Employee employee);
+	public void updateTheme(Employee employee);
 	
 }

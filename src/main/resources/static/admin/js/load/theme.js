@@ -1,4 +1,5 @@
 $(function () {
+	skinCheck();
     skinChanger();
     activateNotificationAndTasksScroll();
 
@@ -10,25 +11,59 @@ $(function () {
     });
 });
 
+//Skin check
+function skinCheck() {
+	$('.navbar-right .pull-right').on('click', function() {
+		let bodyClass = $('body').attr('class');
+		let theme = bodyClass.match(/\btheme-(\S+)\b/);
+		if (theme) {
+			let empTheme = theme[1];
+			if (empTheme !== '' && empTheme !== 'null' && empTheme !== null) {
+				$('.right-sidebar .choose-skin li').each(function() {
+					if ($(this).data('theme') === empTheme) {
+						$(this).addClass('active');
+					}
+				});
+			}
+		}
+	})
+}
+
 //Skin changer
 function skinChanger() {
-    $('.right-sidebar .demo-choose-skin li').on('click', function () {
-        var $body = $('body');
-        var $this = $(this);
-
-        var existTheme = $('.right-sidebar .demo-choose-skin li.active').data('theme');
-        $('.right-sidebar .demo-choose-skin li').removeClass('active');
+    $('.right-sidebar .choose-skin li').on('click', function () {
+        let $body = $('body');
+        let $this = $(this);
+        let empTheme = $this.data('theme');
+        let loginEmpId = $('#loginEmpId').val();
+        let existTheme = $('.right-sidebar .choose-skin li.active').data('theme');
+        
+        $('.right-sidebar .choose-skin li').removeClass('active');
         $body.removeClass('theme-' + existTheme);
         $this.addClass('active');
-
-        $body.addClass('theme-' + $this.data('theme'));
+        $body.addClass('theme-' + empTheme);
+        
+		updateTheme(loginEmpId,empTheme);
     });
+}
+
+function updateTheme(loginEmpId, empTheme) {
+	$.ajax({
+		url: "/holidayDessert/admin/updateTheme",
+		cache: false,
+		async: false,
+		type: "POST",
+		data: {
+			empId: loginEmpId,
+			empTheme: empTheme
+		}
+	});
 }
 
 //Skin tab content set height and show scroll
 function setSkinListHeightAndScroll(isFirstTime) {
     var height = $(window).height() - ($('.navbar').innerHeight() + $('.right-sidebar .nav-tabs').outerHeight());
-    var $el = $('.demo-choose-skin');
+    var $el = $('.choose-skin');
 
     if (!isFirstTime){
       $el.slimScroll({ destroy: true }).height('auto');

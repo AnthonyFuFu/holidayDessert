@@ -233,6 +233,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        String empLevel = String.valueOf(resultMap.get("EMP_LEVEL"));
 	        String empStatus = String.valueOf(resultMap.get("EMP_STATUS"));
 	        String empHiredate = String.valueOf(resultMap.get("EMP_HIREDATE"));
+	        String empTheme = String.valueOf(resultMap.get("EMP_THEME"));
 	        
 	        user.setEmpId(empId);
 	        user.setDeptId(deptId);
@@ -248,6 +249,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        user.setEmpLevel(empLevel);
 	        user.setEmpStatus(empStatus);
 	        user.setEmpHiredate(empHiredate);
+	        user.setEmpTheme(empTheme);
 	    }
 		return user == null ? null : user;
 	}
@@ -282,6 +284,7 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        String empLevel = String.valueOf(resultMap.get("EMP_LEVEL"));
 	        String empStatus = String.valueOf(resultMap.get("EMP_STATUS"));
 	        String empHiredate = String.valueOf(resultMap.get("EMP_HIREDATE"));
+	        String empTheme = String.valueOf(resultMap.get("EMP_THEME"));
 	        
 	        user.setEmpId(empId);
 	        user.setDeptId(deptId);
@@ -297,8 +300,24 @@ public class EmployeeDaoImpl implements EmployeeDao {
 	        user.setEmpLevel(empLevel);
 	        user.setEmpStatus(empStatus);
 	        user.setEmpHiredate(empHiredate);
+	        user.setEmpTheme(empTheme);
 	    }
 		return user == null ? null : user;
+	}
+
+	@Override
+	public void updateTheme(Employee employee) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " UPDATE holiday_dessert.employee "
+				   + " SET EMP_THEME = ? "
+				   + " WHERE EMP_ID = ? ";
+		
+		args.add(employee.getEmpTheme());
+		args.add(employee.getEmpId());
+		
+		jdbcTemplate.update(sql, args.toArray());
 	}
 
 }

@@ -56,4 +56,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		return employeeDao.login(employee);
 	}
 
+	@Override
+	public void updateTheme(Employee employee) {
+		employeeDao.updateTheme(employee);
+	}
+
 }

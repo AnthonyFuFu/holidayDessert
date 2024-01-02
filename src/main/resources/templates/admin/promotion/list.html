@@ -4,7 +4,7 @@
 <head>
 <title>[[${@environment.getProperty('html.title')}]] - 優惠活動管理</title>
 </head>
-<body class="theme-red">
+<body th:class="theme- + (${employeeSession.empTheme} != 'null' and ${employeeSession.empTheme} != '' ? ${employeeSession.empTheme} : 'red')">
 
     <!-- Page Loader -->
     <div th:include="admin/load/pageloader :: pageloader" class="page-loader-wrapper"></div>
