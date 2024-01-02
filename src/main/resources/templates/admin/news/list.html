@@ -49,8 +49,8 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/addNews}">新增最新消息</a></li>
-                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/addBanner}">新增最新消息圖片</a></li>
+                            			<li><a href="/holidayDessert/admin/news/addNews">新增最新消息</a></li>
+                            			<li><a href="/holidayDessert/admin/news/addBanner">新增最新消息圖片</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -108,7 +108,7 @@
 																		<img src="http://placehold.it/500x300" class="img-responsive">
 																	</div>
 																</div>
-																<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/news/editBanner?newsId=}+${news.NEWS_ID}">修改</a>
+																<a class="btn btn-default waves-effect btn-block" th:href="'/holidayDessert/admin/news/editBanner?newsId='+${news.NEWS_ID}">修改</a>
 																<!-- Controls -->
 																<a class="left carousel-control" th:href="'#banner_'+${news.NEWS_ID}" role="button" data-slide="prev">
 																	<span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>

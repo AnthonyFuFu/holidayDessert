@@ -49,7 +49,7 @@
                                         <i class="material-icons">more_vert</i>
                                     </a>
                                     <ul class="dropdown-menu pull-right">
-                            			<li><a th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/addProductPic?pdId=}+${product.pdId}">新增商品圖片</a></li>
+                            			<li><a th:href="'/holidayDessert/admin/product/addProductPic?pdId='+${product.pdId}">新增商品圖片</a></li>
                             			<li><a href="#"onclick="history.back()">返回列表</a></li>
                                     </ul>
                                 </li>
@@ -69,7 +69,7 @@
 														<img th:unless="${productPic.PD_PICTURE}" src="http://placehold.it/500x300" class="img-responsive">
 													</div>
 												</div>
-												<a class="btn btn-default waves-effect btn-block" th:href="${@environment.getProperty('web.path')}+@{holidayDessert/admin/product/updateProductPic?pdPicId=}+${productPic.PD_PIC_ID}">修改商品圖片</a>
+												<a class="btn btn-default waves-effect btn-block" th:href="'/holidayDessert/admin/product/updateProductPic?pdPicId='+${productPic.PD_PIC_ID}">修改商品圖片</a>
 											</div>
 										</div>
 									</div>
