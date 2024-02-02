@@ -1,6 +1,5 @@
 package com.holidaydessert.controller;
 
-import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -9,93 +8,83 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.MemberService;
 
-@Controller
+@RestController
 @RequestMapping("/front")
 public class FrontLoginController {
 	
 	@Autowired
 	private MemberService memberService;
 	
-	@GetMapping("/login")
-    public String login(@ModelAttribute Member member, Model model){
-		return "front/login";
-    }
-	
-	@RequestMapping(value = "/doLogin" , method = {RequestMethod.POST})
-	public void doLogin(HttpServletRequest pRequest, HttpServletResponse pResponse, HttpSession session, Model model) {
-		
-		String memEmail = pRequest.getParameter("memEmail") != null ? pRequest.getParameter("memEmail") : "";
-		String memPassword = pRequest.getParameter("memPassword") != null ? pRequest.getParameter("memPassword") : "";
-		
-		Map<String, Object> map = new HashMap<>();
-		
-		try {
-			Member member = new Member();
-			member.setMemEmail(memEmail);
-			member.setMemPassword(memPassword);
-			Member login = memberService.login(member);
-			
-			//檢查帳號密碼是否符合
-			if(login != null && login.getMemEmail() != null) {
-				
-				member = login;
-				
-				if("0".equals(member.getMemStatus())) {
-					map.put("STATUS", "N");
-					map.put("MSG", "帳號未啟用");
-				} else if ("0".equals(member.getMemVerificationStatus())) {
-					map.put("STATUS", "N");
-					map.put("MSG", "信箱認證未通過");
-				} else {
-					//session登錄
-					session.setAttribute("memberSession", member);
-					session.setMaxInactiveInterval(60*60);
-					
-					map.put("STATUS", "Y");
-					map.put("MSG", "登入成功");
-				}
-				
-			} else {
-				map.put("STATUS", "N");
-				map.put("MSG", "帳號或密碼輸入錯誤！");
-			}
-			
-			JSONObject tJSONObject = new JSONObject(map);
-			
-			pResponse.setCharacterEncoding("utf-8");
-			PrintWriter out = pResponse.getWriter();
-			out.write(tJSONObject.toString());
-			
-		} catch(Exception ex) {
-			ex.printStackTrace();
-		}
-		
-	}
-	
-	@RequestMapping(value = "/logout" , method = {RequestMethod.POST})
-	public void logout(HttpServletRequest pRequest, HttpServletResponse pResponse, HttpSession session, Model model) {
-		
-		if(session.getAttribute("memberSession") != null){
-			session.removeAttribute("memberSession");
-		}
-		
-	}
+    @PostMapping("/login")
+    public ResponseEntity<Map<String, Object>> login(@RequestParam("memEmail") String memEmail, @RequestParam("memPassword") String memPassword, HttpSession session) {
+        
+    	Map<String, Object> responseMap = new HashMap<>();
+        try {
+            Member member = new Member();
+            member.setMemEmail(memEmail);
+            member.setMemPassword(memPassword);
+            Member login = memberService.login(member);
 
+            // 檢查帳號密碼是否符合
+            if (login != null && login.getMemEmail() != null) {
+                if ("0".equals(login.getMemStatus())) {
+                    responseMap.put("STATUS", "N");
+                    responseMap.put("MSG", "帳號未啟用");
+                } else if ("0".equals(login.getMemVerificationStatus())) {
+                    responseMap.put("STATUS", "N");
+                    responseMap.put("MSG", "信箱認證未通過");
+                } else {
+                    // session登錄
+                    session.setAttribute("memberSession", login);
+                    session.setMaxInactiveInterval(60 * 60);
+
+                    responseMap.put("STATUS", "Y");
+                    responseMap.put("MSG", "登入成功");
+                    responseMap.put("memberSession", login);
+                }
+            } else {
+                responseMap.put("STATUS", "N");
+                responseMap.put("MSG", "帳號或密碼輸入錯誤！");
+            }
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            responseMap.put("STATUS", "N");
+            responseMap.put("MSG", "伺服器錯誤");
+        }
+        return ResponseEntity.ok(responseMap);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Map<String, String>> logout(HttpSession session) {
+        Map<String, String> responseMap = new HashMap<>();
+
+        if (session.getAttribute("memberSession") != null) {
+            session.removeAttribute("memberSession");
+            responseMap.put("STATUS", "success");
+            return ResponseEntity.ok(responseMap);
+        } else {
+            responseMap.put("STATUS", "failure");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
+        }
+    }
+    
 	@GetMapping("/google/login")
 	public RedirectView googleLogin(@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Authentication authentication) {
 

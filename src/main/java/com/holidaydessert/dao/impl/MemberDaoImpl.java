@@ -5,11 +5,14 @@ import java.util.List;
 import java.util.Map;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.holidaydessert.dao.MemberDao;
 import com.holidaydessert.model.Member;
@@ -214,222 +217,108 @@ public class MemberDaoImpl implements MemberDao {
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 	
-	
-	
-	
-	
 	@Override
+    @Transactional
 	public void register(Member member) {
         entityManager.persist(member);
-//		String sql = " INSERT INTO holiday_dessert.member "
-//				   + " (MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL, "
-//				   + " MEM_ADDRESS, MEM_BIRTHDAY, MEM_STATUS, MEM_VERIFICATION_STATUS, MEM_VERIFICATION_CODE) "
-//				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)";
-//		
-//		jdbcTemplate.update(sql, new Object[] { member.getMemName(), member.getMemAccount(), member.getMemPassword(), member.getMemGender(), member.getMemPhone(), 
-//				member.getMemEmail(), member.getMemAddress(), member.getMemBirthday(), member.getMemVerificationCode() });
-		
-	}
-
-	@Override
-	public void edit(Member member) {
-		
-		entityManager.persist(member);
-		
-//		List<Object> args = new ArrayList<>();
-//		String sql = " UPDATE holiday_dessert.member "
-//				   + " SET MEM_NAME = ?, MEM_ACCOUNT = ?, MEM_PASSWORD = ?, MEM_GENDER = ?, "
-//				   + " MEM_PHONE = ?, MEM_EMAIL = ?, MEM_ADDRESS = ?, MEM_BIRTHDAY = ? "
-//				   + " WHERE MEM_ID = ? ";
-//		
-//		args.add(member.getMemName());
-//		args.add(member.getMemAccount());
-//		args.add(member.getMemPassword());
-//		args.add(member.getMemGender());
-//		args.add(member.getMemPhone());
-//		args.add(member.getMemEmail());
-//		args.add(member.getMemAddress());
-//		args.add(member.getMemBirthday());
-//		args.add(member.getMemId());
-//		
-//		jdbcTemplate.update(sql, args.toArray());
-		
 	}
 	
+	@Override
+    @Transactional
+	public void edit(Member member) {
+		
+	    Member managedMember = entityManager.find(Member.class, member.getMemId());
+	    
+	    if (managedMember != null) {
+	        managedMember.setMemName(member.getMemName());
+	        managedMember.setMemAccount(member.getMemAccount());
+	        managedMember.setMemPassword(member.getMemPassword());
+	        managedMember.setMemGender(member.getMemGender());
+	        managedMember.setMemPhone(member.getMemPhone());
+	        managedMember.setMemEmail(member.getMemEmail());
+	        managedMember.setMemAddress(member.getMemAddress());
+	        managedMember.setMemBirthday(member.getMemBirthday());
+	    }
+	    
+	}
+
+    @Override
+    @Transactional
 	public void verificationEmail(Member member) {
-		
-		String sql = " UPDATE forecast.member "
-				   + " SET MEM_VERIFICATION_STATUS = '1', MEM_STATUS = '1' "
-				   + " WHERE MEM_ID = ? ";
-		
-		jdbcTemplate.update(sql, new Object[] { member.getMemId() });
-		
+    	
+        Member managedMember = entityManager.find(Member.class, member.getMemId());
+
+        if (managedMember != null) {
+            managedMember.setMemVerificationStatus("1");
+            managedMember.setMemStatus("1");
+        }
+        
 	}
 
 	@Override
 	public Member getCheckMemberEmail(Member member) {
 
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT * FROM holiday_dessert.member "
-				   + " WHERE MEM_EMAIL = ? ";
-		
-		args.add(member.getMemEmail());
-		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		Member user = new Member();
-		if (!list.isEmpty()) {
-	        Map<String, Object> resultMap = list.get(0);
-	        String memId = String.valueOf(resultMap.get("MEM_ID"));
-	        String memName = String.valueOf(resultMap.get("MEM_NAME"));
-	        String memAccount = String.valueOf(resultMap.get("MEM_ACCOUNT"));
-	        String memPassword = String.valueOf(resultMap.get("MEM_PASSWORD"));
-	        String memGender = String.valueOf(resultMap.get("MEM_GENDER"));
-	        String memPhone = String.valueOf(resultMap.get("MEM_PHONE"));
-	        String memEmail = String.valueOf(resultMap.get("MEM_EMAIL"));
-	        String memAddress = String.valueOf(resultMap.get("MEM_ADDRESS"));
-	        String memBirthday = String.valueOf(resultMap.get("MEM_BIRTHDAY"));
-	        String memStatus = String.valueOf(resultMap.get("MEM_STATUS"));
-	        String memVerificationStatus = String.valueOf(resultMap.get("MEM_VERIFICATION_STATUS"));
-	        String memVerificationCode = String.valueOf(resultMap.get("MEM_VERIFICATION_CODE"));
-	        String memGoogleUid = String.valueOf(resultMap.get("MEM_GOOGLE_UID"));
-	        
-	        user.setMemId(memId);
-	        user.setMemName(memName);
-	        user.setMemAccount(memAccount);
-	        user.setMemPassword(memPassword);
-	        user.setMemGender(memGender);
-	        user.setMemPhone(memPhone);
-	        user.setMemEmail(memEmail);
-	        user.setMemAddress(memAddress);
-	        user.setMemBirthday(memBirthday);
-	        user.setMemStatus(memStatus);
-	        user.setMemVerificationStatus(memVerificationStatus);
-	        user.setMemVerificationCode(memVerificationCode);
-	        user.setMemGoogleUid(memGoogleUid);
-	        
-	    }
-		return user == null ? null : user;
-
+        TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memEmail = :memEmail", Member.class);
+        query.setParameter("memEmail", member.getMemEmail());
+        
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+        
 	}
 	
 	@Override
+    @Transactional
 	public void updateVerification(Member member) {
-		
-		String sql = " UPDATE forecast.member "
-				   + " SET MEM_VERIFICATION_CODE = ? "
-				   + " WHERE MEM_ID = ? ";
-		
-		jdbcTemplate.update(sql, new Object[] { member.getMemVerificationCode(), member.getMemId()});
-		
+
+        Member managedMember = entityManager.find(Member.class, member.getMemId());
+
+        if (managedMember != null) {
+            managedMember.setMemVerificationCode(member.getMemVerificationCode());
+        }
+        
 	}
 
 	@Override
+    @Transactional
 	public void updatePassword(Member member) {
 
-		String sql = " UPDATE forecast.member "
-				   + " SET MEM_PASSWORD = ? "
-				   + " WHERE MEM_ID = ? ";
-		
-		jdbcTemplate.update(sql, new Object[] { member.getMemPassword(), member.getMemId()});
-		
+        Member managedMember = entityManager.find(Member.class, member.getMemId());
+        if (managedMember != null) {
+            managedMember.setMemPassword(member.getMemPassword());
+        }
+        
 	}
 
 	@Override
 	public Member login(Member member) {
-
-		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT * FROM holiday_dessert.member "
-				   + " WHERE MEM_EMAIL = ? "
-				   + " AND MEM_PASSWORD = ? ";
+        TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memEmail = :memEmail AND m.memPassword = :memPassword", Member.class);
+        query.setParameter("memEmail", member.getMemEmail());
+        query.setParameter("memPassword", member.getMemPassword());
+        
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
 		
-		args.add(member.getMemEmail());
-		args.add(member.getMemPassword());
-		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		Member user = new Member();
-		if (!list.isEmpty()) {
-			Map<String, Object> resultMap = list.get(0);
-	        String memId = String.valueOf(resultMap.get("MEM_ID"));
-	        String memName = String.valueOf(resultMap.get("MEM_NAME"));
-	        String memAccount = String.valueOf(resultMap.get("MEM_ACCOUNT"));
-	        String memPassword = String.valueOf(resultMap.get("MEM_PASSWORD"));
-	        String memGender = String.valueOf(resultMap.get("MEM_GENDER"));
-	        String memPhone = String.valueOf(resultMap.get("MEM_PHONE"));
-	        String memEmail = String.valueOf(resultMap.get("MEM_EMAIL"));
-	        String memAddress = String.valueOf(resultMap.get("MEM_ADDRESS"));
-	        String memBirthday = String.valueOf(resultMap.get("MEM_BIRTHDAY"));
-	        String memStatus = String.valueOf(resultMap.get("MEM_STATUS"));
-	        String memVerificationStatus = String.valueOf(resultMap.get("MEM_VERIFICATION_STATUS"));
-	        String memVerificationCode = String.valueOf(resultMap.get("MEM_VERIFICATION_CODE"));
-	        String memGoogleUid = String.valueOf(resultMap.get("MEM_GOOGLE_UID"));
-	        
-	        user.setMemId(memId);
-	        user.setMemName(memName);
-	        user.setMemAccount(memAccount);
-	        user.setMemPassword(memPassword);
-	        user.setMemGender(memGender);
-	        user.setMemPhone(memPhone);
-	        user.setMemEmail(memEmail);
-	        user.setMemAddress(memAddress);
-	        user.setMemBirthday(memBirthday);
-	        user.setMemStatus(memStatus);
-	        user.setMemVerificationStatus(memVerificationStatus);
-	        user.setMemVerificationCode(memVerificationCode);
-	        user.setMemGoogleUid(memGoogleUid);
-	        
-	    }
-		return user == null ? null : user;
 	}
 	
 	@Override
 	public Member getDataByGoogleUid(String googleUid) {
 
-		List<Object> args = new ArrayList<>();
-
-		String sql = " SELECT * FROM holiday_dessert.member "
-				   + " WHERE MEM_GOOGLE_UID = ? ";
-
-		args.add(googleUid);
+        TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memGoogleUid = :memGoogleUid", Member.class);
+        query.setParameter("memGoogleUid", googleUid);
+        
+        try {
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
 		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		Member user = new Member();
-		if (!list.isEmpty()) {
-			Map<String, Object> resultMap = list.get(0);
-	        String memId = String.valueOf(resultMap.get("MEM_ID"));
-	        String memName = String.valueOf(resultMap.get("MEM_NAME"));
-	        String memAccount = String.valueOf(resultMap.get("MEM_ACCOUNT"));
-	        String memPassword = String.valueOf(resultMap.get("MEM_PASSWORD"));
-	        String memGender = String.valueOf(resultMap.get("MEM_GENDER"));
-	        String memPhone = String.valueOf(resultMap.get("MEM_PHONE"));
-	        String memEmail = String.valueOf(resultMap.get("MEM_EMAIL"));
-	        String memAddress = String.valueOf(resultMap.get("MEM_ADDRESS"));
-	        String memBirthday = String.valueOf(resultMap.get("MEM_BIRTHDAY"));
-	        String memStatus = String.valueOf(resultMap.get("MEM_STATUS"));
-	        String memVerificationStatus = String.valueOf(resultMap.get("MEM_VERIFICATION_STATUS"));
-	        String memVerificationCode = String.valueOf(resultMap.get("MEM_VERIFICATION_CODE"));
-	        String memGoogleUid = String.valueOf(resultMap.get("MEM_GOOGLE_UID"));
-	        
-	        user.setMemId(memId);
-	        user.setMemName(memName);
-	        user.setMemAccount(memAccount);
-	        user.setMemPassword(memPassword);
-	        user.setMemGender(memGender);
-	        user.setMemPhone(memPhone);
-	        user.setMemEmail(memEmail);
-	        user.setMemAddress(memAddress);
-	        user.setMemBirthday(memBirthday);
-	        user.setMemStatus(memStatus);
-	        user.setMemVerificationStatus(memVerificationStatus);
-	        user.setMemVerificationCode(memVerificationCode);
-	        user.setMemGoogleUid(memGoogleUid);
-	        
-	    }
-		return user == null ? null : user;
 	}
 	
 }

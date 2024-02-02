@@ -1,0 +1,107 @@
+.contact-us-section {
+    width: 100%;
+    background-color: white;
+    position: relative;
+    padding: 100px 0;
+    z-index: 1;
+}
+
+.contact-us-title {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 24px;
+    line-height: 35px;
+    letter-spacing: 3px;
+    margin: 20px;
+    font: bold;
+}
+
+.contact-us-name div,
+.contact-us-phone div,
+.contact-us-email div,
+.contact-us-text div {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 1.4em;
+    margin: 10px;
+    text-align: left;
+}
+
+.contact-us-name,
+.contact-us-phone,
+.contact-us-email,
+.contact-us-text {
+    padding: 10px;
+}
+
+.contact-us-name input,
+.contact-us-phone input,
+.contact-us-email input,
+.contact-us-text textarea {
+    outline: none;
+    border: none;
+    box-shadow: none;
+    padding: 8px, 12px, 8px, 12px;
+    border-radius: 40px;
+    padding-left: 20px;
+    width: 100%;
+    height: 44px;
+    background: #201E2D14;
+    font-size: 14px;
+}
+
+.contact-information {
+    display: inline-block;
+}
+
+.contact-us-email,
+.contact-us-text,
+.contact-us-send-form {
+    display: inline-block;
+    width: 100%;
+    max-width: 600px;
+    padding: 10px 20px;
+}
+
+.contact-us-name,
+.contact-us-phone {
+    display: inline-block;
+    width: 48%;
+    max-width: 288px;
+}
+
+.contact-us-text textarea {
+    height: 254px;
+    padding-top: 20px;
+    resize: none;
+}
+
+.contact-information .contact-us-send-form .send-form {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: 1.4em;
+    margin-top: 20px;
+    padding: 8px 40px;
+    border-radius: 43px;
+    height: 36px;
+    width: 136px;
+    background: #201E2D;
+    border: none;
+    color: white;
+    float: right;
+}
+
+@media only screen and (max-width: 1024px) {}
+
+@media only screen and (max-width: 768px) {}
+
+@media only screen and (max-width: 480px) {
+
+    .contact-us-name,
+    .contact-us-phone,
+    .contact-us-email,
+    .contact-us-text {
+        display: inline-block;
+        max-width: 100%;
+        width: 100%;
+        padding: 10px 20px;
+    }
+
+}

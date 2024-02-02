@@ -1,0 +1,268 @@
+header.header {
+    width: 100%;
+    height: 58px;
+    text-align: center;
+    font-family: 'Noto Sans TC', sans-serif;
+}
+
+nav.nav {
+    height: 58px;
+    width: 90%;
+    display: inline-block;
+}
+
+.nav-bar {
+    display: flex;
+    align-items: center;
+}
+
+.logo {
+    cursor: pointer;
+    list-style: none;
+    width: 150px;
+    height: 100%;
+    max-width: 100%;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    align-items: center;
+    color: white;
+}
+
+.logo:hover img {
+    filter: brightness(0) saturate(100%) invert(66%) sepia(75%) saturate(352%) hue-rotate(347deg) brightness(104%) contrast(101%);
+}
+
+.news {
+    font-size: 1.6em;
+    cursor: pointer;
+    list-style: none;
+    width: 100px;
+    height: 58px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    align-items: center;
+    margin-left: auto;
+    color: white;
+    position: relative;
+    font-weight: bold;
+}
+
+.shop,
+.QA,
+.contact {
+    font-size: 1.6em;
+    cursor: pointer;
+    list-style: none;
+    width: 100px;
+    height: 58px;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    align-items: center;
+    color: white;
+    position: relative;
+    font-weight: bold;
+}
+
+.news:hover,
+.shop:hover,
+.QA:hover,
+.contact:hover {
+    color: #FFBD5B;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.news:hover::after,
+.shop:hover::after,
+.QA:hover::after,
+.contact:hover::after {
+    content: '';
+    top: 0;
+    left: 0;
+    width: 100%;
+    position: absolute;
+    height: 4px;
+    background: #FFBD5B;
+    z-index: 2;
+    border-radius: 0 0 1px 1px;
+}
+
+.news:hover::before,
+.shop:hover::before,
+.QA:hover::before,
+.contact:hover::before {
+    content: '';
+    position: absolute;
+    z-index: 2;
+    top: 8px;
+    width: 0;
+    height: 0;
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #FFBD5B;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.notify-cart {
+    list-style: none;
+    display: flex;
+}
+
+.notify-cart li {
+    margin: 5px;
+}
+
+.notify-cart li i {
+    color: white;
+}
+
+.notify-cart li i:hover {
+    color: #FFBD5B;
+    transition: all 0.3s ease;
+}
+
+.sign {
+    font-size: 1.6em;
+    list-style: none;
+    width: 120px;
+    height: 100%;
+    margin: 5px 20px;
+    padding: 13px 20px;
+    border-radius: 30px;
+    background: var(--gold, #FFBD5B);
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+}
+
+.header-layout {
+    display: inline-block;
+    height: 58px;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    flex-shrink: 0;
+    background: #201E2DA6;
+}
+
+.news li div a,
+.shop li div a,
+.QA li div a,
+.contact li div a {
+    border: 1px solid red;
+}
+
+.shop_bar,
+.QA_bar,
+.contact_bar {
+    display: none;
+}
+
+.shop:hover .shop_bar,
+.QA:hover .QA_bar,
+.contact:hover .contact_bar {
+    display: block;
+    position: absolute;
+    width: 198px;
+    height: 100px;
+    padding: 30px;
+    border: 1px solid red;
+}
+
+.mobile-nav-bar {
+    display: none;
+}
+
+.hamburger {
+    height: 58px;
+    width: 58px;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    vertical-align: middle;
+    justify-content: center;
+    align-items: center;
+}
+
+.bar {
+    width: 20px;
+    height: 2px;
+    background-color: white;
+    margin: 3px 0;
+    transition: 0.4s;
+}
+
+.hamburger.open .bar:nth-child(1) {
+    transform: rotate(-45deg) translate(-5.5px, 6px);
+}
+
+.hamburger.open .bar:nth-child(2) {
+    opacity: 0;
+}
+
+.hamburger.open .bar:nth-child(3) {
+    transform: rotate(45deg) translate(-5.5px, -6px);
+}
+
+
+@media only screen and (max-width: 1024px) {
+    .notify-cart {
+        padding: 0;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .mobile-nav-bar {
+        display: block;
+    }
+
+    .news,
+    .shop,
+    .contact,
+    .QA {
+        display: none;
+    }
+
+    .notify-cart {
+        display: flex;
+        align-items: center;
+        margin-left: auto;
+        position: relative;
+    }
+
+    .sign {
+        font-size: 1.4em;
+        width: 100px;
+        display: flex;
+        position: relative;
+    }
+
+}
+
+@media only screen and (max-width: 480px) {
+
+    .hamburger {
+        width: 40px;
+    }
+
+    .logo {
+        width: 120px;
+        height: 100%;
+        max-width: 100%;
+    }
+    
+    .sign {
+        display: inline-block;
+        font-size: 1.2em;
+        width: 80px;
+        margin: 5px 0;
+        padding: 13px 5px;
+    }
+
+    
+}

@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -52,7 +53,8 @@ public class Member extends Base {
 	private String memVerificationCode;// 會員驗證碼
 	@Column(name = "MEM_GOOGLE_UID")
 	private String memGoogleUid;	   // 會員googleUid
-
+	
+	@Transient
 	private String totalExpense;	   // 總金額
 	
 }

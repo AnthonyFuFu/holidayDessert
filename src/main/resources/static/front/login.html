@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/holidayDessert/front/css/header.css">
+    <link rel="stylesheet" href="/holidayDessert/front/css/footer.css">
+    <link rel="stylesheet" href="/holidayDessert/front/css/all.css">
+    <link rel="stylesheet" href="/holidayDessert/front/css/main.css">
+    <link rel="stylesheet" href="/holidayDessert/front/css/login.css">
+    <link rel="stylesheet" href="/holidayDessert/front/css/contact-us.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" type="text/css" />
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    <script src="/holidayDessert/front/js/login.js"></script>
+    <script type="text/javascript" src="/holidayDessert/front/js/lib/vue.js"></script>
+    <title>假日甜點官方網站HolidayDessert</title>
+</head>
+<body>
+    <header class="header">
+        <div class="header-layout">
+            <nav class="nav">
+                <div class="nav-bar">
+
+                    <div class="mobile-nav-bar">
+                        <div class="hamburger">
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                            <div class="bar"></div>
+                        </div>
+                        
+                    </div>
+
+                    <ul class="logo">
+                        <li><img src="/holidayDessert/front/images/logo.svg" alt="HolidayDessertLogo"></li>
+                    </ul>
+                    <ul class="news">
+                        <li>最新消息</li>
+                    </ul>
+                    <ul class="shop">
+                        <li>商品頁面</li>
+                        <li class="shop_bar">
+                            <div><a href="#">常溫甜點</a></div>
+                            <div><a href="#">冷藏甜點</a></div>
+                            <div><a href="#">冷凍甜點</a></div>
+                            <div><a href="#">禮盒專區</a></div>
+                        </li>
+                    </ul>
+                    <ul class="contact">
+                        <li>聯繫我們</li>
+                        <li class="contact_bar">
+                            <div><a href="#">臉書</a></div>
+                            <div><a href="#">IG</a></div>
+                            <div><a href="#">電話</a></div>
+                            <div><a href="#">信箱</a></div>
+                            <div><a href="#">填寫表單</a></div>
+                        </li>
+                    </ul>
+                    <ul class="QA">
+                        <li>QA</li>
+                        <li class="QA_bar">
+                            <div><a href="#">訂購方式</a></div>
+                            <div><a href="#">宅配說明</a></div>
+                        </li>
+                    </ul>
+                    <ul class="notify-cart">
+                        <li><a href="javascript:void(0);"><i class="material-icons">notifications</i></a></li>
+                        <li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i></a></li>
+                    </ul>
+                    <ul class="sign">
+                        <li><a class="sign_in"><span>加入會員</span></a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <section class="banner-box">
+        <img class="banner-login" src="/holidayDessert/front/images/banner-login.jpg" alt="banner">
+    </section>
+
+    <main class="main">
+        <section class="login-section">
+            <form id="login" class="login-area" >
+                <div>登入</div>
+                <div class="login-input">
+                    <div class="email-block">
+                        <div>帳號</div>
+                        <input v-model="memEmail" type="email" placeholder="請輸入Email帳號" maxlength="30" autocomplete="username">
+                    </div>
+                    <div class="pwd-block">
+                        <div>密碼</div>
+                        <input v-model="memPassword" :type="passwordType" placeholder="請輸入密碼" maxlength="25" autocomplete="current-password">
+                        <span class="material-icons vision" @mousedown="passwordVision(true)" @mouseup="passwordVision(false)" @mouseleave="passwordVision(false)">visibility_off</span>
+                    </div>
+                    <div class="remember-block">
+                        <input v-model="rememberMe" type="checkbox" id="remember-me">
+                        <span for="remember-me" @click="toggleRememberMe"></span>
+                        <label for="remember-me">保持登入狀態</label>
+                    </div>
+                    <div>
+                        <span><a href="./forget-password.html">忘記密碼?</a></span>
+                        <span class="separator"></span>
+                        <span><a href="./register.html">前往註冊<span class="material-symbols-outlined">arrow_circle_right</span></a></span>
+                    </div>
+                    <div class="login-submit" @click="login">登入</div>
+                </div>
+                <div class="horizon"></div>or<div class="horizon"></div>
+                <div>cxz {{memAddress}}</div>
+        
+            </form>
+        </section>
+        <!-- <section class="register-section">
+            <form class="register-area">
+                <div>註冊</div>
+
+                <div class="login-input">
+
+                    <div class="name-block">
+                        <div>姓名</div>
+                        <input type="text" placeholder="請輸入姓名" maxlength="30">
+                    </div>
+                    <div class="phone-block">
+                        <div>電話</div>
+                        <input type="tel" placeholder="請輸入電話號碼" maxlength="20">
+                    </div>
+
+                    <div class="email-block">
+                        <div>帳號</div>
+                        <input type="email" placeholder="請輸入Email帳號" maxlength="30" autocomplete="username">
+                    </div>
+                    <div class="pwd-block">
+                        <div>密碼</div>
+                        <input type="password" placeholder="請輸入密碼" maxlength="25" autocomplete="current-password">
+                        <span class="material-icons vision">visibility_off</span>
+                    </div>
+                    <div class="agree-block">
+                        <input type="checkbox" id="agree">
+                        <span for="agree"></span>
+                        <label for="agree">開始使用本服務或註冊前，平台用戶應確保其已仔細參閱並同意<a href="./policy.html"
+                                class="gold">隱私權政策</a>以及<a href="./terms.html" class="gold">使用者條款</a></label>
+                    </div>
+                    <div class="register-submit">註冊</div>
+                </div>
+                <div class="horizon"></div>or<div class="horizon"></div>
+                <div>cxz</div>
+            </form>
+        </section> -->
+    </main>
+
+    <section class="contact-us-section">
+        <form action="" class="contact-us-area">
+            <div class="contact-information">
+                <div class="contact-us-title">聯絡我們</div>
+                <div class="contact-us-name">
+                    <div>姓名</div>
+                    <input type="text" placeholder="請輸入姓名" maxlength="30">
+                </div>
+                <div class="contact-us-phone">
+                    <div>電話</div>
+                    <input type="tel" placeholder="請輸入電話號碼" maxlength="20">
+                </div>
+                <div class="contact-us-email">
+                    <div>Email</div>
+                    <input type="email" placeholder="請輸入Email帳號" maxlength="30" autocomplete="username">
+                </div>
+                <div class="contact-us-text">
+                    <div>您的訊息</div>
+                    <textarea type="text" placeholder="請輸入您的訊息"></textarea>
+                </div>
+                <div class="contact-us-send-form">
+                    <button id="sendForm" class="send-form">寄出信件</button>
+                </div>
+            </div>
+        </form>
+    </section>
+
+
+    <footer class="footer">
+        <div class="footer-layout">
+            <div class="footer-logo">
+                <img src="/holidayDessert/front/images/logo.svg" alt="HolidayDessertLogo">
+                <div>只營業於假日的神秘小店</div>
+                <div>
+                    <a href="#">品牌故事</a>
+                </div>
+                <div>
+                    <a href="#">分店資訊</a>
+                </div>
+            </div>
+            <div class="separator separator-one"></div>
+            <div class="footer-contact">
+                <div class="footer-contact-us">聯絡我們</div>
+                <div class="footer-FB-icon">
+                    <a href="#">
+                        <div><img src="/holidayDessert/front/images/FB-icon.svg" alt="FB-icon"></div>
+                        <div class="footer-icon-text">Facebook</div>
+                    </a>
+                </div>
+                <div class="footer-IG-icon">
+                    <a href="#">
+                        <div><img src="/holidayDessert/front/images/IG-icon.svg" alt="IG-icon"></div>
+                        <div class="footer-icon-text">Instagram</div>
+                    </a>
+                </div>
+                <div class="footer-Line-icon">
+                    <a href="#">
+                        <div><img src="/holidayDessert/front/images/Line-icon.svg" alt="Line-icon"></div>
+                        <div class="footer-icon-text">Line</div>
+                    </a>
+                </div>
+            </div>
+            <div class="separator separator-two"></div>
+            <div class="footer-service">
+                <div>假日甜點有限公司｜(03)4782389</div>
+                <div>客服專線：09-12345678</div>
+                <div>客服時間：10:00-17:00</div>
+                <div>信箱：holidaydessert@gmail.com</div>
+                <div>地址：桃園市平鎮區建銘路一段5號</div>
+            </div>
+            <div class="footer-copyright">Copyright &copy; 2024 HolidayDessert 假日甜點 All Rights Reserved.</div>
+        </div>
+    </footer>
+
+</body>
+
+</html>

@@ -8,10 +8,87 @@
 //		$(".login-area").stop().fadeOut();
 //	});
 //});
+$(function () {
+
+    $('.hamburger').click(function () {
+        $(this).toggleClass('open');
+    });
+
+	new Vue({
+		el: '#login',
+		data: {
+			// model 屬性
+			memId:'',
+			memName:'',
+			memAccount:'',
+			memEmail: '',
+			memPassword: '',
+			memGender:'',
+			memPhone:'',
+			memAddress:'',
+			memBirthday:'',
+			memStatus:'',
+			memVerificationStatus:'',
+			memVerificationCode:'',
+			memGoogleUid:'',
+			// 其他屬性
+      		passwordType: 'password',
+      		rememberMe: false
+		},
+		methods: {
+			login() {
+				var vm = this;
+				
+				$.ajax({
+					url: "/holidayDessert/front/login",
+					cache: false,
+					async: false,
+					dataType: "json",
+					type: "POST",
+					data: {
+						memEmail: this.memEmail,
+						memPassword: this.memPassword
+					},
+					error: function(xhr) {
+						console.log(xhr);
+						alert("執行失敗");
+					},
+					success: function(data) {
+						
+						if (data.STATUS == "N") {
+							alert(data.MSG);
+						} else if (location.href.includes("/member/verification")) {
+							$(location).attr("href", "/holidayDessert/index");
+						} else {
+							var memberSession = data.memberSession;
+							vm.memEmail = memberSession.memEmail;
+							vm.memPassword = memberSession.memPassword;
+							vm.memAddress = memberSession.memAddress;
+							alert(vm.memAddress)
+						}
+					}
+				});
+			},
+			passwordVision(isMouseDown){
+				// 切換密碼可視性
+				if (isMouseDown) {
+					this.passwordType = 'text';
+				} else {
+					this.passwordType = 'password';
+				}
+				
+			},
+			toggleRememberMe(){
+				this.rememberMe = !this.rememberMe;
+			}
+			
+		}
+	});
+});
 
 function login() {
 	$.ajax({
-		url: "/holidayDessert/front/doLogin",
+		url: "/holidayDessert/front/login",
 		cache: false,
 		async: false,
 		dataType: "json",
