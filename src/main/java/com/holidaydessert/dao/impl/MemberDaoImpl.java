@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
@@ -17,6 +20,9 @@ public class MemberDaoImpl implements MemberDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+    
 	@Override
 	public List<Map<String, Object>> list(Member member) {
 
@@ -208,40 +214,45 @@ public class MemberDaoImpl implements MemberDao {
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 	
+	
+	
+	
+	
 	@Override
 	public void register(Member member) {
-
-		String sql = " INSERT INTO holiday_dessert.member "
-				   + " (MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL, "
-				   + " MEM_ADDRESS, MEM_BIRTHDAY, MEM_STATUS, MEM_VERIFICATION_STATUS, MEM_VERIFICATION_CODE) "
-				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)";
-		
-		jdbcTemplate.update(sql, new Object[] { member.getMemName(), member.getMemAccount(), member.getMemPassword(), member.getMemGender(), member.getMemPhone(), 
-				member.getMemEmail(), member.getMemAddress(), member.getMemBirthday(), member.getMemVerificationCode() });
+        entityManager.persist(member);
+//		String sql = " INSERT INTO holiday_dessert.member "
+//				   + " (MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL, "
+//				   + " MEM_ADDRESS, MEM_BIRTHDAY, MEM_STATUS, MEM_VERIFICATION_STATUS, MEM_VERIFICATION_CODE) "
+//				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?, 0, 0, ?)";
+//		
+//		jdbcTemplate.update(sql, new Object[] { member.getMemName(), member.getMemAccount(), member.getMemPassword(), member.getMemGender(), member.getMemPhone(), 
+//				member.getMemEmail(), member.getMemAddress(), member.getMemBirthday(), member.getMemVerificationCode() });
 		
 	}
 
 	@Override
 	public void edit(Member member) {
-
-		List<Object> args = new ArrayList<>();
 		
-		String sql = " UPDATE holiday_dessert.member "
-				   + " SET MEM_NAME = ?, MEM_ACCOUNT = ?, MEM_PASSWORD = ?, MEM_GENDER = ?, "
-				   + " MEM_PHONE = ?, MEM_EMAIL = ?, MEM_ADDRESS = ?, MEM_BIRTHDAY = ? "
-				   + " WHERE MEM_ID = ? ";
+		entityManager.persist(member);
 		
-		args.add(member.getMemName());
-		args.add(member.getMemAccount());
-		args.add(member.getMemPassword());
-		args.add(member.getMemGender());
-		args.add(member.getMemPhone());
-		args.add(member.getMemEmail());
-		args.add(member.getMemAddress());
-		args.add(member.getMemBirthday());
-		args.add(member.getMemId());
-		
-		jdbcTemplate.update(sql, args.toArray());
+//		List<Object> args = new ArrayList<>();
+//		String sql = " UPDATE holiday_dessert.member "
+//				   + " SET MEM_NAME = ?, MEM_ACCOUNT = ?, MEM_PASSWORD = ?, MEM_GENDER = ?, "
+//				   + " MEM_PHONE = ?, MEM_EMAIL = ?, MEM_ADDRESS = ?, MEM_BIRTHDAY = ? "
+//				   + " WHERE MEM_ID = ? ";
+//		
+//		args.add(member.getMemName());
+//		args.add(member.getMemAccount());
+//		args.add(member.getMemPassword());
+//		args.add(member.getMemGender());
+//		args.add(member.getMemPhone());
+//		args.add(member.getMemEmail());
+//		args.add(member.getMemAddress());
+//		args.add(member.getMemBirthday());
+//		args.add(member.getMemId());
+//		
+//		jdbcTemplate.update(sql, args.toArray());
 		
 	}
 	
