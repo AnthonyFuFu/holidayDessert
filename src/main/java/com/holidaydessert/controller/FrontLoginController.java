@@ -16,8 +16,8 @@ import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -32,15 +32,10 @@ public class FrontLoginController {
 	private MemberService memberService;
 	
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestParam("memEmail") String memEmail, @RequestParam("memPassword") String memPassword, HttpSession session) {
-        
+    public ResponseEntity<Map<String, Object>> login(@RequestBody Member member,HttpSession session) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {
-            Member member = new Member();
-            member.setMemEmail(memEmail);
-            member.setMemPassword(memPassword);
             Member login = memberService.login(member);
-
             // 檢查帳號密碼是否符合
             if (login != null && login.getMemEmail() != null) {
                 if ("0".equals(login.getMemStatus())) {

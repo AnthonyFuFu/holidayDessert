@@ -32,42 +32,37 @@ $(function () {
 			memVerificationCode:'',
 			memGoogleUid:'',
 			// 其他屬性
+			memberSession: null,
       		passwordType: 'password',
       		rememberMe: false
 		},
 		methods: {
 			login() {
 				var vm = this;
-				
-				$.ajax({
-					url: "/holidayDessert/front/login",
-					cache: false,
-					async: false,
-					dataType: "json",
-					type: "POST",
-					data: {
-						memEmail: this.memEmail,
-						memPassword: this.memPassword
-					},
-					error: function(xhr) {
-						console.log(xhr);
-						alert("執行失敗");
-					},
-					success: function(data) {
-						
-						if (data.STATUS == "N") {
-							alert(data.MSG);
-						} else if (location.href.includes("/member/verification")) {
-							$(location).attr("href", "/holidayDessert/index");
-						} else {
-							var memberSession = data.memberSession;
-							vm.memEmail = memberSession.memEmail;
-							vm.memPassword = memberSession.memPassword;
-							vm.memAddress = memberSession.memAddress;
-							alert(vm.memAddress)
-						}
+				axios.post('/holidayDessert/front/login', {
+					memEmail: this.memEmail,
+					memPassword: this.memPassword
+				})
+				.then(response => {
+					
+					if (response.data.STATUS == "N") {
+						alert(response.data.MSG);
+					} else if (location.href.includes("/member/verification")) {
+						$(location).attr("href", "/holidayDessert/index");
+					} else {
+						var memberSession = response.data.memberSession;
+						vm.memEmail = memberSession.memEmail;
+						vm.memPassword = memberSession.memPassword;
+						vm.memAddress = memberSession.memAddress;
+						vm.memberSession = memberSession;
 					}
+					
+				})
+				.catch(error => {
+					console.log(error);
+					alert("執行失敗");
 				});
+				
 			},
 			passwordVision(isMouseDown){
 				// 切換密碼可視性
