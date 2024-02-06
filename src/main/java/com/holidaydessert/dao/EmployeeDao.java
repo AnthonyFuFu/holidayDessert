@@ -17,5 +17,8 @@ public interface EmployeeDao {
 	public Employee getData(Employee employee);
 	public Employee login(Employee employee);
 	public void updateTheme(Employee employee);
+
+	// front
+	public List<Employee> findAllWithDepartment();
 	
 }

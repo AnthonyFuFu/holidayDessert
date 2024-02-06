@@ -18,4 +18,7 @@ public interface EmployeeService {
 	public Employee login(Employee employee);
 	public void updateTheme(Employee employee);
 	
+	// front
+	public List<Employee> findAllWithDepartment();
+	
 }

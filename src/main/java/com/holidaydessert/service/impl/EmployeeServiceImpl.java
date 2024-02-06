@@ -61,4 +61,9 @@ public class EmployeeServiceImpl implements EmployeeService {
 		employeeDao.updateTheme(employee);
 	}
 
+	@Override
+	public List<Employee> findAllWithDepartment() {
+		return employeeDao.findAllWithDepartment();
+	}
+	
 }
