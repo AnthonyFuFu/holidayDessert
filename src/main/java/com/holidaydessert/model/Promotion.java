@@ -25,7 +25,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "promotion")
 public class Promotion extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "PM_ID")
@@ -51,5 +51,5 @@ public class Promotion extends Base {
     
     @Column(name = "PM_END")
 	private String pmEnd;			   // 結束時間
-
+    
 }

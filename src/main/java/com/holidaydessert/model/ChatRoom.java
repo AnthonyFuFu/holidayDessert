@@ -21,7 +21,7 @@ import lombok.NonNull;
 @Entity
 @Table(name = "chat_room")
 public class ChatRoom {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ROOM_ID")
@@ -38,5 +38,5 @@ public class ChatRoom {
     
     @Column(name = "ROOM_LAST_UPDATE")
 	private String roomLastUpdate;	   // 聊天室最後更新時間
-	
+    
 }

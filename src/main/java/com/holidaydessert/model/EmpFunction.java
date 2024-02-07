@@ -23,7 +23,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "emp_function")
 public class EmpFunction extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "FUNC_ID")

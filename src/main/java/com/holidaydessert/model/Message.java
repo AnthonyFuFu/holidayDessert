@@ -23,7 +23,7 @@ import lombok.NonNull;
 @Entity
 @Table(name = "message")
 public class Message {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MSG_ID")
@@ -31,10 +31,10 @@ public class Message {
     
     @Column(name = "EMP_ID")
 	private String empId;              // 管理員ID
-
+    
     @Column(name = "MEM_ID")
 	private String memId;              // 會員ID
-
+    
     @Column(name = "ROOM_ID")
 	private String roomId;			   // 聊天室ID
     
@@ -52,7 +52,7 @@ public class Message {
     
     @Column(name = "MSG_IMAGE")
 	private String msgImage;           // 聊天圖片名稱
-
+    
     @ManyToOne
     @JoinColumn(name = "EMP_ID", insertable = false, updatable = false)
 	private Employee employee;         // 管理員
@@ -60,9 +60,9 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "MEM_ID", insertable = false, updatable = false)
 	private Member member;             // 會員
-
+    
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", insertable = false, updatable = false)
 	private ChatRoom chatRoom;		   // 聊天室
-
+    
 }

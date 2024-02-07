@@ -29,12 +29,12 @@ import lombok.Setter;
 @Entity
 @Table(name = "news")
 public class News extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "NEWS_ID")
 	private String newsId;             // 最新消息ID
-
+    
     @Column(name = "PM_ID")
 	private String pmId;               // 活動優惠ID
     
@@ -58,9 +58,9 @@ public class News extends Base {
     
 	@Transient
 	private List<Map<String, Object>> bannerList;
-
+	
     @ManyToOne
     @JoinColumn(name = "PM_ID", insertable = false, updatable = false)
 	private Promotion promotion;       // 活動優惠
-
+    
 }

@@ -4,12 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.holidaydessert.dao.CartDao;
 import com.holidaydessert.model.Cart;
+import com.holidaydessert.model.Cart.CartId;
 
 @Repository
 public class CartDaoImpl implements CartDao {
@@ -17,6 +22,9 @@ public class CartDaoImpl implements CartDao {
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
 
+    @PersistenceContext
+    private EntityManager entityManager;
+    
 	@Override
 	public List<Map<String, Object>> list(Cart cart) {
 		
@@ -148,43 +156,37 @@ public class CartDaoImpl implements CartDao {
 	}
 
 	@Override
+    @Transactional
 	public void add(Cart cart) {
-		
-		String sql = " INSERT INTO holiday_dessert.cart "
-				   + " (MEM_ID, PD_ID, CART_PD_QUANTITY) "
-				   + " VALUES(?, ?, ?) ";
-		
-		jdbcTemplate.update(sql, new Object[] { cart.getMemId(), cart.getPdId(), cart.getCartPdQuantity() });
-		
+	    cart.setId(new CartId(cart.getMemId(), cart.getPdId()));
+		entityManager.persist(cart);
 	}
 
 	@Override
+    @Transactional
 	public void update(Cart cart) {
-
-		List<Object> args = new ArrayList<>();
 		
-		String sql = " UPDATE holiday_dessert.cart "
-				   + " SET CART_PD_QUANTITY = ? "
-				   + " WHERE MEM_ID = ? "
-				   + " AND PD_ID = ? ";
-		
-		args.add(cart.getCartPdQuantity());
-		args.add(cart.getMemId());
-		args.add(cart.getPdId());
-		
-		jdbcTemplate.update(sql, args.toArray());
-		
+		cart.setId(new CartId(cart.getMemId(), cart.getPdId()));
+	    Cart managedCart = entityManager.find(Cart.class, cart.getId());
+	    
+	    if (managedCart != null) {
+	        managedCart.setCartPdQuantity(cart.getCartPdQuantity());
+	        entityManager.merge(managedCart);
+	    }
+	    
 	}
 
 	@Override
+    @Transactional
 	public void delete(Cart cart) {
-
-		String sql = " DELETE FROM holiday_dessert.cart "
-				   + " WHERE MEM_ID = ? "
-				   + " AND PD_ID = ? ";
 		
-		jdbcTemplate.update(sql, new Object[] { cart.getMemId(), cart.getPdId() });
+		cart.setId(new CartId(cart.getMemId(), cart.getPdId()));
+		Cart managedCart = entityManager.find(Cart.class, cart.getId());
+		
+		if (managedCart != null) {
+			entityManager.remove(managedCart);
+		}
 		
 	}
-
+	
 }

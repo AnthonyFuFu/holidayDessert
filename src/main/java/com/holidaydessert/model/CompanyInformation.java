@@ -23,7 +23,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "company_information")
 public class CompanyInformation extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "COM_ID")

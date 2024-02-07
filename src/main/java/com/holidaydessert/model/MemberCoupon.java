@@ -27,36 +27,36 @@ import lombok.ToString;
 @Entity
 @Table(name = "member_coupon")
 public class MemberCoupon extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "FUNC_ID")
+    @Column(name = "MEM_CP_ID")
 	private String memCpId;            // 會員優惠券ID
-
+    
     @Column(name = "MEM_ID")
 	private String memId;              // 會員ID
-
+    
     @Column(name = "CP_ID")
 	private String cpId;               // 優惠券種類ID
-
+    
     @Column(name = "MEM_CP_START")
 	private String memCpStart;         // 起始時間
-
+    
     @Column(name = "MEM_CP_END")
 	private String memCpEnd;           // 截止時間
-
+    
     @Column(name = "MEM_CP_STATUS")
 	private String memCpStatus;        // 使用狀態(0:不可用 1:可用)
-
+    
     @Column(name = "MEM_CP_RECORD")
 	private String memCpRecord;	       // 使用紀錄
-
+    
     @ManyToOne
     @JoinColumn(name = "MEM_ID", insertable = false, updatable = false)
 	private Member member;             // 會員
-
+    
     @ManyToOne
     @JoinColumn(name = "CP_ID", insertable = false, updatable = false)
 	private Coupon coupon;             // 優惠券種類
-
+    
 }

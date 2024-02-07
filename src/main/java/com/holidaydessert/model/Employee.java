@@ -5,11 +5,13 @@ import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
@@ -31,7 +33,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "employee")
 public class Employee extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EMP_ID")
@@ -81,9 +83,12 @@ public class Employee extends Base {
 	
 	@Transient
 	private List<Map<String, Object>> authorityList;
-
+	
     @ManyToOne
     @JoinColumn(name = "DEPT_ID", insertable = false, updatable = false)
     private Department department;     // 部門
-
+    
+    @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER)
+    private List<Message> messages;
+    
 }

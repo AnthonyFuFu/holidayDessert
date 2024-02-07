@@ -25,7 +25,7 @@ import lombok.ToString;
 @Entity
 @Table(name = "department")
 public class Department extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "DEPT_ID")
@@ -36,5 +36,5 @@ public class Department extends Base {
     
     @Column(name = "DEPT_LOC")
 	private String deptLoc;            // 部門地點
-
+    
 }

@@ -35,40 +35,44 @@ public class Authority extends Base {
     	@AttributeOverride(name = "funcId", column = @Column(name = "FUNC_ID"))
     })
     private AuthorityId id;			   // 複合主鍵ID
-
+	
 	@Transient
 	private String empId;              // 管理員ID
-
+	
 	@Transient
 	private String funcId;             // 功能ID
 	
     @Column(name = "AUTH_STATUS")
 	private String authStatus;         // 權限狀態
-	
-}
-
-@Getter
-@Setter
-@Embeddable
-class AuthorityId implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-    private String empId;              // 管理員ID
-    private String funcId;             // 功能ID
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof AuthorityId)) return false;
-        AuthorityId authorityId = (AuthorityId) o;
-        return Objects.equals(getEmpId(), authorityId.getEmpId()) &&
-               Objects.equals(getFuncId(), authorityId.getFuncId());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getEmpId(), getFuncId());
-    }
     
+	@Getter
+	@Setter
+	@NoArgsConstructor
+	@AllArgsConstructor
+	@Embeddable
+	public static class AuthorityId implements Serializable {
+		
+		private static final long serialVersionUID = 1L;
+		
+		private String empId;		   // 管理員ID
+		private String funcId;		   // 功能ID
+		
+		@Override
+		public boolean equals(Object o) {
+			if (this == o)
+				return true;
+			if (!(o instanceof AuthorityId))
+				return false;
+			AuthorityId authorityId = (AuthorityId) o;
+			return Objects.equals(getEmpId(), authorityId.getEmpId())
+					&& Objects.equals(getFuncId(), authorityId.getFuncId());
+		}
+		
+		@Override
+		public int hashCode() {
+			return Objects.hash(getEmpId(), getFuncId());
+		}
+		
+	}
+	
 }

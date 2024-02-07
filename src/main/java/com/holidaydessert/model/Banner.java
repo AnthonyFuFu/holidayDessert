@@ -24,12 +24,12 @@ import lombok.NonNull;
 @Entity
 @Table(name = "banner")
 public class Banner {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "BAN_ID")
 	private String banId;              // 公告BannerID
-
+    
     @Column(name = "NEWS_ID")
 	private String newsId;             // 最新消息ID
     
@@ -45,5 +45,5 @@ public class Banner {
     @ManyToOne
     @JoinColumn(name = "NEWS_ID", insertable = false, updatable = false)
 	private News news;				   // 最新消息
-
+    
 }

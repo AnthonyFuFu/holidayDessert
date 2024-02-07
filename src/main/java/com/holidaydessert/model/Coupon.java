@@ -23,7 +23,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "coupon")
 public class Coupon extends Base {
-
+	
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "CP_ID")
@@ -43,5 +43,5 @@ public class Coupon extends Base {
     
     @Column(name = "CP_IMAGE")
 	private String cpImage;            // 優惠券圖片名稱
-
+    
 }
