@@ -260,9 +260,14 @@ public class MemberDaoImpl implements MemberDao {
 
         TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memEmail = :memEmail", Member.class);
         query.setParameter("memEmail", member.getMemEmail());
-        
+
+        List<Member> resultList = query.getResultList();
         try {
-            return query.getSingleResult();
+        	if (!resultList.isEmpty()) {
+        	    return resultList.get(0);
+        	} else {
+        	    return null;
+        	}
         } catch (NoResultException e) {
             return null;
         }
@@ -299,8 +304,13 @@ public class MemberDaoImpl implements MemberDao {
         query.setParameter("memEmail", member.getMemEmail());
         query.setParameter("memPassword", member.getMemPassword());
         
+        List<Member> resultList = query.getResultList();
         try {
-            return query.getSingleResult();
+        	if (!resultList.isEmpty()) {
+        	    return resultList.get(0);
+        	} else {
+        	    return null;
+        	}
         } catch (NoResultException e) {
             return null;
         }
@@ -312,9 +322,14 @@ public class MemberDaoImpl implements MemberDao {
 
         TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memGoogleUid = :memGoogleUid", Member.class);
         query.setParameter("memGoogleUid", googleUid);
-        
+
+        List<Member> resultList = query.getResultList();
         try {
-            return query.getSingleResult();
+        	if (!resultList.isEmpty()) {
+        	    return resultList.get(0);
+        	} else {
+        	    return null;
+        	}
         } catch (NoResultException e) {
             return null;
         }

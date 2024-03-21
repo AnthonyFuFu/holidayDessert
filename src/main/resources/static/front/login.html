@@ -109,9 +109,13 @@
                         <span><a href="./register.html">前往註冊<span class="material-symbols-outlined">arrow_circle_right</span></a></span>
                     </div>
                     <div class="login-submit" @click="login">登入</div>
+                    <div class="logout-submit" @click="logout">登出</div>
                 </div>
                 <div class="horizon"></div>or<div class="horizon"></div>
-                <div>cxz {{memberSession}} {{memAddress}}</div>
+<!--                 <div>{{memberSession}}</div> -->
+                <div>{{memberSession.memName}}</div>
+                <div>{{memberSession.memAccount}}</div>
+                <div>{{memberSession.memAddress}}</div>
         
             </form>
         </section>

@@ -9,7 +9,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -32,7 +31,7 @@ public class FrontLoginController {
 	private MemberService memberService;
 	
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody Member member,HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody Member member,HttpSession session) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {
             Member login = memberService.login(member);
@@ -45,10 +44,6 @@ public class FrontLoginController {
                     responseMap.put("STATUS", "N");
                     responseMap.put("MSG", "信箱認證未通過");
                 } else {
-                    // session登錄
-                    session.setAttribute("memberSession", login);
-                    session.setMaxInactiveInterval(60 * 60);
-
                     responseMap.put("STATUS", "Y");
                     responseMap.put("MSG", "登入成功");
                     responseMap.put("memberSession", login);
@@ -57,27 +52,12 @@ public class FrontLoginController {
                 responseMap.put("STATUS", "N");
                 responseMap.put("MSG", "帳號或密碼輸入錯誤！");
             }
-
         } catch (Exception ex) {
             ex.printStackTrace();
             responseMap.put("STATUS", "N");
             responseMap.put("MSG", "伺服器錯誤");
         }
         return ResponseEntity.ok(responseMap);
-    }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Map<String, String>> logout(HttpSession session) {
-        Map<String, String> responseMap = new HashMap<>();
-
-        if (session.getAttribute("memberSession") != null) {
-            session.removeAttribute("memberSession");
-            responseMap.put("STATUS", "success");
-            return ResponseEntity.ok(responseMap);
-        } else {
-            responseMap.put("STATUS", "failure");
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(responseMap);
-        }
     }
     
 	@GetMapping("/google/login")
