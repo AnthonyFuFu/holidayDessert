@@ -22,7 +22,7 @@ nav.nav {
     width: 150px;
     height: 100%;
     max-width: 100%;
-    margin: 0;
+    margin: 0 0 0 65px;
     padding: 0;
     display: grid;
     align-items: center;
@@ -46,7 +46,7 @@ nav.nav {
     margin-left: auto;
     color: white;
     position: relative;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .shop,
@@ -55,7 +55,7 @@ nav.nav {
     font-size: 1.6em;
     cursor: pointer;
     list-style: none;
-    width: 100px;
+    width: 110px;
     height: 58px;
     margin: 0;
     padding: 0;
@@ -63,7 +63,17 @@ nav.nav {
     align-items: center;
     color: white;
     position: relative;
-    font-weight: bold;
+    /* font-weight: bold; */
+}
+
+.QA {
+    width: 80px;
+}
+
+.QA li:first-child {
+    font-weight: lighter;
+    letter-spacing: 3px;
+    transform: scaleX(1.15);
 }
 
 .news:hover,
@@ -71,7 +81,7 @@ nav.nav {
 .QA:hover,
 .contact:hover {
     color: #FFBD5B;
-    font-weight: bold;
+    /* font-weight: bold; */
     transition: all 0.3s ease;
 }
 
@@ -110,10 +120,12 @@ nav.nav {
 .notify-cart {
     list-style: none;
     display: flex;
+    margin: 5.8px 0;
+    padding-left: 20px;
 }
 
 .notify-cart li {
-    margin: 5px;
+    margin: 9px;
 }
 
 .notify-cart li i {
@@ -126,17 +138,17 @@ nav.nav {
 }
 
 .sign {
-    font-size: 1.6em;
+    font-size: 1.5em;
     list-style: none;
-    width: 120px;
+    width: 100px;
     height: 100%;
-    margin: 5px 20px;
-    padding: 13px 20px;
+    margin: 5px 65px 5px 25px;
+    padding: 8.2px 15px;
     border-radius: 30px;
     background: var(--gold, #FFBD5B);
     cursor: pointer;
     color: white;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .header-layout {
@@ -213,6 +225,23 @@ nav.nav {
     .notify-cart {
         padding: 0;
     }
+
+    .news,
+    .shop,
+    .contact,
+    .QA {
+        width: 85px;
+    }
+
+    .logo {
+        margin: 0;
+    }
+
+    .sign {
+        margin: 0;
+        display: inline-block;
+    }
+
 }
 
 @media only screen and (max-width: 768px) {
@@ -236,9 +265,9 @@ nav.nav {
     }
 
     .sign {
+        display: inline-block;
         font-size: 1.4em;
         width: 100px;
-        display: flex;
         position: relative;
     }
 
@@ -255,14 +284,23 @@ nav.nav {
         height: 100%;
         max-width: 100%;
     }
-    
+
     .sign {
         display: inline-block;
         font-size: 1.2em;
         width: 80px;
         margin: 5px 0;
-        padding: 13px 5px;
+        padding: 10.6px 15px;
     }
 
-    
+}
+
+@media only screen and (max-width: 376px) {
+    .notify-cart li {
+        margin: 10px 0;
+    }
+
+    .sign {
+        padding: 10.6px 5px;
+    }
 }

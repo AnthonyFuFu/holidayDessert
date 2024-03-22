@@ -26,7 +26,6 @@
 		},
 		methods: {
 			login() {
-				var vm = this;
 				axios.post('/holidayDessert/front/login', {
 					memEmail: this.memEmail,
 					memPassword: this.memPassword
@@ -40,51 +39,68 @@
 						var memberSession = response.data.memberSession;
 						localStorage.setItem('memberSession', JSON.stringify(memberSession));
 //						sessionStorage.setItem('memberSession', JSON.stringify(memberSession));
-						vm.memberSession = memberSession;
-						vm.memId = memberSession.memId;
-						vm.memName = memberSession.memName;
-						vm.memAccount = memberSession.memAccount;
-						vm.memPassword = memberSession.memPassword;
-						vm.memGender = memberSession.memGender;
-						vm.memPhone = memberSession.memPhone;
-						vm.memEmail = memberSession.memEmail;
-						vm.memAddress = memberSession.memAddress;
-						vm.memBirthday = memberSession.memBirthday;
-						vm.memStatus = memberSession.memStatus;
-						vm.memVerificationCode = memberSession.memVerificationCode;
-						vm.memVerificationStatus = memberSession.memVerificationStatus;
-						vm.memGoogleUid = memberSession.memGoogleUid;
+						this.updateSession(memberSession);
 					}
 				})
 				.catch(error => {
 					console.log(error);
 					alert("執行失敗");
 				});
-				
 			},
 			logout() {
 				localStorage.removeItem('memberSession');
 				this.memberSession = '';
 			},
 			loadMemberSession() {
-				var memberSession = localStorage.getItem('memberSession');
-//				var memberSession = sessionStorage.getItem('memberSession');
-				if (memberSession) {
-					this.memberSession = JSON.parse(memberSession);
-					this.memId = this.memberSession.memId;
-					this.memName = this.memberSession.memName;
-					this.memAccount = this.memberSession.memAccount;
-					this.memPassword = this.memberSession.memPassword;
-					this.memGender = this.memberSession.memGender;
-					this.memPhone = this.memberSession.memPhone;
-					this.memEmail = this.memberSession.memEmail;
-					this.memAddress = this.memberSession.memAddress;
-					this.memBirthday = this.memberSession.memBirthday;
-					this.memStatus = this.memberSession.memStatus;
-					this.memVerificationCode = this.memberSession.memVerificationCode;
-					this.memVerificationStatus = this.memberSession.memVerificationStatus;
-					this.memGoogleUid = this.memberSession.memGoogleUid;
-				}
+				this.getGoogleLogin().then(result => {
+					if (result.status === "GLY") {
+						this.updateSession(result.memberSession);
+					} else {
+						var memberSession = localStorage.getItem('memberSession');
+						// var memberSession = sessionStorage.getItem('memberSession');
+						if (memberSession) {
+							this.updateSession(JSON.parse(memberSession));
+						}
+					}
+				});
+			},
+			getGoogleLogin() {
+				return new Promise((resolve, reject) => {
+					axios.post('/holidayDessert/front/getGoogleLogin')
+						.then(response => {
+							if (response.data.STATUS == "N") {
+								resolve({ status: "N", memberSession: '' });
+							} else if (response.data.STATUS == "GLN") {
+								resolve({ status: "GLN", memberSession: '' });
+							} else {
+								var memberSession = response.data.memberSession;
+								localStorage.setItem('memberSession', JSON.stringify(memberSession));
+								this.updateSession(memberSession);
+								resolve({ status: "GLY", memberSession: memberSession });
+							}
+						})
+						.catch(error => {
+							console.log(error);
+							alert("執行失敗");
+							reject(error);
+						});
+				});
+			},
+			updateSession(memberSession) {
+				this.memberSession = memberSession;
+				this.memId = memberSession.memId;
+				this.memName = memberSession.memName;
+				this.memAccount = memberSession.memAccount;
+				this.memPassword = memberSession.memPassword;
+				this.memGender = memberSession.memGender;
+				this.memPhone = memberSession.memPhone;
+				this.memEmail = memberSession.memEmail;
+				this.memAddress = memberSession.memAddress;
+				this.memBirthday = memberSession.memBirthday;
+				this.memStatus = memberSession.memStatus;
+				this.memVerificationCode = memberSession.memVerificationCode;
+				this.memVerificationStatus = memberSession.memVerificationStatus;
+				this.memGoogleUid = memberSession.memGoogleUid;
 			},
 			passwordVision(isMouseDown){
 				// 切換密碼可視性
@@ -106,11 +122,6 @@
 
 function register() {
 	setTimeout(window.open('/holidayDessert/member/register'), 500);
-	//$(location).attr("href", "/forecast/member/register");
-}
-
-function googleLogin() {
-	setTimeout(window.open('/holidayDessert/google/login'), 500);
 }
 
 function forgetPD() {

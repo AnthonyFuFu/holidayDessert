@@ -31,7 +31,7 @@ public class FrontLoginController {
 	private MemberService memberService;
 	
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Member member,HttpSession session) {
+    public ResponseEntity<?> login(@RequestBody Member member, HttpSession session) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {
             Member login = memberService.login(member);
@@ -57,6 +57,40 @@ public class FrontLoginController {
             responseMap.put("STATUS", "N");
             responseMap.put("MSG", "伺服器錯誤");
         }
+        return ResponseEntity.ok(responseMap);
+    }
+    
+    @PostMapping("/getGoogleLogin")
+    public ResponseEntity<?> getGoogleLogin(HttpServletRequest pRequest, Authentication authentication) {
+    	Map<String, Object> responseMap = new HashMap<>();
+    	
+    	if (authentication != null) {
+    		// 獲取google已驗證用戶的Principal
+    		Object principal = authentication.getPrincipal();
+    		// 獲取google用戶的屬性
+    		if (principal instanceof OAuth2User) {
+    			OAuth2User oAuth2User = (OAuth2User) principal;
+    			String oAuth2UserSub = (String) oAuth2User.getAttribute("sub");
+    			String oAuth2UserName = (String) oAuth2User.getAttribute("name");
+    			String oAuth2UserEmail = (String) oAuth2User.getAttribute("email");
+    			
+    			Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
+    			Member memberAccountData = optional.orElse(null);
+    			
+    			System.out.println(oAuth2UserName+"-"+oAuth2UserEmail+"-"+oAuth2UserSub);
+    			// 專案已有帳號
+    			if (memberAccountData != null) {
+                    responseMap.put("STATUS", "GLY");
+                    responseMap.put("MSG", "登入成功");
+    				responseMap.put("memberSession", memberAccountData);
+    			} else {
+                    responseMap.put("STATUS", "N");
+                    responseMap.put("MSG", "登入失敗");
+    			}
+    		}
+		} else {
+            responseMap.put("STATUS", "GLN");
+		}
         return ResponseEntity.ok(responseMap);
     }
     

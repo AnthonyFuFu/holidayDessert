@@ -40,8 +40,7 @@ public class HolidayDessertController {
 		List<Employee> list = employeeService.findAllWithDepartment();
 		for (Employee employee : list) {
 		    Department department = employee.getDepartment();
-		    System.out.println(department.toString());
-		    System.out.println("Employee: " + employee.getEmpName() + ", Department: " + department.getDeptName());
+		    System.out.println(department.toString()+"|===|"+"Employee: " + employee.getEmpName() + ", Department: " + department.getDeptName());
 		}
 		
 		return "front/index";

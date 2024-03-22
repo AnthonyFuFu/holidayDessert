@@ -1,12 +1,16 @@
 package com.holidaydessert.utils;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -21,12 +25,17 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
 import com.holidaydessert.filter.SessionCookieFilter;
+import com.holidaydessert.model.Member;
+import com.holidaydessert.service.MemberService;
 
 @SuppressWarnings("deprecation")
 @Order(Ordered.HIGHEST_PRECEDENCE)
 @EnableWebSecurity
 @Configuration
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
+	
+	@Autowired
+	private MemberService memberService;
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -39,6 +48,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 				.successHandler(new AuthenticationSuccessHandler() {
 					@Override
 					public void onAuthenticationSuccess(HttpServletRequest pRequest, HttpServletResponse pResponse,Authentication authentication) throws IOException, ServletException {
+						Map<String, Object> responseMap = new HashMap<>();
 						// 獲取google已驗證用戶的Principal
 						Object principal = authentication.getPrincipal();
 						String ip = getRemoteHost(pRequest);
@@ -52,26 +62,44 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 							String oAuth2UserName = (String) oAuth2User.getAttribute("name");
 							String oAuth2UserEmail = (String) oAuth2User.getAttribute("email");
 							
-							System.out.println(ip+"-"+session);
-							System.out.println(oAuth2UserName+"-"+oAuth2UserEmail+"-"+oAuth2UserSub);
+							Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
+							Member memberAccountData = optional.orElse(null);
 							
-//							Optional<MemberAccount> optional = memberAccountService.getDataByGoogleUid(oAuth2UserSub);
-//							MemberAccount memberAccountData = optional.orElse(null);
-//							// 專案已有帳號
-//							if (memberAccountData != null) {
-//
-//							} else {
-//								// google
-//							}
-
+							System.out.println(ip+"-"+session+"-"+oAuth2UserName+"-"+oAuth2UserEmail+"-"+oAuth2UserSub);
+							// 專案已有帳號
+							if (memberAccountData != null) {
+			                    responseMap.put("STATUS", "Y");
+			                    responseMap.put("MSG", "登入成功");
+								responseMap.put("memberSession", memberAccountData);
+							} else {
+								// google
+								Member member = new Member();
+								member.setMemName(oAuth2UserName);
+								member.setMemAccount(oAuth2UserEmail);
+								member.setMemEmail(oAuth2UserEmail);
+								member.setMemStatus("1");
+								member.setMemVerificationStatus("1");
+								member.setMemGoogleUid(oAuth2UserSub);
+								member.setMemPassword("");
+								memberService.register(member);
+								
+								// 註冊完馬上登入
+								Optional<Member> getOptionalAfterRegister = memberService.getDataByGoogleUid(oAuth2UserSub);
+								Member getDataAfterRegister = getOptionalAfterRegister.orElse(null);
+								
+			                    responseMap.put("STATUS", "Y");
+			                    responseMap.put("MSG", "登入成功");
+								responseMap.put("memberSession", getDataAfterRegister);
+							}
+							
 						}
-						pResponse.sendRedirect("/holidayDessert/index");
+						pResponse.sendRedirect("/holidayDessert/front/login.html");
 					}
 
 				}).failureHandler(new AuthenticationFailureHandler() {
 					@Override
 					public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,AuthenticationException exception) throws IOException, ServletException {
-						response.sendRedirect("/holidayDessert/index");
+						response.sendRedirect("/holidayDessert/front/index.html");
 					}
 				})
 				.and()
