@@ -93,7 +93,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 							}
 							
 						}
-						pResponse.sendRedirect("/holidayDessert/front/login.html");
+						pResponse.sendRedirect("/holidayDessert/front/index.html");
 					}
 
 				}).failureHandler(new AuthenticationFailureHandler() {

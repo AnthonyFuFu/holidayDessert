@@ -29,13 +29,14 @@ import javax.servlet.http.HttpSession;
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.holidaydessert.model.MainOrder;
 import com.holidaydessert.model.Member;
@@ -43,9 +44,8 @@ import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.MainOrderService;
 import com.holidaydessert.service.MemberService;
 
-@Controller
-@SessionAttributes("memberSession")
-@RequestMapping("/member")
+@RestController
+@RequestMapping("/front/member")
 public class MemberController {
 	
 	private final static String HOST = "smtp.gmail.com";
@@ -66,29 +66,10 @@ public class MemberController {
 	
 	@Value("${html.title}")
 	private String htmlTitle;
-
-	@RequestMapping(value = "/register" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String register(@SessionAttribute("memberSession") Member memberSession, @ModelAttribute Member member, HttpSession session, Model model, HttpServletRequest pRequest) {
-
-		try {
-			String name = pRequest.getParameter("NAME") == null ? "" : pRequest.getParameter("NAME");
-			String fb_uid = pRequest.getParameter("FB_UID") == null ? "" : pRequest.getParameter("FB_UID");
-			String email = pRequest.getParameter("EMAIL") == null ? "" : pRequest.getParameter("EMAIL");
-			
-			member.setMemName(name);
-			member.setMemAccount(fb_uid);
-			member.setMemEmail(email);
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return "front/member/register";
-	}
 	
-	@RequestMapping(value = "/addSubmit" , method = RequestMethod.POST)
-	public String registerAddSubmit(@ModelAttribute Member member, HttpSession session, Model model) {
-		
+	@RequestMapping(value = "/register" , method = RequestMethod.POST)
+	public ResponseEntity<?> register(@RequestBody Member member, HttpSession session) {
+		Map<String, Object> responseMap = new HashMap<>();
 		try{
 			String cKey = "HolidayDessert";
 			Calendar date = Calendar.getInstance();
@@ -108,22 +89,22 @@ public class MemberController {
 				//測試拿掉，上正式要打開
 				sendEmail(member.getMemEmail(), URLEncoder.encode( content, "UTF-8" ));
 				commonService.sendGmail(member.getMemEmail(), htmlTitle+"-帳戶電子郵件驗證", contents);
-				model.addAttribute("message", "恭喜你成功註冊為假日甜點會員");
+				responseMap.put("message", "恭喜你成功註冊為假日甜點會員");
 				
 			} else {
-				model.addAttribute("message", "請勿重複註冊");
+				responseMap.put("message", "請勿重複註冊");
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		model.addAttribute("PATH", "verification");
-		return "front/path";
+		responseMap.put("PATH", "verification.html");
+        return ResponseEntity.ok(responseMap);
 	}
-	
+
 	@RequestMapping(value = "/verificationEmail" , method = {RequestMethod.POST,RequestMethod.GET})
-	public String verificationEmail(HttpSession session, Model model, HttpServletRequest pRequest) throws NullPointerException {
+	public ResponseEntity<?> verificationEmail(HttpSession session, HttpServletRequest pRequest) throws NullPointerException {
+		Map<String, Object> responseMap = new HashMap<>();
 		String code = pRequest.getParameter("code") == null ? "" : pRequest.getParameter("code");
 		String cKey = "HolidayDessert";
 		try {
@@ -140,9 +121,9 @@ public class MemberController {
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
+		responseMap.put("PATH", "/holidayDessert/member/verificationSuccess.html");
 		
-		model.addAttribute("PATH", "/holidayDessert/member/verificationSuccess");
-		return "front/toPath";
+        return ResponseEntity.ok(responseMap);
 	}
 
 	@RequestMapping(value = "/verificationSuccess" , method = {RequestMethod.POST,RequestMethod.GET})
@@ -154,9 +135,9 @@ public class MemberController {
 	public String verification(@SessionAttribute("memberSession") Member memberSession, HttpSession session, Model model, HttpServletRequest pRequest) {
 		return "front/member/verification";
 	}
-	
-	@RequestMapping(value = "/reSendEmail" , method = {RequestMethod.POST,RequestMethod.GET})
-	public void reSendEmail( HttpSession session, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
+
+	@RequestMapping(value = "/reSendEmail", method = { RequestMethod.POST, RequestMethod.GET })
+	public void reSendEmail(HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		String email = pRequest.getParameter("email") == null ? "" : pRequest.getParameter("email");
 		String cKey = "HolidayDessert";
 		String result = "驗證信寄出異常";
@@ -164,78 +145,77 @@ public class MemberController {
 			Member member = new Member();
 			member.setMemEmail(email);
 			member = memberService.getCheckMemberEmail(member);
-			
+
 			Calendar date = Calendar.getInstance();
 			DateFormat yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmss");
 			String yyyymmddStr = yyyymmdd.format(date.getTime());
 			String temp = email + "," + yyyymmddStr;
 			String content = encrypt(temp, cKey);
-			String contents = "歡迎您註冊假日甜點,請點擊下列網址以驗證Email信箱:"+"https://www.holidayDessert.com.tw/holidayDessert/member/verificationEmail?code="+URLEncoder.encode( content, "UTF-8" );
-			
-			if(member != null) {
-				if("1".equals(member.getMemVerificationStatus())){
+			String contents = "歡迎您註冊假日甜點,請點擊下列網址以驗證Email信箱:"
+					+ "https://www.holidayDessert.com.tw/holidayDessert/member/verificationEmail?code="
+					+ URLEncoder.encode(content, "UTF-8");
+
+			if (member != null) {
+				if ("1".equals(member.getMemVerificationStatus())) {
 					result = "信箱已驗證過";
 				} else {
-					
-					member.setMemVerificationCode(URLEncoder.encode( content, "UTF-8" ));
+					member.setMemVerificationCode(URLEncoder.encode(content, "UTF-8"));
 					memberService.register(member);
-					
-					//測試拿掉，上正式要打開
-					sendEmail(member.getMemEmail(), URLEncoder.encode( content, "UTF-8" ));
-					commonService.sendGmail(member.getMemEmail(), htmlTitle+"-帳戶電子郵件驗證", contents);
-					
+
+					// 測試拿掉，上正式要打開
+					sendEmail(member.getMemEmail(), URLEncoder.encode(content, "UTF-8"));
+					commonService.sendGmail(member.getMemEmail(), htmlTitle + "-帳戶電子郵件驗證", contents);
 					memberService.updateVerification(member);
-					
+
 					result = "驗證信已寄出";
 				}
-				
+
 			}
 
 		} catch (UnsupportedEncodingException uee) {
 			uee.printStackTrace();
-		}catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		pResponse.setCharacterEncoding("utf-8");
-
 		try {
 			PrintWriter out = pResponse.getWriter();
 			out.write(result);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 	
 	public void sendEmail(String email, String content) {
-		
+
 		try {
 			Properties properties = System.getProperties();// 獲取系統屬性
-			
+
 			properties.setProperty("mail.transport.protocol", "smtp");
 			properties.setProperty("mail.smtp.host", HOST);// 設置郵件服務器
 			properties.setProperty("mail.smtp.auth", AUTH);// 打開認證
-			
+
 			Session mailSession = Session.getDefaultInstance(properties, null);
 			InternetAddress from = new InternetAddress("s9017611@gmail.com");
 			// 產生整封 email 的主體 message
 			MimeMessage msg = new MimeMessage(mailSession);
-			
+
 			msg.setSubject("假日甜點系統 帳戶電子郵件驗證");
 			msg.setFrom(from);
 			msg.setRecipients(Message.RecipientType.TO, email);
-			msg.setText("歡迎您註冊假日甜點,請點擊下列網址以驗證Email信箱:"+"https://www.holidayDessert.com.tw/holidayDessert/member/verificationEmail?code="+content);
-			
+			msg.setText("歡迎您註冊假日甜點,請點擊下列網址以驗證Email信箱:"
+					+ "https://www.holidayDessert.com.tw/holidayDessert/member/verificationEmail?code=" + content);
+
 			Transport transport = mailSession.getTransport("smtp");
 			transport.connect(HOST, SENDER, PASSWORD);
 			transport.sendMessage(msg, msg.getRecipients(Message.RecipientType.TO));
 			transport.close();
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 	}
 	
 	public static String encrypt(String sSrc, String sKey) throws Exception {
@@ -249,14 +229,14 @@ public class MemberController {
 		}
 		byte[] raw = sKey.getBytes();
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
-		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");//"算法/模式/补码方式"
-		IvParameterSpec iv = new IvParameterSpec("0102030405060708".getBytes());//使用CBC模式，需要一个向量iv，可增加加密算法的强度
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");// "算法/模式/补码方式"
+		IvParameterSpec iv = new IvParameterSpec("0102030405060708".getBytes());// 使用CBC模式，需要一个向量iv，可增加加密算法的强度
 		cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
 		byte[] encrypted = cipher.doFinal(sSrc.getBytes());
 
 		return encoder.encodeToString(encrypted);
 	}
-	
+
 	// 解密
 	public static String decrypt(String sSrc, String sKey) throws Exception {
 		Base64.Decoder decoder = Base64.getDecoder();
@@ -278,7 +258,7 @@ public class MemberController {
 			IvParameterSpec iv = new IvParameterSpec("0102030405060708".getBytes());
 			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 //			byte[] encrypted1 = new BASE64Decoder().decodeBuffer(sSrc);//先用base64解密
-			byte[] encrypted1 = decoder.decode(sSrc);//先用base64解密
+			byte[] encrypted1 = decoder.decode(sSrc);// 先用base64解密
 //			System.out.println("encrypted1: "+encrypted1.toString());
 			try {
 				byte[] original = cipher.doFinal(encrypted1);

@@ -118,6 +118,7 @@
 			this.loadMemberSession();
 		}
 	});
+	
 });
 
 function register() {
