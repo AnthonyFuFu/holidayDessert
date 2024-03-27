@@ -49,7 +49,7 @@
 
                     <div class="email-block">
                         <div>帳號</div>
-                        <input v-model="memEmail" type="email" placeholder="請輸入Email帳號" maxlength="30" autocomplete="username" ref="memEmail">
+                        <input v-model="memEmail" @change="checkEmailExist" type="email" placeholder="請輸入Email帳號" maxlength="30" autocomplete="username" ref="memEmail">
                     </div>
                     <div class="pwd-block">
                         <div>密碼</div>
@@ -57,7 +57,7 @@
                         <span class="material-icons vision" @mousedown="passwordVision(true)" @mouseup="passwordVision(false)" @mouseleave="passwordVision(false)">visibility_off</span>
                     </div>
                     <div class="agree-block">
-                        <input v-model="agreePolicy" type="checkbox" id="agree">
+                        <input v-model="agreePolicy" type="checkbox" id="agree" ref="agreePolicy">
                         <span for="agree" @click="toggleAgree"></span>
                         <label for="agree">開始使用本服務或註冊前，平台用戶應確保其已仔細參閱並同意<a href="./policy.html"
                                 class="gold">隱私權政策</a>以及<a href="./terms.html" class="gold">使用者條款</a></label>

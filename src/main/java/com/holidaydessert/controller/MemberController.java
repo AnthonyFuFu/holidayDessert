@@ -82,7 +82,8 @@ public class MemberController {
 			Member user = memberService.getCheckMemberEmail(member);
 			
 			if(user == null) {
-				
+				member.setMemAccount(member.getMemEmail());
+				member.setMemVerificationStatus("0");
 				member.setMemVerificationCode(URLEncoder.encode( content, "UTF-8" ));
 				memberService.register(member);
 				
@@ -125,7 +126,21 @@ public class MemberController {
 		
         return ResponseEntity.ok(responseMap);
 	}
-
+	
+	@RequestMapping(value = "/checkMemberAccountEmail", method = RequestMethod.POST)
+	public ResponseEntity<?> checkMemberAccountEmail(@RequestBody Member member) {
+		Map<String, Object> responseMap = new HashMap<>();
+		Member checkMemberEmail = memberService.getCheckMemberEmail(member);
+		if (checkMemberEmail == null) {
+			responseMap.put("STATUS", "T");
+            responseMap.put("MSG", "此email可以使用");
+		} else {
+			responseMap.put("STATUS", "F");
+            responseMap.put("MSG", "此email已經註冊,請選擇其他email");
+		}
+		return ResponseEntity.ok(responseMap);
+	}
+	
 	@RequestMapping(value = "/verificationSuccess" , method = {RequestMethod.POST,RequestMethod.GET})
 	public String verificationSuccess(@SessionAttribute("memberSession") Member memberSession, HttpSession session, Model model, HttpServletRequest pRequest) {
 		return "front/member/verificationSuccess";
