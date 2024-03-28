@@ -30,7 +30,7 @@ MEM_NAME VARCHAR(45) NOT NULL,
 MEM_ACCOUNT VARCHAR(20) NOT NULL,
 MEM_PASSWORD VARCHAR(20) NOT NULL,
 MEM_GENDER CHAR(1),
-MEM_PHONE VARCHAR(10),
+MEM_PHONE VARCHAR(20),
 MEM_EMAIL VARCHAR(40) NOT NULL,
 MEM_ADDRESS VARCHAR(100),
 MEM_BIRTHDAY DATE,
@@ -55,7 +55,7 @@ MEM_ID int not null,
 RCP_NAME varchar(45) not null,
 RCP_CVS varchar(255) ,
 RCP_ADDRESS varchar(255) ,
-RCP_PHONE varchar(10) not null,
+RCP_PHONE varchar(20) not null,
 constraint receipt_information_member_fk foreign key (MEM_ID) references member(MEM_ID)
 );
 insert into receipt_information(MEM_ID,RCP_NAME,RCP_CVS,RCP_PHONE)
@@ -78,7 +78,7 @@ CREATE TABLE employee(
 EMP_ID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 DEPT_ID INT(10),
 EMP_NAME VARCHAR(20) NOT NULL,
-EMP_PHONE VARCHAR(10) NOT NULL,
+EMP_PHONE VARCHAR(20) NOT NULL,
 EMP_JOB VARCHAR(30) NOT NULL,
 EMP_SALARY INT(10) NOT NULL,
 EMP_PICTURE VARCHAR(300),
@@ -334,7 +334,7 @@ create table main_order(
     ORD_STATUS INT(1) not null default 0,
     ORD_CREATE datetime default current_timestamp,
     ORD_RECIPIENT varchar(20) not null,
-    ORD_RECIPIENT_PHONE varchar(10) not null,
+    ORD_RECIPIENT_PHONE varchar(20) not null,
     ORD_PAYMENT INT(2) not null,
     ORD_DELIVERY INT(2) not null,
     ORD_ADDRESS varchar(100) not null,
@@ -365,8 +365,22 @@ create table company_information(
 	COM_ID int auto_increment not null primary key,
     COM_NAME varchar(45) not null,
     COM_ADDRESS varchar(45) not null,
-    COM_PHONE varchar(10) not null,
+    COM_PHONE varchar(20) not null,
     COM_MEMO varchar(500) not null
 );
 insert into company_information(COM_NAME, COM_ADDRESS, COM_PHONE, COM_MEMO)
 values ('假日甜點', '桃園市楊梅區甡甡路646號', '0981023222', '享受假日時光');
+
+-- 表單 --
+create table form(
+FORM_ID int auto_increment not null primary key,
+FORM_PHONE varchar(20),
+FORM_EMAIL varchar(40) NOT NULL,
+FORM_CONTENT varchar(500),
+FORM_CREATE_BY varchar(50),
+FORM_CREATE_TIME datetime not null default current_timestamp
+);
+
+insert into form(FORM_PHONE,FORM_EMAIL,FORM_CONTENT,FORM_CREATE_BY)
+values ('0911064756','s9017611@gmail.com','我想購買 怎麼聯繫您們','傅勝宏'),
+	   ('0911064756','s9017688@gmail.com','我想購買','AnthonyFuFu');
