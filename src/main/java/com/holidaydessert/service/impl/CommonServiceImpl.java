@@ -26,13 +26,14 @@ import com.holidaydessert.service.CommonService;
 
 @Service
 public class CommonServiceImpl implements CommonService {
-	
+
 	private final static String HOST = "smtp.gmail.com";
 	private final static String AUTH = "true";
 	private final static String PORT = "587";
 	private final static String STARTTLE_ENABLE = "true";
+//	private final static String SENDER_NAME = "假日甜點";
 	private final static String SENDER = "s9017611@gmail.com";
-	private final static String PASSWORD = "123456";
+	private final static String PASSWORD = "rkun bgju hpcf egfm";
 	
 	@Value("${mail.fromname}")
 	private String fromname;
@@ -200,8 +201,6 @@ public class CommonServiceImpl implements CommonService {
 	public void sendGmail(String email, String title, String content) throws IOException {
 		try {
 			
-			String form = "marking00@tkb.com.tw";
-
 			Properties properties = System.getProperties();// 獲取系統屬性
 
 			properties.put("mail.smtp.starttls.enable", STARTTLE_ENABLE);
@@ -213,7 +212,7 @@ public class CommonServiceImpl implements CommonService {
 
 			Session mailSession = Session.getDefaultInstance(properties);
 
-			InternetAddress from = new InternetAddress(form, MimeUtility.encodeText(fromname, "UTF-8", "b"));
+			InternetAddress from = new InternetAddress(SENDER, MimeUtility.encodeText(fromname, "UTF-8", "b"));
 			// 產生整封 email 的主體 message
 			MimeMessage msg = new MimeMessage(mailSession);
 			msg.setHeader("Content-Type", "text/html; charset=UTF-8");

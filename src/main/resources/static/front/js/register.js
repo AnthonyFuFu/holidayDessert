@@ -27,7 +27,7 @@
 		methods: {
 			checkEmailExist() {
 				return new Promise((resolve, reject) => {
-					axios.post('/holidayDessert/front/member/checkMemberAccountEmail', {
+					axios.post('/holidayDessert/member/checkMemberAccountEmail', {
 						memEmail: this.memEmail
 					})
 					.then(response => {
@@ -110,22 +110,17 @@
 				this.checkEmailExist().then(result => {
 					if (result.status === "T") {
 						if (this.checkForm()) {
-							axios.post('/holidayDessert/front/member/register', {
+							axios.post('/holidayDessert/member/register', {
 								memName: this.memName,
 								memPhone: this.memPhone,
 								memEmail: this.memEmail,
 								memPassword: this.memPassword
 							})
 							.then(response => {
-								if (response.data.STATUS == "N") {
+								if (response.data.STATUS == "F") {
 									alert(response.data.MSG);
-								} else if (location.href.includes("/member/verification")) {
-									$(location).attr("href", "/holidayDessert/index");
 								} else {
-									var memberSession = response.data.memberSession;
-									localStorage.setItem('memberSession', JSON.stringify(memberSession));
-//									sessionStorage.setItem('memberSession', JSON.stringify(memberSession));
-									this.updateSession(memberSession);
+									$(location).attr("href", "/holidayDessert/front/login.html");
 								}
 							})
 							.catch(error => {

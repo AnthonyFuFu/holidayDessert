@@ -12,16 +12,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Properties;
 
 import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
-import javax.mail.Message;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,16 +39,14 @@ import com.holidaydessert.service.MainOrderService;
 import com.holidaydessert.service.MemberService;
 
 @RestController
-@RequestMapping("/front/member")
+@RequestMapping("/member")
 public class MemberController {
 	
-	private final static String HOST = "smtp.gmail.com";
-	private final static String AUTH = "true";
-//	private final static String PORT = "587";
-//	private final static String STARTTLE_ENABLE = "true";
-	private final static String SENDER = "s9017611@gmail.com";
-	private final static String PASSWORD = "123456";
-
+	private final static String EMAIL_CONTENTS
+			= "<div>歡迎您註冊假日甜點</div><br><br>"
+			+ "<div>請點擊下列網址以驗證Email信箱:</div><br>"
+			+ "https://www.fwstudio.com.tw/holidayDessert/member/verificationEmail?code=";
+	
 	@Autowired
 	private MemberService memberService;
 	
@@ -71,13 +63,13 @@ public class MemberController {
 	public ResponseEntity<?> register(@RequestBody Member member, HttpSession session) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try{
-			String cKey = "HolidayDessert";
+			String cKey = "_HolidayDessert_";
 			Calendar date = Calendar.getInstance();
 			DateFormat yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmss");
 			String yyyymmddStr = yyyymmdd.format(date.getTime());
 			String temp = member.getMemEmail() + "," + yyyymmddStr;
 			String content = encrypt(temp, cKey);
-			String contents = "歡迎您註冊假日甜點,請點擊下列網址以驗證Email信箱:"+"https://www.holidayDessert.com.tw/holidayDessert/member/verificationEmail?code="+URLEncoder.encode( content, "UTF-8" );
+			String contents = EMAIL_CONTENTS + URLEncoder.encode( content, "UTF-8" );
 			
 			Member user = memberService.getCheckMemberEmail(member);
 			
@@ -86,20 +78,18 @@ public class MemberController {
 				member.setMemVerificationStatus("0");
 				member.setMemVerificationCode(URLEncoder.encode( content, "UTF-8" ));
 				memberService.register(member);
-				
 				//測試拿掉，上正式要打開
-				sendEmail(member.getMemEmail(), URLEncoder.encode( content, "UTF-8" ));
 				commonService.sendGmail(member.getMemEmail(), htmlTitle+"-帳戶電子郵件驗證", contents);
-				responseMap.put("message", "恭喜你成功註冊為假日甜點會員");
-				
+				responseMap.put("STATUS", "T");
+				responseMap.put("MSG", "恭喜你成功註冊為假日甜點會員");
 			} else {
-				responseMap.put("message", "請勿重複註冊");
+				responseMap.put("STATUS", "F");
+				responseMap.put("MSG", "請勿重複註冊");
 			}
 			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		responseMap.put("PATH", "verification.html");
         return ResponseEntity.ok(responseMap);
 	}
 
@@ -107,7 +97,7 @@ public class MemberController {
 	public ResponseEntity<?> verificationEmail(HttpSession session, HttpServletRequest pRequest) throws NullPointerException {
 		Map<String, Object> responseMap = new HashMap<>();
 		String code = pRequest.getParameter("code") == null ? "" : pRequest.getParameter("code");
-		String cKey = "HolidayDessert";
+		String cKey = "_HolidayDessert_";
 		try {
 			String content = decrypt(code,cKey);
 			String[] text = content.split(",");
@@ -154,7 +144,7 @@ public class MemberController {
 	@RequestMapping(value = "/reSendEmail", method = { RequestMethod.POST, RequestMethod.GET })
 	public void reSendEmail(HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		String email = pRequest.getParameter("email") == null ? "" : pRequest.getParameter("email");
-		String cKey = "HolidayDessert";
+		String cKey = "_HolidayDessert_";
 		String result = "驗證信寄出異常";
 		try {
 			Member member = new Member();
@@ -166,10 +156,8 @@ public class MemberController {
 			String yyyymmddStr = yyyymmdd.format(date.getTime());
 			String temp = email + "," + yyyymmddStr;
 			String content = encrypt(temp, cKey);
-			String contents = "歡迎您註冊假日甜點,請點擊下列網址以驗證Email信箱:"
-					+ "https://www.holidayDessert.com.tw/holidayDessert/member/verificationEmail?code="
-					+ URLEncoder.encode(content, "UTF-8");
-
+			String contents = EMAIL_CONTENTS + URLEncoder.encode( content, "UTF-8" );
+			
 			if (member != null) {
 				if ("1".equals(member.getMemVerificationStatus())) {
 					result = "信箱已驗證過";
@@ -178,7 +166,6 @@ public class MemberController {
 					memberService.register(member);
 
 					// 測試拿掉，上正式要打開
-					sendEmail(member.getMemEmail(), URLEncoder.encode(content, "UTF-8"));
 					commonService.sendGmail(member.getMemEmail(), htmlTitle + "-帳戶電子郵件驗證", contents);
 					memberService.updateVerification(member);
 
@@ -197,37 +184,6 @@ public class MemberController {
 			PrintWriter out = pResponse.getWriter();
 			out.write(result);
 		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-	}
-	
-	public void sendEmail(String email, String content) {
-
-		try {
-			Properties properties = System.getProperties();// 獲取系統屬性
-
-			properties.setProperty("mail.transport.protocol", "smtp");
-			properties.setProperty("mail.smtp.host", HOST);// 設置郵件服務器
-			properties.setProperty("mail.smtp.auth", AUTH);// 打開認證
-
-			Session mailSession = Session.getDefaultInstance(properties, null);
-			InternetAddress from = new InternetAddress("s9017611@gmail.com");
-			// 產生整封 email 的主體 message
-			MimeMessage msg = new MimeMessage(mailSession);
-
-			msg.setSubject("假日甜點系統 帳戶電子郵件驗證");
-			msg.setFrom(from);
-			msg.setRecipients(Message.RecipientType.TO, email);
-			msg.setText("歡迎您註冊假日甜點,請點擊下列網址以驗證Email信箱:"
-					+ "https://www.holidayDessert.com.tw/holidayDessert/member/verificationEmail?code=" + content);
-
-			Transport transport = mailSession.getTransport("smtp");
-			transport.connect(HOST, SENDER, PASSWORD);
-			transport.sendMessage(msg, msg.getRecipients(Message.RecipientType.TO));
-			transport.close();
-
-		} catch (Exception e) {
 			e.printStackTrace();
 		}
 

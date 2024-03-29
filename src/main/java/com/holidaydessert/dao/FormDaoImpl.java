@@ -34,8 +34,8 @@ public class FormDaoImpl implements FormDao {
 				sql += " INSTR(FORM_PHONE, ?) > 0"
 					+  " OR INSTR(FORM_EMAIL, ?) > 0 "
 					+  " OR INSTR(FORM_CONTENT, ?) > 0 "
-					+  " OR INSTR(CREATE_BY, ?) > 0 "
-					+  " OR INSTR(CREATE_TIME, ?) > 0 "
+					+  " OR INSTR(FORM_CREATE_BY, ?) > 0 "
+					+  " OR INSTR(FORM_CREATE_TIME, ?) > 0 "
 					+  " ) ";
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -78,8 +78,8 @@ public class FormDaoImpl implements FormDao {
 				sql += " INSTR(FORM_PHONE, ?) > 0"
 					+  " OR INSTR(FORM_EMAIL, ?) > 0 "
 					+  " OR INSTR(FORM_CONTENT, ?) > 0 "
-					+  " OR INSTR(CREATE_BY, ?) > 0 "
-					+  " OR INSTR(CREATE_TIME, ?) > 0 "
+					+  " OR INSTR(FORM_CREATE_BY, ?) > 0 "
+					+  " OR INSTR(FORM_CREATE_TIME, ?) > 0 "
 					+  " ) ";
 		  		args.add(searchText[i]);
 		  		args.add(searchText[i]);
@@ -97,7 +97,7 @@ public class FormDaoImpl implements FormDao {
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " INSERT INTO holiday_dessert.form "
-				   + " (FORM_PHONE, FORM_EMAIL, FORM_CONTENT, CREATE_BY, CREATE_TIME) "
+				   + " (FORM_PHONE, FORM_EMAIL, FORM_CONTENT, FORM_CREATE_BY, FORM_CREATE_TIME) "
 				   + " VALUES(?, ?, ?, ?, NOW()) ";
 		
 		args.add(form.getFormPhone());
