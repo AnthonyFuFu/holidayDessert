@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -42,9 +41,6 @@ import io.swagger.annotations.ApiOperation;
 @CrossOrigin
 @Api(tags = "優惠活動管理")
 public class PromotionManagement {
-
-	@Value("${web.path}")
-	private String WEB_PATH;
 	
 	@Autowired
 	private AuthorityService authorityService;

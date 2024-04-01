@@ -34,7 +34,7 @@
 					if (response.data.STATUS == "N") {
 						alert(response.data.MSG);
 					} else if (location.href.includes("/member/verification")) {
-						$(location).attr("href", "/holidayDessert/index");
+						$(location).attr("href", "/holidayDessert/index.html");
 					} else {
 						var memberSession = response.data.memberSession;
 						localStorage.setItem('memberSession', JSON.stringify(memberSession));

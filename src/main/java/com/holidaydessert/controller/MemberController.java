@@ -41,11 +41,14 @@ import com.holidaydessert.service.MemberService;
 @RestController
 @RequestMapping("/member")
 public class MemberController {
+
+	@Value("${web.path}")
+	private static String WEB_PATH;
 	
 	private final static String EMAIL_CONTENTS
 			= "<div>歡迎您註冊假日甜點</div><br><br>"
 			+ "<div>請點擊下列網址以驗證Email信箱:</div><br>"
-			+ "https://www.fwstudio.com.tw/holidayDessert/member/verificationEmail?code=";
+			+ WEB_PATH + "holidayDessert/member/verificationEmail?code=";
 	
 	@Autowired
 	private MemberService memberService;

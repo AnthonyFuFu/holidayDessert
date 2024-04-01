@@ -402,3 +402,12 @@
     }
 
 }
+
+@media only screen and (max-width: 376px) {
+	
+    .login-submit,
+    .register-submit {
+        width: 100%;
+    }
+    
+}
