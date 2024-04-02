@@ -11,14 +11,16 @@
     <link rel="stylesheet" href="/holidayDessert/front/css/main.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/login.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/contact-us.css">
+    <link rel="stylesheet" href="/holidayDessert/assets/plugins/sweetalert/sweetalert.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" type="text/css" />
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="/holidayDessert/front/js/login.js"></script>
+    <script src="/holidayDessert/front/js/register.js"></script>
     <script type="text/javascript" src="/holidayDessert/front/js/lib/vue.js"></script>
+    <script type="text/javascript" src="/holidayDessert/assets/plugins/sweetalert/sweetalert.min.js"></script>
     <title>假日甜點官方網站HolidayDessert</title>
 </head>
 <body>
@@ -30,30 +32,39 @@
     </section>
 
     <main class="main">
-        <section class="login-section">
-            <form id="login" class="login-area" >
-                <div>登入</div>
+        <section class="register-section">
+            <form id="register" class="register-area">
+                <div>註冊</div>
+                <div>{{memberSession.memName}}</div>
+                <div>{{memberSession.memAccount}}</div>
+                <div>{{memberSession.memAddress}}</div>
                 <div class="login-input">
+
+                    <div class="name-block">
+                        <div>姓名</div>
+                        <input v-model="memName" type="text" placeholder="請輸入姓名" maxlength="30" ref="memName">
+                    </div>
+                    <div class="phone-block">
+                        <div>電話</div>
+                        <input v-model="memPhone" type="tel" placeholder="請輸入電話號碼" maxlength="20" ref="memPhone">
+                    </div>
+
                     <div class="email-block">
                         <div>帳號</div>
-                        <input v-model="memEmail" type="email" placeholder="請輸入Email帳號" maxlength="30" autocomplete="username">
+                        <input v-model="memEmail" @change="checkEmailExist" type="email" placeholder="請輸入Email帳號" maxlength="30" autocomplete="username" ref="memEmail">
                     </div>
                     <div class="pwd-block">
                         <div>密碼</div>
-                        <input v-model="memPassword" :type="passwordType" placeholder="請輸入密碼" maxlength="25" autocomplete="current-password">
+                        <input v-model="memPassword" :type="passwordType" type="password" placeholder="請輸入密碼" maxlength="25" autocomplete="current-password" ref="memPassword">
                         <span class="material-icons vision" @mousedown="passwordVision(true)" @mouseup="passwordVision(false)" @mouseleave="passwordVision(false)">visibility_off</span>
                     </div>
-                    <div class="remember-block">
-                        <input v-model="rememberMe" type="checkbox" id="remember-me">
-                        <span for="remember-me" @click="toggleRememberMe"></span>
-                        <label for="remember-me">保持登入狀態</label>
+                    <div class="agree-block">
+                        <input v-model="agreePolicy" type="checkbox" id="agree" ref="agreePolicy">
+                        <span for="agree" @click="toggleAgree"></span>
+                        <label for="agree">開始使用本服務或註冊前，平台用戶應確保其已仔細參閱並同意<a href="./policy.html"
+                                class="gold">隱私權政策</a>以及<a href="./terms.html" class="gold">使用者條款</a></label>
                     </div>
-                    <div>
-                        <span><a href="./forget-password.html">忘記密碼？</a></span>
-                        <span class="separator"></span>
-                        <span><a href="./register.html">前往註冊<span class="material-symbols-outlined">arrow_circle_right</span></a></span>
-                    </div>
-                    <div class="login-submit" @click="login">登入</div>
+                    <div class="register-submit" @click="register">註冊</div>
                     <div class="logout-submit" @click="logout">登出</div>
                 </div>
                 <div class="horizon"></div>or<div class="horizon"></div>
@@ -68,7 +79,6 @@
                         <a href="/holidayDessert/front/member/LineLogin"><img src="/holidayDessert/front/images/Line-logo.svg" alt="Line-logo"></a>
                     </div>
                 </div>
-                <div>{{memberSession.memName}}</div>
             </form>
         </section>
     </main>

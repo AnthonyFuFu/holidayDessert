@@ -32,10 +32,11 @@
 				})
 				.then(response => {
 					if (response.data.STATUS == "N") {
-						alert(response.data.MSG);
+						this.warning(response.data.MSG);
 					} else if (location.href.includes("/member/verification")) {
 						$(location).attr("href", "/holidayDessert/index.html");
 					} else {
+						this.success(response.data.MSG);
 						var memberSession = response.data.memberSession;
 						localStorage.setItem('memberSession', JSON.stringify(memberSession));
 //						sessionStorage.setItem('memberSession', JSON.stringify(memberSession));
@@ -44,7 +45,7 @@
 				})
 				.catch(error => {
 					console.log(error);
-					alert("執行失敗");
+					this.warning("執行失敗");
 				});
 			},
 			logout() {
@@ -81,7 +82,7 @@
 						})
 						.catch(error => {
 							console.log(error);
-							alert("執行失敗");
+							this.warning("執行失敗");
 							reject(error);
 						});
 				});
@@ -112,6 +113,24 @@
 			},
 			toggleRememberMe(){
 				this.rememberMe = !this.rememberMe;
+			},
+			success(message) {
+				swal({
+					title: message,
+					type: "success",
+					showCancelButton: false,
+					confirmButtonColor: "#3085d6",
+					confirmButtonText: "確定"
+				});
+			},
+			warning(message) {
+				swal({
+					title: message,
+					type: "warning",
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "確定",
+					closeOnConfirm: false
+				});
 			}
 		},
 		mounted() {

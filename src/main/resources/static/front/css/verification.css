@@ -109,6 +109,23 @@
     display: inline-block;
 }
 
+.verification-submit a {
+    text-decoration: none;
+    color: black;
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+.verification-submit:hover {
+    background: #FFBD5B;
+    transition: all 0.3s ease;
+}
+
+.email-block {
+    display: inline-block;
+}
+
 .gold {
     color: #FFBD5B;
 }

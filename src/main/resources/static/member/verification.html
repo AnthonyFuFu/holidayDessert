@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="/holidayDessert/front/css/all.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/main.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/verification.css">
+    <link rel="stylesheet" href="/holidayDessert/assets/plugins/sweetalert/sweetalert.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
@@ -18,6 +19,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="/holidayDessert/front/js/verification.js"></script>
     <script type="text/javascript" src="/holidayDessert/front/js/lib/vue.js"></script>
+    <script type="text/javascript" src="/holidayDessert/assets/plugins/sweetalert/sweetalert.min.js"></script>
     <title>假日甜點官方網站HolidayDessert</title>
 </head>
 <body>
@@ -35,9 +37,9 @@
                 <div class="verification-input">
                     <div class="email-block">
                         <div>會員註冊後，系統會發送認證信到您的信箱，點選認證信連結後，即可登入會員，若您5分鐘內未收到驗證信，請檢查您的<span class="gold">垃圾郵件或垃圾桶檔案夾</span>，或者點選【<span class="gold">重新寄送驗證信</span>】</div>
-                        <input v-model="memEmail" type="email" placeholder="請重新輸入Email" maxlength="30" autocomplete="username">
+                        <input v-model="memEmail" type="email" placeholder="請重新輸入Email" maxlength="30">
                     </div>
-                    <div class="verification-submit" @click="login">重新寄送驗證信</div>
+                    <div class="verification-submit" @click="reSendEmail">重新寄送驗證信</div>
                 </div>
             </form>
         </section>

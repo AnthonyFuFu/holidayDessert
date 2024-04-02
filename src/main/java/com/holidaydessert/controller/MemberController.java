@@ -31,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.holidaydessert.model.MainOrder;
 import com.holidaydessert.model.Member;
@@ -43,12 +44,16 @@ import com.holidaydessert.service.MemberService;
 public class MemberController {
 
 	@Value("${web.path}")
-	private static String WEB_PATH;
+	private String WEB_PATH;
 	
-	private final static String EMAIL_CONTENTS
-			= "<div>歡迎您註冊假日甜點</div><br><br>"
-			+ "<div>請點擊下列網址以驗證Email信箱:</div><br>"
-			+ WEB_PATH + "holidayDessert/member/verificationEmail?code=";
+	@Value("${html.title}")
+	private String htmlTitle;
+
+	private String getEmailContents(String code) {
+		return "<div>歡迎您註冊假日甜點</div><br><br>"
+			 + "<div>請點擊下列網址以驗證Email信箱:</div><br>" + WEB_PATH
+			 + "holidayDessert/member/verificationEmail?code=" + code;
+	}
 	
 	@Autowired
 	private MemberService memberService;
@@ -58,9 +63,6 @@ public class MemberController {
 	
 	@Autowired
 	private CommonService commonService;
-	
-	@Value("${html.title}")
-	private String htmlTitle;
 	
 	@RequestMapping(value = "/register" , method = RequestMethod.POST)
 	public ResponseEntity<?> register(@RequestBody Member member, HttpSession session) {
@@ -72,7 +74,7 @@ public class MemberController {
 			String yyyymmddStr = yyyymmdd.format(date.getTime());
 			String temp = member.getMemEmail() + "," + yyyymmddStr;
 			String content = encrypt(temp, cKey);
-			String contents = EMAIL_CONTENTS + URLEncoder.encode( content, "UTF-8" );
+			String contents = getEmailContents(URLEncoder.encode( content, "UTF-8" ));
 			
 			Member user = memberService.getCheckMemberEmail(member);
 			
@@ -95,30 +97,6 @@ public class MemberController {
 		}
         return ResponseEntity.ok(responseMap);
 	}
-
-	@RequestMapping(value = "/verificationEmail" , method = {RequestMethod.POST,RequestMethod.GET})
-	public ResponseEntity<?> verificationEmail(HttpSession session, HttpServletRequest pRequest) throws NullPointerException {
-		Map<String, Object> responseMap = new HashMap<>();
-		String code = pRequest.getParameter("code") == null ? "" : pRequest.getParameter("code");
-		String cKey = "_HolidayDessert_";
-		try {
-			String content = decrypt(code,cKey);
-			String[] text = content.split(",");
-			Member member = new Member();
-			member.setMemEmail(text[0]);
-			
-			member = memberService.getCheckMemberEmail(member);
-			memberService.verificationEmail(member);
-			
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		responseMap.put("PATH", "/holidayDessert/member/verificationSuccess.html");
-		
-        return ResponseEntity.ok(responseMap);
-	}
 	
 	@RequestMapping(value = "/checkMemberAccountEmail", method = RequestMethod.POST)
 	public ResponseEntity<?> checkMemberAccountEmail(@RequestBody Member member) {
@@ -134,62 +112,61 @@ public class MemberController {
 		return ResponseEntity.ok(responseMap);
 	}
 	
-	@RequestMapping(value = "/verificationSuccess" , method = {RequestMethod.POST,RequestMethod.GET})
-	public String verificationSuccess(@SessionAttribute("memberSession") Member memberSession, HttpSession session, Model model, HttpServletRequest pRequest) {
-		return "front/member/verificationSuccess";
-	}
-	
-	@RequestMapping(value = "/verification" , method = {RequestMethod.POST,RequestMethod.GET})
-	public String verification(@SessionAttribute("memberSession") Member memberSession, HttpSession session, Model model, HttpServletRequest pRequest) {
-		return "front/member/verification";
-	}
-
 	@RequestMapping(value = "/reSendEmail", method = { RequestMethod.POST, RequestMethod.GET })
-	public void reSendEmail(HttpServletRequest pRequest, HttpServletResponse pResponse) {
-		String email = pRequest.getParameter("email") == null ? "" : pRequest.getParameter("email");
+	public ResponseEntity<?> reSendEmail(@RequestBody Member member) {
+		Map<String, Object> responseMap = new HashMap<>();
 		String cKey = "_HolidayDessert_";
-		String result = "驗證信寄出異常";
 		try {
-			Member member = new Member();
-			member.setMemEmail(email);
+			String memEmail = member.getMemEmail();
 			member = memberService.getCheckMemberEmail(member);
-
 			Calendar date = Calendar.getInstance();
 			DateFormat yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmss");
 			String yyyymmddStr = yyyymmdd.format(date.getTime());
-			String temp = email + "," + yyyymmddStr;
+			String temp = memEmail + "," + yyyymmddStr;
 			String content = encrypt(temp, cKey);
-			String contents = EMAIL_CONTENTS + URLEncoder.encode( content, "UTF-8" );
-			
+			String contents = getEmailContents(URLEncoder.encode( content, "UTF-8" ));
 			if (member != null) {
 				if ("1".equals(member.getMemVerificationStatus())) {
-					result = "信箱已驗證過";
+					responseMap.put("STATUS", "T");
+					responseMap.put("MSG", "信箱已驗證過");
 				} else {
 					member.setMemVerificationCode(URLEncoder.encode(content, "UTF-8"));
-					memberService.register(member);
-
 					// 測試拿掉，上正式要打開
 					commonService.sendGmail(member.getMemEmail(), htmlTitle + "-帳戶電子郵件驗證", contents);
 					memberService.updateVerification(member);
-
-					result = "驗證信已寄出";
+					responseMap.put("STATUS", "RS");
+					responseMap.put("MSG", "驗證信已寄出");
 				}
-
 			}
+		} catch (Exception e) {
+			responseMap.put("STATUS", "F");
+			responseMap.put("MSG", "驗證信寄出異常");
+			e.printStackTrace();
+		}
+		return ResponseEntity.ok(responseMap);
+	}
 
-		} catch (UnsupportedEncodingException uee) {
-			uee.printStackTrace();
+	@RequestMapping(value = "/verificationEmail" , method = {RequestMethod.POST,RequestMethod.GET})
+	public RedirectView verificationEmail(HttpSession session, HttpServletRequest pRequest) throws NullPointerException {
+		String code = pRequest.getParameter("code") == null ? "" : pRequest.getParameter("code");
+		String cKey = "_HolidayDessert_";
+		try {
+			String content = decrypt(code,cKey);
+			String[] text = content.split(",");
+			Member member = new Member();
+			member.setMemEmail(text[0]);
+			
+			member = memberService.getCheckMemberEmail(member);
+			memberService.verificationEmail(member);
+			
+		} catch (UnsupportedEncodingException e1) {
+			e1.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		pResponse.setCharacterEncoding("utf-8");
-		try {
-			PrintWriter out = pResponse.getWriter();
-			out.write(result);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+    	RedirectView redirectView = new RedirectView();
+    	redirectView.setUrl("/holidayDessert/member/verificationSuccess.html"); // 設置要跳轉的URL
+    	return redirectView;
 	}
 	
 	public static String encrypt(String sSrc, String sKey) throws Exception {
@@ -288,10 +265,10 @@ public class MemberController {
 		return "front/toPath";
 	}
 	
-	@RequestMapping(value = "/updatePassword" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updatePassword(@SessionAttribute("memberSession") Member memberSession, @ModelAttribute Member member, HttpSession session, Model model) {
-		return "front/member/updatePassword";
-	}
+//	@RequestMapping(value = "/updatePassword" , method = {RequestMethod.GET, RequestMethod.POST})
+//	public String updatePassword(@SessionAttribute("memberSession") Member memberSession, @ModelAttribute Member member, HttpSession session, Model model) {
+//		return "front/member/updatePassword";
+//	}
 
 	@RequestMapping(value = "/updatePasswordSubmit" , method = RequestMethod.POST)
 	public String updatePasswordSubmit(@SessionAttribute("memberSession") Member memberSession, @ModelAttribute Member member, HttpSession session, Model model, HttpServletRequest pRequest) {
@@ -341,10 +318,10 @@ public class MemberController {
 		
 	}
 	
-	@RequestMapping(value = "/forgetPD" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String forgetPD(@ModelAttribute Member member, HttpSession session, Model model) {
-		return "front/member/forgetPD";
-	}
+//	@RequestMapping(value = "/forgetPD" , method = {RequestMethod.GET, RequestMethod.POST})
+//	public String forgetPD(@ModelAttribute Member member, HttpSession session, Model model) {
+//		return "front/member/forgetPD";
+//	}
 	
 	@RequestMapping(value = "/setPD" , method = {RequestMethod.GET, RequestMethod.POST})
 	public void setPD(HttpServletRequest pRequest, HttpServletResponse pResponse, HttpSession session, Model model) {
@@ -388,10 +365,10 @@ public class MemberController {
 		
 	}
 	
-	@RequestMapping(value = "/forgetPDSuccess" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String forgetPDSuccess(@ModelAttribute Member member, HttpSession session, Model model) {
-		return "front/member/forgetPDSuccess";
-	}
+//	@RequestMapping(value = "/forgetPDSuccess" , method = {RequestMethod.GET, RequestMethod.POST})
+//	public String forgetPDSuccess(@ModelAttribute Member member, HttpSession session, Model model) {
+//		return "front/member/forgetPDSuccess";
+//	}
 	
 	public String generator(int strLen){
 		int num = 0;

@@ -51,7 +51,7 @@
 					})
 					.catch(error => {
 						console.log(error);
-						alert("執行失敗");
+						this.warning("執行失敗");
 						reject(error);
 					});
 				});
@@ -72,35 +72,35 @@
 			checkForm() {
 				//驗證資料
 				if (this.memName == null || this.memName == '') {
-					alert("請輸入中文姓名");
+					this.warning("請輸入中文姓名");
 					this.$refs.memName.focus();
 					return false;
 				} else if (this.memPhone == null || this.memPhone == '') {
-					alert("請輸入行動電話");
+					this.warning("請輸入行動電話");
 					this.$refs.memPhone.focus();
 					return false;
 				} else if (!this.isCellphone(this.memPhone)) {
-					alert("行動電話格式不正確，請確認行動電話號碼");
+					this.warning("行動電話格式不正確，請確認行動電話號碼");
 					this.$refs.memPhone.focus();
 					return false;
 				} else if (this.memEmail == null || this.memEmail == '') {
-					alert("請輸入電子信箱");
+					this.warning("請輸入電子信箱");
 					this.$refs.memEmail.focus();
 					return false;
 				} else if (!this.isEmail(this.memEmail)) {
-					alert("電子信箱格式錯誤,請確認妳的電子信箱是不是合法的");
+					this.warning("電子信箱格式錯誤,請確認妳的電子信箱是不是合法的");
 					this.$refs.memEmail.focus();
 					return false;
 				} else if (this.memPassword == null || this.memPassword == '') {
-					alert("請輸入密碼");
+					this.warning("請輸入密碼");
 					this.$refs.memPassword.focus();
 					return false;
 				} else if (this.memPassword.length < 6) {
-					alert("密碼必須大於6碼");
+					this.warning("密碼必須大於6碼");
 					this.$refs.memPassword.focus();
 					return false;
 				} else if (!this.agreePolicy) {
-					alert("請勾選已閱讀會員權利說明");
+					this.warning("請勾選已閱讀會員權利說明");
 					this.$refs.agreePolicy.focus();
 					return false;
 				}
@@ -118,19 +118,19 @@
 							})
 							.then(response => {
 								if (response.data.STATUS == "F") {
-									alert(response.data.MSG);
+									this.warning(response.data.MSG);
 								} else {
-									$(location).attr("href", "/holidayDessert/front/login.html");
+									$(location).attr("href", "/holidayDessert/member/verification.html");
 								}
 							})
 							.catch(error => {
 								console.log(error);
-								alert("執行失敗");
+								this.warning("執行失敗");
 							});
 						}
 					} else {
 						if (this.checkForm()) {
-							alert('此email已經註冊,請選擇其他email')
+							this.warning("此email已經註冊,請選擇其他email");
 						}
 					}
 				});
@@ -169,7 +169,7 @@
 						})
 						.catch(error => {
 							console.log(error);
-							alert("執行失敗");
+							this.warning("執行失敗");
 							reject(error);
 						});
 				});
@@ -200,6 +200,24 @@
 			},
 			toggleAgree(){
 				this.agreePolicy = !this.agreePolicy;
+			},
+			success(message) {
+				swal({
+					title: message,
+					type: "success",
+					showCancelButton: false,
+					confirmButtonColor: "#3085d6",
+					confirmButtonText: "確定"
+				});
+			},
+			warning(message) {
+				swal({
+					title: message,
+					type: "warning",
+					confirmButtonColor: "#DD6B55",
+					confirmButtonText: "確定",
+					closeOnConfirm: false
+				});
 			}
 		},
 		mounted() {
