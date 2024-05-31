@@ -155,7 +155,14 @@
 			<groupId>com.auth0</groupId>
 			<artifactId>java-jwt</artifactId>
 			<version>3.18.2</version>
+<!-- 	   		<version>3.3.0</version> -->
 		</dependency>
+	  <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt -->
+	    <dependency>
+			 <groupId>io.jsonwebtoken</groupId>
+			 <artifactId>jjwt</artifactId>
+			 <version>0.2</version>
+	    </dependency>
 		<!-- https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui -->
 		<dependency>
 			<groupId>io.springfox</groupId>

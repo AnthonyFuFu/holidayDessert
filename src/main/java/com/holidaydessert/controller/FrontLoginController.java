@@ -23,6 +23,8 @@ import org.springframework.web.servlet.view.RedirectView;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.MemberService;
 
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("/front")
 public class FrontLoginController {
@@ -31,7 +33,9 @@ public class FrontLoginController {
 	private MemberService memberService;
 	
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody Member member, HttpSession session) {
+    public ResponseEntity<?> login(
+    			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member,
+    		HttpSession session) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {
             Member login = memberService.login(member);

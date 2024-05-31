@@ -24,7 +24,6 @@ public class FormController {
 	public ResponseEntity<?> sendForm(@RequestBody Form form) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try {
-			System.out.println(form.toString());
 			formService.add(form);
 			responseMap.put("STATUS", "T");
             responseMap.put("MSG", "送出成功");

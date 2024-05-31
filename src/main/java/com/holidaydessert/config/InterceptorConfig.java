@@ -1,22 +1,27 @@
 package com.holidaydessert.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.holidaydessert.interceptors.JWTInterceptor;
+import com.holidaydessert.interceptors.LogInterceptor;
 
 @Configuration
 public class InterceptorConfig implements WebMvcConfigurer {
-	
-	@Autowired
-	JWTInterceptor jwtInterceptor;
 
+	private final String[] excludePath = {"/static/**","/user/login", "/swagger-ui.html",
+			"/swagger-resources/**", "/asserts/**", "/webjars/**"};
+
+	@Bean
+	public LogInterceptor logInterceptor() {
+		return new LogInterceptor();
+	}
+	
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
-		registry.addInterceptor(jwtInterceptor).addPathPatterns("/**") // 其他街口token驗證
-				.excludePathPatterns("/user/login", "/swagger-ui.html",
-						"/swagger-resources/**", "/asserts/**", "/webjars/**"); // 所有用戶都放行
+		registry.addInterceptor(logInterceptor())
+				.addPathPatterns("/**") // 其他街口token驗證
+				.excludePathPatterns(excludePath); // 所有用戶都放行
 	}
 }

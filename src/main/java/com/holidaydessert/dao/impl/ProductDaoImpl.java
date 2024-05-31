@@ -404,14 +404,14 @@ public class ProductDaoImpl implements ProductDao {
 	}
 	
 	@Override
-	public List<Map<String, Object>> frontNewList(Product product) {
+	public List<Map<String, Object>> frontNewList() {
 
 		String sql = " SELECT p.PD_ID, PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, "
 				   + " PD_STATUS, DATE_FORMAT(PD_UPDATE_TIME, '%Y-%m-%d %H:%i:%s') PD_UPDATE_TIME, "
 				   + " CASE PD_STATUS "
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
-				   + " END AS STATUS, PD_PIC_ID, PD_PIC_SORT, PD_PIC "
+				   + " END AS STATUS, PD_PIC_ID, PD_PIC_SORT, PD_PICTURE, PD_IMAGE "
 				   + " FROM holiday_dessert.product p "
 				   + " LEFT JOIN product_pic ppic ON p.PD_ID = ppic.PD_ID "
 				   + " WHERE PD_STATUS = 1 "
@@ -442,7 +442,7 @@ public class ProductDaoImpl implements ProductDao {
 				   + " CASE PD_STATUS "
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
-				   + " END AS STATUS, PD_PIC_ID, PD_PIC_SORT, PD_PIC "
+				   + " END AS STATUS, PD_PIC_ID, PD_PIC_SORT, PD_PICTURE, PD_IMAGE "
 				   + " FROM holiday_dessert.product p "
 				   + " LEFT JOIN product_pic ppic ON p.PD_ID = ppic.PD_ID "
 				   + " WHERE PD_STATUS = 1 "
@@ -476,7 +476,7 @@ public class ProductDaoImpl implements ProductDao {
 				   + " CASE PD_STATUS "
 				   + " WHEN '0' THEN '下架' "
 				   + " WHEN '1' THEN '上架' "
-				   + " END AS STATUS, PD_PIC_ID, PD_PIC_SORT, PD_PIC "
+				   + " END AS STATUS, PD_PIC_ID, PD_PIC_SORT, PD_PICTURE, PD_IMAGE "
 				   + " FROM holiday_dessert.product p "
 				   + " LEFT JOIN product_pic ppic ON p.PD_ID = ppic.PD_ID "
 				   + " WHERE PD_STATUS = 1 "
