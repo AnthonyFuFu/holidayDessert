@@ -64,6 +64,20 @@ public class FrontLoginController {
         return ResponseEntity.ok(responseMap);
     }
     
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpSession session) {
+    	Map<String, Object> responseMap = new HashMap<>();
+        try {
+        	responseMap.put("STATUS", "Y");
+        	responseMap.put("MSG", "登出成功");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            responseMap.put("STATUS", "N");
+            responseMap.put("MSG", "伺服器錯誤");
+        }
+        return ResponseEntity.ok(responseMap);
+    }
+    
     @PostMapping("/getGoogleLogin")
     public ResponseEntity<?> getGoogleLogin(HttpServletRequest pRequest, Authentication authentication) {
     	Map<String, Object> responseMap = new HashMap<>();

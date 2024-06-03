@@ -49,8 +49,22 @@
 				});
 			},
 			logout() {
-				localStorage.removeItem('memberSession');
-				this.memberSession = '';
+				axios.post('/holidayDessert/front/logout', {
+				})
+				.then(response => {
+					if (response.data.STATUS == "N") {
+						this.warning(response.data.MSG);
+					} else {
+						this.success(response.data.MSG);
+						localStorage.removeItem('memberSession');
+						this.memberSession = '';
+					}
+				})
+				.catch(error => {
+					console.log(error);
+					this.warning("執行失敗");
+				});
+				
 			},
 			loadMemberSession() {
 				this.getGoogleLogin().then(result => {
