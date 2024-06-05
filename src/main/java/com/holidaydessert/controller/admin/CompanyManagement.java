@@ -30,14 +30,13 @@ import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CompanyInformationService;
 import com.holidaydessert.service.DepartmentService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
 @RequestMapping("/admin/company")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@Api(tags = "公司管理")
+@ApiIgnore
 public class CompanyManagement {
 	
 	@Autowired
@@ -52,7 +51,6 @@ public class CompanyManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "公司清單", httpMethod = "GET", notes = "進行公司查詢")
 	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限

@@ -21,15 +21,13 @@ import com.holidaydessert.model.Employee;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.EmployeeService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
 @RequestMapping("/admin")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-//@RestController
-@Api(tags = "後台")
+@ApiIgnore
 public class IndexManagement {
 	
 	@Autowired
@@ -39,7 +37,6 @@ public class IndexManagement {
 	private EmployeeService employeeService;
 	
 	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "後台首頁", httpMethod = "GET", notes = "進行查詢首頁")
 	public String index(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		
 		// 權限

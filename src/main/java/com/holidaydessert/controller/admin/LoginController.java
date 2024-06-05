@@ -15,8 +15,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.service.EmployeeService;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 @Controller
 @RequestMapping("/admin")
+@ApiIgnore
 public class LoginController {
 	
 	@Autowired

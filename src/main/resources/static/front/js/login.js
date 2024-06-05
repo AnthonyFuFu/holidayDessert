@@ -39,7 +39,6 @@
 						this.success(response.data.MSG);
 						var memberSession = response.data.memberSession;
 						localStorage.setItem('memberSession', JSON.stringify(memberSession));
-//						sessionStorage.setItem('memberSession', JSON.stringify(memberSession));
 						this.updateSession(memberSession);
 					}
 				})
@@ -49,8 +48,7 @@
 				});
 			},
 			logout() {
-				axios.post('/holidayDessert/front/logout', {
-				})
+				axios.post('/holidayDessert/front/logout')
 				.then(response => {
 					if (response.data.STATUS == "N") {
 						this.warning(response.data.MSG);
@@ -64,30 +62,23 @@
 					console.log(error);
 					this.warning("執行失敗");
 				});
-				
 			},
 			loadMemberSession() {
-				this.getGoogleLogin().then(result => {
-					if (result.status === "GLY") {
-						this.updateSession(result.memberSession);
-					} else {
-						var memberSession = localStorage.getItem('memberSession');
-						// var memberSession = sessionStorage.getItem('memberSession');
-						if (memberSession) {
-							this.updateSession(JSON.parse(memberSession));
-						}
-					}
-				});
+				var memberSession = localStorage.getItem('memberSession');
+				if (memberSession) {
+					this.updateSession(JSON.parse(memberSession));
+				}
 			},
-			getGoogleLogin() {
+			googleLogin() {
 				return new Promise((resolve, reject) => {
-					axios.post('/holidayDessert/front/getGoogleLogin')
+					axios.post('/holidayDessert/front/google/login')
 						.then(response => {
 							if (response.data.STATUS == "N") {
 								resolve({ status: "N", memberSession: '' });
 							} else if (response.data.STATUS == "GLN") {
 								resolve({ status: "GLN", memberSession: '' });
 							} else {
+								this.success(response.data.MSG);
 								var memberSession = response.data.memberSession;
 								localStorage.setItem('memberSession', JSON.stringify(memberSession));
 								this.updateSession(memberSession);
@@ -98,7 +89,7 @@
 							console.log(error);
 							this.warning("執行失敗");
 							reject(error);
-						});
+					});
 				});
 			},
 			updateSession(memberSession) {
@@ -154,17 +145,6 @@
 	
 });
 
-function register() {
-	setTimeout(window.open('/holidayDessert/member/register'), 500);
-}
-
-function forgetPD() {
-	$(location).attr("href", "/holidayDessert/member/forgetPD");
-}
-
-function vfEmail() {
-	$(location).attr("href", "/holidayDessert/member/verification");
-}
 //$(function(){
 //	$(".btn-login").click(function(){
 //		$(".nav-content-mobile").fadeOut();

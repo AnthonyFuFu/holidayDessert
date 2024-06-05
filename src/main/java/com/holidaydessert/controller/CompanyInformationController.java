@@ -1,36 +1,36 @@
 package com.holidaydessert.controller;
 
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.holidaydessert.model.Authority;
-import com.holidaydessert.service.AuthorityService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 
-@Controller
+@RestController
 @RequestMapping("/companyInformation")
+@Api(tags = { "公司資訊" })
 public class CompanyInformationController {
 	
-	@Autowired
-	private AuthorityService authorityService;
-	
 	@RequestMapping(value = "/index" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String companyInformation(HttpSession session, Model model, HttpServletRequest pRequest) {
-		
-		Authority authority = new Authority();
-		
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		System.out.println(authorityList);
-		
-		return "front/holidayDessert/index";
-	}
+	@ApiOperation(value = "獲取公司資訊", httpMethod = "POST", notes = "顯示公司詳細資料")
+    public ResponseEntity<?> companyInformation(HttpSession session) {
+    	Map<String, Object> responseMap = new HashMap<>();
+        try {
+        	responseMap.put("STATUS", "Y");
+        	responseMap.put("MSG", "成功");
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            responseMap.put("STATUS", "N");
+            responseMap.put("MSG", "錯誤");
+        }
+        return ResponseEntity.ok(responseMap);
+    }
 	
 }

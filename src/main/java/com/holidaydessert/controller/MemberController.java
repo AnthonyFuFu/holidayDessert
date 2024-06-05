@@ -39,8 +39,13 @@ import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.MainOrderService;
 import com.holidaydessert.service.MemberService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("/member")
+@Api(tags = "會員")
 public class MemberController {
 
 	@Value("${web.path}")
@@ -63,9 +68,10 @@ public class MemberController {
 	
 	@Autowired
 	private CommonService commonService;
-	
-	@RequestMapping(value = "/register" , method = RequestMethod.POST)
-	public ResponseEntity<?> register(@RequestBody Member member, HttpSession session) {
+
+	@RequestMapping(value = "/register", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "註冊", httpMethod = "POST", notes = "註冊會員資料")
+	public ResponseEntity<?> register(@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member, HttpSession session) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try{
 			String cKey = "_HolidayDessert_";

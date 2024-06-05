@@ -7,12 +7,15 @@ import java.util.Map;
 
 import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.view.RedirectView;
 
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.service.BannerService;
@@ -21,10 +24,12 @@ import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
 import com.holidaydessert.utils.JWTUtil;
 
+import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
+@Api(tags = { "首頁" })
 public class IndexController {
 
 	@Autowired
@@ -40,9 +45,18 @@ public class IndexController {
 	private ProductPicService productPicService;
 
 	private static String subject = "holidaydessertAPI";
+
+    @ApiIgnore
+	@RequestMapping(value =  {"/", "/index"}, method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "首頁", httpMethod = "POST", notes = "導回首頁")
+    public RedirectView index(HttpServletRequest pRequest, HttpServletResponse pResponse) {
+		RedirectView redirectView = new RedirectView();
+		redirectView.setUrl("/holidayDessert/index.html"); // 設置要跳轉的URL
+		return redirectView;
+    }
 	
-	@PostMapping("/getNewList")
-	@ApiOperation(value = "代碼列表" , notes = "依類型及備註取得代碼列表")
+	@RequestMapping(value = "/getNewList", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "新品上市", httpMethod = "POST" , notes = "顯示於首頁的新品上市清單")
 //	@RequestMapping(value = "/getNewList", method = RequestMethod.POST)
 	public ResponseEntity<?> sendForm(
 //			@ApiParam(name="type",value="類型",required=false) 
@@ -65,10 +79,10 @@ public class IndexController {
 				throw new AuthException();
 			}
 		} catch (AuthException e) {
-			Map<String, Object> map = new HashMap<>();
-			map.put("status", "403");
-			map.put("message", "驗證失敗");
-			return new ResponseEntity<>(map, HttpStatus.FORBIDDEN);
+			Map<String, Object> responseMap = new HashMap<>();
+			responseMap.put("STATUS", "403");
+			responseMap.put("MSG", "驗證失敗");
+			return new ResponseEntity<>(responseMap, HttpStatus.FORBIDDEN);
 		}
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 		

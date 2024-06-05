@@ -36,14 +36,13 @@ import com.holidaydessert.service.DepartmentService;
 import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import springfox.documentation.annotations.ApiIgnore;
 
 @Controller
 @RequestMapping("/admin/employee")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@Api(tags = "員工管理")
+@ApiIgnore
 public class EmployeeManagement {
 
 	@Value("${admin.upload.file.path}")
@@ -67,7 +66,6 @@ public class EmployeeManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "員工清單", httpMethod = "GET", notes = "進行員工查詢")
 	public String list(@SessionAttribute("employeeSession") Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限

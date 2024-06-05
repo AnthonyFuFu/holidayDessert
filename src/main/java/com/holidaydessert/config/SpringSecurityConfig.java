@@ -41,7 +41,7 @@ public class SpringSecurityConfig {
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http.csrf().disable()
 			.authorizeRequests()
-				.antMatchers("/google/login")
+				.antMatchers("/front/google/login")
 				.authenticated() // 指定需要Google登入驗證的頁面
 				.anyRequest().permitAll() // 其他頁面允許訪問
 				.and()

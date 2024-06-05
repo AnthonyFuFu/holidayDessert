@@ -44,7 +44,7 @@ public class TokenController {
 	private TokenService tokenService;
 
 	@PostMapping("/getToken")
-	@ApiOperation(value = "獲取token,時限30分鐘")
+	@ApiOperation(value = "獲取token", notes = "token時限30分鐘")
 	public ResponseEntity<?> getToken(
 			@ApiParam(name = "memEmail", value = "MEM_EMAIL", required = true) @RequestParam(value = "memEmail", required = true) String memEmail,
 			@ApiParam(name = "memPassword", value = "MEM_PASSWORD", required = true) @RequestParam(value = "memPassword", required = true) String memPassword) {

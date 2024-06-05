@@ -13,15 +13,21 @@ import org.springframework.web.bind.annotation.RestController;
 import com.holidaydessert.model.Form;
 import com.holidaydessert.service.FormService;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
+
 @RestController
 @RequestMapping("/form")
+@Api(tags = "送單")
 public class FormController {
 
 	@Autowired
 	private FormService formService;
 	
-	@RequestMapping(value = "/sendForm", method = RequestMethod.POST)
-	public ResponseEntity<?> sendForm(@RequestBody Form form) {
+	@RequestMapping(value = "/sendForm", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "送單", httpMethod = "POST", notes = "送單聯絡我們")
+	public ResponseEntity<?> sendForm(@ApiParam(name = "Form", value = "送單", required = true)@RequestBody Form form) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try {
 			formService.add(form);

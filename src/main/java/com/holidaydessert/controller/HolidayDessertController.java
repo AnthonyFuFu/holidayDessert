@@ -24,7 +24,6 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/")
 @SessionAttributes("memberSession")
 @CrossOrigin
-//@RestController
 @Api(tags = "前台")
 public class HolidayDessertController {
 	

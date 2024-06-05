@@ -14,7 +14,10 @@ import com.google.gson.Gson;
 import com.holidaydessert.model.Message;
 import com.holidaydessert.service.MessageService;
 
+import springfox.documentation.annotations.ApiIgnore;
+
 @Controller
+@ApiIgnore
 public class ChatRoomController {
 	
 	@Autowired

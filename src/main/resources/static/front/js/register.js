@@ -136,31 +136,37 @@
 				});
 			},
 			logout() {
-				localStorage.removeItem('memberSession');
-				this.memberSession = '';
-			},
-			loadMemberSession() {
-				this.getGoogleLogin().then(result => {
-					if (result.status === "GLY") {
-						this.updateSession(result.memberSession);
+				axios.post('/holidayDessert/front/logout')
+				.then(response => {
+					if (response.data.STATUS == "N") {
+						this.warning(response.data.MSG);
 					} else {
-						var memberSession = localStorage.getItem('memberSession');
-						// var memberSession = sessionStorage.getItem('memberSession');
-						if (memberSession) {
-							this.updateSession(JSON.parse(memberSession));
-						}
+						this.success(response.data.MSG);
+						localStorage.removeItem('memberSession');
+						this.memberSession = '';
 					}
+				})
+				.catch(error => {
+					console.log(error);
+					this.warning("執行失敗");
 				});
 			},
-			getGoogleLogin() {
+			loadMemberSession() {
+				var memberSession = localStorage.getItem('memberSession');
+				if (memberSession) {
+					this.updateSession(JSON.parse(memberSession));
+				}
+			},
+			googleLogin() {
 				return new Promise((resolve, reject) => {
-					axios.post('/holidayDessert/front/getGoogleLogin')
+					axios.post('/holidayDessert/front/google/login')
 						.then(response => {
 							if (response.data.STATUS == "N") {
 								resolve({ status: "N", memberSession: '' });
 							} else if (response.data.STATUS == "GLN") {
 								resolve({ status: "GLN", memberSession: '' });
 							} else {
+								this.success(response.data.MSG);
 								var memberSession = response.data.memberSession;
 								localStorage.setItem('memberSession', JSON.stringify(memberSession));
 								this.updateSession(memberSession);
@@ -171,7 +177,7 @@
 							console.log(error);
 							this.warning("執行失敗");
 							reject(error);
-						});
+					});
 				});
 			},
 			updateSession(memberSession) {
