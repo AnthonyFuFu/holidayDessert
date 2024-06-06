@@ -1,25 +1,13 @@
 package com.holidaydessert.interceptors;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.auth0.jwt.exceptions.AlgorithmMismatchException;
-import com.auth0.jwt.exceptions.InvalidClaimException;
-import com.auth0.jwt.exceptions.SignatureVerificationException;
-import com.auth0.jwt.exceptions.TokenExpiredException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.holidaydessert.model.Employee;
-import com.holidaydessert.utils.JWTUtil;
 
 //@Component
 public class LogInterceptor implements HandlerInterceptor {
@@ -42,6 +30,7 @@ public class LogInterceptor implements HandlerInterceptor {
 		}
 	    
 		String Args = gson.toJson(request.getParameterMap());
+		System.out.println(Args);
 //		editLog.setIp(request.getRemoteAddr());
 //		editLog.setMethod(request.getMethod());
 //		editLog.setUrl(request.getRequestURI());
@@ -127,6 +116,7 @@ public class LogInterceptor implements HandlerInterceptor {
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
 		int status = response.getStatus();
+		System.out.println(status);
 //		editLog.setStatus(Integer.toString(status));		
 //		editLogService.addLog(editLog);
 		HandlerInterceptor.super.afterCompletion(request, response, handler, ex);

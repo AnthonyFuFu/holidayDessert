@@ -404,7 +404,7 @@ public class ProductDaoImpl implements ProductDao {
 	}
 	
 	@Override
-	public List<Map<String, Object>> frontNewList() {
+	public List<Map<String, Object>> getNewArrivalList() {
 
 		String sql = " SELECT p.PD_ID, PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, "
 				   + " PD_STATUS, DATE_FORMAT(PD_UPDATE_TIME, '%Y-%m-%d %H:%i:%s') PD_UPDATE_TIME, "

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/holidayDessert/front/css/main.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/index.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/contact-us.css">
+    <link rel="stylesheet" href="/holidayDessert/assets/plugins/sweetalert/sweetalert.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" type="text/css">
@@ -18,6 +19,7 @@
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="/holidayDessert/front/js/lib/vue.js"></script>
+    <script type="text/javascript" src="/holidayDessert/assets/plugins/sweetalert/sweetalert.min.js"></script>
     
     <!-- owl.carousel -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
@@ -28,7 +30,6 @@
 </head>
 <body>
 	<div id="header"></div>
-	
 	
     <section class="banner-box">
         <img class="banner-login" src="/holidayDessert/front/images/banner-login.jpg" alt="banner">
@@ -69,82 +70,32 @@
                 </div>
             </div>
         </div>
-        <div class="popular-block">
+        <div id="popular" class="popular-block">
+<!--         <div class="popular-block"> -->
             <div class="popular-title">熱門推薦</div>
             <div class="popular-carousel owl-carousel owl-theme">
-                <div class="popular-item item">
-                    <div class="popular-images"><img src="/holidayDessert/front/images/carousel-images2.jpg" /></div>
+                <div v-for="popular in popularList" class="popular-item item">
+                    <div class="popular-images"><img :src="'/'+popular.PD_PICTURE" :alt="popular.PD_NAME" /></div>
                     <div class="popular-info">
-                        <div class="popular-name">品名品名品名品名</div>
-                        <div class="popular-price">$200</div>
-                    </div>
-                </div>
-                <div class="popular-item item">
-                    <div class="popular-images"><img src="/holidayDessert/front/images/carousel-images2.jpg" /></div>
-                    <div class="popular-info">
-                        <div class="popular-name">品名品名品名品名</div>
-                        <div class="popular-price">$200</div>
-                    </div>
-                </div>
-                <div class="popular-item item">
-                    <div class="popular-images"><img src="/holidayDessert/front/images/carousel-images1.jpg" /></div>
-                    <div class="popular-info">
-                        <div class="popular-name">品名品名品名品名</div>
-                        <div class="popular-price">$200</div>
-                    </div>
-                </div>
-                <div class="popular-item item">
-                    <div class="popular-images"><img src="/holidayDessert/front/images/carousel-images3.jpg" /></div>
-                    <div class="popular-info">
-                        <div class="popular-name">品名品名品名品名</div>
-                        <div class="popular-price">$200</div>
-                    </div>
-                </div>
-                <div class="popular-item item">
-                    <div class="popular-images"><img src="/holidayDessert/front/images/carousel-images3.jpg" /></div>
-                    <div class="popular-info">
-                        <div class="popular-name">品名品名品名品名</div>
-                        <div class="popular-price">$200</div>
+                        <div class="popular-name">{{popular.PD_NAME}}</div>
+                        <div class="popular-price">${{popular.PD_PRICE}}</div>
                     </div>
                 </div>
             </div>
         </div>
-
-        <div class="new-arrival-block">
+        <div id="newArrival" class="new-arrival-block">
             <div class="new-arrival-background"><img src="/holidayDessert/front/images/new-arrival-background.jpg" /></div>
             <div class="new-arrival-title">新品上市</div>
             <div class="new-arrival-carousel">
-                <div class="new-arrival-item">
-                    <div class="new-arrival-images"><img src="/holidayDessert/front/images/carousel-images2.jpg" /></div>
+                <div v-for="newArrival in newArrivalList" class="new-arrival-item">
+                    <div class="new-arrival-images"><img :src="'/'+newArrival.PD_PICTURE" :alt="newArrival.PD_NAME" /></div>
                     <div class="new-arrival-info">
-                        <div class="new-arrival-name">品名品名品名品名</div>
-                        <div class="new-arrival-price">$200</div>
-                    </div>
-                </div>
-                <div class="new-arrival-item">
-                    <div class="new-arrival-images"><img src="/holidayDessert/front/images/carousel-images2.jpg" /></div>
-                    <div class="new-arrival-info">
-                        <div class="new-arrival-name">品名品名品名品名</div>
-                        <div class="new-arrival-price">$200</div>
-                    </div>
-                </div>
-                <div class="new-arrival-item">
-                    <div class="new-arrival-images"><img src="/holidayDessert/front/images/carousel-images1.jpg" /></div>
-                    <div class="new-arrival-info">
-                        <div class="new-arrival-name">品名品名品名品名</div>
-                        <div class="new-arrival-price">$200</div>
-                    </div>
-                </div>
-                <div class="new-arrival-item">
-                    <div class="new-arrival-images"><img src="/holidayDessert/front/images/carousel-images1.jpg" /></div>
-                    <div class="new-arrival-info">
-                        <div class="new-arrival-name">品名品名品名品名</div>
-                        <div class="new-arrival-price">$200</div>
+                        <div class="new-arrival-name">{{newArrival.PD_NAME}}</div>
+                        <div class="new-arrival-price">${{newArrival.PD_PRICE}}</div>
                     </div>
                 </div>
             </div>
         </div>
-
         <div class="comment-block">
             <div class="comment-title">假日甜點<br>Holiday Desserts</div>
             <div class="comment-description">只屬於你的快樂時光，請你和我們一起悠閒品嘗。</div>

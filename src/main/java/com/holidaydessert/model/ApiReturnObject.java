@@ -1,11 +1,22 @@
 package com.holidaydessert.model;
 
-import java.util.List;
-import java.util.Map;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
-import lombok.Data;
-
-@Data
+@Getter
+@Setter
+@Builder
+@ToString
+@NoArgsConstructor
+@AllArgsConstructor
 public class ApiReturnObject {
-	private List<Map<String, Object>> result;
+	
+	private Integer code;
+	private String message;
+	private Object result;
+	
 }

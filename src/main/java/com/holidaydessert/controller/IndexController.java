@@ -1,8 +1,6 @@
 package com.holidaydessert.controller;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.security.auth.message.AuthException;
@@ -18,9 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.holidaydessert.model.ApiReturnObject;
-import com.holidaydessert.service.BannerService;
-import com.holidaydessert.service.NewsService;
-import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
 import com.holidaydessert.utils.JWTUtil;
 
@@ -33,17 +28,14 @@ import springfox.documentation.annotations.ApiIgnore;
 public class IndexController {
 
 	@Autowired
-	private NewsService newsService;
-
-	@Autowired
-	private BannerService bannerService;
-	
-	@Autowired
 	private ProductService productService;
 	
-	@Autowired
-	private ProductPicService productPicService;
+//	@Autowired
+//	private NewsService newsService;
 
+//	@Autowired
+//	private BannerService bannerService;
+	
 	private static String subject = "holidaydessertAPI";
 
     @ApiIgnore
@@ -54,27 +46,35 @@ public class IndexController {
 		redirectView.setUrl("/holidayDessert/index.html"); // 設置要跳轉的URL
 		return redirectView;
     }
+
+	@RequestMapping(value = "/getPopularList", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "熱門推薦", httpMethod = "POST" , notes = "顯示於首頁的熱門推薦清單")
+	public ResponseEntity<?> getPopularList() {
+		
+		ApiReturnObject apiReturnObject = productService.getNewArrivalList();
+		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
+		
+	}
+	
+	@RequestMapping(value = "/getNewArrivalList", method = { RequestMethod.GET, RequestMethod.POST })
+	@ApiOperation(value = "新品上市", httpMethod = "POST" , notes = "顯示於首頁的新品上市清單")
+	public ResponseEntity<?> getNewArrivalList() {
+		
+		ApiReturnObject apiReturnObject = productService.getNewArrivalList();
+		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
+		
+	}
 	
 	@RequestMapping(value = "/getNewList", method = { RequestMethod.GET, RequestMethod.POST })
 	@ApiOperation(value = "新品上市", httpMethod = "POST" , notes = "顯示於首頁的新品上市清單")
-//	@RequestMapping(value = "/getNewList", method = RequestMethod.POST)
-	public ResponseEntity<?> sendForm(
-//			@ApiParam(name="type",value="類型",required=false) 
-//	@RequestParam(value ="type",required=false)String type,
-//			@ApiParam(name = "memo" ,value = "備註",required = false)
-//	@RequestParam(value = "memo" , required = false)String memo,
-//			@ApiParam(name="sorts",value="排序方式",required=true)
-//	@RequestParam(value ="sorts",required=true)String[] sorts,
-	HttpServletRequest request) {
+	public ResponseEntity<?> getNewList(HttpServletRequest request) {
 		
 		ApiReturnObject apiReturnObject = new ApiReturnObject();
 		String token = request.getHeader("Authorization");
 		
 		try {
 			if(JWTUtil.getSubject(token) != null && JWTUtil.getSubject(token).equals(subject)) {
-				List<Map<String, Object>> frontNewList = new ArrayList<>();
-				frontNewList = productService.frontNewList();
-				apiReturnObject.setResult(frontNewList);
+				apiReturnObject = productService.getNewArrivalList();
 			}else {
 				throw new AuthException();
 			}

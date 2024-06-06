@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.ProductDao;
+import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.Product;
 import com.holidaydessert.service.ProductService;
 
@@ -70,12 +71,19 @@ public class ProductServiceImpl implements ProductService {
 	public int getIssuePromotionCount(Product product) {
 		return productDao.getIssuePromotionCount(product);
 	}
-	
-	@Override
-	public List<Map<String, Object>> frontNewList() {
-		return productDao.frontNewList();
-	}
 
+	@Override
+	public ApiReturnObject getNewArrivalList() {
+		
+		List<Map<String, Object>> newArrivalList = productDao.getNewArrivalList();
+		
+		if(newArrivalList == null) {
+			return new ApiReturnObject(200, "查無新品上市清單", null);
+		}
+		
+		return new ApiReturnObject(200, "取得新品上市清單成功", newArrivalList);
+	}
+	
 	@Override
 	public List<Map<String, Object>> frontTypeList(Product product) {
 		return productDao.frontTypeList(product);

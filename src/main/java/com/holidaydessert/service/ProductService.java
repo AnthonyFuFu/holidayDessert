@@ -3,6 +3,7 @@ package com.holidaydessert.service;
 import java.util.List;
 import java.util.Map;
 
+import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.Product;
 
 public interface ProductService {
@@ -21,7 +22,7 @@ public interface ProductService {
 	public int getIssuePromotionCount(Product product);
 	
 	// front
-	public List<Map<String, Object>> frontNewList();
+	public ApiReturnObject getNewArrivalList();
 	public List<Map<String, Object>> frontTypeList(Product product);
 	public List<Map<String, Object>> frontRandTypeList(Product product);
 	

@@ -27,8 +27,10 @@
 		methods: {
 			checkEmailExist() {
 				return new Promise((resolve, reject) => {
-					axios.post('/holidayDessert/member/checkMemberAccountEmail', {
-						memEmail: this.memEmail
+					axios.post('/holidayDessert/member/checkMemberAccountEmail', null, {
+						params:{
+							memEmail: this.memEmail
+						}
 					})
 					.then(response => {
 						let status = response.data.STATUS;

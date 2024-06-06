@@ -1,18 +1,11 @@
 package com.holidaydessert.utils;
 
 import java.security.Key;
-import java.util.Calendar;
 import java.util.Date;
-import java.util.Map;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.security.auth.message.AuthException;
 import javax.xml.bind.DatatypeConverter;
-
-import com.auth0.jwt.JWT;
-import com.auth0.jwt.JWTCreator;
-import com.auth0.jwt.algorithms.Algorithm;
-import com.auth0.jwt.interfaces.DecodedJWT;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;

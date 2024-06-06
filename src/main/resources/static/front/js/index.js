@@ -1,26 +1,95 @@
 ﻿$(function() {
+	new Vue({
+		el: '#newArrival',
+		data: {
+			// model 屬性
+			popularList:[],
+			newArrivalList:[]
+		},
+		created(){
+			this.getNewArrivalList()
+		},
+		methods: {
+			getNewArrivalList() {
+				axios.post('/holidayDessert/getNewArrivalList')
+				.then(response => {
+					this.newArrivalList = response.data.result;
+				})
+				.catch(error => {
+					console.log(error);
+					this.warning("執行失敗");
+				});
+			}
+		}
+	});
+	new Vue({
+		el: '#popular',
+		data: {
+			// model 屬性
+			popularList:[]
+		},
+		created(){
+			this.getPopularList()
+		},
+		methods: {
+			getPopularList() {
+				axios.post('/holidayDessert/getPopularList')
+				.then(response => {
+					this.popularList = response.data.result;
+					this.$nextTick(() => {
+						this.initializeOwlCarousel();
+					});
+				})
+				.catch(error => {
+					console.log(error);
+					this.warning("執行失敗");
+				});
+			},
+			initializeOwlCarousel() {
+				var popularCarousel = $('.popular-carousel');
+            	// 销毁之前的实例，防止重复初始化
+            	popularCarousel.trigger('destroy.owl.carousel');
+            	popularCarousel.find('.owl-stage-outer').children().unwrap();
+            	popularCarousel.removeClass("owl-center owl-loaded owl-text-select-on");
+				popularCarousel.children().each(function(index) {
+					$(this).attr('data-position', index);
+				});
+				popularCarousel.owlCarousel({
+					center: true,
+					nav: false,
+					dots: true,
+					loop: true,
+					responsiveClass: true,
+					responsive: {
+						0:		{items: 2},
+						480:	{items: 2},
+						768:	{items: 3},
+						1024:	{items: 5},
+						1600:	{items: 7}
+					}
+				});
+				$(document).on('click', '.owl-item>.popular-item', function() {
+					var speed = 300;
+					popularCarousel.trigger('to.owl.carousel', [$(this).data('position'), speed]);
+				});
+    		}
+		}
+	});
+	
 	function initializeOwlCarousel() {
 		$(".owl-carousel").owlCarousel({
-			loop: true, // 循環播放
-			nav: false, // 顯示點點
-			margin: 0,             // 设置为0，以免插件添加额外的间距
-			autoWidth: true,       // 启用自动宽度
+			loop: true,
+			nav: false,
+			margin: 0,
+			autoWidth: true,
 			center: true,
 			dots: false,
 			responsiveClass: true,
 			responsive: {
-				0: {
-					items: 1 // 螢幕大小為 0~600 顯示 1 個項目
-				},
-				480: {
-					items: 2 // 螢幕大小為 480~768 顯示 2 個項目
-				},
-				768: {
-					items: 3 // 螢幕大小為 768 以上 顯示 3 個項目
-				},
-				1024: {
-					items: 3 // 螢幕大小為 1024 以上 顯示 3 個項目
-				}
+				0:		{items: 1},
+				480:	{items: 2},
+				768:	{items: 3},
+				1024:	{items: 3}
 			}
 		});
 	}
@@ -42,35 +111,3 @@
 	});
 });
 
-var popularCarousel = $('.popular-carousel');
-popularCarousel.children().each(function(index) {
-	$(this).attr('data-position', index);
-});
-popularCarousel.owlCarousel({
-	center: true,
-	nav: false, // 顯示點點
-	dots: false,
-	loop: true,
-	responsiveClass: true,
-	responsive: {
-		0: {
-			items: 2
-		},
-		480: {
-			items: 2
-		},
-		768: {
-			items: 3
-		},
-		1024: {
-			items: 5
-		},
-		1600: {
-			items: 7
-		}
-	}
-});
-$(document).on('click', '.owl-item>.popular-item', function() {
-	var speed = 300;
-	popularCarousel.trigger('to.owl.carousel', [$(this).data('position'), speed]);
-});

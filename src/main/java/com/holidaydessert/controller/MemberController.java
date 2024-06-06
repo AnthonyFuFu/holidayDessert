@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.view.RedirectView;
@@ -42,6 +43,7 @@ import com.holidaydessert.service.MemberService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import springfox.documentation.annotations.ApiIgnore;
 
 @RestController
 @RequestMapping("/member")
@@ -71,7 +73,7 @@ public class MemberController {
 
 	@RequestMapping(value = "/register", method = { RequestMethod.GET, RequestMethod.POST })
 	@ApiOperation(value = "註冊", httpMethod = "POST", notes = "註冊會員資料")
-	public ResponseEntity<?> register(@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member, HttpSession session) {
+	public ResponseEntity<?> register(@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try{
 			String cKey = "_HolidayDessert_";
@@ -103,27 +105,34 @@ public class MemberController {
 		}
         return ResponseEntity.ok(responseMap);
 	}
-	
-	@RequestMapping(value = "/checkMemberAccountEmail", method = RequestMethod.POST)
-	public ResponseEntity<?> checkMemberAccountEmail(@RequestBody Member member) {
+
+	@RequestMapping(value = "/checkMemberAccountEmail", method = { RequestMethod.POST, RequestMethod.GET })
+	@ApiOperation(value = "驗證信箱是否重複使用", httpMethod = "POST", notes = "驗證信箱是否重複使用")
+	public ResponseEntity<?> checkMemberAccountEmail(
+			@ApiParam(name = "memEmail", value = "電子信箱", required = true) @RequestParam(value = "memEmail", required = true) String memEmail) {
+		Member member = new Member();
+		member.setMemEmail(memEmail);
 		Map<String, Object> responseMap = new HashMap<>();
 		Member checkMemberEmail = memberService.getCheckMemberEmail(member);
 		if (checkMemberEmail == null) {
 			responseMap.put("STATUS", "T");
-            responseMap.put("MSG", "此email可以使用");
+			responseMap.put("MSG", "此email可以使用");
 		} else {
 			responseMap.put("STATUS", "F");
-            responseMap.put("MSG", "此email已經註冊,請選擇其他email");
+			responseMap.put("MSG", "此email已經註冊,請選擇其他email");
 		}
 		return ResponseEntity.ok(responseMap);
 	}
 	
 	@RequestMapping(value = "/reSendEmail", method = { RequestMethod.POST, RequestMethod.GET })
-	public ResponseEntity<?> reSendEmail(@RequestBody Member member) {
+	@ApiOperation(value = "重寄驗證信", httpMethod = "POST", notes = "重寄註冊驗證信")
+	public ResponseEntity<?> reSendEmail(
+			@ApiParam(name = "memEmail", value = "電子信箱", required = true) @RequestParam(value = "memEmail", required = true) String memEmail) {
 		Map<String, Object> responseMap = new HashMap<>();
 		String cKey = "_HolidayDessert_";
 		try {
-			String memEmail = member.getMemEmail();
+			Member member = new Member();
+			member.setMemEmail(memEmail);
 			member = memberService.getCheckMemberEmail(member);
 			Calendar date = Calendar.getInstance();
 			DateFormat yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -153,9 +162,12 @@ public class MemberController {
 	}
 
 	@RequestMapping(value = "/verificationEmail" , method = {RequestMethod.POST,RequestMethod.GET})
-	public RedirectView verificationEmail(HttpSession session, HttpServletRequest pRequest) throws NullPointerException {
-		String code = pRequest.getParameter("code") == null ? "" : pRequest.getParameter("code");
+	@ApiOperation(value = "信箱驗證", httpMethod = "GET", notes = "註冊信箱驗證連結")
+	public RedirectView verificationEmail(
+	        @ApiParam(name = "code", value = "驗證碼", required = true)
+	        @RequestParam(value = "code", required = true) String code) throws NullPointerException {
 		String cKey = "_HolidayDessert_";
+    	RedirectView redirectView = new RedirectView();
 		try {
 			String content = decrypt(code,cKey);
 			String[] text = content.split(",");
@@ -164,14 +176,13 @@ public class MemberController {
 			
 			member = memberService.getCheckMemberEmail(member);
 			memberService.verificationEmail(member);
+	    	redirectView.setUrl("/holidayDessert/member/verificationSuccess.html"); // 設置要跳轉的URL
 			
 		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
+	    	redirectView.setUrl("/holidayDessert/member/verification.html"); // 設置要跳轉的URL
 		} catch (Exception e) {
-			e.printStackTrace();
+	    	redirectView.setUrl("/holidayDessert/member/verification.html"); // 設置要跳轉的URL
 		}
-    	RedirectView redirectView = new RedirectView();
-    	redirectView.setUrl("/holidayDessert/member/verificationSuccess.html"); // 設置要跳轉的URL
     	return redirectView;
 	}
 	
@@ -230,7 +241,8 @@ public class MemberController {
 			return null;
 		}
 	}
-	
+
+    @ApiIgnore
 	@RequestMapping(value = "/update" , method = {RequestMethod.GET, RequestMethod.POST} , produces="text/plain;charset=UTF-8")
 	public String update(@SessionAttribute("memberSession") Member memberSession, @ModelAttribute Member member, HttpSession session, Model model) {
 		
@@ -254,7 +266,8 @@ public class MemberController {
 		}
 		return "front/member/update";
 	}
-	
+
+    @ApiIgnore
 	@RequestMapping(value = "/updateSubmit" , method = RequestMethod.POST , produces="text/plain;charset=UTF-8")
 	public String updateSubmit(@SessionAttribute("memberSession") Member memberSession, @ModelAttribute Member member, HttpSession session, Model model, HttpServletRequest pRequest) {
 		
@@ -276,6 +289,7 @@ public class MemberController {
 //		return "front/member/updatePassword";
 //	}
 
+    @ApiIgnore
 	@RequestMapping(value = "/updatePasswordSubmit" , method = RequestMethod.POST)
 	public String updatePasswordSubmit(@SessionAttribute("memberSession") Member memberSession, @ModelAttribute Member member, HttpSession session, Model model, HttpServletRequest pRequest) {
 		
@@ -291,7 +305,8 @@ public class MemberController {
 		model.addAttribute("PATH", "/forecast/member/update");
 		return "front/toPath";
 	}
-	
+
+    @ApiIgnore
 	@RequestMapping(value = "/checkPassword" , method = {RequestMethod.GET, RequestMethod.POST})
 	public void checkPassword(@SessionAttribute("memberSession") Member memberSession, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 
@@ -328,7 +343,8 @@ public class MemberController {
 //	public String forgetPD(@ModelAttribute Member member, HttpSession session, Model model) {
 //		return "front/member/forgetPD";
 //	}
-	
+
+    @ApiIgnore
 	@RequestMapping(value = "/setPD" , method = {RequestMethod.GET, RequestMethod.POST})
 	public void setPD(HttpServletRequest pRequest, HttpServletResponse pResponse, HttpSession session, Model model) {
 		
