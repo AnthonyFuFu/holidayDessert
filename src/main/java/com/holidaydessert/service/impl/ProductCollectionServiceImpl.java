@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.ProductCollectionDao;
+import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.ProductCollection;
 import com.holidaydessert.service.ProductCollectionService;
 
@@ -52,8 +53,27 @@ public class ProductCollectionServiceImpl implements ProductCollectionService {
 	}
 
 	@Override
-	public List<Map<String, Object>> frontList(ProductCollection productCollection) {
-		return productCollectionDao.frontList(productCollection);
+	public ApiReturnObject getAllPdcList() {
+		
+		List<Map<String, Object>> list = productCollectionDao.getAllPdcList();
+		if(list == null) {
+			return new ApiReturnObject(200, "查無商品分類清單", null);
+		}
+		
+		return new ApiReturnObject(200, "取得商品分類清單成功", list);
+		
+	}
+
+	@Override
+	public ApiReturnObject getPdByPdcName(String pdcName) {
+		
+		List<Map<String, Object>> list = productCollectionDao.getPdByPdcName(pdcName);
+		if(list == null) {
+			return new ApiReturnObject(200, "查無商品分類", null);
+		}
+		
+		return new ApiReturnObject(200, "取得商品分類成功", list);
+		
 	}
 
 }

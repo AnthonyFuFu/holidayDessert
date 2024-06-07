@@ -75,14 +75,20 @@ new Vue({
 		},
 		sendForm() {
 			if (this.checkForm()) {
-				axios.post('/holidayDessert/form/sendForm', null,{
-					params:{
-						formPhone: this.formPhone,
-						formEmail: this.formEmail,
-						formContent: this.formContent,
-						formCreateBy: this.formCreateBy
-					}
+				axios.post('/holidayDessert/form/sendForm',{
+					formPhone: this.formPhone,
+					formEmail: this.formEmail,
+					formContent: this.formContent,
+					formCreateBy: this.formCreateBy
 				})
+// 				axios.get('/holidayDessert/form/sendForm', null,{
+// 					params:{
+// 						formPhone: this.formPhone,
+// 						formEmail: this.formEmail,
+// 						formContent: this.formContent,
+// 						formCreateBy: this.formCreateBy
+// 					}
+// 				})
 				.then(response => {
 					if (response.data.STATUS == "T") {
 				        alert(response.data.MSG);

@@ -3,6 +3,7 @@ package com.holidaydessert.service;
 import java.util.List;
 import java.util.Map;
 
+import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.ProductCollection;
 
 public interface ProductCollectionService {
@@ -17,6 +18,7 @@ public interface ProductCollectionService {
 	public List<Map<String, Object>> getList();
 	
 	// front
-	public List<Map<String, Object>> frontList(ProductCollection productCollection);
+	public ApiReturnObject getAllPdcList();
+	public ApiReturnObject getPdByPdcName(String pdcName);
 	
 }
