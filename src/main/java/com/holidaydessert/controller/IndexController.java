@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,16 +40,16 @@ public class IndexController {
 	private static String subject = "holidaydessertAPI";
 
     @ApiIgnore
-	@RequestMapping(value =  {"/", "/index"}, method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "首頁", httpMethod = "POST", notes = "導回首頁")
+    @PostMapping(value =  {"/", "/index"})
+	@ApiOperation(value = "首頁", notes = "導回首頁")
     public RedirectView index(HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/holidayDessert/index.html"); // 設置要跳轉的URL
 		return redirectView;
     }
 
-	@RequestMapping(value = "/getPopularList", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "熱門推薦", httpMethod = "POST" , notes = "顯示於首頁的熱門推薦清單")
+    @PostMapping(value = "/getPopularList")
+	@ApiOperation(value = "熱門推薦", notes = "顯示於首頁的熱門推薦清單")
 	public ResponseEntity<?> getPopularList() {
 		
 		ApiReturnObject apiReturnObject = productService.getNewArrivalList();
@@ -56,8 +57,8 @@ public class IndexController {
 		
 	}
 	
-	@RequestMapping(value = "/getNewArrivalList", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "新品上市", httpMethod = "POST" , notes = "顯示於首頁的新品上市清單")
+    @PostMapping(value = "/getNewArrivalList")
+	@ApiOperation(value = "新品上市", notes = "顯示於首頁的新品上市清單")
 	public ResponseEntity<?> getNewArrivalList() {
 		
 		ApiReturnObject apiReturnObject = productService.getNewArrivalList();

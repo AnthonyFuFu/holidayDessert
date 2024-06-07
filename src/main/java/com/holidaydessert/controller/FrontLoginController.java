@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -33,9 +34,9 @@ public class FrontLoginController {
 	@Autowired
 	private MemberService memberService;
 	
-	@RequestMapping(value = "/login", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "登入", httpMethod = "POST", notes = "登入獲取會員資料")
-    public ResponseEntity<?> login(@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member, HttpSession session) {
+	@PostMapping(value = "/login")
+	@ApiOperation(value = "登入", notes = "登入獲取會員資料")
+    public ResponseEntity<?> login(@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {
             Member login = memberService.login(member);
@@ -65,7 +66,7 @@ public class FrontLoginController {
     }
 
     @ApiIgnore
-	@RequestMapping(value = "/logout", method = { RequestMethod.GET, RequestMethod.POST })
+    @PostMapping(value = "/logout")
     public ResponseEntity<?> logout(HttpSession session) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {

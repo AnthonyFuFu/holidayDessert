@@ -25,10 +25,8 @@
 			}
 			,reSendEmail() {
 				if (this.checkForm()) {
-					axios.post('/holidayDessert/member/reSendEmail', null, {
-						params:{
-							memEmail: this.memEmail
-						}
+					axios.post('/holidayDessert/member/reSendEmail', {
+						memEmail: this.memEmail
 					})
 					.then(response => {
 						if (response.data.STATUS == "F") {

@@ -25,7 +25,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -71,8 +73,8 @@ public class MemberController {
 	@Autowired
 	private CommonService commonService;
 
-	@RequestMapping(value = "/register", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "註冊", httpMethod = "POST", notes = "註冊會員資料")
+	@PostMapping(value = "/register")
+	@ApiOperation(value = "註冊", notes = "註冊會員資料")
 	public ResponseEntity<?> register(@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try{
@@ -106,12 +108,10 @@ public class MemberController {
         return ResponseEntity.ok(responseMap);
 	}
 
-	@RequestMapping(value = "/checkMemberAccountEmail", method = { RequestMethod.POST, RequestMethod.GET })
-	@ApiOperation(value = "驗證信箱是否重複使用", httpMethod = "POST", notes = "驗證信箱是否重複使用")
+	@PostMapping(value = "/checkMemberAccountEmail")
+	@ApiOperation(value = "驗證信箱是否重複使用", notes = "驗證信箱是否重複使用")
 	public ResponseEntity<?> checkMemberAccountEmail(
-			@ApiParam(name = "memEmail", value = "電子信箱", required = true) @RequestParam(value = "memEmail", required = true) String memEmail) {
-		Member member = new Member();
-		member.setMemEmail(memEmail);
+			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
 		Map<String, Object> responseMap = new HashMap<>();
 		Member checkMemberEmail = memberService.getCheckMemberEmail(member);
 		if (checkMemberEmail == null) {
@@ -124,15 +124,14 @@ public class MemberController {
 		return ResponseEntity.ok(responseMap);
 	}
 	
-	@RequestMapping(value = "/reSendEmail", method = { RequestMethod.POST, RequestMethod.GET })
-	@ApiOperation(value = "重寄驗證信", httpMethod = "POST", notes = "重寄註冊驗證信")
+	@PostMapping(value = "/reSendEmail")
+	@ApiOperation(value = "重寄驗證信", notes = "重寄註冊驗證信")
 	public ResponseEntity<?> reSendEmail(
-			@ApiParam(name = "memEmail", value = "電子信箱", required = true) @RequestParam(value = "memEmail", required = true) String memEmail) {
+			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
+		String memEmail = member.getMemEmail();
 		Map<String, Object> responseMap = new HashMap<>();
 		String cKey = "_HolidayDessert_";
 		try {
-			Member member = new Member();
-			member.setMemEmail(memEmail);
 			member = memberService.getCheckMemberEmail(member);
 			Calendar date = Calendar.getInstance();
 			DateFormat yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmss");
@@ -161,8 +160,8 @@ public class MemberController {
 		return ResponseEntity.ok(responseMap);
 	}
 
-	@RequestMapping(value = "/verificationEmail" , method = {RequestMethod.POST,RequestMethod.GET})
-	@ApiOperation(value = "信箱驗證", httpMethod = "GET", notes = "註冊信箱驗證連結")
+	@GetMapping(value = "/verificationEmail")
+	@ApiOperation(value = "信箱驗證", notes = "註冊信箱驗證連結")
 	public RedirectView verificationEmail(
 	        @ApiParam(name = "code", value = "驗證碼", required = true)
 	        @RequestParam(value = "code", required = true) String code) throws NullPointerException {
