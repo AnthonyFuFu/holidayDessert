@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS company_information;
 DROP TABLE IF EXISTS order_detail;
 -- ================== CREATE TABLE(會員）================== --
 
-CREATE TABLE member(
+CREATE TABLE `member`(
 MEM_ID INT AUTO_INCREMENT NOT NULL PRIMARY KEY,
 MEM_NAME VARCHAR(45) NOT NULL,
 MEM_ACCOUNT VARCHAR(50) NOT NULL,
@@ -40,7 +40,7 @@ MEM_VERIFICATION_CODE VARCHAR(100),
 MEM_GOOGLE_UID VARCHAR(100),
 CONSTRAINT unikey_MEM_ACCOUNT unique(MEM_ACCOUNT)
 );
-INSERT INTO member(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS,MEM_GOOGLE_UID)
+INSERT INTO `member`(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS,MEM_GOOGLE_UID)
 VALUES  ('傅勝宏', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
 		('嘉', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1,NULL),
         ('貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
@@ -384,3 +384,38 @@ FORM_CREATE_TIME datetime not null default current_timestamp
 insert into form(FORM_PHONE,FORM_EMAIL,FORM_CONTENT,FORM_CREATE_BY)
 values ('0911064756','s9017611@gmail.com','我想購買 怎麼聯繫您們','傅勝宏'),
 	   ('0911064756','s9017688@gmail.com','我想購買','AnthonyFuFu');
+       
+-- 留言 --
+create table `comment`(
+CMT_ID int auto_increment not null primary key,
+MEM_ID int not null,
+CMT_STATUS INT(2) not null default 1,
+CMT_CHECK INT(1) not null default 0,
+CMT_PICTURE VARCHAR(300),
+CMT_CONTENT varchar(500),
+CMT_CREATE_BY varchar(50),
+CMT_CREATE_TIME datetime not null default current_timestamp
+);
+
+insert into `comment`(MEM_ID,CMT_CONTENT,CMT_CREATE_BY)
+values (1,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。','傅勝宏'),
+	   (2,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。','AnthonyFuFu'),
+	   (3,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。','ZeoWu');
+
+-- 操作紀錄 --
+create table edit_log(
+LOG_ID int auto_increment not null primary key,
+LOG_IP varchar(50),
+LOG_URL varchar(50),
+LOG_TYPE varchar(20),
+LOG_METHOD varchar(50),
+LOG_HTTP_STATUS_CODE varchar(50),
+LOG_CONTENT longtext,
+LOG_CREATE_BY varchar(50),
+LOG_CREATE_TIME datetime not null default current_timestamp
+);
+
+insert into edit_log(LOG_IP,LOG_URL,LOG_TYPE,LOG_METHOD,LOG_HTTP_STATUS_CODE,LOG_CONTENT,LOG_CREATE_BY)
+values ('0:0:0:0:0:0:0:1','/form/sendForm','employee','POST',200,'{"mem_name":["傅勝宏"],"form_content":["我想購買 怎麼聯繫您們"]}',"傅勝宏"),
+	   ('0:0:0:0:0:0:0:1','/form/sendForm','member','POST',200,'{"mem_name":["傅勝宏"],"form_content":["我想購買 怎麼聯繫您們"]}',"傅勝宏");
+
