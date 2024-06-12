@@ -1,4 +1,4 @@
-package com.holidaydessert.utils;
+package com.holidaydessert.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;

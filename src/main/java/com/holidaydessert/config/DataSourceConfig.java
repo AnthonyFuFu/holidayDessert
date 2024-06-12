@@ -1,4 +1,4 @@
-package com.holidaydessert.utils;
+package com.holidaydessert.config;
 
 import javax.sql.DataSource;
 
