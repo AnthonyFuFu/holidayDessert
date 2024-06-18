@@ -36,6 +36,23 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <div th:if="${memberSession != null}" th:include="front/chat :: chat"></div>
 
 <script type="text/javascript" th:src="@{/front/js/index.js}"></script>
+<script type="text/javascript" th:src="@{/front/js/summary.js}"></script>
+
+
+
+    <h1>文件上传</h1>
+    <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" id="file" name="file" />
+        <button type="submit">上传</button>
+    </form>
+    <div id="result"></div>
+    
+    
+	<input name="prompt"/>
+	<button type="button" th:onclick="chat()">送出</button>
+
+
+
 
 <dl th:each="orderDetail:${frontOrderDetails}">
 	<dd><div th:text="${orderDetail.ORD_ID}"></div></dd>
