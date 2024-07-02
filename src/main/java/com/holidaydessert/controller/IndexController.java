@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
 import com.holidaydessert.model.ApiReturnObject;
+import com.holidaydessert.service.CommentService;
 import com.holidaydessert.service.ProductService;
 import com.holidaydessert.utils.JWTUtil;
 
@@ -31,8 +32,8 @@ public class IndexController {
 	@Autowired
 	private ProductService productService;
 	
-//	@Autowired
-//	private NewsService newsService;
+	@Autowired
+	private CommentService commentService;
 
 //	@Autowired
 //	private BannerService bannerService;
@@ -62,6 +63,15 @@ public class IndexController {
 	public ResponseEntity<?> getNewArrivalList() {
 		
 		ApiReturnObject apiReturnObject = productService.getNewArrivalList();
+		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
+		
+	}
+
+    @PostMapping(value = "/getCommentList")
+	@ApiOperation(value = "留言", notes = "顯示於首頁的留言清單")
+	public ResponseEntity<?> getCommentList() {
+		
+		ApiReturnObject apiReturnObject = commentService.getCommentList();
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 		
 	}

@@ -55,7 +55,13 @@ public class Member extends Base {
 	
 	@Column(name = "MEM_BIRTHDAY")
 	private String memBirthday;        // 生日
-	
+
+    @Column(name = "MEM_PICTURE")
+	private String memPicture;         // 會員圖片路徑
+    
+    @Column(name = "MEM_IMAGE")
+	private String memImage;           // 會員圖片名稱
+    
 	@Column(name = "MEM_STATUS")
 	private String memStatus;          // 會員狀態(1:正常 0:停權)
 	

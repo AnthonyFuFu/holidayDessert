@@ -36,6 +36,7 @@
     </section>
 
     <main class="main">
+    
         <div class="slice-block">
             <div class="gray-block">
                 <div class="gray-title">
@@ -70,12 +71,15 @@
                 </div>
             </div>
         </div>
+        
         <div id="popular" class="popular-block">
-<!--         <div class="popular-block"> -->
             <div class="popular-title">熱門推薦</div>
             <div class="popular-carousel owl-carousel owl-theme">
                 <div v-for="popular in popularList" class="popular-item item">
-                    <div class="popular-images"><img :src="'/'+popular.PD_PICTURE" :alt="popular.PD_NAME" /></div>
+                    <div class="popular-images">
+                    	<img v-if="popular.PD_PICTURE" :src="'/'+popular.PD_PICTURE" :alt="popular.PD_NAME" />
+                    	<img v-else src="/holidayDessert/front/images/carousel-images1.jpg" />
+                    </div>
                     <div class="popular-info">
                         <div class="popular-name">{{popular.PD_NAME}}</div>
                         <div class="popular-price">${{popular.PD_PRICE}}</div>
@@ -83,12 +87,16 @@
                 </div>
             </div>
         </div>
+        
         <div id="newArrival" class="new-arrival-block">
             <div class="new-arrival-background"><img src="/holidayDessert/front/images/new-arrival-background.jpg" /></div>
             <div class="new-arrival-title">新品上市</div>
             <div class="new-arrival-carousel">
                 <div v-for="newArrival in newArrivalList" class="new-arrival-item">
-                    <div class="new-arrival-images"><img :src="'/'+newArrival.PD_PICTURE" :alt="newArrival.PD_NAME" /></div>
+                    <div class="new-arrival-images">
+                    	<img v-if="newArrival.PD_PICTURE" :src="'/'+newArrival.PD_PICTURE" :alt="newArrival.PD_NAME" />
+                    	<img v-else src="/holidayDessert/front/images/carousel-images1.jpg" />
+                    </div>
                     <div class="new-arrival-info">
                         <div class="new-arrival-name">{{newArrival.PD_NAME}}</div>
                         <div class="new-arrival-price">${{newArrival.PD_PRICE}}</div>
@@ -96,51 +104,27 @@
                 </div>
             </div>
         </div>
-        <div class="comment-block">
+        
+        <div id="comment" class="comment-block">
             <div class="comment-title">假日甜點<br>Holiday Desserts</div>
             <div class="comment-description">只屬於你的快樂時光，請你和我們一起悠閒品嘗。</div>
             <div class="comment-message owl-carousel owl-theme">
-                <div class="commenter-block item">
+                <div v-for="comment in commentList" class="commenter-block item">
                     <div class="commenter">
                         <div class="commenter-images">
-                            <img src="/holidayDessert/front/images/carousel-images1.jpg" />
+                    		<img v-if="comment.CMT_PICTURE" :src="'/' + comment.CMT_PICTURE" :alt="comment.CMT_CONTENT" />
+                    		<img v-else src="/holidayDessert/front/images/carousel-images1.jpg" />
                         </div>
                         <div class="commenter-details">
-                            <div class="commenter-name">傅勝宏1</div>
-                            <div class="commenter-time">2024/05/23</div>
+                            <div class="commenter-name">{{comment.CMT_CREATE_BY}}</div>
+                            <div class="commenter-time">{{comment.CMT_CREATE_TIME}}</div>
                         </div>
                     </div>
-                    <div class="commenter-message">
-                        只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。</div>
-                </div>
-                <div class="commenter-block item">
-                    <div class="commenter">
-                        <div class="commenter-images">
-                            <img src="/holidayDessert/front/images/carousel-images1.jpg" />
-                        </div>
-                        <div class="commenter-details">
-                            <div class="commenter-name">傅勝宏2</div>
-                            <div class="commenter-time">2024/05/23</div>
-                        </div>
-                    </div>
-                    <div class="commenter-message">
-                        只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。</div>
-                </div>
-                <div class="commenter-block item">
-                    <div class="commenter">
-                        <div class="commenter-images">
-                            <img src="/holidayDessert/front/images/carousel-images1.jpg" />
-                        </div>
-                        <div class="commenter-details">
-                            <div class="commenter-name">傅勝宏3</div>
-                            <div class="commenter-time">2024/05/23</div>
-                        </div>
-                    </div>
-                    <div class="commenter-message">
-                        只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。</div>
+                    <div class="commenter-message">{{comment.CMT_CONTENT}}</div>
                 </div>
             </div>
         </div>
+        
     </main>
     <div id="form"></div>
 	<div id="footer"></div>
