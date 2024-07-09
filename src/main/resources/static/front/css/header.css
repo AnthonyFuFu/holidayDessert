@@ -161,11 +161,45 @@ nav.nav {
     background: #201E2DA6;
 }
 
+.news li div,
+.shop li div,
+.QA li div,
+.contact li div {
+    width: 100%;
+    padding: 15px;
+}
+
 .news li div a,
 .shop li div a,
 .QA li div a,
 .contact li div a {
-    border: 1px solid red;
+	text-decoration: none;
+    width: 100%;
+    color: white;
+}
+
+.news li div a:hover,
+.shop li div a:hover,
+.QA li div a:hover,
+.contact li div a:hover {
+    width: 100%;
+    color: #FFBD5B;
+}
+
+.news li span,
+.shop li span,
+.QA li span,
+.contact li span {
+    display: none;
+	float:left;
+}
+
+.news li div:hover > span,
+.shop li div:hover > span,
+.QA li div:hover > span,
+.contact li div:hover > span {
+    color: #FFBD5B;
+    display: block;
 }
 
 .shop_bar,
@@ -177,12 +211,14 @@ nav.nav {
 .shop:hover .shop_bar,
 .QA:hover .QA_bar,
 .contact:hover .contact_bar {
+    color: #FFBD5B;
     display: block;
     position: absolute;
-    width: 198px;
-    height: 100px;
-    padding: 30px;
-    border: 1px solid red;
+    width: 250px;
+    background: #201E2DE5;
+    top: 58px;
+    left: 50%;
+    transform: translateX(-50%);
 }
 
 .mobile-nav-bar {
