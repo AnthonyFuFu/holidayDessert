@@ -1,6 +1,6 @@
 <header class="header">
 	<div class="header-layout">
-		<nav class="nav">
+		<nav id="nav" class="nav">
 			<div class="nav-bar">
 				<div class="mobile-nav-bar">
 					<div class="hamburger">
@@ -45,9 +45,87 @@
 					<li><a href="javascript:void(0);"><i class="material-icons">shopping_cart</i></a></li>
 				</ul>
 				<ul class="sign">
-					<li><a class="sign_in"><span>加入會員</span></a></li>
+					<li v-if="!memberSession"><a href="/holidayDessert/member/login.html" class="sign_in"><span>登入</span></a></li>
+					<li v-else><a href="javascript:void(0);" class="sign_in" @click="logout"><span>登出</span></a></li>
 				</ul>
 			</div>
 		</nav>
 	</div>
 </header>
+
+<script>
+new Vue({
+	el: '#nav',
+	data: {
+		// model 屬性
+		memId:'',
+		memName:'',
+		memAccount:'',
+		memEmail: '',
+		memPassword: '',
+		memGender:'',
+		memPhone:'',
+		memAddress:'',
+		memBirthday:'',
+		memStatus:'',
+		memVerificationStatus:'',
+		memVerificationCode:'',
+		memGoogleUid:'',
+		// 其他屬性
+		memberSession: null
+	},
+	methods: {
+		logout() {
+			axios.post('/holidayDessert/front/logout')
+			.then(response => {
+				if (response.data.STATUS == "N") {
+					this.warning(response.data.MSG);
+				} else {
+					localStorage.removeItem('memberSession');
+					this.memberSession = null;
+					$(location).attr("href", "/holidayDessert/index.html");
+				}
+			})
+			.catch(error => {
+				console.log(error);
+				this.warning("執行失敗");
+			});
+		},
+		loadMemberSession() {
+			var memberSession = localStorage.getItem('memberSession');
+			if (memberSession) {
+				this.updateSession(JSON.parse(memberSession));
+			}
+		},
+		updateSession(memberSession) {
+			this.memberSession = memberSession;
+			this.memId = memberSession.memId;
+			this.memName = memberSession.memName;
+			this.memAccount = memberSession.memAccount;
+			this.memPassword = memberSession.memPassword;
+			this.memGender = memberSession.memGender;
+			this.memPhone = memberSession.memPhone;
+			this.memEmail = memberSession.memEmail;
+			this.memAddress = memberSession.memAddress;
+			this.memBirthday = memberSession.memBirthday;
+			this.memStatus = memberSession.memStatus;
+			this.memVerificationCode = memberSession.memVerificationCode;
+			this.memVerificationStatus = memberSession.memVerificationStatus;
+			this.memGoogleUid = memberSession.memGoogleUid;
+		},
+		warning(message) {
+			swal({
+				title: message,
+				type: "warning",
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "確定",
+				closeOnConfirm: false
+			});
+		}
+	},
+	mounted() {
+		this.loadMemberSession();
+	}
+});
+
+</script>

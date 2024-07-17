@@ -151,6 +151,11 @@ nav.nav {
     /* font-weight: bold; */
 }
 
+.sign_in {
+    color: white;
+	text-decoration: none;
+}
+
 .header-layout {
     display: inline-block;
     height: 58px;
@@ -166,7 +171,6 @@ nav.nav {
 .QA li div,
 .contact li div {
     width: 100%;
-    padding: 15px;
 }
 
 .news li div a,
@@ -175,6 +179,8 @@ nav.nav {
 .contact li div a {
 	text-decoration: none;
     width: 100%;
+    padding: 15px;
+    display: block;
     color: white;
 }
 
@@ -184,6 +190,7 @@ nav.nav {
 .contact li div a:hover {
     width: 100%;
     color: #FFBD5B;
+    transition: all 0.3s ease;
 }
 
 .news li span,
@@ -192,6 +199,7 @@ nav.nav {
 .contact li span {
     display: none;
 	float:left;
+    transform: translate(50%,60%);
 }
 
 .news li div:hover > span,

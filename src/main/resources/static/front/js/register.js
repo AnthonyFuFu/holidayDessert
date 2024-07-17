@@ -135,22 +135,6 @@
 					}
 				});
 			},
-			logout() {
-				axios.post('/holidayDessert/front/logout')
-				.then(response => {
-					if (response.data.STATUS == "N") {
-						this.warning(response.data.MSG);
-					} else {
-						this.success(response.data.MSG);
-						localStorage.removeItem('memberSession');
-						this.memberSession = '';
-					}
-				})
-				.catch(error => {
-					console.log(error);
-					this.warning("執行失敗");
-				});
-			},
 			loadMemberSession() {
 				var memberSession = localStorage.getItem('memberSession');
 				if (memberSession) {
@@ -166,11 +150,11 @@
 							} else if (response.data.STATUS == "GLN") {
 								resolve({ status: "GLN", memberSession: '' });
 							} else {
-								this.success(response.data.MSG);
 								var memberSession = response.data.memberSession;
 								localStorage.setItem('memberSession', JSON.stringify(memberSession));
 								this.updateSession(memberSession);
 								resolve({ status: "GLY", memberSession: memberSession });
+								$(location).attr("href", "/holidayDessert/index.html");
 							}
 						})
 						.catch(error => {
@@ -206,15 +190,6 @@
 			},
 			toggleAgree(){
 				this.agreePolicy = !this.agreePolicy;
-			},
-			success(message) {
-				swal({
-					title: message,
-					type: "success",
-					showCancelButton: false,
-					confirmButtonColor: "#3085d6",
-					confirmButtonText: "確定"
-				});
 			},
 			warning(message) {
 				swal({
