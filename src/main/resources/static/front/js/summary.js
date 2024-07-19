@@ -35,9 +35,35 @@ $(function(){
 			processData: false,
 			contentType: false,
 			success: function(data) {
+				$('#result').empty();
 				$('#result').html(data.result);
 			},
 			error: function(jqXHR, textStatus, errorThrown) {
+				$('#result').empty();
+				$('#result').html('<p>上傳失败</p>');
+			}
+		});
+	});
+	
+	$('#uploadForm2').submit(function(event) {
+		event.preventDefault(); // 防止表单默认提交
+
+		var formData = new FormData();
+		var file = $('#file2')[0].files[0];
+		formData.append('file', file);
+
+		$.ajax({
+			url: "api/extractPDF", // 替换为你的文件上传接口
+			type: 'POST',
+			data: formData,
+			processData: false,
+			contentType: false,
+			success: function(data) {
+				$('#result').empty();
+				$('#result').html(data.result);
+			},
+			error: function(jqXHR, textStatus, errorThrown) {
+				$('#result').empty();
 				$('#result').html('<p>上傳失败</p>');
 			}
 		});
