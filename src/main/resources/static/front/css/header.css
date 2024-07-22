@@ -143,15 +143,22 @@ nav.nav {
     width: 100px;
     height: 100%;
     margin: 5px 65px 5px 25px;
-    padding: 8.2px 15px;
     border-radius: 30px;
     background: var(--gold, #FFBD5B);
     cursor: pointer;
     color: white;
-    /* font-weight: bold; */
+	text-align:center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-inline-start: 0;
 }
 
 .sign_in {
+    display: block;
+    padding: 8.2px 15px;
+    width: 100px;
+    border-radius: 30px;
     color: white;
 	text-decoration: none;
 }
@@ -332,19 +339,45 @@ nav.nav {
     .sign {
         display: inline-block;
         font-size: 1.2em;
+        line-height: 1.2em;
         width: 80px;
-        margin: 5px 0;
-        padding: 10.6px 15px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
-
+    
+    .sign_in {
+        width: 80px;
+        height: 38px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
 }
 
 @media only screen and (max-width: 376px) {
+	
     .notify-cart li {
         margin: 10px 0;
     }
-
+    
     .sign {
+        width: 70px;
+    }
+    
+    .sign_in {
+        width: 70px;
+    }
+    
+}
+
+@media only screen and (max-width: 280px) {
+	
+    .sign_in {
+        width: 100%;
         padding: 10.6px 5px;
     }
+    
 }

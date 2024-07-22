@@ -22,6 +22,7 @@ public interface ProductService {
 	public int getIssuePromotionCount(Product product);
 	
 	// front
+	public ApiReturnObject getMainProductList();
 	public ApiReturnObject getNewArrivalList();
 	public List<Map<String, Object>> frontTypeList(Product product);
 	public List<Map<String, Object>> frontRandTypeList(Product product);

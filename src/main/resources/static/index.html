@@ -37,7 +37,7 @@
 
     <main class="main">
     
-        <div class="slice-block">
+        <div id="mainProduct" class="slice-block">
             <div class="gray-block">
                 <div class="gray-title">
                     <img src="/holidayDessert/front/images/logo.svg" alt="HolidayDessertLogo" />
@@ -47,24 +47,21 @@
                     <div class="gray-text-inside">我們在桃園楊梅區的小巷弄裡，是只營業於假日的神秘小店，在這裡想要邀請你一起品嘗我們簡單而愜意的生活。</div>
                 </div>
             </div>
+            
             <div class="white-block">
                 <div class="white-inside">
                     <div class="white-left">
-                        <img src="/holidayDessert/front/images/dessert1.jpg" />
+                        <img v-if="mainProductList[activeIndex] && mainProductList[activeIndex].PD_PICTURE" :src="'/'+mainProductList[activeIndex].PD_PICTURE" :alt="mainProductList[activeIndex].PD_NAME" />
+                        <img v-else src="/holidayDessert/front/images/dessert1.jpg" />
                     </div>
                     <div class="white-right">
                         <div class="white-right-top">
-                            <div class="white-right-btn active">蛋糕</div>
-                            <div class="white-right-btn">蛋糕</div>
-                            <div class="white-right-btn">蛋糕</div>
+                            <div v-for="(mainProduct, index) in mainProductList" :key="index" :class="['white-right-btn', activeIndex === index ? 'active' : '']" @click="setActive(index)">{{mainProduct.PD_NAME}}</div>
                         </div>
-                        <div class="white-right-body">
-                            <div class="white-right-title">
-                                甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜</div>
+                        <div class="white-right-body" v-if="mainProductList.length > 0 && mainProductList[activeIndex]">
+                            <div class="white-right-title">甜點描述</div>
                             <div class="white-right-description">
-                                <li>甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點甜點</li>
-                                <li>甜點甜點甜點甜點甜點甜點甜點甜點甜點</li>
-                                <li>甜點甜點甜點甜點甜點甜點甜點甜點甜點</li>
+                                <li v-for="(description, index) in split(mainProductList[activeIndex].PD_DESCRIPTION)" :key="index" >{{description}}</li>
                             </div>
                         </div>
                     </div>

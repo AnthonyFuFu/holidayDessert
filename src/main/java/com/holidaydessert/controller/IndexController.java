@@ -48,6 +48,15 @@ public class IndexController {
 		redirectView.setUrl("/holidayDessert/index.html"); // 設置要跳轉的URL
 		return redirectView;
     }
+    
+    @PostMapping(value = "/getMainProductList")
+	@ApiOperation(value = "主要產品", notes = "顯示於首頁的主要產品清單")
+	public ResponseEntity<?> getMainProductList() {
+		
+		ApiReturnObject apiReturnObject = productService.getMainProductList();
+		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
+		
+	}
 
     @PostMapping(value = "/getPopularList")
 	@ApiOperation(value = "熱門推薦", notes = "顯示於首頁的熱門推薦清單")

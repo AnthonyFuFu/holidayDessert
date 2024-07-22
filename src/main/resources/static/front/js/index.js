@@ -1,5 +1,35 @@
 ﻿$(function() {
 	new Vue({
+		el: '#mainProduct',
+		data: {
+			// model 屬性
+			mainProductList:[],
+        	activeIndex: 0 // 用來追踪當前選中的按鈕
+		},
+		created(){
+			this.getMainProductList()
+		},
+		methods: {
+			getMainProductList() {
+				axios.post('/holidayDessert/getMainProductList')
+				.then(response => {
+					this.mainProductList = response.data.result;
+				})
+				.catch(error => {
+					console.log(error);
+					this.warning("執行失敗");
+				});
+			},
+			setActive(index) {
+				this.activeIndex = index;
+			},
+			split(description) {
+				return description.split('\n');
+			}
+		}
+	});
+	
+	new Vue({
 		el: '#newArrival',
 		data: {
 			// model 屬性

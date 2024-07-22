@@ -235,11 +235,10 @@ create table product(
 	PD_UPDATE_TIME datetime,
     constraint product_product_collection_fk FOREIGN KEY (PDC_ID) REFERENCES product_collection(PDC_ID)
 );
-insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS, PD_IS_DEL,
-					PD_CREATE_BY,PD_CREATE_TIME,PD_UPDATE_BY,PD_UPDATE_TIME)
+insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS, PD_IS_DEL, PD_CREATE_BY,PD_CREATE_TIME,PD_UPDATE_BY,PD_UPDATE_TIME)
 values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1, 0,'嘉',NOW(),'嘉',NOW()),
        (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1, 0,'嘉',NOW(),'嘉',NOW());
-
+  
 -- 商品圖片 --
 create table product_pic (
 	PD_PIC_ID int auto_increment not null primary key,

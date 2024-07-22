@@ -402,7 +402,36 @@ public class ProductDaoImpl implements ProductDao {
 		
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
-	
+
+	@Override
+	public List<Map<String, Object>> getMainProductList() {
+
+		String sql = " SELECT p.PD_ID, PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, "
+				   + " PD_STATUS, DATE_FORMAT(PD_UPDATE_TIME, '%Y-%m-%d %H:%i:%s') PD_UPDATE_TIME, "
+				   + " CASE PD_STATUS "
+				   + " WHEN '0' THEN '下架' "
+				   + " WHEN '1' THEN '上架' "
+				   + " END AS STATUS, PD_PIC_ID, PD_PIC_SORT, PD_PICTURE, PD_IMAGE "
+				   + " FROM holiday_dessert.product p "
+				   + " LEFT JOIN product_pic ppic ON p.PD_ID = ppic.PD_ID "
+				   + " WHERE PD_STATUS = 1 "
+				   + " AND PD_IS_DEL = 0 "
+				   + " AND (p.PD_ID, PD_PIC_SORT) IN ( "
+				   + " SELECT PD_ID, MIN(PD_PIC_SORT) "
+				   + " FROM product_pic "
+				   + " GROUP BY PD_ID) "
+				   + " ORDER BY ABS(TIMESTAMPDIFF(SECOND, NOW(), PD_UPDATE_TIME)) ";
+		
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+		
+		if(list!=null && list.size()>0) {
+			return list;
+		} else {
+			return null;
+		}
+		
+	}
+
 	@Override
 	public List<Map<String, Object>> getNewArrivalList() {
 

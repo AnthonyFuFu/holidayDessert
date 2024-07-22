@@ -73,6 +73,18 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
+	public ApiReturnObject getMainProductList() {
+		
+		List<Map<String, Object>> newArrivalList = productDao.getMainProductList();
+		
+		if(newArrivalList == null) {
+			return new ApiReturnObject(200, "查無主要產品清單", null);
+		}
+		
+		return new ApiReturnObject(200, "取得主要產品清單成功", newArrivalList);
+	}
+	
+	@Override
 	public ApiReturnObject getNewArrivalList() {
 		
 		List<Map<String, Object>> newArrivalList = productDao.getNewArrivalList();

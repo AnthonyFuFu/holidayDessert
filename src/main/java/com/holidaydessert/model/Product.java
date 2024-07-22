@@ -45,7 +45,7 @@ public class Product extends Base {
 	private String pdPrice;            // 商品原價
     
     @Column(name = "PD_DESCRIPTION")
-	private String pdDescription;      // 商品資訊
+	private String pdDescription;	   // 商品資訊
     
     @Column(name = "PD_DISPLAY_QUANTITY")
 	private String pdDisplayQuantity;  // 商品圖片陳列數量
