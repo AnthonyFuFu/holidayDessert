@@ -44,10 +44,10 @@ CONSTRAINT unikey_MEM_ACCOUNT unique(MEM_ACCOUNT)
 );
 INSERT INTO `member`(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS,MEM_GOOGLE_UID)
 VALUES  ('傅勝宏', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
-		('嘉', 'WU861125', '861125', 'f', '0988000000','zoe861125@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1997-11-25','%Y-%m-%d'),1,1,NULL),
-        ('貝', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
-        ('傅', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
-        ('傅', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL)
+		('阿勝', 'ASHENG', '830917', 'f', '0988000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('傅', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('勝', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('宏', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL)
         ;
 
 -- 常用收貨資訊 --
@@ -97,7 +97,7 @@ CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DE
 );
 INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
 VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
-		('嘉嘉', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert102', 'emppassword2','zoe861125@gmail.com','0','1');
+		('AnthonyFu', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert102', 'emppassword2','s9017611@gmail.com','0','1');
         
 -- 功能-- 
 CREATE TABLE emp_function(
@@ -236,8 +236,8 @@ create table product(
     constraint product_product_collection_fk FOREIGN KEY (PDC_ID) REFERENCES product_collection(PDC_ID)
 );
 insert into product(PDC_ID, PD_NAME, PD_PRICE, PD_DESCRIPTION, PD_DISPLAY_QUANTITY, PD_STATUS, PD_IS_DEL, PD_CREATE_BY,PD_CREATE_TIME,PD_UPDATE_BY,PD_UPDATE_TIME)
-values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1, 0,'嘉',NOW(),'嘉',NOW()),
-       (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1, 0,'嘉',NOW(),'嘉',NOW());
+values (1, '奶茶風味可麗露', 300, '奶茶風味可麗露最好吃', 2, 1, 0,'AnthonyFu',NOW(),'AnthonyFu',NOW()),
+       (1, '抹茶風味可麗露', 500, '抹茶風味可麗露最好吃', 2, 1, 0,'AnthonyFu',NOW(),'AnthonyFu',NOW());
   
 -- 商品圖片 --
 create table product_pic (
@@ -248,8 +248,13 @@ create table product_pic (
     PD_IMAGE VARCHAR(100),
     constraint product_pic_product_fk foreign key (PD_ID) references product(PD_ID)
 );
-insert into product_pic(PD_ID, PD_PIC_SORT)
-values (1, 1),(1, 2),(1, 3),(2, 1),(2, 3),(2, 2);
+insert into product_pic(PD_ID, PD_PIC_SORT, PD_PICTURE, PD_IMAGE)
+values (1, 1, 'holidayDessert/admin/upload/images/productPic/20240731093732.jpg', '20240731093732.jpg'),
+	   (1, 2, 'holidayDessert/admin/upload/images/productPic/20240731093732.jpg', '20240731093732.jpg'),
+	   (1, 3, 'holidayDessert/admin/upload/images/productPic/20240731093732.jpg', '20240731093732.jpg'),
+	   (2, 1, 'holidayDessert/admin/upload/images/productPic/20240731093746.jpg', '20240731093746.jpg'),
+	   (2, 3, 'holidayDessert/admin/upload/images/productPic/20240731093746.jpg', '20240731093746.jpg'),
+	   (2, 2, 'holidayDessert/admin/upload/images/productPic/20240731093746.jpg', '20240731093746.jpg');
 
 -- ================== CREATE TABLE(優惠相關）================== --
 
@@ -401,7 +406,7 @@ CMT_CREATE_TIME datetime not null default current_timestamp
 insert into `comment`(MEM_ID,CMT_CONTENT,CMT_CREATE_BY)
 values (1,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。','傅勝宏'),
 	   (2,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。','AnthonyFuFu'),
-	   (3,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。','ZeoWu');
+	   (3,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。','AnthonyFu');
 
 -- 操作紀錄 --
 create table edit_log(
