@@ -22,6 +22,7 @@ DROP TABLE IF EXISTS banner;
 DROP TABLE IF EXISTS news;
 DROP TABLE IF EXISTS company_information;
 DROP TABLE IF EXISTS order_detail;
+DROP TABLE IF EXISTS fullcalendar;
 -- ================== CREATE TABLE(會員）================== --
 
 CREATE TABLE `member`(
@@ -89,15 +90,18 @@ EMP_ACCOUNT VARCHAR(20) NOT NULL,
 EMP_PASSWORD VARCHAR(20) NOT NULL,
 EMP_EMAIL VARCHAR(40) NOT NULL,
 EMP_LEVEL INT(2) NOT NULL,
+EMP_MANAGER_ID INT DEFAULT NULL ,
 EMP_STATUS INT(1) NOT NULL default '1',
 EMP_HIREDATE date not null DEFAULT (CURRENT_DATE),
 EMP_THEME VARCHAR(40),
 CONSTRAINT unikey_EMP_ACCOUNT unique(EMP_ACCOUNT),
-CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DEPT_ID)
+CONSTRAINT employee_department_fk foreign key (DEPT_ID) references department(DEPT_ID),
+CONSTRAINT employee_manager_fk foreign key (EMP_MANAGER_ID) references employee(EMP_ID) ON DELETE SET NULL
 );
-INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS) 
-VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1'),
-		('AnthonyFu', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert102', 'emppassword2','s9017611@gmail.com','0','1');
+INSERT INTO employee(EMP_NAME, DEPT_ID, EMP_PHONE, EMP_JOB, EMP_SALARY, EMP_PICTURE, EMP_IMAGE, EMP_ACCOUNT, EMP_PASSWORD, EMP_EMAIL, EMP_LEVEL, EMP_STATUS,EMP_MANAGER_ID) 
+VALUES  ('傅勝宏', '1', '0912345678', '軟體工程師', '46250','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert101', 'emppassword1','s9017688@yahoo.com.tw','0','1',null),
+		('AnthonyFu', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert102', 'emppassword2','s9017611@gmail.com','0','1',1),
+		('AnthonyFu2', '2', '0987654321', '行銷+美編', '31500','holidayDessert/admin/upload/images/employee/user.jpg','user.jpg','holidaydessert103', 'emppassword3','s9017622@gmail.com','0','1',1);
         
 -- 功能-- 
 CREATE TABLE emp_function(
@@ -425,3 +429,36 @@ insert into edit_log(LOG_IP,LOG_URL,LOG_TYPE,LOG_METHOD,LOG_HTTP_STATUS_CODE,LOG
 values ('0:0:0:0:0:0:0:1','/form/sendForm','employee','POST',200,'{"mem_name":["傅勝宏"],"form_content":["我想購買 怎麼聯繫您們"]}',"傅勝宏"),
 	   ('0:0:0:0:0:0:0:1','/form/sendForm','member','POST',200,'{"mem_name":["傅勝宏"],"form_content":["我想購買 怎麼聯繫您們"]}',"傅勝宏");
 
+-- 排班管理 --
+create table fullcalendar (
+    id int auto_increment not null primary key comment '唯一的事件 ID',
+    title varchar(255) not null comment '事件的標題',
+    start datetime not null comment '事件的開始日期/時間',
+    end datetime default null comment '事件的結束日期/時間',
+    allDay int(1) not null default 0 comment '是否為全天事件',
+    url varchar(2083) default null comment '點擊事件後開啟的連結',
+    classNames varchar(5000) default null comment '自訂的 CSS 類別名稱',
+    editable int(1) not null default 0 comment '是否允許該事件被拖動或調整大小',
+    startEditable int(1) not null default 0 comment '是否允許調整事件開始時間',
+    durationEditable int(1) not null default 0 comment '是否允許改變事件的持續時間',
+    overlap int(1) not null default 1 comment '是否允許事件重疊',
+    display enum('auto', 'block', 'list-item', 'background', 'inverse-background', 'none') default 'auto' comment '事件的顯示方式',
+    backgroundColor varchar(7) default null comment '背景顏色',
+    borderColor varchar(7) default null comment '邊框顏色',
+    textColor varchar(7) default null comment '文字顏色',
+    groupId varchar(255) default null comment '群組 ID，用於將多個事件歸為同一群組',
+    extendedProps varchar(5000) default null comment '自訂屬性',
+    isApproved int(1) not null default 0 comment '是否已審核 (由管理員控制)',
+    EMP_ID int default null comment '事件擁有者 ID，對應 employee 表的 EMP_ID',
+    constraint calendar_employee_fk foreign key (EMP_ID) references employee(EMP_ID) on delete cascade
+);
+
+insert into fullcalendar (title, start, end, allDay, backgroundColor, borderColor,EMP_ID)
+values('Meeting', CONCAT(CURDATE(), ' 10:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 12:00:00'), 0, '#f56954', '#f56954',1),
+      ('Conference', CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 DAY), ' 09:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 17:00:00'), 0, '#00a65a', '#00a65a',2),
+      ('Lunch', CONCAT(CURDATE(), ' 12:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 WEEK), ' 13:00:00'), 0, '#f39c12', '#f39c12',2),
+      ('Multi-day Event with Time', CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 14:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 WEEK), ' 16:00:00'), 0, '#0073b7', '#0073b7',2),
+      ('Conference2', CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 DAY), ' 09:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 17:00:00'), 0, '#00a65a', '#00a65a',3),
+      ('Lunch2', CONCAT(CURDATE(), ' 12:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 2 WEEK), ' 13:00:00'), 0, '#f39c12', '#f39c12',3),
+      ('Multi-day Event with Time2', CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 14:00:00'), CONCAT(DATE_ADD(CURDATE(), INTERVAL 3 WEEK), ' 16:00:00'), 0, '#0073b7', '#0073b7',3);
+      

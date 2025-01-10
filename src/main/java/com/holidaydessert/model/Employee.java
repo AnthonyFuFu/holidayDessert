@@ -71,6 +71,9 @@ public class Employee extends Base {
     
     @Column(name = "EMP_LEVEL")
 	private String empLevel;           // 等級(0:最高管理員 1:一般管理員)
+
+    @Column(name = "EMP_MANAGER_ID")
+	private String empManagerId;       // 管理者ID
     
     @Column(name = "EMP_STATUS")
 	private String empStatus;          // 狀態(0:停權 1:啟用)
@@ -87,6 +90,10 @@ public class Employee extends Base {
     @ManyToOne
     @JoinColumn(name = "DEPT_ID", insertable = false, updatable = false)
     private Department department;     // 部門
+    
+    @ManyToOne
+    @JoinColumn(name = "EMP_ID", insertable = false, updatable = false)
+    private Employee employee;     	   // 管理員
     
     @OneToMany(mappedBy = "employee",fetch = FetchType.EAGER)
     private List<Message> messages;

@@ -3,6 +3,7 @@ package com.holidaydessert.controller.admin;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,11 +32,13 @@ import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.EmpFunction;
 import com.holidaydessert.model.Employee;
+import com.holidaydessert.model.Fullcalendar;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.DepartmentService;
 import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
+import com.holidaydessert.service.FullcalendarService;
 
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -59,6 +63,9 @@ public class EmployeeManagement {
 
 	@Autowired
 	private DepartmentService departmentService;
+
+	@Autowired
+	private FullcalendarService fullcalendarService;
 	
 	@Autowired
 	private CommonService commonService;
@@ -431,6 +438,101 @@ public class EmployeeManagement {
 		
 		authorityService.update(authority);
 		
+	}
+	
+	@ResponseBody
+	@GetMapping("/listFullcalendar")
+	public List<Map<String, Object>>listFullcalendar(@RequestParam(value = "EMP_ID", required = true) String empId) throws Exception {
+		
+		Fullcalendar fullcalendarData = new Fullcalendar();
+		Employee employee = new Employee();
+		employee.setEmpId(empId);
+		fullcalendarData.setEmployee(employee);
+		
+		List<Map<String, Object>> fullcalendarList = fullcalendarService.list(fullcalendarData);
+		
+		if (fullcalendarList == null) {
+			fullcalendarList = new ArrayList<Map<String, Object>>();
+		}
+	    return fullcalendarList;
+	}
+
+	@RequestMapping(value = "/calendarAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
+	public String calendarAddSubmit(
+			@RequestParam(value = "title", required = true) String title,
+			@RequestParam(value = "start", required = true) String start,
+			@RequestParam(value = "end", required = true) String end,
+			@RequestParam(value = "empId", required = true) String empId,
+			Model model) throws Exception {
+		
+		Fullcalendar fullcalendarData = new Fullcalendar();
+		fullcalendarData.setTitle(title);
+		fullcalendarData.setStart(start);
+		fullcalendarData.setEnd(end);
+		fullcalendarData.setAllDay("0");
+		fullcalendarData.setBackgroundColor("#808080");
+		fullcalendarData.setBorderColor("#808080");
+		if (fullcalendarData.getEmployee() == null) {
+		    fullcalendarData.setEmployee(new Employee());
+		}
+		fullcalendarData.getEmployee().setEmpId(empId);
+		
+		try {
+			fullcalendarService.add(fullcalendarData);
+			model.addAttribute("MESSAGE", "資料新增成功");
+		} catch (Exception e) {
+			e.printStackTrace();
+			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
+			throw new Exception("dataRollback");
+		}
+		model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
+
+		return "admin/toPath";
+	}
+	
+	@ResponseBody
+	@RequestMapping(value = "/approve", method = RequestMethod.POST)
+	public Map<String, String> approve(
+	        @RequestParam(value = "id", required = true) String id) {
+	    Map<String, String> response = new HashMap<>();
+	    try {
+	        Fullcalendar fullcalendarData = new Fullcalendar();
+	        fullcalendarData.setId(id);
+	        fullcalendarData.setIsApproved("1");
+	        fullcalendarData.setBackgroundColor("#32CD32");
+	        fullcalendarData.setBorderColor("#32CD32");
+	        fullcalendarService.update(fullcalendarData);
+
+	        response.put("status", "success");
+	        response.put("message", "准假成功");
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("status", "error");
+	        response.put("message", "審核失敗：" + e.getMessage());
+	    }
+	    return response;
+	}
+	@ResponseBody
+	@RequestMapping(value = "/notApprove", method = RequestMethod.POST)
+	public Map<String, String> notApprove(
+	        @RequestParam(value = "id", required = true) String id) {
+	    Map<String, String> response = new HashMap<>();
+		try {
+			Fullcalendar fullcalendarData = new Fullcalendar();
+			fullcalendarData.setId(id);
+			fullcalendarData.setIsApproved("0");
+			fullcalendarData.setBackgroundColor("#f56954");
+			fullcalendarData.setBorderColor("#f56954");
+			fullcalendarService.update(fullcalendarData);
+			
+	        response.put("status", "success");
+	        response.put("message", "更新為不准假");
+		} catch (Exception e) {
+	        e.printStackTrace();
+	        response.put("status", "error");
+	        response.put("message", "審核失敗：" + e.getMessage());
+	    }
+	    return response;
 	}
 	
 }

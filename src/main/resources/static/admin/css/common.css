@@ -316,3 +316,6 @@
 
 .noUi-active .range-label span {
   opacity: 1; }
+  
+.tab-content > #calendar_animation {
+  display: block;}
