@@ -20,6 +20,11 @@ public class FullcalendarServiceImpl implements FullcalendarService {
 	public List<Map<String, Object>> list(Fullcalendar fullcalendar) {
 		return fullcalendarDao.list(fullcalendar);
 	}
+
+	@Override
+	public List<Map<String, Object>> getManagedEmployees(Fullcalendar fullcalendar) {
+		return fullcalendarDao.getManagedEmployees(fullcalendar);
+	}
 	
 	@Override
 	public void add(Fullcalendar fullcalendar) {

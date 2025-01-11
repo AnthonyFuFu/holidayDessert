@@ -457,6 +457,24 @@ public class EmployeeManagement {
 	    return fullcalendarList;
 	}
 
+	@ResponseBody
+	@GetMapping("/getManagedEmployees")
+	public List<Map<String, Object>>getManagedEmployees(@RequestParam(value = "EMP_ID", required = true) String empId) throws Exception {
+		System.out.println("empId:"+empId);
+		Fullcalendar fullcalendarData = new Fullcalendar();
+		Employee employee = new Employee();
+		employee.setEmpManagerId(empId);
+		fullcalendarData.setEmployee(employee);
+		
+		List<Map<String, Object>> getManagedEmpList = fullcalendarService.getManagedEmployees(fullcalendarData);
+
+		System.out.println("getManagedEmpList:"+getManagedEmpList);
+		if (getManagedEmpList == null) {
+			getManagedEmpList = new ArrayList<Map<String, Object>>();
+		}
+	    return getManagedEmpList;
+	}
+
 	@RequestMapping(value = "/calendarAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String calendarAddSubmit(
 			@RequestParam(value = "title", required = true) String title,

@@ -12,11 +12,21 @@ $(document).ready(function() {
 		},
 		eventSources: [
 			{
-				// 設定事件背景顏色
-				color: '#378006',
-				// 設定事件文字顏色
-				textColor: '#ffffff',
+				color: '#378006',			// 設定事件背景顏色
+				textColor: '#ffffff',		// 設定事件文字顏色
 				url: 'listFullcalendar',	// 事件的 API 路徑
+				method: 'GET',         		// 請求方法 (GET/POST)
+				extraParams: {				// 傳遞的額外參數
+					EMP_ID: empId
+				},
+				failure: function() {		// 請求失敗時的回調函數
+					alert('Error while fetching events!');
+				}
+			},
+			{
+				color: '#0066CC',			// 設定事件背景顏色
+				textColor: '#ffffff',		// 設定事件文字顏色
+				url: 'getManagedEmployees',	// 事件的 API 路徑
 				method: 'GET',         		// 請求方法 (GET/POST)
 				extraParams: {				// 傳遞的額外參數
 					EMP_ID: empId

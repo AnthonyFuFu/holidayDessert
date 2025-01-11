@@ -51,6 +51,35 @@ public class FullcalendarDaoImpl implements FullcalendarDao {
 	}
 
 	@Override
+	public List<Map<String, Object>> getManagedEmployees(Fullcalendar fullcalendar) {
+		
+	    List<Object> args = new ArrayList<>();
+	    String sql = " SELECT fc.id, fc.title, " +
+                	 " DATE_FORMAT(fc.start, '%Y-%m-%dT%H:%i:%s') AS start, " +
+                	 " DATE_FORMAT(fc.end, '%Y-%m-%dT%H:%i:%s') AS end, " +
+                	 " fc.allDay, fc.url, fc.classNames, fc.editable, fc.startEditable, fc.durationEditable, fc.overlap, fc.display, " +
+                	 " fc.backgroundColor, fc.borderColor, fc.textColor, fc.groupId, fc.extendedProps, fc.isApproved, fc.EMP_ID " +
+                	 " FROM fullcalendar fc " + 
+                	 " JOIN employee e ON fc.EMP_ID = e.EMP_ID " + 
+                	 " WHERE e.EMP_MANAGER_ID = ?";
+	    // 添加參數
+	    if (fullcalendar.getEmployee() != null && fullcalendar.getEmployee().getEmpManagerId() != null) {
+	        args.add(fullcalendar.getEmployee().getEmpManagerId()); // 傳遞 EMP_ID
+	    }
+	    
+	    // 查詢數據
+	    List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+	    
+	    // 如果查詢有結果，返回結果；如果沒有，返回 null
+	    if (list != null && list.size() > 0) {
+	        return list;
+	    } else {
+	        return null;
+	    }
+	    
+	}
+	
+	@Override
 	public void add(Fullcalendar fullcalendar) {
 
 		List<Object> args = new ArrayList<>();

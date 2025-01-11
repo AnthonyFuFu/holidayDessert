@@ -9,6 +9,7 @@ public interface FullcalendarService {
 	
 	// back
 	public List<Map<String, Object>> list(Fullcalendar fullcalendar);
+	public List<Map<String, Object>> getManagedEmployees(Fullcalendar fullcalendar);
 	public void add(Fullcalendar fullcalendar);
 	public void update(Fullcalendar fullcalendar);
 	
