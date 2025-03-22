@@ -159,4 +159,11 @@ $(document).ready(function() {
 		});
 	}
 
+	function statusCheck(){
+		if ($("#checkStatus").prop("checked")) {
+			$("#funcStatus").val("1");
+		} else {
+			$("#funcStatus").val("0");
+		}
+	}
 });

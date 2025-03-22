@@ -6,11 +6,6 @@
 <title>[[${@environment.getProperty('html.title')}]] - 員工管理</title>
 <link rel="stylesheet" th:href="@{/admin/css/common.css}" />
 
-<!-- 引入 FullCalendar v5 的 CSS -->
-<link href="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.css" rel="stylesheet">
-<!-- 引入 FullCalendar v5 的 JavaScript -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@5.10.1/main.js"></script>
-
 </head>
 <body th:class="theme- + (${employeeSession.empTheme} != 'null' and ${employeeSession.empTheme} != '' ? ${employeeSession.empTheme} : 'red')">
 
@@ -71,7 +66,6 @@
                                         <li role="presentation" class="active"><a href="#employee_animation" data-toggle="tab">員工清單</a></li>
                                         <li role="presentation"><a href="#emp_function_animation" data-toggle="tab">功能清單</a></li>
                                         <li role="presentation"><a href="#authority_animation" data-toggle="tab">權限管理</a></li>
-										<li role="presentation"><a href="#calendar_animation" data-toggle="tab">排班管理</a></li>
                                     </ul>
                                     <!-- Tab panes -->
                                     <div class="tab-content">
@@ -128,53 +122,6 @@
                                 				</table>
                             				</div>
                                         </div>
-                                        
-										<div role="tabpanel" class="tab-pane fade" id="calendar_animation">
-											<div class="table-responsive">
-												<!-- THE CALENDAR -->
-												<div id="calendar"></div>
-												
-												<form class="form-horizontal" role="form" id="calendarForm" method="POST" enctype="multipart/form-data">
-												<input type="hidden" id="calendarTitle" name="title">
-												<input type="hidden" id="calendarEmpId" name="empId">
-												<div class="row clearfix">
-												    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-												        <label for="calendarStart">排休開始時間</label>
-												    </div>
-												    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-												        <div class="form-group">
-												        	<div class="form-line">
-												            	<input type="text" id="calendarStart" class="datepicker form-control" placeholder="請選擇開始時間" name="start">
-												        	</div>
-												        </div>
-												    </div>
-												</div>
-												<div class="row clearfix">
-												    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> 
-												        <label for="calendarEnd">排休結束時間</label>
-												    </div>
-												    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
-												        <div class="form-group">
-												        	<div class="form-line">
-																<input type="text" id="calendarEnd" class="datepicker form-control" placeholder="請選擇結束時間" name="end">
-												        	</div>
-												        </div>
-												    </div>
-												</div>
-												<div class="row clearfix">
-													<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
-													<div class="row clearfix">
-														<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
-															<button id="addCalendar" class="btn btn-primary waves-effect" type="button">新 增</button>
-														</div>
-												    </div>
-												</div>
-												
-												</form>
-												
-											</div>
-										</div>
-
                                     </div>
                                 </div>
                             </div>
@@ -194,7 +141,6 @@
 <script th:src="@{/admin/js/employee/employee.js}"></script>
 <script th:src="@{/admin/js/employee/emp-function.js}"></script>
 <script th:src="@{/admin/js/employee/authority.js}"></script>
-<script th:src="@{/admin/js/employee/calendar.js}"></script>
 
 </body>
 </html>
