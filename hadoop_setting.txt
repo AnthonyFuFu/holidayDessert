@@ -1,0 +1,117 @@
+安裝好hadoop-3.3.0、java1.8(建議使用1.8)
+參考來源
+https://github.com/ruslanmv/How-to-install-Hadoop-on-Windows
+==========================================================
+設定環境變數
+%HADOOP_HOME%\bin;
+%JAVA_HOME%\bin;
+==========================================================
+C:\Hadoop\hadoop-3.3.0\etc\hadoop
+修改core-site.xml
+==========================================================
+<configuration>
+   <property>
+     <name>fs.default.name</name>
+     <value>hdfs://0.0.0.0:19000</value>
+   </property>
+</configuration>
+==========================================================
+建立資料夾
+C:\hadoop\hadoop-3.3.0\data\datanode
+C:\hadoop\hadoop-3.3.0\data\namenode
+==========================================================
+C:\Hadoop\hadoop-3.3.0\etc\hadoop
+修改hdfs-site.xml
+
+<configuration>
+   <property>
+     <name>dfs.replication</name>
+     <value>1</value>
+   </property>
+   <property>
+     <name>dfs.namenode.name.dir</name>
+     <value>/hadoop/hadoop-3.3.0/data/namenode</value>
+   </property>
+   <property>
+     <name>dfs.datanode.data.dir</name>
+     <value>/hadoop/hadoop-3.3.0/data/datanode</value>
+   </property>
+</configuration>
+==========================================================
+C:\Hadoop\hadoop-3.3.0\etc\hadoop
+修改mapred-site.xml
+
+<configuration>
+    <property>
+        <name>mapreduce.framework.name</name>
+        <value>yarn</value>
+    </property>
+    <property> 
+        <name>mapreduce.application.classpath</name>
+        <value>%HADOOP_HOME%/share/hadoop/mapreduce/*,%HADOOP_HOME%/share/hadoop/mapreduce/lib/*,%HADOOP_HOME%/share/hadoop/common/*,%HADOOP_HOME%/share/hadoop/common/lib/*,%HADOOP_HOME%/share/hadoop/yarn/*,%HADOOP_HOME%/share/hadoop/yarn/lib/*,%HADOOP_HOME%/share/hadoop/hdfs/*,%HADOOP_HOME%/share/hadoop/hdfs/lib/*</value>
+    </property>
+</configuration>
+==========================================================
+C:\Hadoop\hadoop-3.3.0\etc\hadoop
+修改yarn-site.xml
+
+<configuration>
+    <property>
+        <name>yarn.nodemanager.aux-services</name>
+        <value>mapreduce_shuffle</value>
+    </property>
+    <property>
+        <name>yarn.nodemanager.env-whitelist</name>
+        <value>JAVA_HOME,HADOOP_COMMON_HOME,HADOOP_HDFS_HOME,HADOOP_CONF_DIR,CLASSPATH_PREPEND_DISTCACHE,HADOOP_YARN_HOME,HADOOP_MAPRED_HOME</value>
+    </property>
+</configuration>
+==========================================================
+
+準備啟動
+Initialise HDFS
+如果没報錯的话，表示配置文件沒出問題！
+hdfs namenode -format
+
+=========================================================
+
+Start HDFS daemons
+%HADOOP_HOME%\sbin\start-dfs.cmd
+
+=========================================================
+
+Verify HDFS web portal UI through this link-UI操作介面
+
+http://localhost:9870/dfshealth.html#tab-overview.
+
+=========================================================
+
+Start YARN daemons
+
+%HADOOP_HOME%\sbin\start-yarn.cmd
+
+=========================================================
+
+YARN resource manager UI-UI操作介面
+
+http://localhost:8088
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
