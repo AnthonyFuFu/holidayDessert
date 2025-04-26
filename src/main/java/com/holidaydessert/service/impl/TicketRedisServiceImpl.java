@@ -30,7 +30,7 @@ public class TicketRedisServiceImpl implements TicketRedisService {
 
         try {
             if (!redisLockUtil.lock(lockKey, lockValue, 30)) {
-                return "系统繁忙，请稍后再试";
+                return "系统繁忙，請稍後再試";
             }
 
             Ticket ticket = ticketDao.findByEvent(event);
@@ -43,7 +43,7 @@ public class TicketRedisServiceImpl implements TicketRedisService {
 
             // 金流处理逻辑...
 
-            return "抢票成功";
+            return "搶票成功";
         } finally {
             redisLockUtil.unlock(lockKey);
         }

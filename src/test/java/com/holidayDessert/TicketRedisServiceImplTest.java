@@ -46,7 +46,7 @@ public class TicketRedisServiceImplTest {
 
         String response = ticketRedisService.purchaseTicket(event);
 
-        assertEquals("抢票成功", response);
+        assertEquals("搶票成功", response);
         verify(ticketDao, times(1)).save(ticket);
         verify(redisLockUtil, times(1)).unlock(anyString());
     }

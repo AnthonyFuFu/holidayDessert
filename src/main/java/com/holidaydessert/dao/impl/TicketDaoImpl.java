@@ -16,10 +16,12 @@ public class TicketDaoImpl implements TicketDao {
 	private EntityManager entityManager;
 
 	@Override
-	public Ticket findByEvent(String event) {
-		String jpql = "SELECT t FROM Ticket t WHERE t.event = :event";
+	public Ticket findByEvent(String ticketEvent) {
+		String jpql = "SELECT t FROM Ticket t WHERE t.ticketEvent = :ticketEvent";
 		try {
-			return entityManager.createQuery(jpql, Ticket.class).setParameter("event", event).getSingleResult();
+			return entityManager.createQuery(jpql, Ticket.class)
+								.setParameter("ticketEvent", ticketEvent)
+								.getSingleResult();
 		} catch (NoResultException e) {
 			return null;
 		}
