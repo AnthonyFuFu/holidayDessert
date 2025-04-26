@@ -28,7 +28,7 @@ public class TicketDaoImpl implements TicketDao {
 	@Override
 	public void save(Ticket ticket) {
 
-		if (ticket.getId() == null) {
+		if (ticket.getTicketId() == null) {
 			entityManager.persist(ticket);
 		} else {
 			entityManager.merge(ticket);
