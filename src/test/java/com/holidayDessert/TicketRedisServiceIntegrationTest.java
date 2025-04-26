@@ -21,9 +21,7 @@ public class TicketRedisServiceIntegrationTest {
     public void testPurchaseRealTicket() {
         // 資料庫中已有這筆資料：跨年煙火派對
         String event = "跨年煙火派對";
-        
         String result = ticketRedisService.purchaseTicket(event);
-
         assertEquals("搶票成功", result);
     }
 }
