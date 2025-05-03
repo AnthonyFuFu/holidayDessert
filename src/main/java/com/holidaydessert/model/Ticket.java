@@ -21,20 +21,29 @@ public class Ticket implements Serializable {
     @Id
     @Column(name = "TICKET_ID")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long ticketId;  // 票券 ID
-    
-    @Column(name = "TICKET_EVENT", nullable = false, unique = true)
-    private String ticketEvent; // 活動名稱
-    
+    private Integer ticketId;
+
+    @Column(name = "TICKET_NAME", nullable = false, unique = true)
+    private String ticketName;
+
+    @Column(name = "TICKET_START", nullable = false)
+    private String ticketStart;
+
+    @Column(name = "TICKET_SALE_START", nullable = false)
+    private String ticketSaleStart;
+
+    @Column(name = "TICKET_SALE_END", nullable = false)
+    private String ticketSaleEnd;
+
     @Column(name = "TICKET_QUANTITY", nullable = false)
-    private Integer ticketQuantity; // 剩餘票數
-    
-    @Column(name = "TICKET_PRICE", nullable = false)
-    private Integer ticketPrice; // 價格
-    
+    private Integer ticketQuantity;
+
+    @Column(name = "TICKET_STATUS", nullable = false)
+    private Integer ticketStatus;
+
     @Column(name = "TICKET_CREATE_TIME", updatable = false, insertable = false)
     private String ticketCreateTime; // 建立時間（自動生成）
-    
+
     @Column(name = "TICKET_UPDATE_TIME", insertable = false)
     private String ticketUpdateTime; // 更新時間（自動更新）
     

@@ -74,11 +74,6 @@ public class TicketRedisServiceImpl implements TicketRedisService {
         }
     }
 
-    public void saveToRedis(Ticket ticket) {
-        String key = PREFIX + ticket.getTicketId();
-        redisTemplate.opsForValue().set(key, ticket);
-    }
-    
     public void saveTicketToRedisByEvent(String event) {
         Ticket ticket = ticketDao.findByEvent(event);
         if (ticket != null) {
@@ -86,6 +81,11 @@ public class TicketRedisServiceImpl implements TicketRedisService {
         } else {
             throw new RuntimeException("找不到該活動的票券：" + event);
         }
+    }
+
+    public void saveToRedis(Ticket ticket) {
+        String key = PREFIX + ticket.getTicketId();
+        redisTemplate.opsForValue().set(key, ticket);
     }
     
     public Ticket getFromRedis(Long id) {

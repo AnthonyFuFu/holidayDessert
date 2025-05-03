@@ -28,12 +28,6 @@ public class TicketController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     
-    @PostMapping("/cache")
-    public ResponseEntity<?> saveTicket(@RequestBody Ticket ticket) {
-        ticketRedisService.saveToRedis(ticket);
-        return ResponseEntity.ok("Saved to Redis");
-    }
-    
     @GetMapping("/eventCache")
     public ResponseEntity<?> saveTicketToRedisByEvent(@RequestParam String event) {
     	//用Get方法把資料放進快取 測試用API:http://localhost:8080/holidayDessert/api/tickets/eventCache?event=五月天演唱會
@@ -43,6 +37,12 @@ public class TicketController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
         }
+    }
+
+    @PostMapping("/cache")
+    public ResponseEntity<?> saveTicket(@RequestBody Ticket ticket) {
+        ticketRedisService.saveToRedis(ticket);
+        return ResponseEntity.ok("Saved to Redis");
     }
     
     @GetMapping("/cache/{id}")
