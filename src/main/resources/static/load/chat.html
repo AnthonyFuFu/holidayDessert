@@ -1,32 +1,167 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat Room</title>
-    <link rel="stylesheet" href="/holidayDessert/front/css/chat.css">
-</head>
-<body>
-    <div class="chat-container">
-        <div class="chat-header">Chat Room</div>
-        <div class="chat-messages">
-            <div class="message left">
-                <div class="avatar"><img src="user1_avatar.jpg" alt=""></div>
-                <div class="message-left-text">Hello there!</div>
-            </div>
-            <div class="message right">
-              <div class="message-right-text">I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about I'm good, thanks for asking. How about you? I'm good, thanks for asking. How aboutI'm good, thanks for asking. How about you? I'm good, thanks for asking. How aboutHello there!</div>
-            </div>
-            <div class="message left">
-                <div class="avatar"><img src="user1_avatar.jpg" alt=""></div>
-                <div class="message-left-text">I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about you? I'm good, thanks for asking. How about you?</div>
-            </div>
-            <!-- More messages can be added here -->
-        </div>
-        <div class="chat-input">
-            <input type="text" placeholder="Type your message...">
-            <button>Send</button>
-        </div>
-    </div>
-</body>
-</html>
+<section>
+	<form id="chatForm" class="chat-area">
+		<div class="chat-container" v-if="isChatOpen">
+			<div class="chat-header">
+				<span>服務員 {{ empName }}</span>
+				<button type="button" class="chat-close" @click="closeChatRoom">&times;</button>
+			</div>
+			<div class="chat-messages">
+				<div class="message left">
+					<div class="avatar">
+						<img src="user1_avatar.jpg" alt="">
+					</div>
+					<div class="message-left-text">Hello there!</div>
+				</div>
+				<div class="message right">
+					<div class="message-right-text">BANANA</div>
+				</div>
+				<div class="message left">
+					<div class="avatar">
+						<img src="user1_avatar.jpg" alt="">
+					</div>
+					<div class="message-left-text">BALALA</div>
+				</div>
+				<!-- More messages can be added here -->
+			</div>
+			<div class="chat-input">
+				<input v-model="msgContent" type="text" placeholder="Type your message...">
+				<button id="sendMessage" class="send-message" @click.prevent="sendMessage">Send</button>
+			</div>
+		</div>
+		<a class="btn-msg" @click.prevent="openChatRoom" v-if="!isChatOpen" href="javascript:void(0);">
+			<i class="material-icons">sms</i>
+		</a>
+	</form>
+	
+</section>
+
+<script>
+new Vue({
+	el: '#chatForm',
+	data: {
+		// model 屬性
+		memId:'',
+		memName:'',
+		memAccount:'',
+		msgContent:'',
+		roomUrl:'',
+		// 其他屬性
+		empId:'',
+		empName:'',
+		msgContentList:[],
+		memberSession: '',
+		isChatOpen: false
+	},
+	methods: {
+		openChatRoom() {
+			if(this.memberSession == ''){
+				this.warning('請登入')
+			} else {
+	 			this.isChatOpen = true;
+	 			this.getChatRoom();
+			}
+		},
+		closeChatRoom() {
+			this.isChatOpen = false;
+			
+			if(this.stompClient){
+				this.stompClient.disconnect(() => {
+			        console.log('Disconnected');
+				});
+				this.stompClient = null;
+			}
+
+			if(this.socket){
+				this.socket.close();
+				this.socket = null;
+			}
+			
+		},
+		sendMessage() {
+		    if (this.memberSession == '') {
+		        this.warning('請登入');
+		        return;
+		    }
+		    if (!this.stompClient || !this.roomUrl) return;
+
+		    const msg = {
+		        memId: this.memId,
+		        empId: this.empId,
+		        content: this.msgContent,
+		        roomUrl: this.roomUrl
+		    };
+
+		    this.stompClient.send('/app/chat/' + this.roomUrl, {}, JSON.stringify(msg));
+		    this.msgContent = '';
+		    
+		},
+		getChatRoom() {
+			axios.post('/holidayDessert/getChatRoom',{
+				memId: this.memId
+			})
+			.then(response => {
+				if (response.data.code == "200") {
+					this.roomUrl = response.data.result[0].ROOM_URL;
+					this.connectWebSocket();
+				}
+			})
+			.catch(error => {
+				console.log(error);
+				alert("執行失敗");
+			});
+		},
+		connectWebSocket() {
+		    if (!this.roomUrl) return;
+		    // 建立連線
+		    this.socket = new SockJS('/holidayDessert/ws-chat');  // 對應你的 Spring WebSocket endpoint
+		    this.stompClient = Stomp.over(this.socket);
+
+		    const self = this;
+		    this.stompClient.connect({}, function(frame) {
+		        console.log('Connected: ' + frame);
+		        // 訂閱聊天室房間
+		        self.stompClient.subscribe('/topic/chat/' + self.roomUrl, function(messageOutput) {
+		            const message = JSON.parse(messageOutput.body);
+		            self.msgContentList.push(message);
+		        });
+		    });
+		},
+		loadMemberSession() {
+			var memberSession = localStorage.getItem('memberSession');
+			if (memberSession) {
+				this.updateSession(JSON.parse(memberSession));
+			}
+		},
+		updateSession(memberSession) {
+			this.memberSession = memberSession;
+			this.memId = memberSession.memId;
+			this.memName = memberSession.memName;
+			this.memAccount = memberSession.memAccount;
+			this.memEmail = memberSession.memEmail;
+			this.memGoogleUid = memberSession.memGoogleUid;
+		},
+		success(message) {
+			swal({
+				title: message,
+				type: "success",
+				showCancelButton: false,
+				confirmButtonColor: "#3085d6",
+				confirmButtonText: "確定"
+			});
+		},
+		warning(message) {
+			swal({
+				title: message,
+				type: "warning",
+				confirmButtonColor: "#DD6B55",
+				confirmButtonText: "確定",
+				closeOnConfirm: false
+			});
+		}
+	},
+	mounted() {
+		this.loadMemberSession();
+	}
+});
+
+</script>

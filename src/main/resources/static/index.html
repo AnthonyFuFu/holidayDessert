@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="/holidayDessert/front/css/main.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/index.css">
     <link rel="stylesheet" href="/holidayDessert/front/css/contact-us.css">
+    <link rel="stylesheet" href="/holidayDessert/front/css/chat.css">
     <link rel="stylesheet" href="/holidayDessert/assets/plugins/sweetalert/sweetalert.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700&subset=latin,cyrillic-ext" rel="stylesheet" type="text/css">
@@ -20,7 +21,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.7/axios.min.js" integrity="sha512-NQfB/bDaB8kaSXF8E77JjhHG5PM6XVRxvHzkZiwl3ddWCEPBa23T76MuWSwAJdMGJnmQqM0VeY9kFszsrBEFrQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script type="text/javascript" src="/holidayDessert/front/js/lib/vue.js"></script>
     <script type="text/javascript" src="/holidayDessert/assets/plugins/sweetalert/sweetalert.min.js"></script>
-    
+    <!-- SockJS -->
+	<script src="https://cdn.jsdelivr.net/npm/sockjs-client@1/dist/sockjs.min.js"></script>
+	<!-- STOMP -->
+	<script src="https://cdn.jsdelivr.net/npm/stompjs@2.3.3/lib/stomp.min.js"></script>
     <!-- owl.carousel -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css"/>
@@ -124,6 +128,7 @@
         
     </main>
     <div id="form"></div>
+    <div id="chat"></div>
 	<div id="footer"></div>
 </body>
 <script>
@@ -131,6 +136,7 @@
 		$("#header").load("/holidayDessert/load/header.html");
 		$("#footer").load("/holidayDessert/load/footer.html");
 		$("#form").load("/holidayDessert/load/form.html");
+		$("#chat").load("/holidayDessert/load/chat.html");
 	});
 </script>
 <script src="/holidayDessert/front/js/index.js"></script>

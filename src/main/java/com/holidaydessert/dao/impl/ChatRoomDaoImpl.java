@@ -1,5 +1,6 @@
 package com.holidaydessert.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -33,4 +34,81 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 		
 	}
 
+	@Override
+	public Long addChatRoom(String roomUrl) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " INSERT INTO holiday_dessert.chat_room "
+				   + " (ROOM_URL, ROOM_STATUS, ROOM_UPDATE_STATUS, ROOM_LAST_UPDATE) "
+				   + " VALUES(?, ?, ?, NOW()) ";
+		
+		args.add(roomUrl);
+		args.add(1);
+		args.add(0);
+		
+		jdbcTemplate.update(sql, args.toArray());
+		return jdbcTemplate.queryForObject("SELECT LAST_INSERT_ID()",Long.class);
+	}
+	
+	@Override
+	public List<Map<String, Object>> getChatRoomByMessage(String memId) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT ROOM_ID FROM holiday_dessert.message msg "
+				   + " WHERE MEM_ID = ? "
+				   + " GROUP BY ROOM_ID ";
+		
+		args.add(memId);
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if(list!=null && list.size()>0) {
+			return list;
+		} else {
+			return null;
+		}
+		
+	}
+
+	@Override
+	public List<Map<String, Object>> getChatRoom(String chatRoomId) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT * FROM holiday_dessert.chat_room "
+				   + " WHERE ROOM_ID = ? ";
+		
+		args.add(chatRoomId);
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if(list!=null && list.size()>0) {
+			return list;
+		} else {
+			return null;
+		}
+		
+	}
+	
+	@Override
+	public List<Map<String, Object>> getServiceStaff(String memId) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT msg.*, MEM_NAME, EMP_NAME FROM holiday_dessert.message msg "
+				   + " LEFT JOIN member m ON m.MEM_ID = msg.MEM_ID "
+				   + " LEFT JOIN employee e ON e.EMP_ID = msg.EMP_ID "
+				   + " WHERE m.MEM_ID = ? ";
+		
+		args.add(memId);
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if(list!=null && list.size()>0) {
+			return list;
+		} else {
+			return null;
+		}
+		
+	}
+	
 }

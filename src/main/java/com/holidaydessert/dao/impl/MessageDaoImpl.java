@@ -64,12 +64,13 @@ public class MessageDaoImpl implements MessageDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " INSERT INTO holiday_dessert.product_pic "
-				   + " (EMP_ID, MEM_ID, MSG_CONTENT, MSG_TIME, MSG_DIRECTION, MSG_PICTURE, MSG_IMAGE) "
-				   + " VALUES(?, ?, ?, ?, ?, ?, ?) ";
+		String sql = " INSERT INTO holiday_dessert.message "
+				   + " (EMP_ID, MEM_ID, ROOM_ID, MSG_CONTENT, MSG_TIME, MSG_DIRECTION, MSG_PICTURE, MSG_IMAGE) "
+				   + " VALUES(?, ?, ?, ?, ?, ?, ?, ?) ";
 		
 		args.add(message.getEmpId());
 		args.add(message.getMemId());
+		args.add(message.getRoomId());
 		args.add(message.getMsgContent());
 		args.add(message.getMsgTime());
 		args.add(message.getMsgDirection());
