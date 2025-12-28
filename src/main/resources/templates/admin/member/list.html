@@ -3,6 +3,7 @@
 <head th:include="admin/load/css :: css"></head>
 <head>
 <title>[[${@environment.getProperty('html.title')}]] - 會員管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
 </head>
 <body th:class="theme- + (${employeeSession.empTheme} != 'null' and ${employeeSession.empTheme} != '' ? ${employeeSession.empTheme} : 'red')">
 
@@ -78,7 +79,7 @@
                                         <div role="tabpanel" class="tab-pane fade" id="message_animation">
 											<div class="row">
 												<div th:each="chatRoom : ${chatRoomList}" class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-													<div class="info-box bg-cyan hover-zoom-effect hover-expand-effect chat-room" th:data-roomurl="${chatRoom.ROOM_URL}">
+													<div class="info-box bg-cyan hover-zoom-effect hover-expand-effect chat-room openChatRoom" th:data-roomurl="${chatRoom.ROOM_URL}">
 														<div class="icon">
 															<i class="material-icons">email</i>
 														</div>
@@ -135,7 +136,8 @@
             </div>
         </div>
     </section>
-<!-- <div th:if="${employeeSession != null}" th:include="front/chat :: chat"></div> -->
+<!-- Chat Bar -->
+<div th:if="${employeeSession != null}" th:include="admin/load/chat :: chat"></div>
 <div th:include="admin/load/js :: js"></div>
 <div th:include="admin/load/js :: jquery-datatable"></div>
 <div th:include="admin/load/js :: chat"></div>

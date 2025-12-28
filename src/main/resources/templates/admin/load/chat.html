@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<section th:fragment="chat">
+		<form id="chatForm" class="chat-area">
+			<div class="chat-container" style="display:none;">
+				<div class="chat-header">
+					<span>xxx</span>
+					<button type="button" class="chat-close" id="closeChatRoom">&times;</button>
+				</div>
+				<div class="chat-messages" id="chatMessages">
+					<!-- 訊息動態塞 -->
+					<div class="message left">
+						<div class="avatar">
+							<img src="user1_avatar.jpg" alt="">
+						</div>
+						<div class="message-left-text">Hello there!</div>
+					</div>
+					<div class="message right">
+						<div class="message-right-text">BANANA</div>
+					</div>
+					<div class="message left">
+						<div class="avatar">
+							<img src="user1_avatar.jpg" alt="">
+						</div>
+						<div class="message-left-text">BALALA</div>
+					</div>
+				</div>
+				<div class="chat-input">
+					<input id="msgContent" type="text" placeholder="Type your message...">
+					<button id="sendMessage" class="send-message">Send</button>
+				</div>
+			</div>
+		</form>
+	</section>
+</html>

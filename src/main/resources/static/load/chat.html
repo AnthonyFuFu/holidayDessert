@@ -91,7 +91,7 @@ new Vue({
 		        roomUrl: this.roomUrl
 		    };
 
-		    this.stompClient.send('/app/chat/' + this.roomUrl, {}, JSON.stringify(msg));
+		    this.stompClient.send('/topic/chat/' + this.roomUrl, {}, JSON.stringify(msg));
 		    this.msgContent = '';
 		    
 		},

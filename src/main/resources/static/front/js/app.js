@@ -1,3 +1,6 @@
+
+// 自動判斷 ws / wss
+const protocol = location.protocol === 'https:' ? 'wss://' : 'ws://';
 let port = window.location.port;
 let url = window.location.hostname + (port ? ':' + port : '');
 //let httpUrl = window.location.protocol + '//' + window.location.hostname + (port ? ':' + port : '') + '/';
