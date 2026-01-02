@@ -79,7 +79,7 @@
                                         <div role="tabpanel" class="tab-pane fade" id="message_animation">
 											<div class="row">
 												<div th:each="chatRoom : ${chatRoomList}" class="col-lg-3 col-md-3 col-sm-3 col-xs-6">
-													<div class="info-box bg-cyan hover-zoom-effect hover-expand-effect chat-room openChatRoom" th:data-roomurl="${chatRoom.ROOM_URL}">
+													<div class="info-box bg-cyan hover-zoom-effect hover-expand-effect chat-room openChatRoom" th:data-roomid="${chatRoom.ROOM_ID}" th:data-roomurl="${chatRoom.ROOM_URL}" th:data-memid="${chatRoom.MEM_ID}" th:data-memname="${chatRoom.MEM_NAME}">
 														<div class="icon">
 															<i class="material-icons">email</i>
 														</div>

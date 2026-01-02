@@ -18,16 +18,18 @@ public class MessageDaoImpl implements MessageDao {
 	private JdbcTemplate jdbcTemplate;
 	
 	@Override
-	public List<Map<String, Object>> getMessageByEmpId(Message message) {
+	public List<Map<String, Object>> getMessageByEmp(Message message) {
 
 		List<Object> args = new ArrayList<>();
 		
 		String sql = " SELECT msg.*, MEM_NAME, EMP_NAME FROM holiday_dessert.message msg "
 				   + " LEFT JOIN member m ON m.MEM_ID = msg.MEM_ID "
 				   + " LEFT JOIN employee e ON e.EMP_ID = msg.EMP_ID "
-				   + " WHERE e.EMP_ID = ? ";
+				   + " WHERE e.EMP_ID = ? "
+				   + " AND m.MEM_ID = ? ";
 		
 		args.add(message.getEmpId());
+		args.add(message.getMemId());
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
 		
 		if (list != null && list.size() > 0) {

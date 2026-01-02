@@ -1,9 +1,64 @@
 let stompClient = null;
 let currentSubscription = null;
+let roomId = null;
+let roomUrl = null;
+let memId = null;
+let empId = null;
+let firstName = null;
+let isChatOpen = false;
+let socket = null;
+let msgDirection = '0';
 
 $('.chat-room').on('click', function() {
-	let roomUrl = $(this).data('roomurl')
+	$('#member-name').text($(this).data('memname'));
+	roomId = $(this).data('roomid');
+	roomUrl = $(this).data('roomurl');
+	memId = $(this).data('memid');
+	empId = $('#loginEmpId').val();
+	firstName = $(this).data('memname').charAt(0);
+	getMessageByEmp();
     connectChatRoom(roomUrl);
+	
+});
+$('#closeChatRoom').on('click', function () {
+    isChatOpen = false;
+    $('.chat-container').hide();
+
+    if (stompClient) {
+        stompClient.deactivate();
+        stompClient = null;
+    }
+
+    if (socket) {
+        socket.close();
+        socket = null;
+    }
+});
+$('#sendMessage').click(function() {
+        var msgContent = $('#msgContent').val();
+		if (msgContent == '') return;
+        // 假設你已經有 stompClient 和 roomUrl
+		if (!stompClient || !stompClient.connected || !roomUrl) {
+		    console.warn('stompClient not ready');
+		    return;
+		}
+        if (typeof stompClient === 'undefined' || !roomUrl) return;
+
+        var msg = {
+            memId: memId,
+            empId: empId,
+            msgContent: msgContent,
+			roomId: roomId,
+            roomUrl: roomUrl,
+			msgDirection: msgDirection
+        };
+        // 發送訊息
+		stompClient.publish({
+		    destination: "/app/chat/" + roomUrl,
+		    body: JSON.stringify(msg)
+		});
+        // 清空輸入框
+        $('#msgContent').val('');
 });
 
 function connectChatRoom(roomUrl) {
@@ -25,7 +80,6 @@ function connectChatRoom(roomUrl) {
         debug: (msg) => console.log(msg)
     });
     stompClient.onConnect = () => {
-        console.log('Connected room:', roomUrl);
         currentSubscription = stompClient.subscribe(
             '/topic/chat/' + roomUrl,
             (message) => {
@@ -42,94 +96,71 @@ function connectChatRoom(roomUrl) {
     };
     stompClient.activate();
 }
-
-
-let isChatOpen = false;
-let socket = null;
-let roomUrl = null;
-
-// Thymeleaf 塞進來
-const memId = /*[[${memId}]]*/ '';
-const empId = /*[[${empId}]]*/ '';
-const memberSession = /*[[${memberSession}]]*/ '';
-
-
-$('#closeChatRoom').on('click', function () {
-    isChatOpen = false;
-    $('.chat-container').hide();
-
-    if (stompClient) {
-        stompClient.deactivate();
-        stompClient = null;
-    }
-
-    if (socket) {
-        socket.close();
-        socket = null;
-    }
-});
-
 function appendMessage(msg) {
-    const mem = msg.memId === memId;
-
-    const html = mem
-        ? `<div class="message right">
-                <div class="message-right-text">${msg.content}</div>
+    const emp = msg.empId;
+    const html = emp
+        ? `<div class="message chat-right">
+                <div class="message-right-text">${msg.msgContent}</div>
            </div>`
-        : `<div class="message left">
-                <div class="avatar"><img src="user1_avatar.jpg"></div>
-                <div class="message-left-text">${msg.content}</div>
+        : `<div class="message chat-left">
+                <div class="avatar"><span class="first-char">${firstName}</span></div>
+                <div class="message-left-text">${msg.msgContent}</div>
            </div>`;
 
     $('#chatMessages').append(html);
+	scrollToBottom();
 }
 
-$('#sendMessage').click(function() {
-//        var empId = $('#loginEmpId').val();
-//        var memId = $('#loginMemId').val();
-        var msgContent = $('#msgContent').val();
-//        if (!memId) {
-//            alert('請登入');
-//            return;
-//        }
-        // 假設你已經有 stompClient 和 roomUrl
-        if (typeof stompClient === 'undefined' || !roomUrl) return;
+function scrollToBottom() {
+	const chat = document.getElementById('chatMessages'); // 原生 DOM
+  	chat.scrollTo({
+    	top: chat.scrollHeight,
+    	behavior: 'smooth'
+	});
+}
 
-        var msg = {
-            memId: memId,
-            empId: empId,
-            content: msgContent,
-            roomUrl: roomUrl
-        };
-        // 發送訊息
-        stompClient.send('/topic/chat/' + roomUrl, {}, JSON.stringify(msg));
-        // 清空輸入框
-        $('#msgContent').val('');
-});
+function getMessageByEmp() {
+	$('#chatMessages').empty();
+	$.ajax({
+	    url: "/holidayDessert/getMessageByEmp",
+	    method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({
+			memId: memId,
+		    empId: empId
+		}),
+		success: function(response) {
+		    if (response.code === 200) {
+				const list = response.result;
+				let messageHtml = '';
+				for (let i = 0; i < list.length; i++) {
+				    const msgDirection = list[i].MSG_DIRECTION; // 1 或 0
+				    const content = list[i].MSG_CONTENT;
+					const memFirstName = list[i].MEM_NAME ? list[i].MEM_NAME.charAt(0) : '';
+				    if (msgDirection === 1) {
+				        messageHtml += `
+				            <div class="message chat-left">
+								<div class="avatar"><span class="first-char">${memFirstName}</span></div>
+				                <div class="message-left-text">${content}</div>
+				            </div>
+				        `;
+				    } else if (msgDirection === 0) {
+				        messageHtml += `
+				            <div class="message chat-right">
+				                <div class="message-right-text">${content}</div>
+				            </div>
+				        `;
+				    }
+				}
+				$('#chatMessages').append(messageHtml);
+		    } else {
+		        alert('取得客服對會員對話紀錄失敗：' + response.message);
+		    }
+		},
+	    error: function(xhr, status, error) {
+	        console.error('API調用失敗: ' + error);
+			alert('取得客服對會員對話紀錄失敗，請稍後再試');
+	    }
+	});
+}
 
-//function connectWebSocket(roomUrl) {
-//	
-//    if (!roomUrl) {
-//        alert('找不到聊天室連線位址');
-//        return;
-//    }
-//
-//    ws = new WebSocket(roomUrl);
-//    // 連線成功
-//    ws.onopen = function () {
-//        console.log('WebSocket 已連線：' + roomUrl);
-//    };
-//    // 接收訊息
-//    ws.onmessage = function (event) {
-//        console.log('收到訊息：', event.data);
-//        // 這裡可以把訊息顯示到畫面上
-//    };
-//    // 關閉連線
-//    ws.onclose = function () {
-//        console.log('WebSocket 已關閉');
-//    };
-//    // 發生錯誤
-//    ws.onerror = function (error) {
-//        console.error('WebSocket 發生錯誤', error);
-//    };
-//}

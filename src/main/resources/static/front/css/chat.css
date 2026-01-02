@@ -38,13 +38,13 @@ body {
 	word-wrap: break-word;
 }
 
-.left {
+.chat-left {
 	text-align: left;
 	display: flex;
 	align-items: flex-start;
 }
 
-.right {
+.chat-right {
 	display: flex;
 	justify-content: flex-end;
 	align-items: flex-end;

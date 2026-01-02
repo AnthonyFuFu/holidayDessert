@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.MessageDao;
+import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.Message;
 import com.holidaydessert.service.MessageService;
 
@@ -17,8 +18,9 @@ public class MessageServiceImpl implements MessageService {
 	private MessageDao messageDao;
 	
 	@Override
-	public List<Map<String, Object>> getMessageByEmpId(Message message) {
-		return messageDao.getMessageByEmpId(message);
+	public ApiReturnObject getMessageByEmp(Message message) {
+		List<Map<String, Object>> chatRoom = messageDao.getMessageByEmp(message);
+		return new ApiReturnObject(200, "取得客服對會員對話紀錄", chatRoom);
 	}
 
 	@Override

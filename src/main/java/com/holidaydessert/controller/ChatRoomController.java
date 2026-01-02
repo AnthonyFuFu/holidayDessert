@@ -49,13 +49,12 @@ public class ChatRoomController {
 		
 	}
     
-    @PostMapping(value = "/getServiceStaff")
-	@ApiOperation(value = "初始化聊天室", notes = "初始化聊天室，有聊過天以該服務員為優先，否則給特定一位負責")
-	public ResponseEntity<?> getServiceStaff(
-			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
+    @PostMapping(value = "/getMessageByEmp")
+	@ApiOperation(value = "取得客服對會員對話紀錄", notes = "取得客服對會員對話紀錄，發送方向(0:客服對會員 1:會員對客服)")
+	public ResponseEntity<?> getMessageByEmp(
+			@ApiParam(name = "Employee", value = "客服", required = true) @RequestBody Message message) {
     	
-    	String memId = member.getMemId();
-		ApiReturnObject apiReturnObject = chatRoomService.getServiceStaff(memId);
+		ApiReturnObject apiReturnObject = messageService.getMessageByEmp(message);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 		
 	}
@@ -63,6 +62,8 @@ public class ChatRoomController {
     @MessageMapping("/chat/{roomUrl}")  // 前端 send 的路徑
     @SendTo("/topic/chat/{roomUrl}")    // 前端 subscribe 的路徑
     public Message send(@DestinationVariable String roomUrl, Message message) {
+		String time = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
+		message.setMsgTime(time);
         messageService.saveMessage(message);
         return message;
     }

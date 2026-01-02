@@ -5,24 +5,7 @@
 				<span>服務員 {{ empName }}</span>
 				<button type="button" class="chat-close" @click="closeChatRoom">&times;</button>
 			</div>
-			<div class="chat-messages">
-				<div class="message left">
-					<div class="avatar">
-						<img src="user1_avatar.jpg" alt="">
-					</div>
-					<div class="message-left-text">Hello there!</div>
-				</div>
-				<div class="message right">
-					<div class="message-right-text">BANANA</div>
-				</div>
-				<div class="message left">
-					<div class="avatar">
-						<img src="user1_avatar.jpg" alt="">
-					</div>
-					<div class="message-left-text">BALALA</div>
-				</div>
-				<!-- More messages can be added here -->
-			</div>
+			<div class="chat-messages" id="chatMessages"></div>
 			<div class="chat-input">
 				<input v-model="msgContent" type="text" placeholder="Type your message...">
 				<button id="sendMessage" class="send-message" @click.prevent="sendMessage">Send</button>
@@ -44,12 +27,14 @@ new Vue({
 		memName:'',
 		memAccount:'',
 		msgContent:'',
+		roomId: '',
 		roomUrl:'',
 		// 其他屬性
 		empId:'',
 		empName:'',
 		msgContentList:[],
 		memberSession: '',
+		msgDirection: '1',
 		isChatOpen: false
 	},
 	methods: {
@@ -82,25 +67,50 @@ new Vue({
 		        this.warning('請登入');
 		        return;
 		    }
+		    if (this.msgContent == '') return;
+		    
 		    if (!this.stompClient || !this.roomUrl) return;
-
+		    
 		    const msg = {
 		        memId: this.memId,
 		        empId: this.empId,
-		        content: this.msgContent,
-		        roomUrl: this.roomUrl
+		        msgContent: this.msgContent,
+				roomId: this.roomId,
+		        roomUrl: this.roomUrl,
+				msgDirection: this.msgDirection
 		    };
-
-		    this.stompClient.send('/topic/chat/' + this.roomUrl, {}, JSON.stringify(msg));
+		    this.stompClient.send('/app/chat/' + this.roomUrl, {}, JSON.stringify(msg));
+		    this.appendMessage(msg);
 		    this.msgContent = '';
 		    
 		},
+		
+		appendMessage(msg) {
+// 		    const firstChar = msg.MEM_NAME ? msg.MEM_NAME.charAt(0) : (this.firstName || '');
+// 		    const html = msg.empId
+// 		        ? `<div class="message chat-right">
+// 		               <div class="message-right-text">${msg.msgContent}</div>
+// 		           </div>`
+// 		        : `<div class="message chat-left">
+// 		               <div class="avatar"><span class="first-char">${firstChar}</span></div>
+// 		               <div class="message-left-text">${msg.msgContent}</div>
+// 		           </div>`;
+
+		    const chatContainer = document.getElementById('chatMessages');
+// 		    chatContainer.insertAdjacentHTML('beforeend', html);
+		    chatContainer.scrollTo({
+		        top: chatContainer.scrollHeight,
+		        behavior: 'smooth'
+		    });
+		},
+		
 		getChatRoom() {
 			axios.post('/holidayDessert/getChatRoom',{
 				memId: this.memId
 			})
 			.then(response => {
 				if (response.data.code == "200") {
+					this.roomId = response.data.result[0].ROOM_ID;
 					this.roomUrl = response.data.result[0].ROOM_URL;
 					this.connectWebSocket();
 				}
@@ -118,11 +128,12 @@ new Vue({
 
 		    const self = this;
 		    this.stompClient.connect({}, function(frame) {
-		        console.log('Connected: ' + frame);
 		        // 訂閱聊天室房間
 		        self.stompClient.subscribe('/topic/chat/' + self.roomUrl, function(messageOutput) {
 		            const message = JSON.parse(messageOutput.body);
 		            self.msgContentList.push(message);
+		            // 加入 appendMessage 顯示
+		            self.appendMessage(message);
 		        });
 		    });
 		},

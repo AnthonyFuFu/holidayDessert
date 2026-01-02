@@ -356,13 +356,13 @@
 	word-wrap: break-word;
 }
 
-.left {
+.chat-left {
 	text-align: left;
 	display: flex;
 	align-items: flex-start;
 }
 
-.right {
+.chat-right {
 	display: flex;
 	justify-content: flex-end;
 	align-items: flex-end;
@@ -384,6 +384,13 @@
 	border-radius: 50%;
 }
 
+.avatar .first-char {
+  font-size: 22px;
+  font-family: "Microsoft JhengHei", sans-serif;
+  color: #999;
+  font-weight: bold;
+}
+
 .message-left-text {
 	padding: 5px 10px;
 	background-color: #f1f0f0;
@@ -398,7 +405,6 @@
 	max-width: 70%;
 	border-radius: 5px;
 	text-align: right;
-	/* 將文本靠右對齊 */
 }
 
 .chat-input {

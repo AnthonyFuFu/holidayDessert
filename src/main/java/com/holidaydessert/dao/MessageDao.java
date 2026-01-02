@@ -8,7 +8,7 @@ import com.holidaydessert.model.Message;
 public interface MessageDao {
 
 	// back
-	public List<Map<String, Object>> getMessageByEmpId(Message message);
+	public List<Map<String, Object>> getMessageByEmp(Message message);
 		
 	// front
 	public List<Map<String, Object>> getMessageByMemId(Message message);
