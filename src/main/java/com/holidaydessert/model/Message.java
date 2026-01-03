@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -64,5 +65,11 @@ public class Message {
     @ManyToOne
     @JoinColumn(name = "ROOM_ID", insertable = false, updatable = false)
 	private ChatRoom chatRoom;		   // 聊天室
-    
+
+	@Transient
+	private String empName;           // 管理員名稱
+	
+	@Transient
+	private String memName;           // 會員名稱
+	
 }

@@ -396,6 +396,8 @@
 	background-color: #f1f0f0;
 	max-width: 70%;
 	border-radius: 5px;
+	color: #383838;
+  	font-family: Charcoal,monospace,sans-serif;
 }
 
 .message-right-text {
@@ -403,8 +405,9 @@
 	color: #fff;
 	background-color: #89a8eb;
 	max-width: 70%;
-	border-radius: 5px;
+	border-radius: 10px;
 	text-align: right;
+  	font-family: Charcoal,monospace,sans-serif;
 }
 
 .chat-input {

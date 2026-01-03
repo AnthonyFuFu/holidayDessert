@@ -11,7 +11,7 @@ public interface MessageDao {
 	public List<Map<String, Object>> getMessageByEmp(Message message);
 		
 	// front
-	public List<Map<String, Object>> getMessageByMemId(Message message);
+	public List<Map<String, Object>> getMessageByMem(Message message);
 	public void saveMessage(Message message);
 	public void edit(Message message);
 	public void delete(Message message);

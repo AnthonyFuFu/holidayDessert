@@ -76,8 +76,11 @@ public class ChatRoomDaoImpl implements ChatRoomDao {
 
 		List<Object> args = new ArrayList<>();
 		
-		String sql = " SELECT * FROM holiday_dessert.chat_room "
-				   + " WHERE ROOM_ID = ? ";
+		String sql = " SELECT chat.*,msg.EMP_ID,msg.MEM_ID,(SELECT e.EMP_NAME FROM employee e WHERE e.EMP_ID = msg.EMP_ID LIMIT 1) AS EMP_NAME "
+				   + " FROM holiday_dessert.chat_room chat "
+				   + " LEFT JOIN message msg ON chat.ROOM_ID = msg.ROOM_ID "
+				   + " WHERE chat.ROOM_ID = ? "
+				   + " GROUP BY chat.ROOM_ID ";
 		
 		args.add(chatRoomId);
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());

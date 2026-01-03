@@ -4,21 +4,21 @@ let roomId = null;
 let roomUrl = null;
 let memId = null;
 let empId = null;
+let empName = null;
 let firstName = null;
 let isChatOpen = false;
 let socket = null;
 let msgDirection = '0';
-
 $('.chat-room').on('click', function() {
 	$('#member-name').text($(this).data('memname'));
 	roomId = $(this).data('roomid');
 	roomUrl = $(this).data('roomurl');
 	memId = $(this).data('memid');
 	empId = $('#loginEmpId').val();
+	empName = $('#loginEmpName').val();
 	firstName = $(this).data('memname').charAt(0);
 	getMessageByEmp();
     connectChatRoom(roomUrl);
-	
 });
 $('#closeChatRoom').on('click', function () {
     isChatOpen = false;
@@ -28,39 +28,36 @@ $('#closeChatRoom').on('click', function () {
         stompClient.deactivate();
         stompClient = null;
     }
-
     if (socket) {
         socket.close();
         socket = null;
     }
 });
 $('#sendMessage').click(function() {
-        var msgContent = $('#msgContent').val();
-		if (msgContent == '') return;
-        // 假設你已經有 stompClient 和 roomUrl
-		if (!stompClient || !stompClient.connected || !roomUrl) {
-		    console.warn('stompClient not ready');
-		    return;
-		}
-        if (typeof stompClient === 'undefined' || !roomUrl) return;
-
-        var msg = {
-            memId: memId,
-            empId: empId,
-            msgContent: msgContent,
-			roomId: roomId,
-            roomUrl: roomUrl,
-			msgDirection: msgDirection
-        };
-        // 發送訊息
-		stompClient.publish({
-		    destination: "/app/chat/" + roomUrl,
-		    body: JSON.stringify(msg)
-		});
-        // 清空輸入框
-        $('#msgContent').val('');
+	var msgContent = $('#msgContent').val();
+	if (msgContent == '') return;
+    // 假設已經有 stompClient 和 roomUrl
+	if (!stompClient || !stompClient.connected || !roomUrl) {
+		console.warn('stompClient not ready');
+		return;
+	}
+	if (typeof stompClient === 'undefined' || !roomUrl) return;
+	var msg = {
+		memId: memId,
+		empId: empId,
+		empName: empName,
+		msgContent: msgContent,
+		roomId: roomId,
+		roomUrl: roomUrl,
+		msgDirection: msgDirection
+	};
+	// 發送訊息
+	stompClient.publish({
+		destination: "/app/chat/" + roomUrl,
+		body: JSON.stringify(msg)
+	});
+	$('#msgContent').val('');
 });
-
 function connectChatRoom(roomUrl) {
     if (!roomUrl) return;
 	isChatOpen = true;
@@ -77,14 +74,14 @@ function connectChatRoom(roomUrl) {
     stompClient = new StompJs.Client({
 		webSocketFactory: () => new SockJS('/holidayDessert/ws-chat'),
         reconnectDelay: 5000,
-        debug: (msg) => console.log(msg)
+		// debug: (msg) => console.log(msg)
     });
     stompClient.onConnect = () => {
-        currentSubscription = stompClient.subscribe(
-            '/topic/chat/' + roomUrl,
-            (message) => {
-                const data = JSON.parse(message.body);
-				appendMessage(data);
+        currentSubscription = stompClient.subscribe('/topic/chat/' + roomUrl,
+			(message) => {
+				const raw = JSON.parse(message.body);
+				const msg = normalizeMessage(raw);
+				appendMessage(msg);
             }
         );
     };
@@ -97,20 +94,40 @@ function connectChatRoom(roomUrl) {
     stompClient.activate();
 }
 function appendMessage(msg) {
-    const emp = msg.empId;
-    const html = emp
-        ? `<div class="message chat-right">
-                <div class="message-right-text">${msg.msgContent}</div>
-           </div>`
-        : `<div class="message chat-left">
-                <div class="avatar"><span class="first-char">${firstName}</span></div>
-                <div class="message-left-text">${msg.msgContent}</div>
-           </div>`;
-
+    const html = renderMessage(msg);
+    if (!html) return;
     $('#chatMessages').append(html);
-	scrollToBottom();
+    scrollToBottom();
 }
-
+function renderMessage(msg) {
+    if (msg.direction === 1) {
+        return `
+            <div class="message chat-left">
+                <div class="avatar">
+                    <span class="first-char">
+                        ${msg.memName ? msg.memName.charAt(0) : ''}
+                    </span>
+                </div>
+                <div class="message-left-text">${msg.content}</div>
+            </div>
+        `;
+    }
+    if (msg.direction === 0) {
+        return `
+            <div class="message chat-right">
+                <div class="message-right-text">${msg.content}</div>
+            </div>
+        `;
+    }
+    return '';
+}
+function normalizeMessage(raw) {
+    return {
+        direction: Number(raw.MSG_DIRECTION ?? raw.msgDirection),
+        content: raw.MSG_CONTENT ?? raw.msgContent,
+        memName: raw.MEM_NAME ?? raw.memName ?? ''
+    };
+}
 function scrollToBottom() {
 	const chat = document.getElementById('chatMessages'); // 原生 DOM
   	chat.scrollTo({
@@ -118,7 +135,6 @@ function scrollToBottom() {
     	behavior: 'smooth'
 	});
 }
-
 function getMessageByEmp() {
 	$('#chatMessages').empty();
 	$.ajax({
@@ -132,27 +148,13 @@ function getMessageByEmp() {
 		success: function(response) {
 		    if (response.code === 200) {
 				const list = response.result;
-				let messageHtml = '';
-				for (let i = 0; i < list.length; i++) {
-				    const msgDirection = list[i].MSG_DIRECTION; // 1 或 0
-				    const content = list[i].MSG_CONTENT;
-					const memFirstName = list[i].MEM_NAME ? list[i].MEM_NAME.charAt(0) : '';
-				    if (msgDirection === 1) {
-				        messageHtml += `
-				            <div class="message chat-left">
-								<div class="avatar"><span class="first-char">${memFirstName}</span></div>
-				                <div class="message-left-text">${content}</div>
-				            </div>
-				        `;
-				    } else if (msgDirection === 0) {
-				        messageHtml += `
-				            <div class="message chat-right">
-				                <div class="message-right-text">${content}</div>
-				            </div>
-				        `;
-				    }
-				}
-				$('#chatMessages').append(messageHtml);
+				let html = '';
+				list.forEach(raw => {
+					const msg = normalizeMessage(raw);
+				    html += renderMessage(msg);
+				});
+				$('#chatMessages').append(html);
+				scrollToBottom();
 		    } else {
 		        alert('取得客服對會員對話紀錄失敗：' + response.message);
 		    }
@@ -163,4 +165,3 @@ function getMessageByEmp() {
 	    }
 	});
 }
-

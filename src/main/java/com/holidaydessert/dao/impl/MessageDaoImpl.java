@@ -41,7 +41,7 @@ public class MessageDaoImpl implements MessageDao {
 	}
 
 	@Override
-	public List<Map<String, Object>> getMessageByMemId(Message message) {
+	public List<Map<String, Object>> getMessageByMem(Message message) {
 
 		List<Object> args = new ArrayList<>();
 		

@@ -12,10 +12,7 @@ import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
-import com.google.gson.Gson;
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.model.Message;
@@ -36,8 +33,6 @@ public class ChatRoomController {
 	@Autowired
 	private ChatRoomService chatRoomService;
 	
-	private Gson gson = new Gson();
-	
     @PostMapping(value = "/getChatRoom")
 	@ApiOperation(value = "獲取聊天室", notes = "獲取聊天室，有則聊天，沒有則建立")
 	public ResponseEntity<?> getChatRoom(
@@ -46,7 +41,6 @@ public class ChatRoomController {
     	String memId = member.getMemId();
 		ApiReturnObject apiReturnObject = chatRoomService.getChatRoom(memId);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
-		
 	}
     
     @PostMapping(value = "/getMessageByEmp")
@@ -56,7 +50,15 @@ public class ChatRoomController {
     	
 		ApiReturnObject apiReturnObject = messageService.getMessageByEmp(message);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
-		
+	}
+
+    @PostMapping(value = "/getMessageByMem")
+	@ApiOperation(value = "取得會員對客服對話紀錄", notes = "取得會員對客服對話紀錄，發送方向(0:客服對會員 1:會員對客服)")
+	public ResponseEntity<?> getMessageByMem(
+			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Message message) {
+    	
+		ApiReturnObject apiReturnObject = messageService.getMessageByMem(message);
+		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 	}
     
     @MessageMapping("/chat/{roomUrl}")  // 前端 send 的路徑
@@ -67,32 +69,5 @@ public class ChatRoomController {
         messageService.saveMessage(message);
         return message;
     }
-    
-    
-    
-    
-	@RequestMapping(value = "/front/chat", method = { RequestMethod.GET, RequestMethod.POST })
-	public String chatPage() {
-		return "front/chat";
-	}
-	
-	@MessageMapping("/chat")
-	@SendTo("/topic/greetings")
-	public String send(Message message) throws Exception {
-
-		String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
-		System.out.println(message.getEmpId());
-		System.out.println(message.getMemId());
-		System.out.println(message.getMsgDirection());
-		message.setMsgTime(time);
-//		messageService.saveMessage(message);
-		
-		System.out.println(messageService.getMessageByMemId(message));
-//		Thread.sleep(200);
-		
-		String output = gson.toJson(message);
-		
-		return output;
-	}
 	
 }

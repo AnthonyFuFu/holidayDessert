@@ -8,6 +8,7 @@
                 </div>
                 <div class="info-container">
                 	<input id="loginEmpId" type="hidden" th:field="*{employeeSession.empId}">
+                	<input id="loginEmpName" type="hidden" th:field="*{employeeSession.empName}">
                     <div class="name" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[[${employeeSession.empName}]]</div>
                     <div class="email">[[${employeeSession.empEmail}]]</div>
                     <div class="btn-group user-helper-dropdown">

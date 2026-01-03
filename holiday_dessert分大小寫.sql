@@ -48,10 +48,10 @@ CONSTRAINT unikey_MEM_ACCOUNT UNIQUE(MEM_ACCOUNT)
 ) COMMENT='會員';
 INSERT INTO `member`(MEM_NAME, MEM_ACCOUNT, MEM_PASSWORD, MEM_GENDER, MEM_PHONE, MEM_EMAIL,MEM_ADDRESS, MEM_BIRTHDAY,MEM_STATUS,MEM_VERIFICATION_STATUS,MEM_GOOGLE_UID)
 VALUES  ('傅勝宏', 'FU830917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
-		('阿勝', 'ASHENG', '830917', 'f', '0988000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
-        ('傅', 'FU30917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
-        ('勝', 'FU83917', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
-        ('宏', 'FU83097', '830917', 'm', '0999000000','s9017611@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL)
+		('阿勝', 'ASHENG', '830917', 'f', '0988000000','s9017622@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('傅', 'FU30917', '830917', 'm', '0999000000','s9017633@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('勝', 'FU83917', '830917', 'm', '0999000000','s9017644@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL),
+        ('宏', 'FU83097', '830917', 'm', '0999000000','s9017655@gmail.com','台北市中正區博愛路36號',STR_TO_DATE('1994-09-17','%Y-%m-%d'),1,1,NULL)
         ;
 
 -- 常用收貨資訊 --
