@@ -106,6 +106,13 @@ public class JWTUtil {
 		return claims.getSubject();
 	}
 	
+	/**
+	 * 從token中取得subject
+	 */
+	public static String getSubjectFromToken(String token) {
+	    Claims claims = decodeJWT(token);
+	    return claims.getSubject();
+	}
 //	================================================================================================
 
 //	private static final String SIGN = "F!@#$%^&*ADSA";

@@ -1,9 +1,5 @@
 package com.holidaydessert.controller;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import javax.security.auth.message.AuthException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -11,8 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.view.RedirectView;
 
@@ -38,7 +32,7 @@ public class IndexController {
 //	@Autowired
 //	private BannerService bannerService;
 	
-	private static String subject = "holidaydessertAPI";
+//	private static String subject = "holidaydessertAPI";
 
     @ApiIgnore
     @PostMapping(value =  {"/", "/index"})
@@ -85,27 +79,19 @@ public class IndexController {
 		
 	}
 	
-	@RequestMapping(value = "/getNewList", method = { RequestMethod.GET, RequestMethod.POST })
+    @PostMapping(value = "/getNewList")
 	@ApiOperation(value = "新品上市", httpMethod = "POST" , notes = "顯示於首頁的新品上市清單")
 	public ResponseEntity<?> getNewList(HttpServletRequest request) {
-		
-		ApiReturnObject apiReturnObject = new ApiReturnObject();
-		String token = request.getHeader("Authorization");
-		
 		try {
-			if(JWTUtil.getSubject(token) != null && JWTUtil.getSubject(token).equals(subject)) {
+			ApiReturnObject apiReturnObject = new ApiReturnObject();
+			String token = request.getHeader("Authorization");
+			if(JWTUtil.getSubjectFromToken(token) != null) {
 				apiReturnObject = productService.getNewArrivalList();
-			}else {
-				throw new AuthException();
 			}
-		} catch (AuthException e) {
-			Map<String, Object> responseMap = new HashMap<>();
-			responseMap.put("STATUS", "403");
-			responseMap.put("MSG", "驗證失敗");
-			return new ResponseEntity<>(responseMap, HttpStatus.FORBIDDEN);
+			return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
+		} catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiReturnObject(403, "Token 無效", null));
 		}
-		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
-		
 	}
 	
 }

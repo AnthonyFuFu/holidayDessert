@@ -97,7 +97,7 @@ public class TokenController {
 				String newRefresh = "";
 				// 用token issuer判斷角色
 				String issuer = JWTUtil.getIssuer("Bearer " + refresh);
-				if (issuer.equals("ElearningAPIKey")) {
+				if (issuer.equals("holidaydesserAPIKey")) {
 					access = JWTUtil.createJWT(subject, issuer, ACCESS_TOKEN_EXPIRATION);
 					newRefresh = JWTUtil.createJWT(subject, issuer, REFRESH_TOKEN_EXPIRATION);
 					// userDetailService.loadUserByUsername(account, "admin");
