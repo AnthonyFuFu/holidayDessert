@@ -76,6 +76,7 @@ new Vue({
 	},
 	methods: {
 		logout() {
+			//	window.location.href = "/holidayDessert/front/google/logout"; //google登出
 			axios.post('/holidayDessert/front/logout')
 			.then(response => {
 				if (response.data.STATUS == "N") {

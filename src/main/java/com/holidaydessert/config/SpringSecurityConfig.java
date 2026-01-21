@@ -41,7 +41,7 @@ public class SpringSecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(csrf -> csrf.disable())
                 .authorizeRequests(requests -> requests
-                        .antMatchers("/front/google/login")
+                        .antMatchers("/front/google/login", "/front/google/logout")
                         .authenticated() // 指定需要Google登入驗證的頁面
                         .anyRequest().permitAll())
                 .oauth2Login(login -> login
@@ -103,6 +103,22 @@ public class SpringSecurityConfig {
                         response.sendRedirect("/holidayDessert/index.html");
                     }
                 }))
+                .logout(logout -> logout
+                        .logoutSuccessUrl("/holidayDessert/index.html") // 登出成功後跳轉的頁面
+                        .logoutUrl("/front/google/logout") // 配置登出端點
+                        .addLogoutHandler((request, response, auth) -> {
+                            // 清理 HttpSession
+                            HttpSession session = request.getSession(false);
+                            if (session != null) {
+                                session.invalidate();
+                            }
+                        })
+                        .logoutSuccessHandler((request, response, auth) -> {
+                            // 強制 Google 登出
+                            String googleLogoutUrl = "https://accounts.google.com/logout";
+                            response.sendRedirect(googleLogoutUrl);
+                        })
+                )
                 .addFilterAfter(new SessionCookieFilter(), BasicAuthenticationFilter.class).headers(headers -> headers.xssProtection());
 
 		return http.build();
