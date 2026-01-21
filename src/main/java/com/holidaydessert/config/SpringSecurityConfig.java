@@ -38,74 +38,72 @@ public class SpringSecurityConfig {
 	private MemberService memberService;
 
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-		http.csrf().disable()
-			.authorizeRequests()
-				.antMatchers("/front/google/login")
-				.authenticated() // 指定需要Google登入驗證的頁面
-				.anyRequest().permitAll() // 其他頁面允許訪問
-				.and()
-			.oauth2Login()
-				.successHandler(new AuthenticationSuccessHandler() {
-					@Override
-					public void onAuthenticationSuccess(HttpServletRequest pRequest, HttpServletResponse pResponse, Authentication authentication) throws IOException, ServletException {
-						Map<String, Object> responseMap = new HashMap<>();
-						// 獲取google已驗證用戶的Principal
-						Object principal = authentication.getPrincipal();
-						String ip = getRemoteHost(pRequest);
-						// 獲取HttpSession對象
-						HttpSession session = pRequest.getSession();
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        http.csrf(csrf -> csrf.disable())
+                .authorizeRequests(requests -> requests
+                        .antMatchers("/front/google/login")
+                        .authenticated() // 指定需要Google登入驗證的頁面
+                        .anyRequest().permitAll())
+                .oauth2Login(login -> login
+                        .successHandler(new AuthenticationSuccessHandler() {
+                            @Override
+                            public void onAuthenticationSuccess(HttpServletRequest pRequest, HttpServletResponse pResponse, Authentication authentication) throws IOException, ServletException {
+                                Map<String, Object> responseMap = new HashMap<>();
+                                // 獲取google已驗證用戶的Principal
+                                Object principal = authentication.getPrincipal();
+                                String ip = getRemoteHost(pRequest);
+                                // 獲取HttpSession對象
+                                HttpSession session = pRequest.getSession();
 
-						// 獲取google用戶的屬性
-						if (principal instanceof OAuth2User) {
-							OAuth2User oAuth2User = (OAuth2User) principal;
-							String oAuth2UserSub = (String) oAuth2User.getAttribute("sub");
-							String oAuth2UserName = (String) oAuth2User.getAttribute("name");
-							String oAuth2UserEmail = (String) oAuth2User.getAttribute("email");
+                                // 獲取google用戶的屬性
+                                if (principal instanceof OAuth2User) {
+                                    OAuth2User oAuth2User = (OAuth2User) principal;
+                                    String oAuth2UserSub = (String) oAuth2User.getAttribute("sub");
+                                    String oAuth2UserName = (String) oAuth2User.getAttribute("name");
+                                    String oAuth2UserEmail = (String) oAuth2User.getAttribute("email");
 
-							Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
-							Member memberAccountData = optional.orElse(null);
+                                    Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
+                                    Member memberAccountData = optional.orElse(null);
 
-							System.out.println(ip + "-" + session + "-" + oAuth2UserName + "-" + oAuth2UserEmail + "-" + oAuth2UserSub);
-							// 專案已有帳號
-							if (memberAccountData != null) {
-								responseMap.put("STATUS", "Y");
-								responseMap.put("MSG", "登入成功");
-								responseMap.put("memberSession", memberAccountData);
-							} else {
-								// google
-								Member member = new Member();
-								member.setMemName(oAuth2UserName);
-								member.setMemAccount(oAuth2UserEmail);
-								member.setMemEmail(oAuth2UserEmail);
-								member.setMemStatus("1");
-								member.setMemVerificationStatus("1");
-								member.setMemGoogleUid(oAuth2UserSub);
-								member.setMemPassword("");
-								memberService.register(member);
+                                    System.out.println(ip + "-" + session + "-" + oAuth2UserName + "-" + oAuth2UserEmail + "-" + oAuth2UserSub);
+                                    // 專案已有帳號
+                                    if (memberAccountData != null) {
+                                        responseMap.put("STATUS", "Y");
+                                        responseMap.put("MSG", "登入成功");
+                                        responseMap.put("memberSession", memberAccountData);
+                                    } else {
+                                        // google
+                                        Member member = new Member();
+                                        member.setMemName(oAuth2UserName);
+                                        member.setMemAccount(oAuth2UserEmail);
+                                        member.setMemEmail(oAuth2UserEmail);
+                                        member.setMemStatus("1");
+                                        member.setMemVerificationStatus("1");
+                                        member.setMemGoogleUid(oAuth2UserSub);
+                                        member.setMemPassword("");
+                                        memberService.register(member);
 
-								// 註冊完馬上登入
-								Optional<Member> getOptionalAfterRegister = memberService.getDataByGoogleUid(oAuth2UserSub);
-								Member getDataAfterRegister = getOptionalAfterRegister.orElse(null);
+                                        // 註冊完馬上登入
+                                        Optional<Member> getOptionalAfterRegister = memberService.getDataByGoogleUid(oAuth2UserSub);
+                                        Member getDataAfterRegister = getOptionalAfterRegister.orElse(null);
 
-								responseMap.put("STATUS", "Y");
-								responseMap.put("MSG", "登入成功");
-								responseMap.put("memberSession", getDataAfterRegister);
-							}
+                                        responseMap.put("STATUS", "Y");
+                                        responseMap.put("MSG", "登入成功");
+                                        responseMap.put("memberSession", getDataAfterRegister);
+                                    }
 
-						}
-						pResponse.sendRedirect("/holidayDessert/index.html");
-					}
+                                }
+                                pResponse.sendRedirect("/holidayDessert/index.html");
+                            }
 
-				}).failureHandler(new AuthenticationFailureHandler() {
-					@Override
-					public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-							AuthenticationException exception) throws IOException, ServletException {
-						response.sendRedirect("/holidayDessert/index.html");
-					}
-				})
-				.and()
-				.addFilterAfter(new SessionCookieFilter(), BasicAuthenticationFilter.class).headers().xssProtection();
+                        }).failureHandler(new AuthenticationFailureHandler() {
+                    @Override
+                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
+                                                        AuthenticationException exception) throws IOException, ServletException {
+                        response.sendRedirect("/holidayDessert/index.html");
+                    }
+                }))
+                .addFilterAfter(new SessionCookieFilter(), BasicAuthenticationFilter.class).headers(headers -> headers.xssProtection());
 
 		return http.build();
 	}

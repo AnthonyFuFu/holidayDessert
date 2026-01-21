@@ -17,17 +17,17 @@ public class DataSourceConfig {
 	@Bean(name = "firstDataSource")
 	@Qualifier("firstDataSource")
 	@ConfigurationProperties(prefix="spring.datasource.druid.first")
-	public DataSource primaryDataSource() {
+	DataSource primaryDataSource() {
 		return DruidDataSourceBuilder.create().build();
 	}
 	
 	@Bean(name="jdbcTemplate")
-	public JdbcTemplate mysqlJdbcTemplate (@Qualifier("firstDataSource")  DataSource dataSource ) {
+	JdbcTemplate mysqlJdbcTemplate (@Qualifier("firstDataSource")  DataSource dataSource ) {
 		return new JdbcTemplate(dataSource);
 	}
 	
 	@Bean(name="jdbcNameTemplate")
-    public NamedParameterJdbcTemplate mysqlJdbcNameTemplate (@Qualifier("firstDataSource")  DataSource dataSource ) {
+    NamedParameterJdbcTemplate mysqlJdbcNameTemplate (@Qualifier("firstDataSource")  DataSource dataSource ) {
     	return new NamedParameterJdbcTemplate(dataSource);
 	}
 	

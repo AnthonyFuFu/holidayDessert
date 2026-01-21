@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
@@ -23,7 +22,6 @@ import io.swagger.annotations.ApiOperation;
 @Controller
 @RequestMapping("/")
 @SessionAttributes("memberSession")
-@CrossOrigin
 @Api(tags = "前台")
 public class HolidayDessertController {
 	

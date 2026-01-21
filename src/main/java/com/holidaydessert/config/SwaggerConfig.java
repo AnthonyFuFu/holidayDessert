@@ -29,7 +29,7 @@ public class SwaggerConfig extends WebMvcConfigurationSupport {
 //	private final String[] includePath = {"/**/addSubmit","/**/updateSubmit","/**/editSubmit","/**/delete","/**/audit"};
 	
 	@Bean
-	public Docket api() {
+	Docket api() {
 		/**
 		 * clazz 存放想要過慮位於Swagger下方Model屬性類別
 		 * apis:是Controller可以設定用package方式掃描否則會掃描全專案
