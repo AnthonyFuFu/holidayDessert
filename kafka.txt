@@ -1,0 +1,49 @@
+# cd to path
+cd C:\kafka_2.12-2.8.0
+
+# Start the ZooKeeper service on windows
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+# Start the Kafka server on windows
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+# Create Topic [test]
+./bin/windows/kafka-topics.bat --create --bootstrap-server localhost:9092 --topic test --replication-factor 1 --partitions 1
+
+# Describe Topic [test]
+./bin/windows/kafka-topics.bat --describe --bootstrap-server localhost:9092 --topic test
+
+# Publish to Topic [test]
+./bin/windows/kafka-console-producer.bat --bootstrap-server localhost:9092 --topic test
+
+# Consumer Topic [test]
+./bin/windows/kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic test
+
+# List all topics
+./bin/windows/kafka-topics.bat --list --bootstrap-server localhost:9092
+
+# Consume topic [json]
+./bin/windows/kafka-console-consumer.bat --bootstrap-server localhost:9092 --topic json
+
+# 未開kafka用
+spring.profiles.active=local
+
+# 開kafka用
+#spring.profiles.active=prod,kafka
+
+// 測試用 web path
+// http://localhost:8080/holidayDessert/kafka/publish/傅勝宏/FU830917/830917/m/0999000000/s9017611@gmail.com/台北市中正區博愛路36號/1994-09-17/pic1/img1
+
+// 測試用 json postman
+{
+  "memName": "傅勝宏",
+  "memAccount": "FU830917",
+  "memPassword": "830917",
+  "memGender": "m",
+  "memPhone": "0999000000",
+  "memEmail": "s9017611@gmail.com",
+  "memAddress": "台北市中正區博愛路36號",
+  "memBirthday": "1994-09-17",
+  "memPicture": "pic1",
+  "memImage": "img1"
+}

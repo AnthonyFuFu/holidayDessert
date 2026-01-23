@@ -238,8 +238,8 @@ public class MemberDaoImpl implements MemberDao {
 	        managedMember.setMemEmail(member.getMemEmail());
 	        managedMember.setMemAddress(member.getMemAddress());
 	        managedMember.setMemBirthday(member.getMemBirthday());
-	        managedMember.setMemBirthday(member.getMemPicture());
-	        managedMember.setMemBirthday(member.getMemImage());
+	        managedMember.setMemPicture(member.getMemPicture());
+	        managedMember.setMemImage(member.getMemImage());
 	    }
 	    
 	}
