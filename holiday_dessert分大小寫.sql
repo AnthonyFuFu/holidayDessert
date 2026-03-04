@@ -390,10 +390,10 @@ CMT_CONTENT VARCHAR(500) COMMENT '留言內容',
 CMT_CREATE_BY VARCHAR(50) COMMENT '留言創建人',
 CMT_CREATE_TIME DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) COMMENT='留言';
-INSERT INTO `comment`(MEM_ID,CMT_CONTENT,CMT_CREATE_BY)
-VALUES (1,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。','傅勝宏'),
-	   (2,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。','AnthonyFuFu'),
-	   (3,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。','AnthonyFu');
+INSERT INTO `comment`(MEM_ID,CMT_CONTENT,CMT_CHECK,CMT_CREATE_BY)
+VALUES (1,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。',1,'傅勝宏'),
+	   (2,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。',1,'AnthonyFuFu'),
+	   (3,'只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。只屬於你的快樂時光，請你和我們一起悠閒品嘗。',1,'AnthonyFu');
 
 -- 操作紀錄 --
 CREATE TABLE edit_log(
