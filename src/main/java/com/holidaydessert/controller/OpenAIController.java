@@ -26,10 +26,9 @@ public class OpenAIController {
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 	}
 	
-	
 	// 以下功能要升級成更高階的才能使用 is not supported with the current subscription key and pricing tier OpenAI.S0.
 	@RequestMapping(value = "/generateCaptionForImage", method = { RequestMethod.GET, RequestMethod.POST })
-	public ResponseEntity<?> generateCaptionForImage(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> generateCaptionForImage(@RequestParam MultipartFile file) {
 		ApiReturnObject apiReturnObject = chatGPTService.generateCaptionForImage(file);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 	}
@@ -42,7 +41,7 @@ public class OpenAIController {
 	}
 
 	@RequestMapping(value = "/extractTextFromImage", method = { RequestMethod.GET, RequestMethod.POST })
-	public ResponseEntity<?> extractTextFromImage(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> extractTextFromImage(@RequestParam MultipartFile file) {
 		ApiReturnObject apiReturnObject = chatGPTService.extractTextFromImage(file);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 	}
