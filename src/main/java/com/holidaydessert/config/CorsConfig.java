@@ -6,6 +6,8 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
+import com.holidaydessert.constant.AllowedOrigin;
+
 @Configuration
 public class CorsConfig {
     @Bean
@@ -14,7 +16,7 @@ public class CorsConfig {
 
         //允許跨網域請求的來源
         // config.addAllowedOrigin("*");
-        config.addAllowedOrigin("http://localhost:8081");
+        config.setAllowedOrigins(AllowedOrigin.OFFICAIL);
 
         //允許跨域攜帶cookie資訊，預設跨網域請求是不攜帶cookie資訊的。
          config.setAllowCredentials(true);
