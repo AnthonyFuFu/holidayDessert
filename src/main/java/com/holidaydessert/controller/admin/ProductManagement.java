@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -36,6 +36,7 @@ import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.ProductCollectionService;
 import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
+import static com.holidaydessert.constant.BuildPath.*;
 
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -45,9 +46,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @CrossOrigin
 @ApiIgnore
 public class ProductManagement {
-
-	@Value("${admin.upload.file.path}")
-	private String ADMIN_UPLOAD_FILE_PATH;
 	
 	@Autowired
 	private AuthorityService authorityService;
@@ -67,7 +65,7 @@ public class ProductManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -89,7 +87,7 @@ public class ProductManagement {
 	}
 	
 	@GetMapping("/productTables")
-	public void productTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void productTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Product productData = new Product();
 
@@ -130,7 +128,7 @@ public class ProductManagement {
 	}
 	
 	@GetMapping("/productCollectionTables")
-	public void productCollectionTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void productCollectionTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductCollection productCollection, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		ProductCollection productCollectionData = new ProductCollection();
 
@@ -171,7 +169,7 @@ public class ProductManagement {
 	}
 
 	@RequestMapping(value = "/addProduct" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addProduct(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addProduct(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -192,7 +190,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/updateProduct" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateProduct(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateProduct(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product, Model model) throws Exception {
 		
 		// 權限
@@ -215,7 +213,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/productAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String productAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String productAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
@@ -235,7 +233,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/productUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String productUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String productUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
@@ -250,7 +248,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/addProductCollection" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addProductCollection(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addProductCollection(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -269,7 +267,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/updateProductCollection" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateProductCollection(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateProductCollection(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductCollection productCollection, Model model) throws Exception {
 		
 		// 權限
@@ -290,7 +288,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/productCollectionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String productCollectionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String productCollectionAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductCollection productCollection,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
@@ -308,7 +306,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/productCollectionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String productCollectionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String productCollectionUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductCollection productCollection,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
@@ -322,7 +320,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/editProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String editProductPic(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String editProductPic(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product,@ModelAttribute ProductPic productPic, Model model) throws Exception {
 		
 		// 權限
@@ -345,7 +343,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/addProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addProductPic(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addProductPic(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -370,7 +368,7 @@ public class ProductManagement {
 	}
 	
 	@RequestMapping(value = "/updateProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateProductPic(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateProductPic(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductPic productPic, Model model) throws Exception {
 		
 		// 權限
@@ -392,25 +390,15 @@ public class ProductManagement {
 	
 
 	@RequestMapping(value = "/productPicAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String productPicAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String productPicAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductPic productPic,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam MultipartFile imageFile,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
 		try {
-			String osName = System.getProperty("os.name").toLowerCase();
-
-			if (osName.contains("win")) {
-				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\productPic\\"));
-			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
-			} else if (osName.contains("mac")) {
-				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
-			} else {
-				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
-			}
-			productPic.setPdPicture("holidayDessert/admin/upload/images/productPic/" + productPic.getPdImage());
-			
+	        String uploadPath = buildUploadPath(PRODUCTPIC_IMAGE_FOLDER);
+	        productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+	        productPic.setPdPicture(PRODUCTPIC_WEB_PATH + productPic.getPdImage());
 			productPicService.add(productPic);
 			model.addAttribute("MESSAGE", "資料新增成功");
 		} catch (Exception e) {
@@ -424,10 +412,10 @@ public class ProductManagement {
 	}
 
 	@RequestMapping(value = "/productPicUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String productPicUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String productPicUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductPic productPic,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
-			@RequestParam(value = "originalImage", required = false) String originalImage,
+			@RequestParam MultipartFile imageFile,
+			@RequestParam(required = false) String originalImage,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
@@ -435,23 +423,11 @@ public class ProductManagement {
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				productPic.setPdImage(originalImage);
 			} else {
-				String osName = System.getProperty("os.name").toLowerCase();
-				if (osName.contains("win")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\productPic\\");
-					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\productPic\\"));
-				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/productPic/");
-					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
-				} else if (osName.contains("mac")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/productPic/");
-					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
-				} else {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/productPic/");
-					productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/productPic/"));
-				}
+	            String uploadPath = buildUploadPath(PRODUCTPIC_IMAGE_FOLDER);
+	            commonService.deleteUploadedFiles(originalImage, uploadPath);
+	            productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-			productPic.setPdPicture("holidayDessert/admin/upload/images/productPic/" + productPic.getPdImage());
-			
+	        productPic.setPdPicture(PRODUCTPIC_WEB_PATH + productPic.getPdImage());
 			productPicService.update(productPic);
 			model.addAttribute("PATH", "/holidayDessert/admin/product/editProductPic?pdId="+productPic.getPdId());
 		} catch (JSONException e) {
@@ -459,10 +435,10 @@ public class ProductManagement {
 		}
 		return "admin/toPath";
 	}
-	
-	@RequestMapping(value = "/productPicDelete" , method = {RequestMethod.POST})
+
 	@ResponseBody
-	public String productPicDelete(@SessionAttribute("employeeSession") Employee employeeSession,
+	@PostMapping(value = "/productPicDelete")
+	public String productPicDelete(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductPic productPic, Model model, HttpServletRequest request) {
 		
 		productPic = productPicService.getData(productPic);

@@ -11,12 +11,12 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -35,6 +35,7 @@ import com.holidaydessert.service.BannerService;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.NewsService;
 import com.holidaydessert.service.PromotionService;
+import static com.holidaydessert.constant.BuildPath.*;
 
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -44,9 +45,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @CrossOrigin
 @ApiIgnore
 public class NewsManagement {
-
-	@Value("${admin.upload.file.path}")
-	private String ADMIN_UPLOAD_FILE_PATH;
 	
 	@Autowired
 	private AuthorityService authorityService;
@@ -66,7 +64,7 @@ public class NewsManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -89,7 +87,7 @@ public class NewsManagement {
 	}
 	
 	@GetMapping("/newsTables")
-	public void newsTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void newsTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		News newsData = new News();
 
@@ -130,7 +128,7 @@ public class NewsManagement {
 	}
 
 	@RequestMapping(value = "/addNews" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addNews(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addNews(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -151,7 +149,7 @@ public class NewsManagement {
 	}
 	
 	@RequestMapping(value = "/updateNews" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateNews(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateNews(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news, Model model) throws Exception {
 		
 		// 權限
@@ -174,7 +172,7 @@ public class NewsManagement {
 	}
 	
 	@RequestMapping(value = "/newsAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String newsAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String newsAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
@@ -192,7 +190,7 @@ public class NewsManagement {
 	}
 	
 	@RequestMapping(value = "/newsUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String newsUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String newsUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
@@ -206,7 +204,7 @@ public class NewsManagement {
 	}
 
 	@RequestMapping(value = "/editBanner" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String editBanner(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String editBanner(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news,@ModelAttribute Banner banner, Model model) throws Exception {
 		
 		// 權限
@@ -229,7 +227,7 @@ public class NewsManagement {
 	}
 
 	@RequestMapping(value = "/addBanner" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addBanner(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addBanner(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -254,7 +252,7 @@ public class NewsManagement {
 	}
 	
 	@RequestMapping(value = "/updateBanner" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateBanner(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateBanner(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Banner banner, Model model) throws Exception {
 		
 		// 權限
@@ -276,26 +274,17 @@ public class NewsManagement {
 	
 
 	@RequestMapping(value = "/bannerAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String bannerAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String bannerAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Banner banner,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam MultipartFile imageFile,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
 		try {
-			String osName = System.getProperty("os.name").toLowerCase();
-
-			if (osName.contains("win")) {
-				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\banner\\"));
-			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
-			} else if (osName.contains("mac")) {
-				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
-			} else {
-				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
-			}
-			banner.setBanPicture("holidayDessert/admin/upload/images/banner/" + banner.getBanImage());
-			
+	        String uploadPath = buildUploadPath(BANNER_IMAGE_FOLDER);
+	        banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+	        banner.setBanPicture(BANNER_WEB_PATH + banner.getBanImage());
 			bannerService.add(banner);
+			
 			model.addAttribute("MESSAGE", "資料新增成功");
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -308,10 +297,10 @@ public class NewsManagement {
 	}
 
 	@RequestMapping(value = "/bannerUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String bannerUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String bannerUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Banner banner,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
-			@RequestParam(value = "originalImage", required = false) String originalImage,
+			@RequestParam MultipartFile imageFile,
+			@RequestParam(required = false) String originalImage,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
@@ -319,23 +308,11 @@ public class NewsManagement {
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				banner.setBanImage(originalImage);
 			} else {
-				String osName = System.getProperty("os.name").toLowerCase();
-				if (osName.contains("win")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\banner\\");
-					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\banner\\"));
-				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/banner/");
-					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
-				} else if (osName.contains("mac")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/banner/");
-					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
-				} else {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/banner/");
-					banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/banner/"));
-				}
+	            String uploadPath = buildUploadPath(BANNER_IMAGE_FOLDER);
+	            commonService.deleteUploadedFiles(originalImage, uploadPath);
+	            banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-			banner.setBanPicture("holidayDessert/admin/upload/images/banner/" + banner.getBanImage());
-			
+	        banner.setBanPicture(BANNER_WEB_PATH + banner.getBanImage());
 			bannerService.update(banner);
 			model.addAttribute("PATH", "/holidayDessert/admin/news/editBanner?newsId="+banner.getNewsId());
 		} catch (JSONException e) {
@@ -343,10 +320,10 @@ public class NewsManagement {
 		}
 		return "admin/toPath";
 	}
-	
-	@RequestMapping(value = "/bannerDelete" , method = {RequestMethod.POST})
+
 	@ResponseBody
-	public String bannerDelete(@SessionAttribute("employeeSession") Employee employeeSession,
+	@PostMapping(value = "/bannerDelete")
+	public String bannerDelete(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Banner banner, Model model, HttpServletRequest request) {
 		
 		banner = bannerService.getData(banner);

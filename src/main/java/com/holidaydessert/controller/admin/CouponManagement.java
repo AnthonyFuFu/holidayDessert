@@ -11,7 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,6 +34,7 @@ import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.CouponService;
 import com.holidaydessert.service.MemberCouponService;
 import com.holidaydessert.service.MemberService;
+import static com.holidaydessert.constant.BuildPath.*;
 
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -45,9 +45,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @ApiIgnore
 public class CouponManagement {
 
-	@Value("${admin.upload.file.path}")
-	private String ADMIN_UPLOAD_FILE_PATH;
-	
 	@Autowired
 	private AuthorityService authorityService;
 	
@@ -66,7 +63,7 @@ public class CouponManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -79,7 +76,7 @@ public class CouponManagement {
 	}
 	
 	@GetMapping("/couponTables")
-	public void couponTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void couponTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Coupon coupon, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Coupon couponData = new Coupon();
 
@@ -120,7 +117,7 @@ public class CouponManagement {
 	}
 
 	@GetMapping("/memberCouponTables")
-	public void memberCouponTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void memberCouponTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute MemberCoupon memberCoupon, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		MemberCoupon memberCouponData = new MemberCoupon();
 
@@ -161,7 +158,7 @@ public class CouponManagement {
 	}
 	
 	@GetMapping("/issueCouponTables")
-	public void issueCouponTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void issueCouponTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Member memberData = new Member();
 
@@ -207,7 +204,7 @@ public class CouponManagement {
 	}
 	
 	@RequestMapping(value = "/addCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addCoupon(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -226,7 +223,7 @@ public class CouponManagement {
 	}
 	
 	@RequestMapping(value = "/updateCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateCoupon(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Coupon coupon, Model model) throws Exception {
 		
 		// 權限
@@ -247,24 +244,15 @@ public class CouponManagement {
 	}
 	
 	@RequestMapping(value = "/couponAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String couponAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String couponAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Coupon coupon,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam MultipartFile imageFile,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
 		try {
-			String osName = System.getProperty("os.name").toLowerCase();
-
-			if (osName.contains("win")) {
-				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\"));
-			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
-			} else if (osName.contains("mac")) {
-				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
-			} else {
-				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
-			}
-			coupon.setCpPicture("holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
+	        String uploadPath = buildUploadPath(COUPON_IMAGE_FOLDER);
+	        coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+	        coupon.setCpPicture(COUPON_WEB_PATH + coupon.getCpImage());
 			couponService.add(coupon);
 			
 			model.addAttribute("MESSAGE", "資料新增成功");
@@ -279,10 +267,10 @@ public class CouponManagement {
 	}
 	
 	@RequestMapping(value = "/couponUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String couponUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String couponUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Coupon coupon,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
-			@RequestParam(value = "originalImage", required = false) String originalImage,
+			@RequestParam MultipartFile imageFile,
+			@RequestParam(required = false) String originalImage,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
@@ -290,23 +278,11 @@ public class CouponManagement {
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				coupon.setCpImage(originalImage);
 			} else {
-				String osName = System.getProperty("os.name").toLowerCase();
-				if (osName.contains("win")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\");
-					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\coupon\\"));
-				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
-					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
-				} else if (osName.contains("mac")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
-					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
-				} else {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/coupon/");
-					coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/coupon/"));
-				}
+	            String uploadPath = buildUploadPath(COUPON_IMAGE_FOLDER);
+	            commonService.deleteUploadedFiles(originalImage, uploadPath);
+	            coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-			coupon.setCpPicture("holidayDessert/admin/upload/images/coupon/" + coupon.getCpImage());
-			
+	        coupon.setCpPicture(COUPON_WEB_PATH + coupon.getCpImage());
 			couponService.update(coupon);
 			model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
 		} catch (JSONException e) {
@@ -316,7 +292,7 @@ public class CouponManagement {
 	}
 
 	@RequestMapping(value = "/issueCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueCoupon(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String issueCoupon(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -334,7 +310,7 @@ public class CouponManagement {
 	}
 
 	@RequestMapping(value = "/issueDailyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueDailyCouponSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String issueDailyCouponSubmit(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest,Model model) throws Exception {
 
 		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;
@@ -357,7 +333,7 @@ public class CouponManagement {
 	}
 
 	@RequestMapping(value = "/issueWeeklyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueWeeklyCouponSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String issueWeeklyCouponSubmit(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;

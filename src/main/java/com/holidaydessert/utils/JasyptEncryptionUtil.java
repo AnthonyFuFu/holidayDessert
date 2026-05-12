@@ -7,7 +7,8 @@ import org.jasypt.encryption.pbe.StandardPBEStringEncryptor;
 import org.jasypt.iv.NoIvGenerator;
 
 public class JasyptEncryptionUtil {
-    public static void main(String[] args) {
+    @SuppressWarnings("resource")
+	public static void main(String[] args) {
         String encryptText = "";
         HashMap<String, String> options = new HashMap<String, String>();
         options.put("1", "encrypt");

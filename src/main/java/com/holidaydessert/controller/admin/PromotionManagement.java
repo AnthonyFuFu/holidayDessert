@@ -56,7 +56,7 @@ public class PromotionManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -69,7 +69,7 @@ public class PromotionManagement {
 	}
 	
 	@GetMapping("/promotionTables")
-	public void promotionTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void promotionTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Promotion promotion, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Promotion promotionData = new Promotion();
 		
@@ -110,7 +110,7 @@ public class PromotionManagement {
 	}
 	
 	@GetMapping("/promotionDetailTables")
-	public void promotionDetailTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void promotionDetailTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		PromotionDetail promotionDetailData = new PromotionDetail();
 
@@ -150,7 +150,7 @@ public class PromotionManagement {
 
 	}
 	@RequestMapping(value = "/issuePromotionTables", method = { RequestMethod.GET, RequestMethod.POST })
-	public void issuePromotionTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void issuePromotionTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
@@ -190,7 +190,7 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/addPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addPromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addPromotion(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -209,7 +209,7 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/updatePromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updatePromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updatePromotion(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Promotion promotion, Model model) throws Exception {
 		
 		// 權限
@@ -230,7 +230,7 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/promotionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String promotionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String promotionAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Promotion promotion, HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
@@ -246,7 +246,7 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/promotionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String promotionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String promotionUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Promotion promotion, HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
@@ -259,7 +259,7 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/issuePromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issuePromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String issuePromotion(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -278,7 +278,7 @@ public class PromotionManagement {
 	}
 
 	@RequestMapping(value = "/issueDailyPromotionSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueDailyPromotionSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String issueDailyPromotionSubmit(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest,Model model) throws Exception {
 
 		String[] products = pRequest.getParameter("products")!=null ? pRequest.getParameter("products").split(",") : null;
@@ -302,7 +302,7 @@ public class PromotionManagement {
 	}
 
 	@RequestMapping(value = "/issueWeeklyPromotionSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueWeeklyPromotionSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String issueWeeklyPromotionSubmit(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		String[] products = pRequest.getParameter("products")!=null ? pRequest.getParameter("products").split(",") : null;
@@ -326,7 +326,7 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/addOneProductPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addOneProductPromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addOneProductPromotion(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -349,7 +349,7 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/updateOneProductPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateOneProductPromotion(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateOneProductPromotion(@SessionAttribute Employee employeeSession,
 			@ModelAttribute PromotionDetail promotionDetail, Model model) throws Exception {
 		
 		// 權限
@@ -374,7 +374,7 @@ public class PromotionManagement {
 	}
 
 	@RequestMapping(value = "/oneProductPromotionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String oneProductPromotionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String oneProductPromotionAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
@@ -391,7 +391,7 @@ public class PromotionManagement {
 	}
 
 	@RequestMapping(value = "/oneProductPromotionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String oneProductPromotionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String oneProductPromotionUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {

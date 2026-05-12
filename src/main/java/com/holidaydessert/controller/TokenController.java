@@ -46,8 +46,8 @@ public class TokenController {
 	@PostMapping("/getToken")
 	@ApiOperation(value = "獲取token", notes = "token時限30分鐘")
 	public ResponseEntity<?> getToken(
-			@ApiParam(name = "memEmail", value = "MEM_EMAIL", required = true) @RequestParam(value = "memEmail", required = true) String memEmail,
-			@ApiParam(name = "memPassword", value = "MEM_PASSWORD", required = true) @RequestParam(value = "memPassword", required = true) String memPassword) {
+			@ApiParam(name = "memEmail", value = "MEM_EMAIL", required = true) @RequestParam(required = true) String memEmail,
+			@ApiParam(name = "memPassword", value = "MEM_PASSWORD", required = true) @RequestParam(required = true) String memPassword) {
 		Map<String, Object> returnMap = new HashMap<>();
 		try {
 			List<Map<String, Object>> tokenList = new ArrayList<>();

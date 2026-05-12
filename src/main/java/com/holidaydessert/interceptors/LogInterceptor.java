@@ -21,11 +21,11 @@ public class LogInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		Gson gson = new Gson();
-		Employee employeeSession = (Employee) request.getSession().getAttribute("userAccountSession");
+		Employee employeeSession = (Employee) request.getSession().getAttribute("employeeSession");
 		
 		if (employeeSession != null) {
 //			editLog.setCreate_by(userAccountSession.getEmployee_no());	
-		}else {
+		} else {
 //			editLog.setCreate_by("0");
 		}
 	    

@@ -12,7 +12,6 @@ import javax.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -35,6 +34,7 @@ import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.DepartmentService;
 import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
+import static com.holidaydessert.constant.BuildPath.*;
 
 import springfox.documentation.annotations.ApiIgnore;
 
@@ -44,9 +44,6 @@ import springfox.documentation.annotations.ApiIgnore;
 @CrossOrigin
 @ApiIgnore
 public class EmployeeManagement {
-
-	@Value("${admin.upload.file.path}")
-	private String ADMIN_UPLOAD_FILE_PATH;
 	
 	@Autowired
 	private AuthorityService authorityService;
@@ -66,7 +63,7 @@ public class EmployeeManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -79,7 +76,7 @@ public class EmployeeManagement {
 	}
 	
 	@GetMapping("/employeeTables")
-	public void employeeTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void employeeTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Employee employeeData = new Employee();
 
@@ -120,7 +117,7 @@ public class EmployeeManagement {
 	}
 
 	@GetMapping("/authorityTables")
-	public void authorityTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void authorityTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Employee employeeData = new Employee();
 		Authority authority = new Authority();
@@ -168,7 +165,7 @@ public class EmployeeManagement {
 	}
 	
 	@GetMapping("/empFunctionTables")
-	public void empFunctionTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void empFunctionTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute EmpFunction empFunction, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		EmpFunction empFunctionData = new EmpFunction();
 
@@ -209,7 +206,7 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/addEmployee" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addEmployee(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -230,7 +227,7 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/updateEmployee" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateEmployee(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee, Model model) throws Exception {
 		
 		// 權限
@@ -253,24 +250,15 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/employeeAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String employeeAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String employeeAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
+			@RequestParam MultipartFile imageFile,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
 		try {
-			String osName = System.getProperty("os.name").toLowerCase();
-
-			if (osName.contains("win")) {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\employee\\"));
-			} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
-			} else if (osName.contains("mac")) {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
-			} else {
-				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
-			}
-			employee.setEmpPicture("holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
+	        String uploadPath = buildUploadPath(EMPLOYEE_IMAGE_FOLDER);
+	        employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+	        employee.setEmpPicture(EMPLOYEE_WEB_PATH + employee.getEmpImage());
 			employeeService.add(employee);
 			
 			String id = employeeService.getNextId();
@@ -295,10 +283,10 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/employeeUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String employeeUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String employeeUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee,
-			@RequestParam(value = "imageFile") MultipartFile imageFile,
-			@RequestParam(value = "originalImage", required = false) String originalImage,
+			@RequestParam MultipartFile imageFile,
+			@RequestParam(required = false) String originalImage,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
 		try {
@@ -306,24 +294,12 @@ public class EmployeeManagement {
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				employee.setEmpImage(originalImage);
 			} else {
-				String osName = System.getProperty("os.name").toLowerCase();
-				if (osName.contains("win")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images\\employee\\");
-					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images\\employee\\"));
-				} else if (osName.contains("nix") || osName.contains("nux") || osName.contains("aix")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/employee/");
-					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
-				} else if (osName.contains("mac")) {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/employee/");
-					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
-				} else {
-					commonService.deleteUploadedFiles(originalImage, ADMIN_UPLOAD_FILE_PATH + "images/employee/");
-					employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile,ADMIN_UPLOAD_FILE_PATH + "images/employee/"));
-				}
+	            String uploadPath = buildUploadPath(EMPLOYEE_IMAGE_FOLDER);
+	            commonService.deleteUploadedFiles(originalImage, uploadPath);
+	            employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-			employee.setEmpPicture("holidayDessert/admin/upload/images/employee/" + employee.getEmpImage());
+	        employee.setEmpPicture(EMPLOYEE_WEB_PATH + employee.getEmpImage());
 			employeeService.update(employee);
-			
 			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -332,7 +308,7 @@ public class EmployeeManagement {
 	}
 	
 	@PostMapping("/resignEmployee")
-	public String resignEmployee(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String resignEmployee(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee, Model model) throws Exception {
 
 		try {
@@ -346,7 +322,7 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/addEmpFunction" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addEmpFunction(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addEmpFunction(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -365,7 +341,7 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/updateEmpFunction" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateEmpFunction(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateEmpFunction(@SessionAttribute Employee employeeSession,
 			@ModelAttribute EmpFunction empFunction, Model model) throws Exception {
 		
 		// 權限
@@ -386,7 +362,7 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/empFunctionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String empFunctionAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String empFunctionAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute EmpFunction empFunction,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
@@ -404,7 +380,7 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/empFunctionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String empFunctionUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String empFunctionUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute EmpFunction empFunction,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		

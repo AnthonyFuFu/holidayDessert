@@ -50,7 +50,7 @@ public class OrderManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -63,7 +63,7 @@ public class OrderManagement {
 	}
 	
 	@GetMapping("/orderTables")
-	public void orderTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void orderTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute MainOrder mainOrder, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		MainOrder mainOrderData = new MainOrder();
 
@@ -103,7 +103,7 @@ public class OrderManagement {
 	}
 
 	@GetMapping("/orderDetailTables")
-	public void orderDetailTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void orderDetailTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute OrderDetail orderDetail, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		OrderDetail orderDetailData = new OrderDetail();
 

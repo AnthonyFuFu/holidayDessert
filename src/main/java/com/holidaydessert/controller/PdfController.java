@@ -22,7 +22,7 @@ import io.swagger.annotations.Api;
 public class PdfController {
 	
 	@PostMapping("/extractPDF")
-	public ResponseEntity<?> extractPDF(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> extractPDF(@RequestParam MultipartFile file) {
 		try {
 			String pdfText = extractTextFromPDF(file.getInputStream());
 			System.out.println(pdfText);

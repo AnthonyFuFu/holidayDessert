@@ -36,5 +36,9 @@ public interface CommonService {
 	public void sendEmail(String email, String title, String content) throws IOException;
 
 	public void sendGmail(String email, String title, String content) throws IOException;
+	
+	public String generateEncryptedToken(String identifier) throws Exception;
 
+	public String decryptToken(String code) throws Exception;
+    
 }

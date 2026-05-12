@@ -8,8 +8,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.holidaydessert.model.Employee;
@@ -30,10 +30,10 @@ public class LoginController {
 		return "admin/login";
     }
 	
-	@RequestMapping(value = "/doLogin" , method = {RequestMethod.POST})
+	@PostMapping(value = "/doLogin")
 	public String doLogin(@ModelAttribute Employee employee, HttpSession session,
-		@RequestParam(value="empAccount",required = true) String empAccount,
-		@RequestParam(value="empPassword",required = true) String empPassword, Model model,
+		@RequestParam(required = true) String empAccount,
+		@RequestParam(required = true) String empPassword, Model model,
 		HttpServletRequest pRequest){
 		String msg = "";
 //		String ip = pRequest.getRemoteAddr();
@@ -76,7 +76,7 @@ public class LoginController {
 		return "admin/login";
     }
 	
-	@RequestMapping(value = "/logout", method = {RequestMethod.GET})
+	@GetMapping(value = "/logout")
 	public String logout(@ModelAttribute Employee employee, HttpSession session, Model model){
 		
 		if(session.getAttribute("employeeSession") != null){

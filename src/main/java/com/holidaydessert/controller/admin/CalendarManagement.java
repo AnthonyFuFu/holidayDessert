@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -43,7 +44,7 @@ public class CalendarManagement {
 	private FullcalendarService fullcalendarService;
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -92,10 +93,10 @@ public class CalendarManagement {
 
 	@RequestMapping(value = "/calendarAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String calendarAddSubmit(
-			@RequestParam(value = "title", required = true) String title,
-			@RequestParam(value = "start", required = true) String start,
-			@RequestParam(value = "end", required = true) String end,
-			@RequestParam(value = "empId", required = true) String empId,
+			@RequestParam(required = true) String title,
+			@RequestParam(required = true) String start,
+			@RequestParam(required = true) String end,
+			@RequestParam(required = true) String empId,
 			Model model) throws Exception {
 		
 		Fullcalendar fullcalendarData = new Fullcalendar();
@@ -124,9 +125,9 @@ public class CalendarManagement {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/approve", method = RequestMethod.POST)
+	@PostMapping("/approve")
 	public Map<String, String> approve(
-	        @RequestParam(value = "id", required = true) String id) {
+	        @RequestParam(required = true) String id) {
 	    Map<String, String> response = new HashMap<>();
 	    try {
 	        Fullcalendar fullcalendarData = new Fullcalendar();
@@ -147,9 +148,9 @@ public class CalendarManagement {
 	}
 	
 	@ResponseBody
-	@RequestMapping(value = "/notApprove", method = RequestMethod.POST)
+	@PostMapping("/notApprove")
 	public Map<String, String> notApprove(
-	        @RequestParam(value = "id", required = true) String id) {
+	        @RequestParam(required = true) String id) {
 	    Map<String, String> response = new HashMap<>();
 		try {
 			Fullcalendar fullcalendarData = new Fullcalendar();

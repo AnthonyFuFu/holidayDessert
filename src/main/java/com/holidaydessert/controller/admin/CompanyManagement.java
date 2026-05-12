@@ -51,7 +51,7 @@ public class CompanyManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -64,7 +64,7 @@ public class CompanyManagement {
 	}
 	
 	@GetMapping("/companyTables")
-	public void companyTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void companyTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute CompanyInformation companyInformation, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		CompanyInformation companyInformationData = new CompanyInformation();
 
@@ -105,7 +105,7 @@ public class CompanyManagement {
 	}
 	
 	@GetMapping("/departmentTables")
-	public void departmentTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void departmentTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Department department, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Department departmentData = new Department();
 
@@ -146,7 +146,7 @@ public class CompanyManagement {
 	}
 
 	@RequestMapping(value = "/addCompany" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addCompany(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addCompany(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -165,7 +165,7 @@ public class CompanyManagement {
 	}
 	
 	@RequestMapping(value = "/updateCompany" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateCompany(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateCompany(@SessionAttribute Employee employeeSession,
 			@ModelAttribute CompanyInformation companyInformation, Model model) throws Exception {
 		
 		// 權限
@@ -186,7 +186,7 @@ public class CompanyManagement {
 	}
 
 	@RequestMapping(value = "/companyAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String companyAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String companyAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute CompanyInformation companyInformation,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
@@ -204,7 +204,7 @@ public class CompanyManagement {
 	}
 	
 	@RequestMapping(value = "/companyUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String companyUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String companyUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute CompanyInformation companyInformation,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		
@@ -218,7 +218,7 @@ public class CompanyManagement {
 	}
 	
 	@RequestMapping(value = "/addDepartment" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addDepartment(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String addDepartment(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
 		// 權限
@@ -237,7 +237,7 @@ public class CompanyManagement {
 	}
 	
 	@RequestMapping(value = "/updateDepartment" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateDepartment(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String updateDepartment(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Department department, Model model) throws Exception {
 		
 		// 權限
@@ -258,7 +258,7 @@ public class CompanyManagement {
 	}
 
 	@RequestMapping(value = "/departmentAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String departmentAddSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String departmentAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Department department,
 			HttpServletRequest pRequest, Model model) throws Exception {
 
@@ -276,7 +276,7 @@ public class CompanyManagement {
 	}
 	
 	@RequestMapping(value = "/departmentUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String departmentUpdateSubmit(@SessionAttribute("employeeSession") Employee employeeSession,
+	public String departmentUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Department department,
 			HttpServletRequest pRequest, Model model) throws Exception {
 		

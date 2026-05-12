@@ -7,9 +7,15 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
+import java.util.Base64;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
+import java.text.DateFormat;
 
+import javax.crypto.Cipher;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 import javax.imageio.ImageIO;
 import javax.mail.Message;
 import javax.mail.Session;
@@ -18,25 +24,14 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.mail.internet.MimeUtility;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.holidaydessert.service.CommonService;
+import static com.holidaydessert.constant.CommonConstant.*;
 
 @Service
 public class CommonServiceImpl implements CommonService {
-
-	private final static String HOST = "smtp.gmail.com";
-	private final static String AUTH = "true";
-	private final static String PORT = "587";
-	private final static String STARTTLE_ENABLE = "true";
-//	private final static String SENDER_NAME = "假日甜點";
-	private final static String SENDER = "s9017611@gmail.com";
-	private final static String PASSWORD = "rkun bgju hpcf egfm";
-	
-	@Value("${mail.fromname}")
-	private String fromname;
 
 	/**
 	 * 多個檔案上傳的接口
@@ -212,7 +207,7 @@ public class CommonServiceImpl implements CommonService {
 
 			Session mailSession = Session.getDefaultInstance(properties);
 
-			InternetAddress from = new InternetAddress(SENDER, MimeUtility.encodeText(fromname, "UTF-8", "b"));
+			InternetAddress from = new InternetAddress(SENDER, MimeUtility.encodeText(FROMNAME, "UTF-8", "b"));
 			// 產生整封 email 的主體 message
 			MimeMessage msg = new MimeMessage(mailSession);
 			msg.setHeader("Content-Type", "text/html; charset=UTF-8");
@@ -230,6 +225,75 @@ public class CommonServiceImpl implements CommonService {
 			e.printStackTrace();
 		}
 		
+	}
+
+    @Override
+    public String generateEncryptedToken(String identifier) throws Exception {
+        DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+        String timestamp = dateFormat.format(Calendar.getInstance().getTime());
+        String raw = identifier + "," + timestamp;
+        return encrypt(raw, ENCRYPT_KEY);
+    }
+    
+    @Override
+    public String decryptToken(String code) throws Exception {
+        return decrypt(code, ENCRYPT_KEY);
+    }
+    
+	public static String encrypt(String sSrc, String sKey) throws Exception {
+		Base64.Encoder encoder = Base64.getEncoder();
+		if (sKey == null) {
+			return null;
+		}
+		// 判断Key是否为16位
+		if (sKey.length() != 16) {
+			return null;
+		}
+		byte[] raw = sKey.getBytes();
+		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");// "算法/模式/补码方式"
+		IvParameterSpec iv = new IvParameterSpec("0102030405060708".getBytes());// 使用CBC模式，需要一个向量iv，可增加加密算法的强度
+		cipher.init(Cipher.ENCRYPT_MODE, skeySpec, iv);
+		byte[] encrypted = cipher.doFinal(sSrc.getBytes());
+
+		return encoder.encodeToString(encrypted);
+	}
+
+	// 解密
+	public static String decrypt(String sSrc, String sKey) throws Exception {
+		Base64.Decoder decoder = Base64.getDecoder();
+//		new String(decoder.decode(sSrc);
+		try {
+			// 判断Key是否正确
+			if (sKey == null) {
+				System.out.print("Key为空null");
+				return null;
+			}
+			// 判断Key是否为16位
+			if (sKey.length() != 16) {
+				System.out.print("Key长度不是16位");
+				return null;
+			}
+			byte[] raw = sKey.getBytes("ASCII");
+			SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
+			Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
+			IvParameterSpec iv = new IvParameterSpec("0102030405060708".getBytes());
+			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
+//			byte[] encrypted1 = new BASE64Decoder().decodeBuffer(sSrc);//先用base64解密
+			byte[] encrypted1 = decoder.decode(sSrc);// 先用base64解密
+//			System.out.println("encrypted1: "+encrypted1.toString());
+			try {
+				byte[] original = cipher.doFinal(encrypted1);
+				String originalString = new String(original);
+				return originalString;
+			} catch (Exception e) {
+				System.out.println(e.toString());
+				return null;
+			}
+		} catch (Exception ex) {
+			System.out.println(ex.toString());
+			return null;
+		}
 	}
 
 }

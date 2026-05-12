@@ -59,7 +59,7 @@ public class MemberManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		// 權限
 		Authority authority = new Authority();
@@ -75,7 +75,7 @@ public class MemberManagement {
 	}
 	
 	@GetMapping("/memberTables")
-	public void memberTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void memberTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Member memberData = new Member();
 
@@ -116,7 +116,7 @@ public class MemberManagement {
 	}
 	
 	@GetMapping("/receiptInformationTables")
-	public void receiptInformationTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void receiptInformationTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ReceiptInformation receiptInformation, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		ReceiptInformation receiptInformationData = new ReceiptInformation();
 
@@ -157,7 +157,7 @@ public class MemberManagement {
 	}
 	
 	@GetMapping("/cartTables")
-	public void cartTables(@SessionAttribute("employeeSession") Employee employeeSession,
+	public void cartTables(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Cart cart, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		Cart cartData = new Cart();
 		

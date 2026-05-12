@@ -37,7 +37,7 @@ public class IndexManagement {
 	private EmployeeService employeeService;
 	
 	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
-	public String index(@SessionAttribute("employeeSession") Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
+	public String index(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		
 		// 權限
 		Authority authority = new Authority();

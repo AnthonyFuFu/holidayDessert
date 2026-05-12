@@ -1,9 +1,7 @@
 package com.holidaydessert.service.impl;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Base64;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +17,7 @@ import com.holidaydessert.dao.ChatRoomDao;
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.Message;
 import com.holidaydessert.service.ChatRoomService;
+import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.MessageService;
 
 @Service
@@ -29,6 +28,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	
 	@Autowired
 	private MessageService messageService;
+
+	@Autowired
+	private CommonService commonService;
 	
 	@Override
 	public List<Map<String, Object>> getAllChatRoom() {
@@ -41,12 +43,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 		
 		if (chatRoomByMessage == null) {
 			try {
-				String cKey = "_HolidayDessert_";
-				Calendar date = Calendar.getInstance();
-				DateFormat yyyymmdd = new SimpleDateFormat("yyyyMMddHHmmss");
-				String yyyymmddStr = yyyymmdd.format(date.getTime());
-				String temp = memId + "," + yyyymmddStr;
-				String roomUrl = encrypt(temp, cKey);
+		        String roomUrl = commonService.generateEncryptedToken(memId);
 				Long roomId = chatRoomDao.addChatRoom(roomUrl);
 				
 				String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());

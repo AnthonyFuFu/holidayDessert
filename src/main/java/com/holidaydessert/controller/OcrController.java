@@ -25,7 +25,7 @@ public class OcrController {
 	private OcrService ocrService;
 	
 	@PostMapping("/recognizeText")
-	public ResponseEntity<?> recognizeText(@RequestParam("file") MultipartFile file) {
+	public ResponseEntity<?> recognizeText(@RequestParam MultipartFile file) {
 		try {
 			ApiReturnObject apiReturnObject = ocrService.recognizeText(ImageIO.read(file.getInputStream()));
 			return ResponseEntity.ok(apiReturnObject);
