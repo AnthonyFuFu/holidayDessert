@@ -14,7 +14,4 @@ public interface BannerDao {
 	public void delete(Banner banner);
 	public Banner getData(Banner banner);
 
-	// front
-	public List<Map<String, Object>> frontRandList(Banner banner);
-
 }

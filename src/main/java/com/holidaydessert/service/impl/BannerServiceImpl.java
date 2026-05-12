@@ -41,9 +41,4 @@ public class BannerServiceImpl implements BannerService{
 		return bannerDao.getData(banner);
 	}
 	
-	@Override
-	public List<Map<String, Object>> frontRandList(Banner banner) {
-		return bannerDao.frontRandList(banner);
-	}
-	
 }

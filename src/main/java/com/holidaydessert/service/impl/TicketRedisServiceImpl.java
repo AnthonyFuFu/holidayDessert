@@ -9,8 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.holidaydessert.dao.TicketDao;
 import com.holidaydessert.model.Ticket;
+import com.holidaydessert.repository.TicketRepository;
 import com.holidaydessert.service.TicketRedisService;
 import com.holidaydessert.utils.RedisLockUtil;
 
@@ -20,8 +20,8 @@ public class TicketRedisServiceImpl implements TicketRedisService {
     private static final String PREFIX = "ticket:";
     
     @Autowired
-    private TicketDao ticketDao;
-    
+    private TicketRepository ticketRepository;
+
     @Autowired
     private ObjectMapper objectMapper;
     
@@ -46,7 +46,7 @@ public class TicketRedisServiceImpl implements TicketRedisService {
             
             if (ticket == null) {
                 // 如果票務信息不存在，從資料庫加載並設置到 Redis
-                ticket = ticketDao.findByEvent(event);
+                ticket = ticketRepository.findByTicketEvent(event);
                 if (ticket == null || ticket.getTicketQuantity() <= 0) {
                     return "票已售罄";
                 }
@@ -75,7 +75,7 @@ public class TicketRedisServiceImpl implements TicketRedisService {
     }
 
     public void saveTicketToRedisByEvent(String event) {
-        Ticket ticket = ticketDao.findByEvent(event);
+        Ticket ticket = ticketRepository.findByTicketEvent(event);
         if (ticket != null) {
             saveToRedis(ticket);
         } else {

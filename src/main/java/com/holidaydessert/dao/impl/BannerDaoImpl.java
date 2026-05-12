@@ -113,24 +113,4 @@ public class BannerDaoImpl implements BannerDao {
 		return pic == null ? null : pic;
 	}
 
-	@Override
-	public List<Map<String, Object>> frontRandList(Banner banner) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT * FROM holiday_dessert.banner "
-				   + " WHERE NEWS_ID = ? "
-				   + " ORDER BY RAND() LIMIT 3 ";
-		
-		args.add(banner.getNewsId());
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		if(list!=null && list.size()>0) {
-			return list;
-		} else {
-			return null;
-		}
-		
-	}
-
 }
