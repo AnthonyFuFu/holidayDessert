@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.CompanyInformationDao;
 import com.holidaydessert.model.CompanyInformation;
+import com.holidaydessert.repository.CompanyInformationRepository;
 import com.holidaydessert.service.CompanyInformationService;
 
 @Service
@@ -15,7 +16,10 @@ public class CompanyInformationServiceImpl implements CompanyInformationService 
 
 	@Autowired
 	private CompanyInformationDao companyInformationDao;
-
+	
+	@Autowired
+	private CompanyInformationRepository companyInformationRepository;
+	
 	@Override
 	public List<Map<String, Object>> list(CompanyInformation companyInformation) {
 		return companyInformationDao.list(companyInformation);
@@ -47,8 +51,9 @@ public class CompanyInformationServiceImpl implements CompanyInformationService 
 	}
 
 	@Override
-	public List<Map<String, Object>> frontList(CompanyInformation companyInformation) {
-		return companyInformationDao.frontList(companyInformation);
+	public List<Map<String, Object>> frontList() {
+	    List<Map<String, Object>> list = companyInformationRepository.frontList();
+	    return list.isEmpty() ? null : list;
 	}
 
 }

@@ -50,7 +50,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 
 		String replyContent = chatCompletions.getChoices().get(0).getMessage().getContent();
 		
-		return new ApiReturnObject(200, "取得對話成功", replyContent);
+		return ApiReturnObject.success("取得對話成功", replyContent);
 
 	}
 
@@ -74,7 +74,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 			System.out.println("   \"" + result.getCaption().getText() + "\", Confidence " 
 			    + String.format("%.4f", result.getCaption().getConfidence()));
 
-            return new ApiReturnObject(200, "分析成功", result.getCaption().getText());
+            return ApiReturnObject.success("分析成功", result.getCaption().getText());
 
 		} catch (HttpResponseException e) {
 			System.out.println("Exception: " + e.getClass().getSimpleName());
@@ -83,7 +83,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 		} catch (Exception e) {
 			System.out.println("Message: " + e.getMessage());
 		}
-        return new ApiReturnObject(500, "分析失敗", null);
+        return ApiReturnObject.serverError("分析失敗");
 	}
 
 	@Override
@@ -106,7 +106,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 			System.out.println("   \"" + result.getCaption().getText() + "\", Confidence "
 			    + String.format("%.4f", result.getCaption().getConfidence()));
 			
-            return new ApiReturnObject(200, "分析成功", result.getCaption().getText());
+            return ApiReturnObject.success("分析成功", result.getCaption().getText());
 
 		} catch (HttpResponseException e) {
 			System.out.println("Exception: " + e.getClass().getSimpleName());
@@ -115,7 +115,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 		} catch (Exception e) {
 			System.out.println("Message: " + e.getMessage());
 		}
-        return new ApiReturnObject(500, "分析失敗", null);
+        return ApiReturnObject.serverError("分析失敗");
 	}
 
 	@Override
@@ -143,7 +143,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 			        System.out.println("Word: '" + word.getText() + "',Bounding polygon " + word.getBoundingPolygon() + ",Confidence " + String.format("%.4f", word.getConfidence()));
 			    }
 			}
-			return new ApiReturnObject(200, "分析成功", extractedText.toString());
+			return ApiReturnObject.success("分析成功", extractedText.toString());
 			
 		} catch (HttpResponseException e) {
 			System.out.println("Exception: " + e.getClass().getSimpleName());
@@ -152,7 +152,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 		} catch (Exception e) {
 			System.out.println("Message: " + e.getMessage());
 		}
-        return new ApiReturnObject(500, "分析失敗", null);
+        return ApiReturnObject.serverError("分析失敗");
 	}
 
 	@Override
@@ -182,7 +182,7 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 					+ ", Confidence " + String.format("%.4f", word.getConfidence()));
 				}
 			}
-			return new ApiReturnObject(200, "分析成功", extractedText.toString());
+			return ApiReturnObject.success("分析成功", extractedText.toString());
 			
 		} catch (HttpResponseException e) {
 			System.out.println("Exception: " + e.getClass().getSimpleName());
@@ -191,6 +191,6 @@ public class ChatGPTServiceImpl implements ChatGPTService {
 		} catch (Exception e) {
 			System.out.println("Message: " + e.getMessage());
 		}
-        return new ApiReturnObject(500, "分析失敗", null);
+        return ApiReturnObject.serverError("分析失敗");
 	}
 }

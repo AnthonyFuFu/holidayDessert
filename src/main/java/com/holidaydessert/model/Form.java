@@ -42,8 +42,8 @@ public class Form extends Base {
 
     @Column(name = "FORM_CREATE_BY")
 	private String formCreateBy;  	   // 送單人
-
-    @Column(name = "FORM_CREATE_TIME")
+    
+    @Column(name = "FORM_CREATE_TIME", insertable = false, updatable = false)
 	private String formCreateTime; 	   // 送單創建時間
 	
 }

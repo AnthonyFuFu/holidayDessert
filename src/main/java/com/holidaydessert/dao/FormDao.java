@@ -11,7 +11,4 @@ public interface FormDao {
 	public List<Map<String, Object>> list(Form form);
 	public int getCount(Form form);
 	
-	// front
-	public void add(Form form);
-	
 }

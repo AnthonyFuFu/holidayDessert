@@ -3,8 +3,6 @@ package com.holidaydessert.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -21,8 +19,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@NonNull
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,10 +27,6 @@ import lombok.Setter;
 public class Cart extends Base {
 	
 	@EmbeddedId
-    @AttributeOverrides({
-    	@AttributeOverride(name = "memId", column = @Column(name = "MEM_ID")),
-    	@AttributeOverride(name = "pdId", column = @Column(name = "PD_ID"))
-    })
     private CartId id;				   // 複合主鍵ID
 	
 	@Transient
@@ -42,8 +35,9 @@ public class Cart extends Base {
 	@Transient
 	private String pdId;               // 商品ID
 	
+	@NonNull
     @Column(name = "CART_PD_QUANTITY")
-	private String cartPdQuantity;     // 商品個數
+	private Integer cartPdQuantity;     // 商品個數
 
 	@Getter
 	@Setter
@@ -53,8 +47,13 @@ public class Cart extends Base {
 	public static class CartId implements Serializable {
 		
 		private static final long serialVersionUID = 1L;
-		
+
+		@NonNull
+		@Column(name = "MEM_ID")
 		private String memId;		   // 會員ID
+
+		@NonNull
+		@Column(name = "PD_ID")
 		private String pdId;		   // 商品ID
 		
 		@Override

@@ -91,23 +91,5 @@ public class FormDaoImpl implements FormDao {
 		}
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
-
-	@Override
-	public void add(Form form) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " INSERT INTO holiday_dessert.form "
-				   + " (FORM_PHONE, FORM_EMAIL, FORM_CONTENT, FORM_CREATE_BY, FORM_CREATE_TIME) "
-				   + " VALUES(?, ?, ?, ?, NOW()) ";
-		
-		args.add(form.getFormPhone());
-		args.add(form.getFormEmail());
-		args.add(form.getFormContent());
-		args.add(form.getFormCreateBy());
-		
-		jdbcTemplate.update(sql, args.toArray());
-		
-	}
-
+	
 }

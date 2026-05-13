@@ -6,26 +6,26 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.holidaydessert.dao.CommentDao;
 import com.holidaydessert.model.ApiReturnObject;
+import com.holidaydessert.repository.CommentRepository;
 import com.holidaydessert.service.CommentService;
 
 @Service
 public class CommentServiceImpl implements CommentService {
 	
 	@Autowired
-	private CommentDao commentDao;
-	
+	private CommentRepository commentRepository;
+
 	@Override
 	public ApiReturnObject getCommentList() {
 		
-		List<Map<String, Object>> commentList = commentDao.getCommentList();
+		List<Map<String, Object>> commentList = commentRepository.getCommentList();
 		
 		if(commentList == null) {
-			return new ApiReturnObject(200, "查無留言清單", null);
+			return ApiReturnObject.success("查無留言清單", null);
 		}
 		
-		return new ApiReturnObject(200, "取得留言清單成功", commentList);
+		return ApiReturnObject.success("取得留言清單成功", commentList);
 	}
 
 }

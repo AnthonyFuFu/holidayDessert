@@ -90,7 +90,7 @@ public class IndexController {
 			}
 			return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 		} catch (Exception e) {
-	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ApiReturnObject(403, "Token 無效", null));
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiReturnObject.forbidden("Token 無效"));
 		}
 	}
 	

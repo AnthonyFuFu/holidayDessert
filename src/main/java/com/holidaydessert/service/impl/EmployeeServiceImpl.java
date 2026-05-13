@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.EmployeeDao;
 import com.holidaydessert.model.Employee;
+import com.holidaydessert.repository.EmployeeRepository;
 import com.holidaydessert.service.EmployeeService;
 
 @Service
@@ -15,7 +16,10 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Autowired
 	private EmployeeDao employeeDao;
-
+	
+	@Autowired
+	private EmployeeRepository employeeRepository;
+	
 	@Override
 	public List<Map<String, Object>> list(Employee employee) {
 		return employeeDao.list(employee);
@@ -63,7 +67,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public List<Employee> findAllWithDepartment() {
-		return employeeDao.findAllWithDepartment();
+		return employeeRepository.findAllWithDepartment();
 	}
 	
 }

@@ -3,8 +3,6 @@ package com.holidaydessert.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.EmbeddedId;
@@ -21,8 +19,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
-@NonNull
+@Builder(toBuilder = true)
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
@@ -30,10 +27,6 @@ import lombok.Setter;
 public class Authority extends Base {
 	
 	@EmbeddedId
-    @AttributeOverrides({
-    	@AttributeOverride(name = "empId", column = @Column(name = "EMP_ID")),
-    	@AttributeOverride(name = "funcId", column = @Column(name = "FUNC_ID"))
-    })
     private AuthorityId id;			   // 複合主鍵ID
 	
 	@Transient
@@ -53,8 +46,13 @@ public class Authority extends Base {
 	public static class AuthorityId implements Serializable {
 		
 		private static final long serialVersionUID = 1L;
-		
+
+		@NonNull
+		@Column(name = "EMP_ID")
 		private String empId;		   // 管理員ID
+
+		@NonNull
+		@Column(name = "FUNC_ID")
 		private String funcId;		   // 功能ID
 		
 		@Override

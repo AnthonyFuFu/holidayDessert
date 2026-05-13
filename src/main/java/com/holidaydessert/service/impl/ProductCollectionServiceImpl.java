@@ -57,10 +57,10 @@ public class ProductCollectionServiceImpl implements ProductCollectionService {
 		
 		List<Map<String, Object>> list = productCollectionDao.getAllPdcList();
 		if(list == null) {
-			return new ApiReturnObject(200, "查無商品分類清單", null);
+			return ApiReturnObject.success("查無商品分類清單", null);
 		}
 		
-		return new ApiReturnObject(200, "取得商品分類清單成功", list);
+		return ApiReturnObject.success("取得商品分類清單成功", list);
 		
 	}
 
@@ -69,10 +69,10 @@ public class ProductCollectionServiceImpl implements ProductCollectionService {
 		
 		List<Map<String, Object>> list = productCollectionDao.getPdByPdcName(pdcName);
 		if(list == null) {
-			return new ApiReturnObject(200, "查無商品分類", null);
+			return ApiReturnObject.success("查無商品分類", null);
 		}
 		
-		return new ApiReturnObject(200, "取得商品分類成功", list);
+		return ApiReturnObject.success("取得商品分類成功", list);
 		
 	}
 

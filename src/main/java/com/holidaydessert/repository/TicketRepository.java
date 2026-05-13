@@ -9,8 +9,9 @@ import com.holidaydessert.model.Ticket;
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 	
 	// Spring Data JPA 自動產生 SELECT * FROM ticket WHERE ticket_event = ?
-    Ticket findByTicketEvent(String ticketEvent);
-    
+	
+//	  JPA範例
+//    Ticket findByTicketEvent(String ticketEvent);
     
 //    List<Ticket> findByTicketStatus(String status);        // WHERE ticket_status = ?
 //    List<Ticket> findByTicketEventAndTicketStatus(...);    // WHERE ... AND ...

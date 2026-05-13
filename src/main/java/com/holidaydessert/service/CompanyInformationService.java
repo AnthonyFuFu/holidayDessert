@@ -16,6 +16,6 @@ public interface CompanyInformationService {
 	public CompanyInformation getData(CompanyInformation companyInformation);
 	
 	// front
-	public List<Map<String, Object>> frontList(CompanyInformation companyInformation);
+	public List<Map<String, Object>> frontList();
 	
 }

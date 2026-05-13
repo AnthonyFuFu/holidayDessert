@@ -26,7 +26,7 @@ public class PdfController {
 		try {
 			String pdfText = extractTextFromPDF(file.getInputStream());
 			System.out.println(pdfText);
-			ApiReturnObject apiReturnObject = new ApiReturnObject(200, "取得對話成功", pdfText);
+			ApiReturnObject apiReturnObject = ApiReturnObject.success("取得對話成功", pdfText);
 			return ResponseEntity.ok(apiReturnObject);
 		} catch (Exception e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
@@ -54,7 +54,7 @@ public class PdfController {
 //		try {
 //			String pdfText = extractTextFromPDF("C:\\Users\\TKB0004757\\Downloads\\生物課程報告-分裂組探究實驗教學.pdf");
 //			System.out.println(pdfText);
-//			ApiReturnObject apiReturnObject =  new ApiReturnObject(200, "取得對話成功", pdfText);
+//			ApiReturnObject apiReturnObject =  ApiReturnObject.success("取得對話成功", pdfText);
 //			return ResponseEntity.ok(apiReturnObject);
 //		} catch (Exception e) {
 //			return ResponseEntity.badRequest().body(e.getMessage());

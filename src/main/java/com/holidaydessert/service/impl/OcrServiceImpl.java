@@ -27,7 +27,7 @@ public class OcrServiceImpl implements OcrService {
 		tesseract.setLanguage("chi_tra");
 		tesseract.setOcrEngineMode(3); // 設置OCR引擎模式
 		String replyContent = tesseract.doOCR(image);
-		return new ApiReturnObject(200, "取得對話成功", replyContent);
+		return ApiReturnObject.success("取得對話成功", replyContent);
 
 	}
 	

@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.BannerDao;
 import com.holidaydessert.model.Banner;
+import com.holidaydessert.repository.BannerRepository;
 import com.holidaydessert.service.BannerService;
 
 @Service
@@ -15,7 +16,10 @@ public class BannerServiceImpl implements BannerService{
 	
 	@Autowired
 	private BannerDao bannerDao;
-	
+
+    @Autowired
+    private BannerRepository bannerRepository;
+    
 	@Override
 	public List<Map<String, Object>> list(Banner banner) {
 		return bannerDao.list(banner);
@@ -39,6 +43,11 @@ public class BannerServiceImpl implements BannerService{
 	@Override
 	public Banner getData(Banner banner) {
 		return bannerDao.getData(banner);
+	}
+	
+	@Override
+	public List<Banner> frontRandList(String newsId) {
+		return bannerRepository.findFrontRandList(newsId);
 	}
 	
 }

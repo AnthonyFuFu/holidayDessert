@@ -159,20 +159,5 @@ public class CompanyInformationDaoImpl implements CompanyInformationDao {
 	    }
 		return company == null ? null : company;
 	}
-
-	@Override
-	public List<Map<String, Object>> frontList(CompanyInformation companyInformation) {
-		
-		String sql = " SELECT * FROM holiday_dessert.company_information ";
-
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
-		
-		if (list != null && list.size() > 0) {
-			return list;
-		} else {
-			return null;
-		}
-		
-	}
-
+	
 }

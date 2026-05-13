@@ -78,10 +78,10 @@ public class ProductServiceImpl implements ProductService {
 		List<Map<String, Object>> newArrivalList = productDao.getMainProductList();
 		
 		if(newArrivalList == null) {
-			return new ApiReturnObject(200, "查無主要產品清單", null);
+			return ApiReturnObject.success("查無主要產品清單", null);
 		}
 		
-		return new ApiReturnObject(200, "取得主要產品清單成功", newArrivalList);
+		return ApiReturnObject.success("取得主要產品清單成功", newArrivalList);
 	}
 	
 	@Override
@@ -90,10 +90,10 @@ public class ProductServiceImpl implements ProductService {
 		List<Map<String, Object>> newArrivalList = productDao.getNewArrivalList();
 		
 		if(newArrivalList == null) {
-			return new ApiReturnObject(200, "查無新品上市清單", null);
+			return ApiReturnObject.success("查無新品上市清單", null);
 		}
 		
-		return new ApiReturnObject(200, "取得新品上市清單成功", newArrivalList);
+		return ApiReturnObject.success("取得新品上市清單成功", newArrivalList);
 	}
 	
 	@Override

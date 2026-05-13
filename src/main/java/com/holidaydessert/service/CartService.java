@@ -12,8 +12,8 @@ public interface CartService {
 	public Integer getCount(Cart cart);
 	
 	// front
-	public List<Map<String, Object>> frontList(Cart cart);
-	public void add(Cart cart);
+	public List<Cart> frontList(String memId);
+	public void insert(Cart cart);
 	public void update(Cart cart);
 	public void delete(Cart cart);
 	

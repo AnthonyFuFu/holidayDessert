@@ -14,4 +14,7 @@ public interface BannerService {
 	public void delete(Banner banner);
 	public Banner getData(Banner banner);
 	
+	// front
+	public List<Banner> frontRandList(String newsId);
+	
 }

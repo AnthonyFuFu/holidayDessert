@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.FormDao;
 import com.holidaydessert.model.Form;
+import com.holidaydessert.repository.FormRepository;
 import com.holidaydessert.service.FormService;
 
 @Service
@@ -15,6 +16,9 @@ public class FormServiceImpl implements FormService {
 
 	@Autowired
 	private FormDao formdao;
+	
+	@Autowired
+	private FormRepository formRepository;
 	
 	@Override
 	public List<Map<String, Object>> list(Form form) {
@@ -28,7 +32,7 @@ public class FormServiceImpl implements FormService {
 	
 	@Override
 	public void add(Form form) {
-		formdao.add(form);
+		formRepository.save(form);
 	}
 	
 }

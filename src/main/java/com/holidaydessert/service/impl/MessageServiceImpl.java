@@ -20,13 +20,13 @@ public class MessageServiceImpl implements MessageService {
 	@Override
 	public ApiReturnObject getMessageByEmp(Message message) {
 		List<Map<String, Object>> getMessage = messageDao.getMessageByEmp(message);
-		return new ApiReturnObject(200, "取得客服對會員對話紀錄", getMessage);
+		return ApiReturnObject.success("取得客服對會員對話紀錄", getMessage);
 	}
 
 	@Override
 	public ApiReturnObject getMessageByMem(Message message) {
 		List<Map<String, Object>> getMessage = messageDao.getMessageByMem(message);
-		return new ApiReturnObject(200, "取得會員對客服對話紀錄", getMessage);
+		return ApiReturnObject.success("取得會員對客服對話紀錄", getMessage);
 	}
 
 	@Override
