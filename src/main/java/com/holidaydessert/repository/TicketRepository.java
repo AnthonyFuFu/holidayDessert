@@ -1,12 +1,30 @@
 package com.holidaydessert.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.holidaydessert.model.Ticket;
 
 @Repository
 public interface TicketRepository extends JpaRepository<Ticket, Integer> {
+	
+
+    // Spring Data JPA 依 Entity 欄位名自動生成 SELECT 語句
+    // 對應原本 EntityManager 的 JPQL：WHERE t.ticketEvent = :ticketEvent
+    Ticket findByTicketEvent(String ticketEvent);
+
+    // 原子性扣庫存（搭配上一版 Layer4 異步 DB 寫入使用）
+    // AND ticketQuantity > 0：防止 DB 層再次超賣（雙重保險）
+    // 回傳 int：影響筆數，0 代表扣減失敗（已售罄）
+    @Modifying
+    @Transactional
+    @Query("UPDATE Ticket t SET t.ticketQuantity = t.ticketQuantity - 1 WHERE t.ticketEvent = :event AND t.ticketQuantity > 0")
+    int decrementTicketCount(@Param("event") String event);
+	
 	
 	// Spring Data JPA 自動產生 SELECT * FROM ticket WHERE ticket_event = ?
 	

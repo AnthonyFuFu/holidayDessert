@@ -22,12 +22,6 @@ public class TicketController {
     @Autowired
     private TicketRedisService ticketRedisService;
     
-    @PostMapping("/purchase")
-    public ResponseEntity<String> purchaseTicket(@RequestParam String event) {
-        String response = ticketRedisService.purchaseTicket(event);
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    
     @GetMapping("/eventCache")
     public ResponseEntity<?> saveTicketToRedisByEvent(@RequestParam String event) {
     	//用Get方法把資料放進快取 測試用API:http://localhost:8080/holidayDessert/api/tickets/eventCache?event=五月天演唱會

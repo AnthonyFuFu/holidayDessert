@@ -25,14 +25,12 @@ public class HighConcurrencyController {
     // POST /highConcurrency/listTicket/init?ticketCount=100
     // =============================================
     @PostMapping("/linkedQueueTicket/init")
-    public String initLinkedQueueTicket(
-            @RequestParam(defaultValue = "10000") int ticketCount) {
+    public String initLinkedQueueTicket(int ticketCount) {
         return highConcurrencyService.initLinkedQueueTickets(ticketCount);
     }
 
     @PostMapping("/listTicket/init")
-    public String initListTicket(
-            @RequestParam(defaultValue = "100") int ticketCount) {
+    public String initListTicket(int ticketCount) {
         return highConcurrencyService.initListTickets(ticketCount);
     }
 

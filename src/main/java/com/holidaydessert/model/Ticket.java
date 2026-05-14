@@ -26,6 +26,9 @@ public class Ticket implements Serializable {
     @Column(name = "TICKET_NAME", nullable = false, unique = true)
     private String ticketName;
 
+    @Column(name = "TICKET_EVENT", nullable = false, unique = true)
+    private String ticketEvent;
+
     @Column(name = "TICKET_START", nullable = false)
     private String ticketStart;
 
