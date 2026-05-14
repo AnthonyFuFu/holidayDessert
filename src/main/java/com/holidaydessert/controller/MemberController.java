@@ -28,7 +28,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.view.RedirectView;
 
-import com.holidaydessert.model.MainOrder;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.MainOrderService;
@@ -175,9 +174,7 @@ public class MemberController {
 			user = memberService.getCheckMemberEmail(memberSession);
 			model.addAttribute("member", user);
 			
-			MainOrder order = new MainOrder();
-			order.setMemId(user.getMemId());
-			List<Map<String, Object>> orderChildList = mainOrderService.getMemOrderList(order);
+			List<Map<String, Object>> orderChildList = mainOrderService.getMemOrderList(user.getMemId());
 			model.addAttribute("orderChildList", orderChildList);
 			
 		} catch (Exception e) {

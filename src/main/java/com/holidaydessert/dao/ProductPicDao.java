@@ -14,7 +14,4 @@ public interface ProductPicDao {
 	public void delete(ProductPic productPic);
 	public ProductPic getData(ProductPic productPic);
 	
-	// front
-	public List<Map<String, Object>> frontRandList(ProductPic productPic);
-	
 }

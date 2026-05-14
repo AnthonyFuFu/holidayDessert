@@ -15,7 +15,4 @@ public interface PromotionDao {
 	public void takeDown(Promotion promotion);
 	public List<Map<String, Object>> getList();
 	
-	// front
-	public List<Map<String, Object>> nearestStartList(Promotion promotion);
-	public Promotion getData(Promotion promotion);
 }

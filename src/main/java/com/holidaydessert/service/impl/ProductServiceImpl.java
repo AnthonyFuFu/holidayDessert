@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.holidaydessert.dao.ProductDao;
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.Product;
+import com.holidaydessert.repository.ProductRepository;
 import com.holidaydessert.service.ProductService;
 
 @Service
@@ -16,7 +17,10 @@ public class ProductServiceImpl implements ProductService {
 
 	@Autowired
 	private ProductDao productDao;
-
+	
+	@Autowired
+	private ProductRepository productRepository;
+	
 	@Override
 	public List<Map<String, Object>> list(Product product) {
 		return productDao.list(product);
@@ -72,38 +76,46 @@ public class ProductServiceImpl implements ProductService {
 		return productDao.getIssuePromotionCount(product);
 	}
 
+	// =============================================
+	// getMainProductList
+	// =============================================
 	@Override
 	public ApiReturnObject getMainProductList() {
-		
-		List<Map<String, Object>> newArrivalList = productDao.getMainProductList();
-		
-		if(newArrivalList == null) {
-			return ApiReturnObject.success("查無主要產品清單", null);
-		}
-		
-		return ApiReturnObject.success("取得主要產品清單成功", newArrivalList);
-	}
-	
-	@Override
-	public ApiReturnObject getNewArrivalList() {
-		
-		List<Map<String, Object>> newArrivalList = productDao.getNewArrivalList();
-		
-		if(newArrivalList == null) {
-			return ApiReturnObject.success("查無新品上市清單", null);
-		}
-		
-		return ApiReturnObject.success("取得新品上市清單成功", newArrivalList);
-	}
-	
-	@Override
-	public List<Map<String, Object>> frontTypeList(Product product) {
-		return productDao.frontTypeList(product);
+	    List<Map<String, Object>> list = productRepository.getMainProductList();
+	    if (list.isEmpty()) {
+	        return ApiReturnObject.success("查無主要產品清單", null);
+	    }
+	    return ApiReturnObject.success("取得主要產品清單成功", list);
 	}
 
+	// =============================================
+	// getNewArrivalList
+	// =============================================
+	@Override
+	public ApiReturnObject getNewArrivalList() {
+	    List<Map<String, Object>> list = productRepository.getNewArrivalList();
+	    if (list.isEmpty()) {
+	        return ApiReturnObject.success("查無新品上市清單", null);
+	    }
+	    return ApiReturnObject.success("取得新品上市清單成功", list);
+	}
+
+	// =============================================
+	// frontTypeList
+	// =============================================
+	@Override
+	public List<Map<String, Object>> frontTypeList(Product product) {
+	    List<Map<String, Object>> list = productRepository.frontTypeList(product.getPdcId());
+	    return list.isEmpty() ? null : list;
+	}
+
+	// =============================================
+	// frontRandTypeList
+	// =============================================
 	@Override
 	public List<Map<String, Object>> frontRandTypeList(Product product) {
-		return productDao.frontRandTypeList(product);
+	    List<Map<String, Object>> list = productRepository.frontRandTypeList(product.getPdcId());
+	    return list.isEmpty() ? null : list;
 	}
 
 }

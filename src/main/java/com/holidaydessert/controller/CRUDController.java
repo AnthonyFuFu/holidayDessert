@@ -33,7 +33,7 @@ public class CRUDController {
             } else if (name != null) {
                 users = memberRepository.findByMemName(name);
             } else if (email != null) {
-                users = memberRepository.findByMemEmail(email);
+                users = memberRepository.findByMemEmailContaining(email);
             } else {
                 users = memberRepository.findAll();
             }

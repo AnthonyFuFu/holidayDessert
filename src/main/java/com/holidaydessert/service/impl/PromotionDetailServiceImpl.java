@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import com.holidaydessert.dao.PromotionDetailDao;
 import com.holidaydessert.model.Promotion;
 import com.holidaydessert.model.PromotionDetail;
+import com.holidaydessert.repository.PromotionDetailRepository;
 import com.holidaydessert.service.PromotionDetailService;
 
 @Service
@@ -16,7 +17,10 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
 
 	@Autowired
 	private PromotionDetailDao promotionDetailDao;
-
+	
+	@Autowired
+	private PromotionDetailRepository promotionDetailRepository;
+	
 	@Override
 	public List<Map<String, Object>> list(PromotionDetail promotionDetail) {
 		return promotionDetailDao.list(promotionDetail);
@@ -57,9 +61,13 @@ public class PromotionDetailServiceImpl implements PromotionDetailService {
 		return promotionDetailDao.getData(promotionDetail);
 	}
 	
+	// =============================================
+	// frontList
+	// =============================================
 	@Override
 	public List<Map<String, Object>> frontList(PromotionDetail promotionDetail) {
-		return promotionDetailDao.frontList(promotionDetail);
+	    List<Map<String, Object>> list = promotionDetailRepository.frontList(promotionDetail.getPmId());
+	    return list.isEmpty() ? null : list;
 	}
 
 }

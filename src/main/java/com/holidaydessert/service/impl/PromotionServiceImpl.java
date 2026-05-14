@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.PromotionDao;
 import com.holidaydessert.model.Promotion;
+import com.holidaydessert.repository.PromotionRepository;
 import com.holidaydessert.service.PromotionService;
 
 @Service
@@ -15,7 +16,10 @@ public class PromotionServiceImpl implements PromotionService {
 
 	@Autowired
 	private PromotionDao promotionDao;
-
+	
+	@Autowired
+	private PromotionRepository promotionRepository;
+	
 	@Override
 	public List<Map<String, Object>> list(Promotion promotion) {
 		return promotionDao.list(promotion);
@@ -46,14 +50,21 @@ public class PromotionServiceImpl implements PromotionService {
 		return promotionDao.getList();
 	}
 
+	// =============================================
+	// nearestStartList
+	// =============================================
 	@Override
 	public List<Map<String, Object>> nearestStartList(Promotion promotion) {
-		return promotionDao.nearestStartList(promotion);
+	    List<Map<String, Object>> list = promotionRepository.nearestStartList();
+	    return list.isEmpty() ? null : list;
 	}
 	
+	// =============================================
+	// getData JPA 直接回傳 Promotion Entity
+	// =============================================
 	@Override
 	public Promotion getData(Promotion promotion) {
-		return promotionDao.getData(promotion);
+	    return promotionRepository.getData(promotion.getPmId()).orElse(null);
 	}
 	
 }

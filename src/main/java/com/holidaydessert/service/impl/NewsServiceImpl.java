@@ -4,10 +4,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.NewsDao;
 import com.holidaydessert.model.News;
+import com.holidaydessert.repository.NewsRepository;
 import com.holidaydessert.service.NewsService;
 
 @Service
@@ -15,6 +18,9 @@ public class NewsServiceImpl implements NewsService {
 
 	@Autowired
 	private NewsDao newsDao;
+	
+	@Autowired
+	private NewsRepository newsRepository;
 	
 	@Override
 	public List<Map<String, Object>> list(News news) {
@@ -56,14 +62,38 @@ public class NewsServiceImpl implements NewsService {
 		return newsDao.getListForBanner();
 	}
 
+	// =============================================
+	// frontList
+	// =============================================
 	@Override
 	public List<Map<String, Object>> frontList(News news) {
-		return newsDao.frontList(news);
+	    List<Map<String, Object>> list;
+
+	    if (news.getStart() != null && !"".equals(news.getStart())) {
+	        // 有分頁：用 Pageable 處理 LIMIT start, length
+	        // LIMIT start, length → PageRequest.of(page, size)
+	        // start = 第幾筆開始（offset），length = 每頁幾筆（size）
+	        int start  = Integer.parseInt(news.getStart());
+	        int length = Integer.parseInt(news.getLength());
+	        int page   = start / length; // 換算成第幾頁
+
+	        Pageable pageable = PageRequest.of(page, length);
+	        list = newsRepository.frontList(pageable);
+	    } else {
+	        // 無分頁：查全部
+	        list = newsRepository.frontListAll();
+	    }
+
+	    return list.isEmpty() ? null : list;
 	}
 
+	// =============================================
+	// frontRandList
+	// =============================================
 	@Override
 	public List<Map<String, Object>> frontRandList(News news) {
-		return newsDao.frontRandList(news);
+	    List<Map<String, Object>> list = newsRepository.frontRandList();
+	    return list.isEmpty() ? null : list;
 	}
 
 }

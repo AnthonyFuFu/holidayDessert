@@ -20,6 +20,6 @@ public interface MemberCouponService {
 	public void receiveOneDayCoupon(Coupon coupon, Member member);
 	public void receiveOneWeekCoupon(Coupon coupon, Member member);
 	public void receiveOneMonthCoupon(Coupon coupon, Member member);
-	public List<Map<String, Object>> listMemberCoupon(MemberCoupon memberCoupon);
+	public List<Map<String, Object>> listMemberCoupon(String memId);
 	
 }

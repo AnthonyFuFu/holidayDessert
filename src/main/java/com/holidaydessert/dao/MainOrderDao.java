@@ -12,8 +12,4 @@ public interface MainOrderDao {
 	public int getCount(MainOrder mainOrder);
 	public void update(MainOrder mainOrder);
 	
-	// front
-	public void add(MainOrder mainOrder);
-	public List<Map<String, Object>> getMemOrderList(MainOrder mainOrder);
-	
 }

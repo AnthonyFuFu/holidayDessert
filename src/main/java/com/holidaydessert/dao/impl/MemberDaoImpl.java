@@ -4,15 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.holidaydessert.dao.MemberDao;
 import com.holidaydessert.model.Member;
@@ -22,10 +16,7 @@ public class MemberDaoImpl implements MemberDao {
 
 	@Autowired
 	private JdbcTemplate jdbcTemplate;
-
-    @PersistenceContext
-    private EntityManager entityManager;
-    
+	
 	@Override
 	public List<Map<String, Object>> list(Member member) {
 
@@ -215,127 +206,6 @@ public class MemberDaoImpl implements MemberDao {
 			}
 		}
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
-	}
-	
-	@Override
-    @Transactional
-	public void register(Member member) {
-        entityManager.persist(member);
-	}
-	
-	@Override
-    @Transactional
-	public void edit(Member member) {
-		
-	    Member managedMember = entityManager.find(Member.class, member.getMemId());
-	    
-	    if (managedMember != null) {
-	        managedMember.setMemName(member.getMemName());
-	        managedMember.setMemAccount(member.getMemAccount());
-	        managedMember.setMemPassword(member.getMemPassword());
-	        managedMember.setMemGender(member.getMemGender());
-	        managedMember.setMemPhone(member.getMemPhone());
-	        managedMember.setMemEmail(member.getMemEmail());
-	        managedMember.setMemAddress(member.getMemAddress());
-	        managedMember.setMemBirthday(member.getMemBirthday());
-	        managedMember.setMemPicture(member.getMemPicture());
-	        managedMember.setMemImage(member.getMemImage());
-	    }
-	    
-	}
-
-    @Override
-    @Transactional
-	public void verificationEmail(Member member) {
-    	
-        Member managedMember = entityManager.find(Member.class, member.getMemId());
-
-        if (managedMember != null) {
-            managedMember.setMemVerificationStatus("1");
-            managedMember.setMemStatus("1");
-        }
-        
-	}
-
-	@Override
-	public Member getCheckMemberEmail(Member member) {
-
-        TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memEmail = :memEmail", Member.class);
-        query.setParameter("memEmail", member.getMemEmail());
-
-        List<Member> resultList = query.getResultList();
-        try {
-        	if (!resultList.isEmpty()) {
-        	    return resultList.get(0);
-        	} else {
-        	    return null;
-        	}
-        } catch (NoResultException e) {
-            return null;
-        }
-        
-	}
-	
-	@Override
-    @Transactional
-	public void updateVerification(Member member) {
-
-        Member managedMember = entityManager.find(Member.class, member.getMemId());
-
-        if (managedMember != null) {
-            managedMember.setMemVerificationCode(member.getMemVerificationCode());
-        }
-        
-	}
-
-	@Override
-    @Transactional
-	public void updatePassword(Member member) {
-
-        Member managedMember = entityManager.find(Member.class, member.getMemId());
-        if (managedMember != null) {
-            managedMember.setMemPassword(member.getMemPassword());
-        }
-        
-	}
-
-	@Override
-	public Member login(Member member) {
-		
-        TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memEmail = :memEmail AND m.memPassword = :memPassword", Member.class);
-        query.setParameter("memEmail", member.getMemEmail());
-        query.setParameter("memPassword", member.getMemPassword());
-        
-        List<Member> resultList = query.getResultList();
-        try {
-        	if (!resultList.isEmpty()) {
-        	    return resultList.get(0);
-        	} else {
-        	    return null;
-        	}
-        } catch (NoResultException e) {
-            return null;
-        }
-		
-	}
-	
-	@Override
-	public Member getDataByGoogleUid(String googleUid) {
-
-        TypedQuery<Member> query = entityManager.createQuery("SELECT m FROM Member m WHERE m.memGoogleUid = :memGoogleUid", Member.class);
-        query.setParameter("memGoogleUid", googleUid);
-
-        List<Member> resultList = query.getResultList();
-        try {
-        	if (!resultList.isEmpty()) {
-        	    return resultList.get(0);
-        	} else {
-        	    return null;
-        	}
-        } catch (NoResultException e) {
-            return null;
-        }
-		
 	}
 	
 }

@@ -20,10 +20,4 @@ public interface ProductDao {
 	public List<Map<String, Object>> issueOneProductList();
 	public int getIssuePromotionCount(Product product);
 	
-	// front
-	public List<Map<String, Object>> getMainProductList();
-	public List<Map<String, Object>> getNewArrivalList();
-	public List<Map<String, Object>> frontTypeList(Product product);
-	public List<Map<String, Object>> frontRandTypeList(Product product);
-	
 }

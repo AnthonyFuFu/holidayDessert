@@ -17,8 +17,4 @@ public interface NewsDao {
 	public List<Map<String, Object>> getList();
 	public List<Map<String, Object>> getListForBanner();
 	
-	// front
-	public List<Map<String, Object>> frontList(News news);
-	public List<Map<String, Object>> frontRandList(News news);
-	
 }

@@ -13,14 +13,4 @@ public interface MemberDao {
 	public List<Map<String, Object>> issueCouponList(Member member);
 	public int getIssueCouponCount(Member member);
 	
-	// front
-	public void register(Member member);
-	public void edit(Member member);
-	public void verificationEmail(Member member);
-	public Member getCheckMemberEmail(Member member);
-	public void updateVerification(Member member);
-	public void updatePassword(Member member);
-	public Member login(Member member);
-	public Member getDataByGoogleUid(String googleUid);
-	
 }

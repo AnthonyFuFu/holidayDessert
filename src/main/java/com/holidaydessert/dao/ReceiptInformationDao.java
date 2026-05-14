@@ -11,9 +11,4 @@ public interface ReceiptInformationDao {
 	public List<Map<String, Object>> list(ReceiptInformation receiptInformation);
 	public int getCount(ReceiptInformation receiptInformation);
 	
-	// front
-	public List<Map<String, Object>> frontList(ReceiptInformation receiptInformation);
-	public void add(ReceiptInformation receiptInformation);
-	public void edit(ReceiptInformation receiptInformation);
-	
 }

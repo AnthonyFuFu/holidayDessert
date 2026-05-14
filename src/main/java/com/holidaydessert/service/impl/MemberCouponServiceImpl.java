@@ -5,11 +5,13 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.holidaydessert.dao.MemberCouponDao;
 import com.holidaydessert.model.Coupon;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.model.MemberCoupon;
+import com.holidaydessert.repository.MemberCouponRepository;
 import com.holidaydessert.service.MemberCouponService;
 
 @Service
@@ -17,7 +19,10 @@ public class MemberCouponServiceImpl implements MemberCouponService {
 
 	@Autowired
 	private MemberCouponDao memberCouponDao;
-	
+
+	@Autowired
+	private MemberCouponRepository memberCouponRepository;
+
 	@Override
 	public List<Map<String, Object>> list(MemberCoupon memberCoupon) {
 		return memberCouponDao.list(memberCoupon);
@@ -37,30 +42,35 @@ public class MemberCouponServiceImpl implements MemberCouponService {
 	public void batchAddOneWeekCoupon(Coupon coupon, String[] member) {
 		memberCouponDao.batchAddOneWeekCoupon(coupon, member);
 	}
-	
+
 	@Override
+	@Transactional
 	public void useCoupon(MemberCoupon memberCoupon) {
-		memberCouponDao.useCoupon(memberCoupon);
+		memberCouponRepository.useCoupon(memberCoupon.getMemCpId());
 	}
 
 	@Override
+	@Transactional
 	public void receiveOneDayCoupon(Coupon coupon, Member member) {
-		memberCouponDao.receiveOneDayCoupon(coupon, member);
+		memberCouponRepository.receiveOneDayCoupon(member.getMemId(), coupon.getCpId());
 	}
 
 	@Override
+	@Transactional
 	public void receiveOneWeekCoupon(Coupon coupon, Member member) {
-		memberCouponDao.receiveOneWeekCoupon(coupon, member);
-	}
-	
-	@Override
-	public void receiveOneMonthCoupon(Coupon coupon, Member member) {
-		memberCouponDao.receiveOneMonthCoupon(coupon, member);
-	}
-	
-	@Override
-	public List<Map<String, Object>> listMemberCoupon(MemberCoupon memberCoupon) {
-		return memberCouponDao.listMemberCoupon(memberCoupon);
+		memberCouponRepository.receiveOneWeekCoupon(member.getMemId(), coupon.getCpId());
 	}
 
+	@Override
+	@Transactional
+	public void receiveOneMonthCoupon(Coupon coupon, Member member) {
+		memberCouponRepository.receiveOneMonthCoupon(member.getMemId(), coupon.getCpId());
+	}
+
+	@Override
+	public List<Map<String, Object>> listMemberCoupon(String memId) {
+		List<Map<String, Object>> list = memberCouponRepository.listMemberCoupon(memId);
+		return list.isEmpty() ? null : list;
+	}
+	
 }

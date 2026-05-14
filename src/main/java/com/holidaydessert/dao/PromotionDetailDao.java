@@ -18,7 +18,4 @@ public interface PromotionDetailDao {
 	public void update(PromotionDetail promotionDetail);
 	public PromotionDetail getData(PromotionDetail promotionDetail);
 	
-	// front
-	public List<Map<String, Object>> frontList(PromotionDetail promotionDetail);
-	
 }

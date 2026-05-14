@@ -291,33 +291,4 @@ public class PromotionDetailDaoImpl implements PromotionDetailDao {
 		return item == null ? null : item;
 	}
 	
-	@Override
-	public List<Map<String, Object>> frontList(PromotionDetail promotionDetail) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT PM_NAME,PM_DESCRIPTION,PM_DISCOUNT,PM_STATUS, "
-				   + " DATE_FORMAT(PM_START, '%Y-%m-%d %H:%i:%s') PM_START, "
-				   + " DATE_FORMAT(PM_END, '%Y-%m-%d %H:%i:%s') PM_END, "
-				   + " PMD_ID, pmd.PD_ID, pmd.PM_ID, PMD_PD_DISCOUNT_PRICE, "
-				   + " DATE_FORMAT(PMD_START, '%Y-%m-%d %H:%i:%s') PMD_START, "
-				   + " DATE_FORMAT(PMD_END, '%Y-%m-%d %H:%i:%s') PMD_END, "
-				   + " PD_NAME,PD_PRICE,PD_DESCRIPTION,PD_STATUS, PD_IS_DEL "
-				   + " FROM holiday_dessert.promotion_detail pmd "
-				   + " LEFT JOIN product p ON pmd.PD_ID = p.PD_ID "
-				   + " LEFT JOIN promotion pm ON pmd.PM_ID = pm.PM_ID "
-				   + " WHERE pmd.PM_ID = ? "
-				   + " AND PD_IS_DEL = 0 ";
-
-		args.add(promotionDetail.getPmId());
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		if (list != null && list.size() > 0) {
-			return list;
-		} else {
-			return null;
-		}
-		
-	}
-
 }

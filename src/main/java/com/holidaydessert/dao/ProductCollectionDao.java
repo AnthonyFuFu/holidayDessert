@@ -16,8 +16,4 @@ public interface ProductCollectionDao {
 	public ProductCollection getData(ProductCollection productCollection);
 	public List<Map<String, Object>> getList();
 	
-	// front
-	public List<Map<String, Object>> getAllPdcList();
-	public List<Map<String, Object>> getPdByPdcName(String pdcName);
-	
 }

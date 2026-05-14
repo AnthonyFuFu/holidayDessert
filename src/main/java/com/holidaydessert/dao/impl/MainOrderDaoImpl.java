@@ -169,54 +169,5 @@ public class MainOrderDaoImpl implements MainOrderDao {
 		jdbcTemplate.update(sql, args.toArray());
 		
 	}
-
-	@Override
-	public void add(MainOrder mainOrder) {
-
-		String sql = " INSERT INTO holiday_dessert.main_order "
-				   + " (MEM_ID, MEM_CP_ID, ORD_SUBTOTAL, ORD_TOTAL, ORD_STATUS, ORD_CREATE, ORD_RECIPIENT, "
-				   + " ORD_RECIPIENT_PHONE, ORD_PAYMENT, ORD_DELIVERY, ORD_ADDRESS, ORD_NOTE, ORD_DELIVERY_FEE) "
-				   + " VALUES(?, ?, ?, ?, ?, NOW(), ?, ?, ?, ?, ?, ?, ?)";
-		
-		jdbcTemplate.update(sql, new Object[] { mainOrder.getMemId(), mainOrder.getMemCpId(),
-				mainOrder.getOrdSubtotal(),mainOrder.getOrdTotal(), mainOrder.getOrdStatus(),
-				mainOrder.getOrdRecipient(), mainOrder.getOrdRecipientPhone(),
-				mainOrder.getOrdPayment(), mainOrder.getOrdDelivery(), mainOrder.getOrdAddress(),
-				mainOrder.getOrdNote(), mainOrder.getOrdDeliveryFee() });
-		
-	}
-
-	@Override
-	public List<Map<String, Object>> getMemOrderList(MainOrder mainOrder) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT MEM_ACCOUNT, "
-				   + " CASE MEM_GENDER "
-				   + " WHEN 'm' THEN '男' "
-				   + " WHEN 'f' THEN '女' "
-				   + " END AS MEM_GENDER, "
-				   + " MEM_EMAIL, mo.*, "
-				   + " CASE WHEN mo.MEM_CP_ID IS NULL THEN '未使用' "
-				   + " ELSE (SELECT CP_NAME "
-				   + " FROM member_coupon mc "
-				   + " LEFT JOIN coupon c ON c.CP_ID = mc.CP_ID "
-				   + " WHERE mc.MEM_CP_ID = mo.MEM_CP_ID "
-				   + " LIMIT 1) "
-				   + " END AS COUPON_USED "
-				   + " FROM holiday_dessert.main_order mo"
-				   + " LEFT JOIN member m ON m.MEM_ID = mo.MEM_ID "
-				   + " WHERE MEM_ID = ? ";
-		
-		args.add(mainOrder.getMemId());
-		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		if (list != null && list.size() > 0) {
-			return list;
-		} else {
-			return null;
-		}
-	}
-
+	
 }

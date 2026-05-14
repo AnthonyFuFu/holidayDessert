@@ -91,39 +91,5 @@ public class OrderDetailDaoImpl implements OrderDetailDao {
 		}
 		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
-
-	@Override
-	public List<Map<String, Object>> frontOrderDetails(OrderDetail orderDetail) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT od.*, PD_NAME "
-				   + " FROM holiday_dessert.order_detail od "
-				   + " LEFT JOIN main_order mo ON od.ORD_ID = mo.ORD_ID "
-				   + " LEFT JOIN product p ON p.PD_ID = od.PD_ID "
-				   + " WHERE od.ORD_ID = ? ";
-		
-		args.add(orderDetail.getOrdId());
-
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-
-		if (list != null && list.size() > 0) {
-			return list;
-		} else {
-			return null;
-		}
-
-	}
-
-	@Override
-	public void add(OrderDetail orderDetail) {
-
-		String sql = " INSERT INTO holiday_dessert.order_detail "
-				   + " (ORD_ID, PD_ID, ORDD_NUMBER, ORDD_PRICE, ORDD_DISCOUNT_PRICE) "
-				   + " VALUES(?, ?, ?, ?, ?) ";
-		
-		jdbcTemplate.update(sql, new Object[] {orderDetail.getOrdId(), orderDetail.getPdId(), orderDetail.getOrddNumber(), orderDetail.getOrddPrice(), orderDetail.getOrddDiscountPrice() });
-		
-	}
-
+	
 }
