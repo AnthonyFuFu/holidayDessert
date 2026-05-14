@@ -15,32 +15,32 @@ public class TicketSeckillController {
 
     /**
      * 初始化票池
-     * POST /seckill/init?event=五月天演唱會&count=1000
+     * POST /seckill/init?ticketName=五月天演唱會&count=1000
      */
-    @PostMapping("/init")
+    @GetMapping("/init")
     public String init(
-            @RequestParam String event,
+            @RequestParam String ticketName,
             @RequestParam(defaultValue = "1000") int count) {
-        return ticketSeckillService.initTickets(event, count);
+        return ticketSeckillService.initTickets(ticketName, count);
     }
 
     /**
      * 搶票
-     * POST /seckill/purchase?event=五月天演唱會&userId=user123
+     * POST /seckill/purchase?ticketName=五月天演唱會&userId=1
      */
-    @PostMapping("/purchase")
+    @GetMapping("/purchase")
     public String purchase(
-            @RequestParam String event,
-            @RequestParam String userId) {
-        return ticketSeckillService.purchaseTicket(event, userId);
+            @RequestParam String ticketName,
+            @RequestParam Integer userId) {
+        return ticketSeckillService.purchaseTicket(ticketName, userId);
     }
 
     /**
      * 查詢剩餘票數
-     * GET /seckill/remain?event=五月天演唱會
+     * GET /seckill/remain?ticketName=五月天演唱會
      */
     @GetMapping("/remain")
-    public String remain(@RequestParam String event) {
-        return "剩餘票數：" + ticketSeckillService.remainCount(event);
+    public String remain(@RequestParam String ticketName) {
+        return "剩餘票數：" + ticketSeckillService.remainCount(ticketName);
     }
 }

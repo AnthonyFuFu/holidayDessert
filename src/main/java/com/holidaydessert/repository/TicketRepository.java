@@ -14,22 +14,21 @@ public interface TicketRepository extends JpaRepository<Ticket, Integer> {
 	
 
     // Spring Data JPA 依 Entity 欄位名自動生成 SELECT 語句
-    // 對應原本 EntityManager 的 JPQL：WHERE t.ticketEvent = :ticketEvent
-    Ticket findByTicketEvent(String ticketEvent);
+    // 對應原本 EntityManager 的 JPQL：WHERE t.ticketName = :ticketName
+    Ticket findByTicketName(String ticketName);
 
     // 原子性扣庫存（搭配上一版 Layer4 異步 DB 寫入使用）
     // AND ticketQuantity > 0：防止 DB 層再次超賣（雙重保險）
     // 回傳 int：影響筆數，0 代表扣減失敗（已售罄）
     @Modifying
     @Transactional
-    @Query("UPDATE Ticket t SET t.ticketQuantity = t.ticketQuantity - 1 WHERE t.ticketEvent = :event AND t.ticketQuantity > 0")
-    int decrementTicketCount(@Param("event") String event);
+    @Query("UPDATE Ticket t SET t.ticketQuantity = t.ticketQuantity - 1 WHERE t.ticketName = :ticketName AND t.ticketQuantity > 0")
+    int decrementTicketCount(@Param("ticketName") String ticketName);
 	
-	
-	// Spring Data JPA 自動產生 SELECT * FROM ticket WHERE ticket_event = ?
+	// Spring Data JPA 自動產生 SELECT * FROM ticket WHERE ticket_name = ?
 	
 //	  JPA範例
-//    Ticket findByTicketEvent(String ticketEvent);
+//    Ticket findByTicketName(String ticketName);
     
 //    List<Ticket> findByTicketStatus(String status);        // WHERE ticket_status = ?
 //    List<Ticket> findByTicketEventAndTicketStatus(...);    // WHERE ... AND ...

@@ -32,15 +32,15 @@ public class TicketRedisServiceImpl implements TicketRedisService {
      * ✅ 修正：改用 ticketRepository，Key 與 SeckillService 統一
      * 管理用途：手動將指定活動的票券預熱進 Redis
      */
-    public void saveTicketToRedisByEvent(String event) {
-        Ticket ticket = ticketRepository.findByTicketEvent(event); // ✅ 改這裡
+    public void saveToRedisByTicketName(String ticketName) {
+        Ticket ticket = ticketRepository.findByTicketName(ticketName); // ✅ 改這裡
         if (ticket != null) {
-            // ✅ 使用統一 Key：ticket:{event}:info
-            String infoKey = String.format(TICKET_INFO_KEY, event);
+            // ✅ 使用統一 Key：ticket:{ticketName}:info
+            String infoKey = String.format(TICKET_INFO_KEY, ticketName);
             redisTemplate.opsForValue().set(infoKey, ticket);
-            log.info("[Cache] ✅ 票券預熱完成 event={}", event);
+            log.info("[Cache] ✅ 票券預熱完成 ticketName={}", ticketName);
         } else {
-            throw new RuntimeException("找不到該活動的票券：" + event);
+            throw new RuntimeException("找不到該活動的票券：" + ticketName);
         }
     }
 
