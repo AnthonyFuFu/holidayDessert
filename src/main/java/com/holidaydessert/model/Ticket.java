@@ -1,6 +1,7 @@
 package com.holidaydessert.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -27,13 +28,13 @@ public class Ticket implements Serializable {
     private String ticketName;
 
     @Column(name = "TICKET_START", nullable = false)
-    private String ticketStart;
+    private LocalDateTime ticketStart;
 
     @Column(name = "TICKET_SALE_START", nullable = false)
-    private String ticketSaleStart;
+    private LocalDateTime ticketSaleStart;
 
     @Column(name = "TICKET_SALE_END", nullable = false)
-    private String ticketSaleEnd;
+    private LocalDateTime ticketSaleEnd;
 
     @Column(name = "TICKET_QUANTITY", nullable = false)
     private Integer ticketQuantity;
@@ -42,9 +43,9 @@ public class Ticket implements Serializable {
     private Integer ticketStatus;
 
     @Column(name = "TICKET_CREATE_TIME", updatable = false, insertable = false)
-    private String ticketCreateTime; // 建立時間（自動生成）
+    private LocalDateTime ticketCreateTime; // 建立時間（自動生成）
 
     @Column(name = "TICKET_UPDATE_TIME", insertable = false)
-    private String ticketUpdateTime; // 更新時間（自動更新）
+    private LocalDateTime ticketUpdateTime; // 更新時間（自動更新）
     
 }

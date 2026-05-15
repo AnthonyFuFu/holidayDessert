@@ -1,4 +1,4 @@
-package com.holidaydessert.config;
+package com.holidaydessert.kafka;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,6 @@ import org.springframework.kafka.support.serializer.ErrorHandlingDeserializer;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
 import org.springframework.util.backoff.FixedBackOff;
 
-import com.holidaydessert.controller.ProducerController;
 import com.holidaydessert.model.Member;
 
 @Configuration

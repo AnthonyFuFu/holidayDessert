@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.holidaydessert.model.Member;
 
 @Repository
-public interface MemberRepository extends JpaRepository<Member, String> {
+public interface MemberRepository extends JpaRepository<Member, Integer> {
 	
 	// CRUDController Use
 	List<Member> findByMemName(String name);
@@ -36,7 +36,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                    "    MEM_PICTURE = :memPicture, MEM_IMAGE = :memImage " +
                    "WHERE MEM_ID = :memId",
            nativeQuery = true)
-    void edit(@Param("memId")      String memId,
+    void edit(@Param("memId")      Integer memId,
               @Param("memName")    String memName,
               @Param("memAccount") String memAccount,
               @Param("memPassword")String memPassword,
@@ -57,7 +57,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                    "SET MEM_VERIFICATION_STATUS = '1', MEM_STATUS = '1' " +
                    "WHERE MEM_ID = :memId",
            nativeQuery = true)
-    void verificationEmail(@Param("memId") String memId);
+    void verificationEmail(@Param("memId") Integer memId);
 
     // =============================================
     // getCheckMemberEmail：依 Email 查詢會員
@@ -74,7 +74,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                    "SET MEM_VERIFICATION_CODE = :memVerificationCode " +
                    "WHERE MEM_ID = :memId",
            nativeQuery = true)
-    void updateVerification(@Param("memId")                String memId,
+    void updateVerification(@Param("memId")                Integer memId,
                              @Param("memVerificationCode") String memVerificationCode);
 
     // =============================================
@@ -86,7 +86,7 @@ public interface MemberRepository extends JpaRepository<Member, String> {
                    "SET MEM_PASSWORD = :memPassword " +
                    "WHERE MEM_ID = :memId",
            nativeQuery = true)
-    void updatePassword(@Param("memId")       String memId,
+    void updatePassword(@Param("memId")       Integer memId,
                          @Param("memPassword") String memPassword);
 
     // =============================================

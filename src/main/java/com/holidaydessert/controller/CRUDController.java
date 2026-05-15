@@ -58,7 +58,7 @@ public class CRUDController {
     // GET 根據ID獲取用戶
     @GetMapping("/{id}")
     @ApiOperation(value = "Get user by ID")
-    public ResponseEntity<Member> getUserById(@PathVariable String id) {
+    public ResponseEntity<Member> getUserById(@PathVariable Integer id) {
         return memberRepository.findById(id)
                 .map(user -> ResponseEntity.ok().body(user))
                 .orElse(ResponseEntity.notFound().build());
@@ -67,7 +67,7 @@ public class CRUDController {
     // PUT 更新用戶
     @PutMapping("/{id}")
     @ApiOperation(value = "Update user by ID")
-    public ResponseEntity<Member> updateUser(@PathVariable String id, @RequestBody Member userDetails) {
+    public ResponseEntity<Member> updateUser(@PathVariable Integer id, @RequestBody Member userDetails) {
         return memberRepository.findById(id)
                 .map(user -> {
                     user.setMemName(userDetails.getMemName());
@@ -81,7 +81,7 @@ public class CRUDController {
     // DELETE 刪除用戶
     @DeleteMapping("/{id}")
     @ApiOperation(value = "Delete user by ID")
-    public ResponseEntity<?> deleteUser(@PathVariable String id) {
+    public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         return memberRepository.findById(id)
                 .map(user -> {
                 	memberRepository.delete(user);

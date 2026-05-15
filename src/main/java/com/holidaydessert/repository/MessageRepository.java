@@ -24,7 +24,7 @@ public interface MessageRepository extends JpaRepository<Message, String> {
                    "LEFT JOIN employee e ON e.EMP_ID = msg.EMP_ID " +
                    "WHERE m.MEM_ID = :memId",
            nativeQuery = true)
-    List<Map<String, Object>> getMessageByMem(@Param("memId") String memId);
+    List<Map<String, Object>> getMessageByMem(@Param("memId") Integer memId);
 
     // =============================================
     // saveMessage → save() 內建，不需要額外方法

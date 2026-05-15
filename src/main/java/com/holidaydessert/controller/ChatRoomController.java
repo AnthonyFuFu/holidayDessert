@@ -38,7 +38,7 @@ public class ChatRoomController {
 	public ResponseEntity<?> getChatRoom(
 			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
     	
-    	String memId = member.getMemId();
+    	Integer memId = member.getMemId();
 		ApiReturnObject apiReturnObject = chatRoomService.getChatRoom(memId);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 	}

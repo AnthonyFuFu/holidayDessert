@@ -1,9 +1,11 @@
 package com.holidaydessert.model;
 
 import java.io.Serializable;
+import java.time.LocalDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,11 +27,11 @@ public class TicketOrder implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer ticketOrdId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEM_ID", nullable = false)
     private Member member;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "TYPE_ID", nullable = false)
     private TicketType ticketType;
 
@@ -40,5 +42,14 @@ public class TicketOrder implements Serializable {
     private Integer ticketOrdStatus;
 
     @Column(name = "TICKET_ORD_TIME", updatable = false, insertable = false)
-    private String ticketOrdTime;
+    private LocalDateTime ticketOrdTime;
+    
+    @Column(name = "TICKET_ORD_AMOUNT", nullable = false)
+    private Integer ticketOrdAmount;         // 實際付款金額快照
+
+    @Column(name = "TICKET_ORD_EXPIRE")
+    private LocalDateTime ticketOrdExpire;   // 付款截止時間
+
+    @Column(name = "TICKET_ORD_PAY_TIME")
+    private LocalDateTime ticketOrdPayTime;  // 付款時間
 }

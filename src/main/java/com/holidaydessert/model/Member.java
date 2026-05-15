@@ -30,7 +30,7 @@ public class Member extends Base {
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "MEM_ID")
-	private String memId;              // 會員ID
+	private Integer memId;              // 會員ID
 	
 	@Column(name = "MEM_NAME")
 	private String memName;            // 姓名

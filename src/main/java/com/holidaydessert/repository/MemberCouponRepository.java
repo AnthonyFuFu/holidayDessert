@@ -37,7 +37,7 @@ public interface MemberCouponRepository extends JpaRepository<MemberCoupon, Stri
                    "        CONCAT(CURDATE(), ' 00:00:00'), " +
                    "        CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 DAY), ' 23:59:59'), 1)",
            nativeQuery = true)
-    void receiveOneDayCoupon(@Param("memId") String memId,
+    void receiveOneDayCoupon(@Param("memId") Integer memId,
                               @Param("cpId") String cpId);
 
     // =============================================
@@ -51,7 +51,7 @@ public interface MemberCouponRepository extends JpaRepository<MemberCoupon, Stri
                    "        CONCAT(CURDATE(), ' 00:00:00'), " +
                    "        CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 WEEK), ' 23:59:59'), 1)",
            nativeQuery = true)
-    void receiveOneWeekCoupon(@Param("memId") String memId,
+    void receiveOneWeekCoupon(@Param("memId") Integer memId,
                                @Param("cpId") String cpId);
 
     // =============================================
@@ -65,7 +65,7 @@ public interface MemberCouponRepository extends JpaRepository<MemberCoupon, Stri
                    "        CONCAT(CURDATE(), ' 00:00:00'), " +
                    "        CONCAT(DATE_ADD(CURDATE(), INTERVAL 1 MONTH), ' 23:59:59'), 1)",
            nativeQuery = true)
-    void receiveOneMonthCoupon(@Param("memId") String memId,
+    void receiveOneMonthCoupon(@Param("memId") Integer memId,
                                 @Param("cpId") String cpId);
 
     // =============================================

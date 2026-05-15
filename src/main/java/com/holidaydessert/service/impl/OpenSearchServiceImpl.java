@@ -357,7 +357,7 @@ public class OpenSearchServiceImpl implements OpenSearchService {
             Member member = new Member();
             
             // 根據 Member 類的屬性設置值
-            member.setMemId((String) map.get(MEM_ID));
+            member.setMemId((Integer) map.get(MEM_ID));
             member.setMemName((String) map.get(MEM_NAME));
             member.setMemAccount((String) map.get(MEM_ACCOUNT));
             member.setMemPassword((String) map.get(MEM_PASSWORD));

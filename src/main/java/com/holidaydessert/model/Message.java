@@ -34,7 +34,7 @@ public class Message {
 	private String empId;              // 管理員ID
     
     @Column(name = "MEM_ID")
-	private String memId;              // 會員ID
+	private Integer memId;             // 會員ID
     
     @Column(name = "ROOM_ID")
 	private String roomId;			   // 聊天室ID

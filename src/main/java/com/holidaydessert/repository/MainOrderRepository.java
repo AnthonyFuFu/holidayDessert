@@ -37,6 +37,6 @@ public interface MainOrderRepository extends JpaRepository<MainOrder, String> {
                    " LEFT JOIN member m ON m.MEM_ID = mo.MEM_ID " +
                    " WHERE mo.MEM_ID = :memId",
            nativeQuery = true)
-    List<Map<String, Object>> getMemOrderList(@Param("memId") String memId);
+    List<Map<String, Object>> getMemOrderList(@Param("memId") Integer memId);
     
 }

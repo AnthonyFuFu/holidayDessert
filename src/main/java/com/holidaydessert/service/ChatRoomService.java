@@ -11,6 +11,6 @@ public interface ChatRoomService {
 	public List<Map<String, Object>> getAllChatRoom();
 
 	// front
-	public ApiReturnObject getChatRoom(String memId);
-	public ApiReturnObject getServiceStaff(String memId);
+	public ApiReturnObject getChatRoom(Integer memId);
+	public ApiReturnObject getServiceStaff(Integer memId);
 }

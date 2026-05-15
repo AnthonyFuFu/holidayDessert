@@ -1,4 +1,4 @@
-package com.holidaydessert.config;
+package com.holidaydessert.kafka;
 
 import java.util.HashMap;
 import java.util.Map;

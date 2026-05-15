@@ -43,7 +43,7 @@ public class MainOrderServiceImpl implements MainOrderService {
 	}
 
 	@Override
-	public List<Map<String, Object>> getMemOrderList(String memId) {
+	public List<Map<String, Object>> getMemOrderList(Integer memId) {
 	    List<Map<String, Object>> list = mainOrderRepository.getMemOrderList(memId);
 	    return list.isEmpty() ? null : list;
 	}

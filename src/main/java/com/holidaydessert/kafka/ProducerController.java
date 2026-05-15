@@ -1,4 +1,4 @@
-package com.holidaydessert.controller;
+package com.holidaydessert.kafka;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.holidaydessert.config.KafkaProducerConfig;
 import com.holidaydessert.model.Member;
 
 @RestController
@@ -33,6 +32,7 @@ public class ProducerController {
 	    	if (kafkaTemplate == null) {
 	    	    return "Kafka is disabled";
 	    	}
+	    	// Spring Kafka 2.x
 	        ListenableFuture<SendResult<String, Member>> future = kafkaTemplate.send(KafkaProducerConfig.JSON_TOPIC, member);
 	        future.addCallback(new KafkaSendCallback<String, Member>() {
 	            @Override

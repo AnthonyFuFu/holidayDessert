@@ -24,7 +24,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                    "WHERE MEM_ID = :memId " +
                    "GROUP BY ROOM_ID",
            nativeQuery = true)
-    List<Map<String, Object>> getChatRoomByMessage(@Param("memId") String memId);
+    List<Map<String, Object>> getChatRoomByMessage(@Param("memId") Integer memId);
 
     // =============================================
     // getChatRoom
@@ -47,6 +47,6 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                    "LEFT JOIN employee e ON e.EMP_ID = msg.EMP_ID " +
                    "WHERE m.MEM_ID = :memId",
            nativeQuery = true)
-    List<Map<String, Object>> getServiceStaff(@Param("memId") String memId);
+    List<Map<String, Object>> getServiceStaff(@Param("memId") Integer memId);
     
 }

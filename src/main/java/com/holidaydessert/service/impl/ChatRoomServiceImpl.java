@@ -38,12 +38,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	}
 
 	@Override
-	public ApiReturnObject getChatRoom(String memId) {
+	public ApiReturnObject getChatRoom(Integer memId) {
 		List<Map<String, Object>> chatRoomByMessage = chatRoomRepository.getChatRoomByMessage(memId);
 		
 		if (chatRoomByMessage == null) {
 			try {
-		        String roomUrl = commonService.generateEncryptedToken(memId);
+		        String roomUrl = commonService.generateEncryptedToken(memId.toString());
 		        Long roomId = chatRoomRepository.save(ChatRoom.createNew(roomUrl)).getRoomId();
 				
 				String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
@@ -81,7 +81,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	}
 	
 	@Override
-	public ApiReturnObject getServiceStaff(String memId) {
+	public ApiReturnObject getServiceStaff(Integer memId) {
 		List<Map<String, Object>> newArrivalList = chatRoomRepository.getServiceStaff(memId);
 		
 		if(newArrivalList == null) {
