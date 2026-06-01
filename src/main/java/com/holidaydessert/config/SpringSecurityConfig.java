@@ -4,8 +4,10 @@ import java.io.IOException;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -22,6 +24,8 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.holidaydessert.constant.AllowedOrigin;
+import com.holidaydessert.filter.OAuth2LoginOriginFilter;
 import com.holidaydessert.filter.SessionCookieFilter;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.MemberService;
@@ -71,21 +75,26 @@ public class SpringSecurityConfig {
                                     }
                                 }
                                 // 加上 googleLogin=true，讓前端知道是 Google 登入
-                                pResponse.sendRedirect("/holidayDessert/index.html?googleLogin=true");
+                                pResponse.sendRedirect(resolveRedirectPath(pRequest, "/holidayDessert/index") + "?googleLogin=true");
+                                clearOriginPortCookie(pResponse);
                             }
 
                         }).failureHandler(new AuthenticationFailureHandler() {
                     @Override
-                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
-                                                        AuthenticationException exception) throws IOException, ServletException {
-                        response.sendRedirect("/holidayDessert/index.html");
+                    public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
+                        // 根據 port 決定是否加 .html
+                        response.sendRedirect(
+                            resolveRedirectPath(request, "/holidayDessert/index")
+                        );
+                        clearOriginPortCookie(response);
                     }
                 }))
                 .logout(logout -> logout
                         .logoutUrl("/front/google/logout")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-                        .logoutSuccessUrl("/holidayDessert/index.html")
+                        .logoutSuccessHandler((request, response, authentication) -> response.sendRedirect(resolveRedirectPath(request, "/holidayDessert/index"))
+                    )
                 )
                 //這是真正的google登出方法
 //              .logout(logout -> logout
@@ -108,7 +117,40 @@ public class SpringSecurityConfig {
 
 		return http.build();
 	}
+	
+	private String resolveRedirectPath(HttpServletRequest request, String basePath) {
+	    int port = getOriginPortFromCookie(request);
+	    System.out.println("[resolveRedirectPath] 使用 port: " + port);
+	    if (port == AllowedOrigin.PORT_HTML) {
+	        return basePath + ".html";
+	    } else {
+	        return AllowedOrigin.OFFICAIL_VUE_HOST + basePath;
+	    }
+	}
 
+	private int getOriginPortFromCookie(HttpServletRequest request) {
+	    Cookie[] cookies = request.getCookies();
+	    if (cookies != null) {
+	        for (Cookie cookie : cookies) {
+	            if (OAuth2LoginOriginFilter.COOKIE_KEY_ORIGIN_PORT.equals(cookie.getName())) {
+	                try {
+	                    int port = Integer.parseInt(cookie.getValue());
+	                    return port;
+	                } catch (NumberFormatException ignored) {}
+	            }
+	        }
+	    }
+	    return request.getLocalPort();
+	}
+
+	/** Cookie 用完就清掉，避免殘留 */
+	private void clearOriginPortCookie(HttpServletResponse response) {
+	    Cookie expiredCookie = new Cookie(OAuth2LoginOriginFilter.COOKIE_KEY_ORIGIN_PORT, "");
+	    expiredCookie.setPath("/");
+	    expiredCookie.setMaxAge(0); // 立即過期
+	    response.addCookie(expiredCookie);
+	}
+	
 	private String getRemoteHost(HttpServletRequest request) {
 		String ip = request.getHeader("x-forwarded-for");
 		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {

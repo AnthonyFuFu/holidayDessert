@@ -7,7 +7,10 @@ public class AllowedOrigin {
 
 	public static final String OFFICAIL_HOST = "http://localhost:8080";
 	public static final String OFFICAIL_VUE_HOST = "http://localhost:8081";
-
+	
+	public static final int PORT_HTML = 8080;   // 有 .html
+	public static final int PORT_VUE  = 8081;   // 無 .html
+	
     // CorsConfig 使用（setAllowedOrigins 接受 List<String>）
 	public static final List<String> OFFICAIL = new ArrayList<String>() {{
         add(OFFICAIL_HOST);
