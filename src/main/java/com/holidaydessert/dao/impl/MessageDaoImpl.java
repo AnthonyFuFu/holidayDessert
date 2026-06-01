@@ -21,23 +21,25 @@ public class MessageDaoImpl implements MessageDao {
 	public List<Map<String, Object>> getMessageByEmp(Message message) {
 
 		List<Object> args = new ArrayList<>();
-		
+
 		String sql = " SELECT msg.*, MEM_NAME, EMP_NAME FROM holiday_dessert.message msg "
 				   + " LEFT JOIN member m ON m.MEM_ID = msg.MEM_ID "
 				   + " LEFT JOIN employee e ON e.EMP_ID = msg.EMP_ID "
-				   + " WHERE e.EMP_ID = ? "
-				   + " AND m.MEM_ID = ? ";
-		
-		args.add(message.getEmpId());
+				   + " WHERE m.MEM_ID = ? "
+				   + " AND msg.ROOM_ID = ? "
+				   + " AND msg.MSG_CONTENT IS NOT NULL "
+				   + " ORDER BY msg.MSG_TIME ASC ";
+
 		args.add(message.getMemId());
+		args.add(message.getRoomId());
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
+
 		if (list != null && list.size() > 0) {
 			return list;
 		} else {
 			return null;
 		}
-		
+
 	}
 	
 }

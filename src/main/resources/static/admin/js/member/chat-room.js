@@ -17,8 +17,7 @@ $('.chat-room').on('click', function() {
 	empId = $('#loginEmpId').val();
 	empName = $('#loginEmpName').val();
 	firstName = $(this).data('memname').charAt(0);
-	getMessageByEmp();
-    connectChatRoom(roomUrl);
+	claimAndOpenChatRoom();
 });
 $('#closeChatRoom').on('click', function () {
     isChatOpen = false;
@@ -135,6 +134,19 @@ function scrollToBottom() {
     	behavior: 'smooth'
 	});
 }
+function claimAndOpenChatRoom() {
+	$.ajax({
+		url: "/holidayDessert/claimChatRoom",
+		method: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify({ roomId: roomId, empId: empId }),
+		complete: function() {
+			// 不論認領成功或已有負責人，都繼續開啟聊天室
+			getMessageByEmp();
+			connectChatRoom(roomUrl);
+		}
+	});
+}
 function getMessageByEmp() {
 	$('#chatMessages').empty();
 	$.ajax({
@@ -143,7 +155,7 @@ function getMessageByEmp() {
 		contentType: 'application/json',
 		data: JSON.stringify({
 			memId: memId,
-		    empId: empId
+			roomId: roomId
 		}),
 		success: function(response) {
 		    if (response.code === 200) {

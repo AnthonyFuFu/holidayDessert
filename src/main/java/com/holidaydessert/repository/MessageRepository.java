@@ -22,9 +22,18 @@ public interface MessageRepository extends JpaRepository<Message, String> {
                    "FROM holiday_dessert.message msg " +
                    "LEFT JOIN member m ON m.MEM_ID = msg.MEM_ID " +
                    "LEFT JOIN employee e ON e.EMP_ID = msg.EMP_ID " +
-                   "WHERE m.MEM_ID = :memId",
+                   "WHERE m.MEM_ID = :memId AND msg.MSG_CONTENT IS NOT NULL",
            nativeQuery = true)
     List<Map<String, Object>> getMessageByMem(@Param("memId") Integer memId);
+
+    // =============================================
+    // claimMessages：認領聊天室（誰先讀取誰負責）
+    // =============================================
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE holiday_dessert.message SET EMP_ID = :empId WHERE ROOM_ID = :roomId AND EMP_ID IS NULL",
+           nativeQuery = true)
+    int claimMessages(@Param("empId") String empId, @Param("roomId") String roomId);
 
     // =============================================
     // saveMessage → save() 內建，不需要額外方法

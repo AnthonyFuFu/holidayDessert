@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
@@ -23,7 +23,7 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import springfox.documentation.annotations.ApiIgnore;
 
-@Controller
+@RestController
 @ApiIgnore
 public class ChatRoomController {
 	
@@ -33,6 +33,15 @@ public class ChatRoomController {
 	@Autowired
 	private ChatRoomService chatRoomService;
 	
+    @PostMapping(value = "/claimChatRoom")
+	@ApiOperation(value = "認領聊天室", notes = "誰先點誰負責，將 NULL EMP_ID 更新為當前員工")
+	public ResponseEntity<?> claimChatRoom(
+			@ApiParam(name = "Message", value = "包含 roomId 與 empId", required = true) @RequestBody Message message) {
+
+		ApiReturnObject apiReturnObject = chatRoomService.claimChatRoom(message.getRoomId(), message.getEmpId());
+		return new ResponseEntity<>(apiReturnObject, HttpStatus.OK);
+	}
+
     @PostMapping(value = "/getChatRoom")
 	@ApiOperation(value = "獲取聊天室", notes = "獲取聊天室，有則聊天，沒有則建立")
 	public ResponseEntity<?> getChatRoom(

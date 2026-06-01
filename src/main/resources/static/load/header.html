@@ -124,7 +124,20 @@ new Vue({
 		}
 	},
 	mounted() {
-		this.loadMemberSession();
+		const urlParams = new URLSearchParams(window.location.search);
+		if (urlParams.get('googleLogin') === 'true') {
+			history.replaceState(null, '', window.location.pathname);
+			axios.get('/holidayDessert/front/google/login')
+				.then(response => {
+					if (response.data.STATUS === 'GLY') {
+						localStorage.setItem('memberSession', JSON.stringify(response.data.memberSession));
+						this.updateSession(response.data.memberSession);
+					}
+				})
+				.catch(error => console.log(error));
+		} else {
+			this.loadMemberSession();
+		}
 	}
 });
 

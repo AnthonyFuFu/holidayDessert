@@ -1,14 +1,11 @@
 package com.holidaydessert.config;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -48,14 +45,11 @@ public class SpringSecurityConfig {
                         .successHandler(new AuthenticationSuccessHandler() {
                             @Override
                             public void onAuthenticationSuccess(HttpServletRequest pRequest, HttpServletResponse pResponse, Authentication authentication) throws IOException, ServletException {
-                                Map<String, Object> responseMap = new HashMap<>();
-                                // 獲取google已驗證用戶的Principal
                                 Object principal = authentication.getPrincipal();
                                 String ip = getRemoteHost(pRequest);
                                 // 獲取HttpSession對象
                                 HttpSession session = pRequest.getSession();
 
-                                // 獲取google用戶的屬性
                                 if (principal instanceof OAuth2User) {
                                     OAuth2User oAuth2User = (OAuth2User) principal;
                                     String oAuth2UserSub = (String) oAuth2User.getAttribute("sub");
@@ -63,16 +57,8 @@ public class SpringSecurityConfig {
                                     String oAuth2UserEmail = (String) oAuth2User.getAttribute("email");
 
                                     Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
-                                    Member memberAccountData = optional.orElse(null);
-
                                     System.out.println(ip + "-" + session + "-" + oAuth2UserName + "-" + oAuth2UserEmail + "-" + oAuth2UserSub);
-                                    // 專案已有帳號
-                                    if (memberAccountData != null) {
-                                        responseMap.put("STATUS", "Y");
-                                        responseMap.put("MSG", "登入成功");
-                                        responseMap.put("memberSession", memberAccountData);
-                                    } else {
-                                        // google
+                                    if (optional.isEmpty()) {
                                         Member member = new Member();
                                         member.setMemName(oAuth2UserName);
                                         member.setMemAccount(oAuth2UserEmail);
@@ -82,18 +68,10 @@ public class SpringSecurityConfig {
                                         member.setMemGoogleUid(oAuth2UserSub);
                                         member.setMemPassword("");
                                         memberService.register(member);
-
-                                        // 註冊完馬上登入
-                                        Optional<Member> getOptionalAfterRegister = memberService.getDataByGoogleUid(oAuth2UserSub);
-                                        Member getDataAfterRegister = getOptionalAfterRegister.orElse(null);
-
-                                        responseMap.put("STATUS", "Y");
-                                        responseMap.put("MSG", "登入成功");
-                                        responseMap.put("memberSession", getDataAfterRegister);
                                     }
-
                                 }
-                                pResponse.sendRedirect("/holidayDessert/index.html");
+                                // 加上 googleLogin=true，讓前端知道是 Google 登入
+                                pResponse.sendRedirect("/holidayDessert/index.html?googleLogin=true");
                             }
 
                         }).failureHandler(new AuthenticationFailureHandler() {
@@ -104,21 +82,28 @@ public class SpringSecurityConfig {
                     }
                 }))
                 .logout(logout -> logout
-                        .logoutSuccessUrl("/holidayDessert/index.html") // 登出成功後跳轉的頁面
-                        .logoutUrl("/front/google/logout") // 配置登出端點
-                        .addLogoutHandler((request, response, auth) -> {
-                            // 清理 HttpSession
-                            HttpSession session = request.getSession(false);
-                            if (session != null) {
-                                session.invalidate();
-                            }
-                        })
-                        .logoutSuccessHandler((request, response, auth) -> {
-                            // 強制 Google 登出
-                            String googleLogoutUrl = "https://accounts.google.com/logout";
-                            response.sendRedirect(googleLogoutUrl);
-                        })
+                        .logoutUrl("/front/google/logout")
+                        .invalidateHttpSession(true)
+                        .clearAuthentication(true)
+                        .logoutSuccessUrl("/holidayDessert/index.html")
                 )
+                //這是真正的google登出方法
+//              .logout(logout -> logout
+//                      .logoutSuccessUrl("/holidayDessert/index.html") // 登出成功後跳轉的頁面
+//                      .logoutUrl("/front/google/logout") // 配置登出端點
+//                      .addLogoutHandler((request, response, auth) -> {
+//                          // 清理 HttpSession
+//                          HttpSession session = request.getSession(false);
+//                          if (session != null) {
+//                              session.invalidate();
+//                          }
+//                      })
+//                      .logoutSuccessHandler((request, response, auth) -> {
+//                          // 強制 Google 登出
+//                          String googleLogoutUrl = "https://accounts.google.com/logout";
+//                          response.sendRedirect(googleLogoutUrl);
+//                      })
+//              )
                 .addFilterAfter(new SessionCookieFilter(), BasicAuthenticationFilter.class).headers(headers -> headers.xssProtection());
 
 		return http.build();

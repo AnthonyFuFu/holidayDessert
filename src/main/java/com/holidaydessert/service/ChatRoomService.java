@@ -9,6 +9,7 @@ public interface ChatRoomService {
 
 	// back
 	public List<Map<String, Object>> getAllChatRoom();
+	public ApiReturnObject claimChatRoom(String roomId, String empId);
 
 	// front
 	public ApiReturnObject getChatRoom(Integer memId);

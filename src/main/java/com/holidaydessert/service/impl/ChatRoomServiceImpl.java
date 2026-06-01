@@ -7,12 +7,14 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.holidaydessert.dao.ChatRoomDao;
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.ChatRoom;
 import com.holidaydessert.model.Message;
 import com.holidaydessert.repository.ChatRoomRepository;
+import com.holidaydessert.repository.MessageRepository;
 import com.holidaydessert.service.ChatRoomService;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.MessageService;
@@ -31,6 +33,9 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
 	@Autowired
 	private CommonService commonService;
+
+	@Autowired
+	private MessageRepository messageRepository;
 	
 	@Override
 	public List<Map<String, Object>> getAllChatRoom() {
@@ -38,20 +43,28 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 	}
 
 	@Override
+	@Transactional
+	public ApiReturnObject claimChatRoom(String roomId, String empId) {
+		int claimed = messageRepository.claimMessages(empId, roomId);
+		String msg = claimed > 0 ? "已認領聊天室" : "聊天室已有負責人";
+		return ApiReturnObject.success(msg, claimed);
+	}
+
+	@Override
 	public ApiReturnObject getChatRoom(Integer memId) {
 		List<Map<String, Object>> chatRoomByMessage = chatRoomRepository.getChatRoomByMessage(memId);
-		
-		if (chatRoomByMessage == null) {
+
+		if (chatRoomByMessage == null || chatRoomByMessage.isEmpty()) {
 			try {
 		        String roomUrl = commonService.generateEncryptedToken(memId.toString());
 		        Long roomId = chatRoomRepository.save(ChatRoom.createNew(roomUrl)).getRoomId();
-				
+
 				String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
 				Message message = new Message();
-				message.setEmpId("0");
+				message.setEmpId(null);       // 尚未分派員工，設為 null
 				message.setMemId(memId);
 				message.setRoomId(roomId.toString());
-				message.setMsgContent("");
+				message.setMsgContent(null);  // null 代表佔位訊息，不顯示在前端
 				message.setMsgTime(dateTime);
 				message.setMsgDirection("1");
 				messageService.saveMessage(message);

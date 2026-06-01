@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -67,9 +69,15 @@ public class FrontLoginController {
 
     @ApiIgnore
     @PostMapping(value = "/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
+    public ResponseEntity<?> logout(HttpServletRequest request) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {
+            // 清除 Spring Security session（含 OAuth2 登入狀態）
+            SecurityContextHolder.clearContext();
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
         	responseMap.put("STATUS", "Y");
         	responseMap.put("MSG", "登出成功");
         } catch (Exception ex) {
