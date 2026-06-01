@@ -14,6 +14,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.Authentication;
@@ -40,7 +41,8 @@ public class SpringSecurityConfig {
 
 	@Bean
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(csrf -> csrf.disable())
+        http.cors(Customizer.withDefaults()) // CORS 在 Spring Security 認證之前處理，header 才能加到 redirect response
+                .csrf(csrf -> csrf.disable())
                 .authorizeRequests(requests -> requests
                         .antMatchers("/front/google/login", "/front/google/logout")
                         .authenticated() // 指定需要Google登入驗證的頁面
