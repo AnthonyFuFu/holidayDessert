@@ -64,7 +64,7 @@ public class SpringSecurityConfig {
 
                                     Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
                                     System.out.println(ip + "-" + session + "-" + oAuth2UserName + "-" + oAuth2UserEmail + "-" + oAuth2UserSub);
-                                    if (optional.isEmpty()) {
+                                    if (!optional.isPresent()) {
                                         Member member = new Member();
                                         member.setMemName(oAuth2UserName);
                                         member.setMemAccount(oAuth2UserEmail);
