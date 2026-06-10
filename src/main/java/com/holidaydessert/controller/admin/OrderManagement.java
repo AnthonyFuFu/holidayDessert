@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,13 +29,13 @@ import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.MainOrderService;
 import com.holidaydessert.service.OrderDetailService;
 
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @Controller
 @RequestMapping("/admin/order")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@ApiIgnore
+@Hidden
 public class OrderManagement {
 	
 	@Autowired

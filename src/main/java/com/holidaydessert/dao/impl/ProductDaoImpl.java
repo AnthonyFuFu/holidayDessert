@@ -292,8 +292,7 @@ public class ProductDaoImpl implements ProductDao {
 				   + " ) AS sub "
 				   + " WHERE sub.rn = 1 "
 				   + " AND (CURDATE() < PMD_START OR CURDATE() > PMD_END OR PMD_START IS NULL OR PMD_END IS NULL) "
-				   + " GROUP BY sub.PD_ID "
-				   + " ) AS subquery ";
+				   + " ) AS subquery "; // 註：rn=1 已保證每個 PD_ID 一列，移除多餘的 GROUP BY 以相容 only_full_group_by
 		
 		if (product.getSearchText() != null && product.getSearchText().length() > 0){
 			String[] searchText = product.getSearchText().split(" ");
@@ -346,8 +345,7 @@ public class ProductDaoImpl implements ProductDao {
 				   + " ) AS sub "
 				   + " WHERE sub.rn = 1 "
 				   + " AND (CURDATE() < PMD_START OR CURDATE() > PMD_END OR PMD_START IS NULL OR PMD_END IS NULL) "
-				   + " GROUP BY sub.PD_ID "
-				   + " ) AS subquery ";
+				   + " ) AS subquery "; // 註：rn=1 已保證每個 PD_ID 一列，移除多餘的 GROUP BY 以相容 only_full_group_by
 		
 		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
 		
@@ -380,8 +378,7 @@ public class ProductDaoImpl implements ProductDao {
 				   + " ) AS sub "
 				   + " WHERE sub.rn = 1 "
 				   + " AND (CURDATE() < PMD_START OR CURDATE() > PMD_END OR PMD_START IS NULL OR PMD_END IS NULL) "
-				   + " GROUP BY sub.PD_ID "
-				   + " ) AS subquery ";
+				   + " ) AS subquery "; // 註：rn=1 已保證每個 PD_ID 一列，移除多餘的 GROUP BY 以相容 only_full_group_by
 		
 		if (product.getSearchText() != null && product.getSearchText().length() > 0){
 			String[] searchText = product.getSearchText().split(" ");

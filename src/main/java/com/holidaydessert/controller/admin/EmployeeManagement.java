@@ -6,9 +6,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,13 +36,13 @@ import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
 import static com.holidaydessert.constant.BuildPath.*;
 
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @Controller
 @RequestMapping("/admin/employee")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@ApiIgnore
+@Hidden
 public class EmployeeManagement {
 	
 	@Autowired

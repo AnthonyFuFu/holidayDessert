@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,13 +38,13 @@ import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
 import static com.holidaydessert.constant.BuildPath.*;
 
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @Controller
 @RequestMapping("/admin/product")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@ApiIgnore
+@Hidden
 public class ProductManagement {
 	
 	@Autowired

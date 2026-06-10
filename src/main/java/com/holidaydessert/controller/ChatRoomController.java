@@ -19,12 +19,12 @@ import com.holidaydessert.model.Message;
 import com.holidaydessert.service.ChatRoomService;
 import com.holidaydessert.service.MessageService;
 
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @RestController
-@ApiIgnore
+@Hidden
 public class ChatRoomController {
 	
 	@Autowired
@@ -34,18 +34,18 @@ public class ChatRoomController {
 	private ChatRoomService chatRoomService;
 	
     @PostMapping(value = "/claimChatRoom")
-	@ApiOperation(value = "認領聊天室", notes = "誰先點誰負責，將 NULL EMP_ID 更新為當前員工")
+	@Operation(summary = "認領聊天室", description = "誰先點誰負責，將 NULL EMP_ID 更新為當前員工")
 	public ResponseEntity<?> claimChatRoom(
-			@ApiParam(name = "Message", value = "包含 roomId 與 empId", required = true) @RequestBody Message message) {
+			@Parameter(name = "Message", description = "包含 roomId 與 empId", required = true) @RequestBody Message message) {
 
 		ApiReturnObject apiReturnObject = chatRoomService.claimChatRoom(message.getRoomId(), message.getEmpId());
 		return new ResponseEntity<>(apiReturnObject, HttpStatus.OK);
 	}
 
     @PostMapping(value = "/getChatRoom")
-	@ApiOperation(value = "獲取聊天室", notes = "獲取聊天室，有則聊天，沒有則建立")
+	@Operation(summary = "獲取聊天室", description = "獲取聊天室，有則聊天，沒有則建立")
 	public ResponseEntity<?> getChatRoom(
-			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
+			@Parameter(name = "Member", description = "會員", required = true) @RequestBody Member member) {
     	
     	Integer memId = member.getMemId();
 		ApiReturnObject apiReturnObject = chatRoomService.getChatRoom(memId);
@@ -53,18 +53,18 @@ public class ChatRoomController {
 	}
     
     @PostMapping(value = "/getMessageByEmp")
-	@ApiOperation(value = "取得客服對會員對話紀錄", notes = "取得客服對會員對話紀錄，發送方向(0:客服對會員 1:會員對客服)")
+	@Operation(summary = "取得客服對會員對話紀錄", description = "取得客服對會員對話紀錄，發送方向(0:客服對會員 1:會員對客服)")
 	public ResponseEntity<?> getMessageByEmp(
-			@ApiParam(name = "Employee", value = "客服", required = true) @RequestBody Message message) {
+			@Parameter(name = "Employee", description = "客服", required = true) @RequestBody Message message) {
     	
 		ApiReturnObject apiReturnObject = messageService.getMessageByEmp(message);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 	}
 
     @PostMapping(value = "/getMessageByMem")
-	@ApiOperation(value = "取得會員對客服對話紀錄", notes = "取得會員對客服對話紀錄，發送方向(0:客服對會員 1:會員對客服)")
+	@Operation(summary = "取得會員對客服對話紀錄", description = "取得會員對客服對話紀錄，發送方向(0:客服對會員 1:會員對客服)")
 	public ResponseEntity<?> getMessageByMem(
-			@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Message message) {
+			@Parameter(name = "Member", description = "會員", required = true) @RequestBody Message message) {
     	
 		ApiReturnObject apiReturnObject = messageService.getMessageByMem(message);
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<!-- <head th:include="front/load/css :: css"></head> -->
-<head th:include="front/load/js :: js"></head>
+<!-- <head th:insert="~{front/load/css :: css}"></head> -->
+<head th:insert="~{front/load/js :: js}"></head>
 <head>
 <!-- <meta http-equiv="Content-Type" content="text/html; charset=utf-8" /> -->
 <!-- <meta http-equiv="X-UA-Compatible" content="ie=edge"> -->
@@ -31,9 +31,9 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 <!-- End Google Tag Manager (noscript) -->
 
 <div th:if="${memberSession != null}"> [[${memberSession.memAccount}]], [[${memberSession.memPassword}]], [[${memberSession.memEmail}]] </div>
-<section class="login-area" th:include="front/load/login :: login"></section>
-<div th:include="front/load/header :: header" id="header"></div>
-<div th:if="${memberSession != null}" th:include="front/chat :: chat"></div>
+<section class="login-area" th:insert="~{front/load/login :: login}"></section>
+<div th:insert="~{front/load/header :: header}" id="header"></div>
+<div th:if="${memberSession != null}" th:insert="~{front/chat :: chat}"></div>
 
 <script type="text/javascript" th:src="@{/front/js/index.js}"></script>
 <script type="text/javascript" th:src="@{/front/js/summary.js}"></script>

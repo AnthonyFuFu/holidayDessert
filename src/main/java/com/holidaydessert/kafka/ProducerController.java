@@ -3,11 +3,10 @@ package com.holidaydessert.kafka;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaProducerException;
-import org.springframework.kafka.core.KafkaSendCallback;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
-import org.springframework.util.concurrent.ListenableFuture;
+
+import java.util.concurrent.CompletableFuture;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -32,15 +31,12 @@ public class ProducerController {
 	    	if (kafkaTemplate == null) {
 	    	    return "Kafka is disabled";
 	    	}
-	    	// Spring Kafka 2.x
-	        ListenableFuture<SendResult<String, Member>> future = kafkaTemplate.send(KafkaProducerConfig.JSON_TOPIC, member);
-	        future.addCallback(new KafkaSendCallback<String, Member>() {
-	            @Override
-	            public void onSuccess(SendResult<String, Member> result) {
+	    	// Spring Kafka 3.x：send() 回傳 CompletableFuture
+	        CompletableFuture<SendResult<String, Member>> future = kafkaTemplate.send(KafkaProducerConfig.JSON_TOPIC, member);
+	        future.whenComplete((result, ex) -> {
+	            if (ex == null) {
 	                LOGGER.info("success send message:{} with offset:{} ", member, result.getRecordMetadata().offset());
-	            }
-	            @Override
-	            public void onFailure(KafkaProducerException ex) {
+	            } else {
 	                LOGGER.error("fail send message! Do somthing....");
 	            }
 	        });

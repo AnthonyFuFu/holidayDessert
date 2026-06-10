@@ -4,8 +4,8 @@ import java.security.Key;
 import java.util.Date;
 
 import javax.crypto.spec.SecretKeySpec;
-import javax.security.auth.message.AuthException;
-import javax.xml.bind.DatatypeConverter;
+import jakarta.security.auth.message.AuthException;
+import jakarta.xml.bind.DatatypeConverter;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtBuilder;

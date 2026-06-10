@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head th:fragment="css">
+<head th:fragment="css" th:remove="tag">
 	<!-- FavIcon-->
     <link rel="icon" th:href="@{/assets/favicon.ico}" type="image/x-icon"/>
     <!-- Google Fonts -->
@@ -37,32 +37,32 @@
     <!-- AdminBSB Themes. You can choose a theme/themes instead of get all themes -->
     <link rel="stylesheet" th:href="@{/assets/css/themes/all-themes.css}" />
 </head>
-<head th:fragment="jquery-datatable">
+<head th:fragment="jquery-datatable" th:remove="tag">
 	<!-- JQuery DataTable -->
     <link rel="stylesheet" th:href="@{/assets/plugins/jquery-datatable/skin/bootstrap/css/dataTables.bootstrap.css}" />
 </head>
-<head th:fragment="JVector-map">
+<head th:fragment="JVector-map" th:remove="tag">
     <!-- JVectorMap -->
     <link rel="stylesheet" th:href="@{/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.css}" />
 </head>
-<head th:fragment="datetime-picker">
+<head th:fragment="datetime-picker" th:remove="tag">
 	<!-- Bootstrap Material DateTime Picker -->
     <link rel="stylesheet" th:href="@{/assets/plugins/bootstrap-material-datetimepicker/css/bootstrap-material-datetimepicker.css}" />
 </head>
-<head th:fragment="morris-chart">
+<head th:fragment="morris-chart" th:remove="tag">
     <!-- Chart -->
     <link rel="stylesheet" th:href="@{/assets/plugins/morrisjs/morris.css}" />
 </head>
-<head th:fragment="range-slider">
+<head th:fragment="range-slider" th:remove="tag">
     <!-- Range Slider -->
     <link rel="stylesheet" th:href="@{/assets/plugins/ion-rangeslider/css/ion.rangeSlider.css}" />
     <link rel="stylesheet" th:href="@{/assets/plugins/ion-rangeslider/css/ion.rangeSlider.skinFlat.css}" />
 </head>
-<head th:fragment="nouislider">
+<head th:fragment="nouislider" th:remove="tag">
     <!-- noUISlider Css -->
     <link rel="stylesheet" th:href="@{/assets/plugins/nouislider/nouislider.min.css}" />
 </head>
-<head th:fragment="light-gallery">
+<head th:fragment="light-gallery" th:remove="tag">
     <!-- Light Gallery PlugIn -->
     <link rel="stylesheet" th:href="@{/assets/plugins/light-gallery/css/lightgallery.css}" />
 </head>

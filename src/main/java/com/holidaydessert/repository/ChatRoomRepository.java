@@ -34,7 +34,7 @@ public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
                    "FROM holiday_dessert.chat_room chat " +
                    "LEFT JOIN message msg ON chat.ROOM_ID = msg.ROOM_ID " +
                    "WHERE chat.ROOM_ID = :chatRoomId " +
-                   "GROUP BY chat.ROOM_ID",
+                   "GROUP BY chat.ROOM_ID, msg.EMP_ID, msg.MEM_ID",
            nativeQuery = true)
     List<Map<String, Object>> getChatRoom(@Param("chatRoomId") String chatRoomId);
 

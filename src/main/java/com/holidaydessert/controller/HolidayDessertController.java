@@ -2,8 +2,8 @@ package com.holidaydessert.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,13 +16,13 @@ import com.holidaydessert.model.Department;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.service.EmployeeService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 @Controller
 @RequestMapping("/")
 @SessionAttributes("memberSession")
-@Api(tags = "前台")
+@Tag(name = "前台")
 public class HolidayDessertController {
 	
 	@Autowired
@@ -31,7 +31,7 @@ public class HolidayDessertController {
 //	private final org.slf4j.Logger log = LoggerFactory.getLogger(LoggerGroups.class);
 	
 	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
-	@ApiOperation(value = "首頁", httpMethod = "GET", notes = "進行查詢")
+	@Operation(summary = "首頁", description = "進行查詢")
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		
 		List<Employee> list = employeeService.findAllWithDepartment();

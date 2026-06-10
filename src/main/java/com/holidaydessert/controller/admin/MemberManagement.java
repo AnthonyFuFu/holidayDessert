@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -32,13 +32,13 @@ import com.holidaydessert.service.ChatRoomService;
 import com.holidaydessert.service.MemberService;
 import com.holidaydessert.service.ReceiptInformationService;
 
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @Controller
 @RequestMapping("/admin/member")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@ApiIgnore
+@Hidden
 public class MemberManagement {
 	
 	@Autowired

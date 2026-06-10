@@ -1,7 +1,7 @@
 package com.holidaydessert.controller;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,12 +15,12 @@ import com.holidaydessert.service.CommentService;
 import com.holidaydessert.service.ProductService;
 import com.holidaydessert.utils.JWTUtil;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @RestController
-@Api(tags = { "首頁" })
+@Tag(name = "首頁")
 public class IndexController {
 
 	@Autowired
@@ -34,9 +34,9 @@ public class IndexController {
 	
 //	private static String subject = "holidaydessertAPI";
 
-    @ApiIgnore
+    @Hidden
     @PostMapping(value =  {"/", "/index"})
-	@ApiOperation(value = "首頁", notes = "導回首頁")
+	@Operation(summary = "首頁", description = "導回首頁")
     public RedirectView index(HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		RedirectView redirectView = new RedirectView();
 		redirectView.setUrl("/holidayDessert/index.html"); // 設置要跳轉的URL
@@ -44,7 +44,7 @@ public class IndexController {
     }
     
     @PostMapping(value = "/getMainProductList")
-	@ApiOperation(value = "主要產品", notes = "顯示於首頁的主要產品清單")
+	@Operation(summary = "主要產品", description = "顯示於首頁的主要產品清單")
 	public ResponseEntity<?> getMainProductList() {
 		
 		ApiReturnObject apiReturnObject = productService.getMainProductList();
@@ -53,7 +53,7 @@ public class IndexController {
 	}
 
     @PostMapping(value = "/getPopularList")
-	@ApiOperation(value = "熱門推薦", notes = "顯示於首頁的熱門推薦清單")
+	@Operation(summary = "熱門推薦", description = "顯示於首頁的熱門推薦清單")
 	public ResponseEntity<?> getPopularList() {
 		
 		ApiReturnObject apiReturnObject = productService.getNewArrivalList();
@@ -62,7 +62,7 @@ public class IndexController {
 	}
 	
     @PostMapping(value = "/getNewArrivalList")
-	@ApiOperation(value = "新品上市", notes = "顯示於首頁的新品上市清單")
+	@Operation(summary = "新品上市", description = "顯示於首頁的新品上市清單")
 	public ResponseEntity<?> getNewArrivalList() {
 		
 		ApiReturnObject apiReturnObject = productService.getNewArrivalList();
@@ -71,7 +71,7 @@ public class IndexController {
 	}
 
     @PostMapping(value = "/getCommentList")
-	@ApiOperation(value = "留言", notes = "顯示於首頁的留言清單")
+	@Operation(summary = "留言", description = "顯示於首頁的留言清單")
 	public ResponseEntity<?> getCommentList() {
 		
 		ApiReturnObject apiReturnObject = commentService.getCommentList();
@@ -80,7 +80,7 @@ public class IndexController {
 	}
 	
     @PostMapping(value = "/getNewList")
-	@ApiOperation(value = "新品上市", httpMethod = "POST" , notes = "顯示於首頁的新品上市清單")
+	@Operation(summary = "新品上市", description = "顯示於首頁的新品上市清單")
 	public ResponseEntity<?> getNewList(HttpServletRequest request) {
 		try {
 			ApiReturnObject apiReturnObject = new ApiReturnObject();

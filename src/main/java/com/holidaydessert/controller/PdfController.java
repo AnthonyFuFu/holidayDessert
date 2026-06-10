@@ -14,10 +14,10 @@ import com.holidaydessert.model.ApiReturnObject;
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
-import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 
 @RestController
-@Api(tags = { "提取PDF文字" })
+@Tag(name = "提取PDF文字")
 @RequestMapping("/api")
 public class PdfController {
 	

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<div th:fragment="js">
+<div th:fragment="js" th:remove="tag">
     <!-- JQuery -->
     <script th:src="@{/assets/plugins/jquery/jquery.min.js}"></script>
     <!-- Bootstrap -->
@@ -47,7 +47,7 @@
     <!-- theme Js -->
     <script th:src="@{/admin/js/load/theme.js}"></script>
 </div>
-<div th:fragment="jquery-datatable">
+<div th:fragment="jquery-datatable" th:remove="tag">
 <!-- JQuery DataTable -->
     <script th:src="@{/assets/plugins/jquery-datatable/jquery.dataTables.js}"></script>
     <script th:src="@{/assets/plugins/jquery-datatable/skin/bootstrap/js/dataTables.bootstrap.js}"></script>
@@ -59,7 +59,7 @@
     <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/buttons.html5.min.js}"></script>
     <script th:src="@{/assets/plugins/jquery-datatable/extensions/export/buttons.print.min.js}"></script>
 </div>
-<div th:fragment="flot-charts">
+<div th:fragment="flot-charts" th:remove="tag">
     <!-- FLot Charts -->
     <script th:src="@{/assets/plugins/flot-charts/jquery.flot.js}"></script>
     <script th:src="@{/assets/plugins/flot-charts/jquery.flot.resize.js}"></script>
@@ -67,33 +67,33 @@
     <script th:src="@{/assets/plugins/flot-charts/jquery.flot.categories.js}"></script>
     <script th:src="@{/assets/plugins/flot-charts/jquery.flot.time.js}"></script>
 </div>
-<div th:fragment="JVector-map">
+<div th:fragment="JVector-map" th:remove="tag">
     <!-- JVectorMap -->
     <script th:src="@{/assets/plugins/jvectormap/jquery-jvectormap-1.2.2.min.js}"></script>
     <script th:src="@{/assets/plugins/jvectormap/jquery-jvectormap-world-mill-en.js}"></script>
 </div>
-<div th:fragment="datetime-picker">
+<div th:fragment="datetime-picker" th:remove="tag">
 	<!-- Bootstrap Material Date time Picker -->
     <script th:src="@{/assets/plugins/bootstrap-material-datetimepicker/js/bootstrap-material-datetimepicker.js}"></script>
 </div>
-<div th:fragment="morris-chart">
+<div th:fragment="morris-chart" th:remove="tag">
     <!-- Chart -->
     <script th:src="@{/assets/plugins/raphael/raphael.min.js}"></script>
     <script th:src="@{/assets/plugins/morrisjs/morris.js}"></script>
 </div>
-<div th:fragment="range-slider">
+<div th:fragment="range-slider" th:remove="tag">
     <!-- RangeSlider -->
     <script th:src="@{/assets/plugins/ion-rangeslider/js/ion.rangeSlider.js}"></script>
 </div>
-<div th:fragment="light-gallery">
+<div th:fragment="light-gallery" th:remove="tag">
     <!-- Light Gallery -->
     <script th:src="@{/assets/plugins/light-gallery/js/lightgallery-all.js}"></script>
 </div>
-<div th:fragment="nouislider">
+<div th:fragment="nouislider" th:remove="tag">
     <!-- noUISlider Plugin Js -->
     <script th:src="@{/assets/plugins/nouislider/nouislider.js}"></script>
 </div>
-<div th:fragment="chat">
+<div th:fragment="chat" th:remove="tag">
     <!-- web socket -->
     <script th:src="@{/assets/plugins/stompjs/stompjs.js}"></script>
 	<script th:src="@{/assets/plugins/sockjs/sockjs.min.js}"></script>

@@ -37,7 +37,7 @@ public class TicketOrderProducer {
                         TicketProducerConfig.TICKET_ORDER_TOPIC,
                         String.valueOf(typeId), // ← Partition Key
                         message
-                ).completable(); 
+                );
 
         future.whenComplete((result, ex) -> {
             if (ex == null) {

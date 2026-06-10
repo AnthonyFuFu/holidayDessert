@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.security.auth.message.AuthException;
+import jakarta.security.auth.message.AuthException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,14 +21,14 @@ import com.holidaydessert.service.TokenService;
 import com.holidaydessert.utils.JWTUtil;
 
 import io.jsonwebtoken.Claims;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @CrossOrigin
 @Controller
 @RequestMapping("/token")
-@Api(tags = { "api拿token" })
+@Tag(name = "api拿token")
 public class TokenController {
 
 	// 時效30分鐘
@@ -44,10 +44,10 @@ public class TokenController {
 	private TokenService tokenService;
 
 	@PostMapping("/getToken")
-	@ApiOperation(value = "獲取token", notes = "token時限30分鐘")
+	@Operation(summary = "獲取token", description = "token時限30分鐘")
 	public ResponseEntity<?> getToken(
-			@ApiParam(name = "memEmail", value = "MEM_EMAIL", required = true) @RequestParam(required = true) String memEmail,
-			@ApiParam(name = "memPassword", value = "MEM_PASSWORD", required = true) @RequestParam(required = true) String memPassword) {
+			@Parameter(name = "memEmail", description = "MEM_EMAIL", required = true) @RequestParam(required = true) String memEmail,
+			@Parameter(name = "memPassword", description = "MEM_PASSWORD", required = true) @RequestParam(required = true) String memPassword) {
 		Map<String, Object> returnMap = new HashMap<>();
 		try {
 			List<Map<String, Object>> tokenList = new ArrayList<>();
@@ -73,7 +73,7 @@ public class TokenController {
 	}
 
 	@PostMapping("/refresh")
-	@ApiOperation(value = "刷新token", notes = "401:refresh token過期，請使用者重新登入\n 403:驗證JWT失敗 200:有效期限內+取得新access\n 參數 不用加上 Bearer  ")
+	@Operation(summary = "刷新token", description = "401:refresh token過期，請使用者重新登入\n 403:驗證JWT失敗 200:有效期限內+取得新access\n 參數 不用加上 Bearer  ")
 	public ResponseEntity<?> refresh(@RequestParam String refresh) {
 		Map<String, Object> returnMap = new HashMap<>();
 		try {

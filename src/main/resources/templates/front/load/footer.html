@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 	<!-- 20190124新增甄戰據點Google Map區塊START-->
-	<section th:fragment="footer">
+	<section th:fragment="footer" th:remove="tag">
 		<script type="text/javascript" th:src="@{/front/js/location.js}"></script>
 <!-- 		<script type="text/javascript" th:src="@{/front/js/fb.js}"></script> -->
 		<section class="mapArea">

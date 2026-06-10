@@ -13,22 +13,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.holidaydessert.model.Form;
 import com.holidaydessert.service.FormService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/form")
-@Api(tags = "送單")
+@Tag(name = "送單")
 public class FormController {
 
 	@Autowired
 	private FormService formService;
 
 	@PostMapping(value = "/sendForm")
-	@ApiOperation(value = "送單", notes = "送單聯絡我們")
+	@Operation(summary = "送單", description = "送單聯絡我們")
 	public ResponseEntity<?> sendForm(
-			@ApiParam(name = "Form", value = "送單", required = true) @RequestBody Form form) {
+			@Parameter(name = "Form", description = "送單", required = true) @RequestBody Form form) {
 		Map<String, Object> responseMap = new HashMap<>();
 		try {
 			formService.add(form);
@@ -42,12 +42,12 @@ public class FormController {
 	}
 
 //	@RequestMapping(value = "/sendForm", method = { RequestMethod.GET, RequestMethod.POST })
-//	@ApiOperation(value = "送單", httpMethod = "POST", notes = "送單聯絡我們")
+//	@Operation(summary = "送單", description = "送單聯絡我們")
 //	public ResponseEntity<?> sendForm(
-//			@ApiParam(name = "formPhone", value = "行動電話", required = true) @RequestParam(value = "formPhone", required = false) String formPhone,
-//			@ApiParam(name = "formEmail", value = "電子信箱", required = true) @RequestParam(value = "formEmail", required = false) String formEmail,
-//			@ApiParam(name = "formContent", value = "訊息", required = true) @RequestParam(value = "formContent", required = true) String formContent,
-//			@ApiParam(name = "formCreateBy", value = "中文姓名", required = true) @RequestParam(value = "formCreateBy", required = true) String formCreateBy) {
+//			@Parameter(name = "formPhone", description = "行動電話", required = true) @RequestParam(description = "formPhone", required = false) String formPhone,
+//			@Parameter(name = "formEmail", description = "電子信箱", required = true) @RequestParam(description = "formEmail", required = false) String formEmail,
+//			@Parameter(name = "formContent", description = "訊息", required = true) @RequestParam(description = "formContent", required = true) String formContent,
+//			@Parameter(name = "formCreateBy", description = "中文姓名", required = true) @RequestParam(description = "formCreateBy", required = true) String formCreateBy) {
 //		Form form = new Form(null, formPhone, formEmail, formContent, formCreateBy, null);
 //		Map<String, Object> responseMap = new HashMap<>();
 //		try {

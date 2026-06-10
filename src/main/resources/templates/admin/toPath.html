@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<div th:include="admin/load/js :: js"></div>
+<div th:insert="~{admin/load/js :: js}"></div>
 	<body>
 		<form id="mainForm" method="POST" th:action="${PATH}" >
 			<input type="hidden" id="path" th:value="${PATH}" />

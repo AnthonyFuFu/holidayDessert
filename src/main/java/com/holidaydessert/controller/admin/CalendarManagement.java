@@ -5,8 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -28,13 +28,13 @@ import com.holidaydessert.model.Fullcalendar;
 import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.FullcalendarService;
 
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @Controller
 @RequestMapping("/admin/calendar")
 @SessionAttributes("employeeSession")
 @CrossOrigin
-@ApiIgnore
+@Hidden
 public class CalendarManagement {
 
 	@Autowired

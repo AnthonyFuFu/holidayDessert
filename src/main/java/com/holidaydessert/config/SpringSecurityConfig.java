@@ -3,11 +3,11 @@ package com.holidaydessert.config;
 import java.io.IOException;
 import java.util.Optional;
 
-import javax.servlet.ServletException;
-import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -43,8 +43,8 @@ public class SpringSecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults()) // CORS 在 Spring Security 認證之前處理，header 才能加到 redirect response
                 .csrf(csrf -> csrf.disable())
-                .authorizeRequests(requests -> requests
-                        .antMatchers("/front/google/login", "/front/google/logout")
+                .authorizeHttpRequests(requests -> requests
+                        .requestMatchers("/front/google/login", "/front/google/logout")
                         .authenticated() // 指定需要Google登入驗證的頁面
                         .anyRequest().permitAll())
                 .oauth2Login(login -> login
@@ -115,7 +115,7 @@ public class SpringSecurityConfig {
 //                          response.sendRedirect(googleLogoutUrl);
 //                      })
 //              )
-                .addFilterAfter(new SessionCookieFilter(), BasicAuthenticationFilter.class).headers(headers -> headers.xssProtection());
+                .addFilterAfter(new SessionCookieFilter(), BasicAuthenticationFilter.class).headers(headers -> headers.xssProtection(Customizer.withDefaults()));
 
 		return http.build();
 	}

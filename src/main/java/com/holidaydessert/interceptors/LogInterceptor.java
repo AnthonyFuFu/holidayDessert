@@ -1,12 +1,11 @@
 package com.holidaydessert.interceptors;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.google.gson.Gson;
 import com.holidaydessert.model.Employee;
 
 //@Component
@@ -14,28 +13,28 @@ public class LogInterceptor implements HandlerInterceptor {
 
 //	@Autowired
 //	private EditLogService editLogService;
-	
+
 //	private EditLog editLog = new EditLog();
 
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		Gson gson = new Gson();
+//		Gson gson = new Gson();
 		Employee employeeSession = (Employee) request.getSession().getAttribute("employeeSession");
-		
+
 		if (employeeSession != null) {
 //			editLog.setCreate_by(userAccountSession.getEmployee_no());	
 		} else {
 //			editLog.setCreate_by("0");
 		}
-	    
-		String Args = gson.toJson(request.getParameterMap());
-		System.out.println(Args);
+
+//		String Args = gson.toJson(request.getParameterMap());
+//		System.out.println(Args);
 //		editLog.setIp(request.getRemoteAddr());
 //		editLog.setMethod(request.getMethod());
 //		editLog.setUrl(request.getRequestURI());
 //		editLog.setContent(Args);
-		
+
 		return HandlerInterceptor.super.preHandle(request, response, handler);
 	}
 //	@Override
@@ -115,8 +114,8 @@ public class LogInterceptor implements HandlerInterceptor {
 	@Override
 	public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
 			throws Exception {
-		int status = response.getStatus();
-		System.out.println(status);
+//		int status = response.getStatus();
+//		System.out.println(status);
 //		editLog.setStatus(Integer.toString(status));		
 //		editLogService.addLog(editLog);
 		HandlerInterceptor.super.afterCompletion(request, response, handler, ex);

@@ -1,7 +1,7 @@
 package com.holidaydessert.controller;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 import java.util.List;
 
@@ -14,7 +14,7 @@ import com.holidaydessert.repository.MemberRepository;
 
 @RestController
 @RequestMapping("/api/member")
-@Api(tags = "Member Management")
+@Tag(name = "Member Management")
 public class CRUDController {
 
     @Autowired
@@ -22,7 +22,7 @@ public class CRUDController {
 
     // GET 所有用戶或根據姓名和郵箱過濾用戶
     @GetMapping
-    @ApiOperation(value = "Get all users or filter by name and email")
+    @Operation(summary = "Get all users or filter by name and email")
     public ResponseEntity<List<Member>> getAllUsers(
             @RequestParam(required = false) String name,
             @RequestParam(required = false) String email) {
@@ -45,7 +45,7 @@ public class CRUDController {
 
     // POST 創建新用戶
     @PostMapping
-    @ApiOperation(value = "Create a new user with name and email")
+    @Operation(summary = "Create a new user with name and email")
     public ResponseEntity<Member> createUser(@RequestBody Member user) {
         try {
         	Member savedUser = memberRepository.save(user);
@@ -57,7 +57,7 @@ public class CRUDController {
 
     // GET 根據ID獲取用戶
     @GetMapping("/{id}")
-    @ApiOperation(value = "Get user by ID")
+    @Operation(summary = "Get user by ID")
     public ResponseEntity<Member> getUserById(@PathVariable Integer id) {
         return memberRepository.findById(id)
                 .map(user -> ResponseEntity.ok().body(user))
@@ -66,7 +66,7 @@ public class CRUDController {
 
     // PUT 更新用戶
     @PutMapping("/{id}")
-    @ApiOperation(value = "Update user by ID")
+    @Operation(summary = "Update user by ID")
     public ResponseEntity<Member> updateUser(@PathVariable Integer id, @RequestBody Member userDetails) {
         return memberRepository.findById(id)
                 .map(user -> {
@@ -80,7 +80,7 @@ public class CRUDController {
 
     // DELETE 刪除用戶
     @DeleteMapping("/{id}")
-    @ApiOperation(value = "Delete user by ID")
+    @Operation(summary = "Delete user by ID")
     public ResponseEntity<?> deleteUser(@PathVariable Integer id) {
         return memberRepository.findById(id)
                 .map(user -> {

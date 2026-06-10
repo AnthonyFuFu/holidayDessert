@@ -4,9 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -23,22 +23,22 @@ import org.springframework.web.bind.annotation.RestController;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.MemberService;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiParam;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Hidden;
 
 @RestController
 @RequestMapping("/front")
-@Api(tags = { "登入登出" })
+@Tag(name = "登入登出")
 public class FrontLoginController {
 	
 	@Autowired
 	private MemberService memberService;
 	
 	@PostMapping(value = "/login")
-	@ApiOperation(value = "登入", notes = "登入獲取會員資料")
-    public ResponseEntity<?> login(@ApiParam(name = "Member", value = "會員", required = true) @RequestBody Member member) {
+	@Operation(summary = "登入", description = "登入獲取會員資料")
+    public ResponseEntity<?> login(@Parameter(name = "Member", description = "會員", required = true) @RequestBody Member member) {
     	Map<String, Object> responseMap = new HashMap<>();
         try {
             Member login = memberService.login(member);
@@ -67,7 +67,7 @@ public class FrontLoginController {
         return ResponseEntity.ok(responseMap);
     }
 
-    @ApiIgnore
+    @Hidden
     @PostMapping(value = "/logout")
     public ResponseEntity<?> logout(HttpServletRequest request) {
     	Map<String, Object> responseMap = new HashMap<>();
@@ -88,7 +88,7 @@ public class FrontLoginController {
         return ResponseEntity.ok(responseMap);
     }
 
-    @ApiIgnore
+    @Hidden
 	@RequestMapping(value = "/google/login", method = { RequestMethod.GET, RequestMethod.POST })
 	public ResponseEntity<?> googleLogin(HttpServletRequest pRequest, HttpServletResponse pResponse, Authentication authentication) {
 		Map<String, Object> responseMap = new HashMap<>();

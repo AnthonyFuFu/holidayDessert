@@ -15,19 +15,19 @@ import com.holidaydessert.model.SearchConditionDto;
 import com.holidaydessert.service.OpenSearchService;
 
 import io.micrometer.core.annotation.Timed;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequestMapping(value = "api/openSearch")
-@Api(tags = "api/openSearch")
+@Tag(name = "api/openSearch")
 @Timed(value = "greeting.time", description = "Time taken to return greeting")
 public class OpenSearchController {
 
     @Autowired
     OpenSearchService openSearchService;
 
-    @ApiOperation(value = "advance search")
+    @Operation(summary = "advance search")
     @PostMapping("/openSearch")
     public ResponseEntity<?> memberSearch(@RequestBody List<SearchConditionDto> list) throws Exception {
 
