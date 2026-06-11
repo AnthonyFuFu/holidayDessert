@@ -27,7 +27,7 @@ import java.util.Map;
 @Profile("kafka")
 public class TicketConsumerConfig {
 
-    @Value("${kafka.bootstrap-servers}")
+    @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
 
     public static final String TICKET_ORDER_GROUP = "ticket-order-group";

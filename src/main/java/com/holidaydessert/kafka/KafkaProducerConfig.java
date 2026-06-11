@@ -23,22 +23,22 @@ import com.holidaydessert.model.Member;
 @Profile("kafka")
 public class KafkaProducerConfig {
 
-	@Value("${kafka.bootstrap-servers}")
+	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 
-	@Value("${kafka.properties.security.protocol}")
+	@Value("${spring.kafka.properties.security.protocol}")
 	private String securityProtocol;
 
-	@Value("${kafka.properties.sasl.mechanism}")
+	@Value("${spring.kafka.properties.sasl.mechanism}")
 	private String saslMechanism;
 
-	@Value("${kafka.producer.password}")
+	@Value("${spring.kafka.producer.password:}")
 	private String password;
 
-	@Value("${kafka.producer.username}")
+	@Value("${spring.kafka.producer.username:}")
 	private String username;
 
-	@Value("${kafka.properties.schema.registry.url}")
+	@Value("${spring.kafka.properties.schema.registry.url}")
 	private String schemaRegistryUrl;
 
     public static final String JSON_TOPIC = "json";

@@ -29,7 +29,7 @@ public class KafkaConsumerConfig {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ProducerController.class);
 
-	@Value("${kafka.bootstrap-servers}")
+	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
 
 	public static final String TEST_TOPIC = "test";

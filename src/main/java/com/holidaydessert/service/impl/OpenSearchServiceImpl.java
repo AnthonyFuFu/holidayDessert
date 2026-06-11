@@ -17,9 +17,9 @@ import org.opensearch.search.builder.SearchSourceBuilder;
 import org.opensearch.search.sort.FieldSortBuilder;
 import org.opensearch.search.sort.SortOrder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import com.holidaydessert.config.OpenSearchProperties;
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.SearchConditionDto;
 import com.holidaydessert.repository.MemberRepository;
@@ -45,8 +45,8 @@ public class OpenSearchServiceImpl implements OpenSearchService {
     @Autowired
     private MemberRepository memberRepository;
 
-    @Value("${opensearch.index_member}")
-    private String INDEX;
+    @Autowired
+    private OpenSearchProperties openSearchProperties;
 
     private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(OpenSearchServiceImpl.class);
 
@@ -122,7 +122,7 @@ public class OpenSearchServiceImpl implements OpenSearchService {
 
             List<Map<String, Object>> resultList = new ArrayList<>();
             if (eqCondition.size() > 0 || neqCondition.size() > 0 || likeCondition.size() > 0 || nlikeCondition.size() > 0) {
-                SearchRequest searchRequest = createSearchRequest(INDEX, eqCondition, neqCondition, likeCondition, nlikeCondition);
+                SearchRequest searchRequest = createSearchRequest(openSearchProperties.getIndexMember(), eqCondition, neqCondition, likeCondition, nlikeCondition);
                 SearchResponse searchResponse = restHighLevelClient.search(searchRequest, RequestOptions.DEFAULT);
 
                 logger.info("hits size = " + searchResponse.getHits().getHits().length);

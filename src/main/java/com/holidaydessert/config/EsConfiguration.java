@@ -21,7 +21,7 @@ import org.opensearch.client.RestClientBuilder;
 import org.opensearch.client.RestClientBuilder.HttpClientConfigCallback;
 import org.opensearch.client.RestClientBuilder.RequestConfigCallback;
 import org.opensearch.client.RestHighLevelClient;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -37,27 +37,20 @@ public class EsConfiguration {
     private static int maxConnectNum = 100;
     private static int maxConnectPerRoute = 100;
 
-    //opensearch properties
-    @Value("${opensearch.ip}")
-    private String opensearchHosts; // 集群地址,多個用逗號隔開
-    @Value("${opensearch.port}")
-    private int opensearchPort; // 集群地址端口
-    @Value("${opensearch.username}")
-    private String openSearchUserName;
-    @Value("${opensearch.password}")
-    private String openSearchPassWord;
+    @Autowired
+    private OpenSearchProperties openSearchProperties;
     
     @Bean
     RestHighLevelClient client() throws Exception {
         hostList = new ArrayList<>();
-        String[] hostStrs = opensearchHosts.split(",");
+        String[] hostStrs = openSearchProperties.getIp().split(",");
         for (String host : hostStrs) {
-            hostList.add(new HttpHost(host, opensearchPort, schema));
+            hostList.add(new HttpHost(host, openSearchProperties.getPort(), schema));
         }
         // 帳號密碼認證
         final CredentialsProvider credentialsProvider = new BasicCredentialsProvider();
         credentialsProvider.setCredentials(AuthScope.ANY,
-                new UsernamePasswordCredentials(openSearchUserName, openSearchPassWord));
+                new UsernamePasswordCredentials(openSearchProperties.getUsername(), openSearchProperties.getPassword()));
         //添加SSL認證
         SSLContext sslContext = new SSLContextBuilder().loadTrustMaterial(null, new TrustStrategy() {
             // 信任所有

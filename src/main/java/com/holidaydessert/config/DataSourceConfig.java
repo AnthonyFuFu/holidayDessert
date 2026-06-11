@@ -2,33 +2,39 @@ package com.holidaydessert.config;
 
 import javax.sql.DataSource;
 
-import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
-import com.alibaba.druid.spring.boot3.autoconfigure.DruidDataSourceBuilder;
-
 @Configuration
 public class DataSourceConfig {
-	
-	@Bean(name = "firstDataSource")
-	@Qualifier("firstDataSource")
-	@ConfigurationProperties(prefix="spring.datasource.druid.first")
-	DataSource primaryDataSource() {
-		return DruidDataSourceBuilder.create().build();
-	}
-	
-	@Bean(name="jdbcTemplate")
-	JdbcTemplate mysqlJdbcTemplate (@Qualifier("firstDataSource")  DataSource dataSource ) {
-		return new JdbcTemplate(dataSource);
-	}
-	
-	@Bean(name="jdbcNameTemplate")
-    NamedParameterJdbcTemplate mysqlJdbcNameTemplate (@Qualifier("firstDataSource")  DataSource dataSource ) {
-    	return new NamedParameterJdbcTemplate(dataSource);
-	}
-	
+
+    @Primary
+    @Bean
+    @ConfigurationProperties("spring.datasource")
+    DataSourceProperties firstDataSourceProperties() {
+        return new DataSourceProperties();
+    }
+
+    @Primary
+    @Bean(name = "firstDataSource")
+    @ConfigurationProperties("spring.datasource.hikari")
+    DataSource primaryDataSource() {
+        return firstDataSourceProperties().initializeDataSourceBuilder().build();
+    }
+
+    @Bean(name = "jdbcTemplate")
+    JdbcTemplate mysqlJdbcTemplate(DataSource dataSource) {
+        return new JdbcTemplate(dataSource);
+    }
+
+    @Bean(name = "jdbcNameTemplate")
+    NamedParameterJdbcTemplate mysqlJdbcNameTemplate(DataSource dataSource) {
+        return new NamedParameterJdbcTemplate(dataSource);
+    }
+
 }

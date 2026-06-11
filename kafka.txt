@@ -1,5 +1,5 @@
 # cd to path
-cd C:\kafka_2.12-2.8.0
+cd C:\kafka (kafka_2.12-2.8.0)
 
 # Start the ZooKeeper service on windows
 .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties

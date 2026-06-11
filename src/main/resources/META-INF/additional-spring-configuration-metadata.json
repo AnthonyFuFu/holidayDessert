@@ -1,0 +1,49 @@
+{
+  "properties": [
+    {
+      "name": "web.path",
+      "type": "java.lang.String",
+      "description": "Web base URL for this application."
+    },
+    {
+      "name": "html.title",
+      "type": "java.lang.String",
+      "description": "HTML page title."
+    },
+    {
+      "name": "html.url",
+      "type": "java.lang.String",
+      "description": "HTML base URL."
+    },
+    {
+      "name": "mail.fromname",
+      "type": "java.lang.String",
+      "description": "Display name for outgoing mail sender."
+    },
+    {
+      "name": "admin.upload.file.path",
+      "type": "java.lang.String",
+      "description": "File system path for admin uploaded files."
+    },
+    {
+      "name": "static.url",
+      "type": "java.lang.String",
+      "description": "Static resources base URL."
+    },
+    {
+      "name": "jwt.secret",
+      "type": "java.lang.String",
+      "description": "Secret key for JWT token signing."
+    },
+    {
+      "name": "user.web-base",
+      "type": "java.lang.String",
+      "description": "Local file system base path for the project."
+    },
+    {
+      "name": "logback.logdir",
+      "type": "java.lang.String",
+      "description": "Directory path for logback log files."
+    }
+  ]
+}
