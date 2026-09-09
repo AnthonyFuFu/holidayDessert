@@ -1,0 +1,324 @@
+# server port
+server:
+  port: 8080
+
+  # Spring Web config
+  servlet:
+    context-path: /holidayDessert
+
+  max-http-request-header-size: "16KB"
+
+spring:
+  profiles:
+    active: local
+    #active: prod,kafka
+
+  # Spring Web config
+  servlet:
+    multipart:
+      max-file-size: "64MB"
+      max-request-size: "64MB"
+
+  # thymeleaf config
+  thymeleaf:
+    prefix: classpath:/templates/
+    cache: false
+
+  web:
+    resources:
+      static-locations: classpath:/static/
+
+  # JPA config
+  jpa:
+    show-sql: false
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+
+  # DataSource config (HikariCP)
+  datasource:
+    url: jdbc:mysql://localhost:3306/holiday_dessert?serverTimezone=Asia/Taipei
+    username: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 60000
+      idle-timeout: 300000
+      max-lifetime: 1800000
+      connection-test-query: SELECT 1
+
+  # Redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  # google Login (taipeirealgood@gmail.com)
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 730279248455-vb75s57ap9ptonvvmvgh3t95iqg5bjav.apps.googleusercontent.com
+            client-secret: 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
+
+            # official machine
+            # redirect-uri: https://www.holidaydessert.com.tw/holidayDessert/login/oauth2/code/{registrationId}
+
+            # local machine
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope:
+              - profile
+              - email
+            client-name: Google
+
+        provider:
+          google:
+            authorization-uri: https://accounts.google.com/o/oauth2/auth
+            token-uri: https://accounts.google.com/o/oauth2/token
+            user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+            user-name-attribute: name
+
+  # Kafka Bootstrap Servers
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    # Kafka Properties
+    properties:
+      security.protocol: SASL_PLAINTEXT
+      sasl.mechanism: PLAIN
+      sasl.kerberos.service.name: kafka
+      schema.registry.url: http://localhost:8081
+      # sasl.jaas.config: 'org.apache.kafka.common.security.plain.PlainLoginModule required username="root" password="123456";'
+
+    # Kafka Producer Properties
+    producer:
+      retries: 0
+      batch-size: 16384
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: io.confluent.kafka.serializers.KafkaAvroSerializer
+
+# Azure OpenAI
+azure:
+  openai:
+    model: gpt-3.5-turbo-16k
+    # model: data-team-test
+    key: c27f170c6ab241798fbe2ac5db0e8e61
+    endpoint: https://data-team-test-0222.openai.azure.com/
+    deployment: data-team-test
+
+# Custom
+html:
+  url: ""
+  title: 假日甜點
+
+static:
+  url: ""
+
+mail:
+  fromname: 假日甜點
+
+# jwt
+jwt:
+  secret: holidayDessert
+
+
+logging:
+  level:
+    root: INFO
+    # org.springframework: WARN
+    # org.hibernate: WARN
+    org.apache.kafka: WARN
+    org.springframework.data.redis: WARN
+    org.springframework.data.repository: WARN
+    org.hibernate: WARN
+    com.ulisesbocchio: WARN
+    com.holidaydessert: DEBUG
+
+  # Logback config
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] [%t] %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%level] [%t] [%line] %msg%n"
+
+  file:
+    path: ./
+
+# opensearch
+opensearch:
+  ip: localhost
+  port: 9200
+  username: admin
+  password: admin
+  index-member: index_member
+
+# ------------------------------
+# github
+# ------------------------------
+# https://github.com/AnthonyFuFu/holidayDessert.git
+
+# ------------------------------
+# swagger-ui
+# ------------------------------
+# http://localhost:8080/holidayDessert/swagger-ui.html
+
+
+# ------------------------------
+# Custom Environment
+# ------------------------------
+---
+spring:
+  config:
+    activate:
+      on-profile: local
+
+  datasource:
+    password: "123456"
+
+  data:
+    redis:
+      password: ""
+
+web:
+  path: http://localhost:8080/
+  #path: https://www.anthonyFu.com.tw/
+
+user:
+  web-base: 'C:\Users\wits.AnthonyFu\git\holidayDessert'
+
+admin:
+  upload:
+    file:
+      path: 'C:\Users\wits.AnthonyFu\git\holidayDessert\src\main\resources\static\admin\upload\'
+
+logback:
+  logdir: 'C:\Users\wits.AnthonyFu\git\holidayDessert\logs'
+
+# ------------------------------
+# R5-2600 windows Environment
+# ------------------------------
+---
+spring:
+  config:
+    activate:
+      on-profile: r5-2600-windows
+
+  datasource:
+    password: cga103g4
+
+  data:
+    redis:
+      password: ""
+
+web:
+  path: http://localhost:8080/
+
+user:
+  web-base: 'C:\Users\User\git\holidayDessert'
+
+admin:
+  upload:
+    file:
+      path: 'C:\Users\User\git\holidayDessert\src\main\resources\static\admin\upload\'
+
+logback:
+  logdir: 'C:\Users\User\git\holidayDessert\logs'
+
+
+# ------------------------------
+# R5-2600 wsl Environment
+# ------------------------------
+---
+spring:
+  config:
+    activate:
+      on-profile: r5-2600-wsl
+
+  datasource:
+    password: cga103g4
+
+web:
+  path: http://localhost:8080/
+
+user:
+  web-base: /home/s9017688/Desktop/work/holidayDessert
+
+admin:
+  upload:
+    file:
+      path: /home/s9017688/Desktop/work/holidayDessert/src/main/resources/static/admin/upload/
+
+logback:
+  logdir: /home/s9017688/Desktop/work/holidayDessert/logs
+
+
+# ------------------------------
+# I5-10400F windows Environment
+# ------------------------------
+---
+spring:
+  config:
+    activate:
+      on-profile: i5-10400f-windows
+
+  datasource:
+    password: sa4850869
+
+  data:
+    redis:
+      password: 123456
+
+web:
+  path: http://localhost:8080/
+
+
+# ------------------------------
+# HX370 windows Environment
+# ------------------------------
+---
+spring:
+  config:
+    activate:
+      on-profile: hx370-windows
+
+  datasource:
+    password: sa4850869
+
+  data:
+    redis:
+      password: ""
+
+web:
+  path: http://localhost:8080/
+
+
+# ------------------------------
+# Mac Environment
+# ------------------------------
+---
+spring:
+  config:
+    activate:
+      on-profile: mac
+
+  datasource:
+    password: sa4850869
+
+  data:
+    redis:
+      password: ""
+
+web:
+  path: http://localhost:8080/
+
+user:
+  web-base: /Users/shenghungfu/git/holidayDessert
+
+admin:
+  upload:
+    file:
+      path: /Users/shenghungfu/git/holidayDessert/src/main/resources/static/admin/upload/
+
+logback:
+  logdir: /Users/shenghungfu/git/holidayDessert/logs
