@@ -17,6 +17,7 @@ import com.holidaydessert.utils.JWTUtil;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Hidden;
 
 @RestController
@@ -51,7 +52,7 @@ public class IndexController {
 		return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
 		
 	}
-
+    
     @PostMapping(value = "/getPopularList")
 	@Operation(summary = "熱門推薦", description = "顯示於首頁的熱門推薦清單")
 	public ResponseEntity<?> getPopularList() {
@@ -79,13 +80,16 @@ public class IndexController {
 		
 	}
 	
+    
+    
+    // 測試JWT token是否有效(使用JWTUtil來驗證 舊方法)
     @PostMapping(value = "/getNewList")
 	@Operation(summary = "新品上市", description = "顯示於首頁的新品上市清單")
 	public ResponseEntity<?> getNewList(HttpServletRequest request) {
 		try {
 			ApiReturnObject apiReturnObject = new ApiReturnObject();
 			String token = request.getHeader("Authorization");
-			if(JWTUtil.getSubjectFromToken(token) != null) {
+			if(JWTUtil.getSubject(token) != null) {
 				apiReturnObject = productService.getNewArrivalList();
 			}
 			return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
@@ -93,5 +97,21 @@ public class IndexController {
 	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiReturnObject.forbidden("Token 無效"));
 		}
 	}
-	
+
+    // 測試JWT token是否有效(使用SecurityFilterChain來驗證 新方法)
+    @SecurityRequirement(name = "memberAuth")
+    @PostMapping(value = "/api/getApiNewList")
+	@Operation(summary = "新品上市", description = "顯示於首頁的新品上市清單")
+	public ResponseEntity<?> getApiNewList(HttpServletRequest request) {
+		try {
+			ApiReturnObject apiReturnObject = new ApiReturnObject();
+			String token = request.getHeader("Authorization");
+			if(JWTUtil.getSubject(token) != null) {
+				apiReturnObject = productService.getNewArrivalList();
+			}
+			return new ResponseEntity<ApiReturnObject>(apiReturnObject,HttpStatus.OK);
+		} catch (Exception e) {
+	        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(ApiReturnObject.forbidden("Token 無效"));
+		}
+	}
 }

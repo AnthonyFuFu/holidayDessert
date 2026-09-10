@@ -15,7 +15,9 @@ import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @Tag(name = "提取PDF文字")
 @RequestMapping("/api")
@@ -25,7 +27,7 @@ public class PdfController {
 	public ResponseEntity<?> extractPDF(@RequestParam MultipartFile file) {
 		try {
 			String pdfText = extractTextFromPDF(file.getInputStream());
-			System.out.println(pdfText);
+			log.info(pdfText);
 			ApiReturnObject apiReturnObject = ApiReturnObject.success("取得對話成功", pdfText);
 			return ResponseEntity.ok(apiReturnObject);
 		} catch (Exception e) {
@@ -53,7 +55,7 @@ public class PdfController {
 //	public ResponseEntity<?> extractPDF(@RequestParam("file") MultipartFile file) {
 //		try {
 //			String pdfText = extractTextFromPDF("C:\\Users\\TKB0004757\\Downloads\\生物課程報告-分裂組探究實驗教學.pdf");
-//			System.out.println(pdfText);
+//			log.info(pdfText);
 //			ApiReturnObject apiReturnObject =  ApiReturnObject.success("取得對話成功", pdfText);
 //			return ResponseEntity.ok(apiReturnObject);
 //		} catch (Exception e) {

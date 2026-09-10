@@ -18,8 +18,10 @@ public class FormService {
 	
 	@Autowired
 	private FormRepository formRepository;
-	
+
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> list(Form form) {
 		return formdao.list(form);
 	}
@@ -27,8 +29,10 @@ public class FormService {
 	public int getCount(Form form) {
 		return formdao.getCount(form);
 	}
-	
+
+	// =============================================
 	// front
+	// =============================================
 	public void add(Form form) {
 		formRepository.save(form);
 	}

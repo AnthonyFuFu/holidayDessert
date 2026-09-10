@@ -18,8 +18,10 @@ public class BannerService {
 
     @Autowired
     private BannerRepository bannerRepository;
-    
+
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> list(Banner banner) {
 		return bannerDao.list(banner);
 	}
@@ -39,8 +41,10 @@ public class BannerService {
 	public Banner getData(Banner banner) {
 		return bannerDao.getData(banner);
 	}
-	
+
+	// =============================================
 	// front
+	// =============================================
 	public List<Banner> frontRandList(String newsId) {
 		return bannerRepository.findFrontRandList(newsId);
 	}

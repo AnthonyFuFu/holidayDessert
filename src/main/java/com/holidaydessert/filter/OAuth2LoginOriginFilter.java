@@ -9,7 +9,11 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
+
 import java.io.IOException;
+
+@Slf4j
 @Component
 @Order(-200) // 必須小於 Spring Security 的 -100，才能搶先執行
 public class OAuth2LoginOriginFilter extends OncePerRequestFilter {
@@ -26,7 +30,7 @@ public class OAuth2LoginOriginFilter extends OncePerRequestFilter {
 
         if ("/front/google/login".equals(servletPath)) {
             int originPort = resolveOriginPort(request);
-            System.out.println("[OAuth2LoginOriginFilter] 儲存 port: " + originPort);
+            log.info("[OAuth2LoginOriginFilter] 儲存 port: " + originPort);
 
             Cookie portCookie = new Cookie(COOKIE_KEY_ORIGIN_PORT, String.valueOf(originPort));
             portCookie.setPath("/");

@@ -4,6 +4,7 @@ import java.util.List;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,7 @@ import com.holidaydessert.service.EmployeeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 
+@Slf4j
 @Controller
 @RequestMapping("/")
 @SessionAttributes("memberSession")
@@ -28,8 +30,6 @@ public class HolidayDessertController {
 	@Autowired
 	private EmployeeService employeeService;
 	
-//	private final org.slf4j.Logger log = LoggerFactory.getLogger(LoggerGroups.class);
-	
 	@RequestMapping(value = "/index", method = { RequestMethod.GET, RequestMethod.POST })
 	@Operation(summary = "首頁", description = "進行查詢")
 	public String index(Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) {
@@ -37,7 +37,7 @@ public class HolidayDessertController {
 		List<Employee> list = employeeService.findAllWithDepartment();
 		for (Employee employee : list) {
 		    Department department = employee.getDepartment();
-		    System.out.println(department.toString()+"|===|"+"Employee: " + employee.getEmpName() + ", Department: " + department.getDeptName());
+		    log.info(department.toString()+"|===|"+"Employee: " + employee.getEmpName() + ", Department: " + department.getDeptName());
 		}
 		
 		return "front/index";

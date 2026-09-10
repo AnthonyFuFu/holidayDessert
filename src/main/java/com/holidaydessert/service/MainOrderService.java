@@ -19,8 +19,10 @@ public class MainOrderService {
 	
 	@Autowired
 	private MainOrderRepository mainOrderRepository;
-	
+
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> list(MainOrder mainOrder) {
 		return mainOrderDao.list(mainOrder);
 	}
@@ -32,8 +34,10 @@ public class MainOrderService {
 	public void update(MainOrder mainOrder) {
 		mainOrderDao.update(mainOrder);
 	}
-	
+
+	// =============================================
 	// front
+	// =============================================
 	@Transactional
 	public void add(MainOrder mainOrder) {
 		mainOrderRepository.save(mainOrder);

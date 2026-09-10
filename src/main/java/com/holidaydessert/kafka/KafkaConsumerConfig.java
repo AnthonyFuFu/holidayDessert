@@ -5,8 +5,6 @@ import java.util.Map;
 
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,12 +20,13 @@ import org.springframework.util.backoff.FixedBackOff;
 
 import com.holidaydessert.model.Member;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Configuration
 @EnableKafka
 @Profile("kafka")
 public class KafkaConsumerConfig {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProducerController.class);
 
 	@Value("${spring.kafka.bootstrap-servers}")
 	private String bootstrapServers;
@@ -84,7 +83,7 @@ public class KafkaConsumerConfig {
 	    DefaultErrorHandler errorHandler = new DefaultErrorHandler(
 	        (consumerRecord, exception) -> {
 	            // recovery callback（等同你以前的 setRecoveryCallback）
-	            LOGGER.info("Recovery is called for message: {}", consumerRecord.value()
+	            log.info("Recovery is called for message: {}", consumerRecord.value()
 	            );
 	        },
 	        backOff

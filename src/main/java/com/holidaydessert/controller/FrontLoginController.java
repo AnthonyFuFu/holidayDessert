@@ -7,6 +7,7 @@ import java.util.Optional;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.security.core.context.SecurityContextHolder;
 
@@ -22,12 +23,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.MemberService;
+import com.holidaydessert.utils.CommonUtil;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Hidden;
 
+@Slf4j
 @RestController
 @RequestMapping("/front")
 @Tag(name = "登入登出")
@@ -96,8 +99,8 @@ public class FrontLoginController {
 		if (authentication != null) {
 			// 獲取google已驗證用戶的Principal
 			Object principal = authentication.getPrincipal();
-			String ip = getRemoteHost(pRequest);
-			System.out.println(ip);
+			String ip = CommonUtil.getRemoteHost(pRequest);
+			log.info(ip);
 			// 獲取google用戶的屬性
 			if (principal instanceof OAuth2User) {
 				OAuth2User oAuth2User = (OAuth2User) principal;
@@ -125,18 +128,4 @@ public class FrontLoginController {
 		return ResponseEntity.ok(responseMap);
 	}
     
-	private String getRemoteHost(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
-	}
-	
 }

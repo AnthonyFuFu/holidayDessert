@@ -33,8 +33,10 @@ public class ChatRoomService {
 
 	@Autowired
 	private MessageRepository messageRepository;
-	
+
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> getAllChatRoom() {
 		return chatRoomDao.getAllChatRoom();
 	}
@@ -45,8 +47,10 @@ public class ChatRoomService {
 		String msg = claimed > 0 ? "已認領聊天室" : "聊天室已有負責人";
 		return ApiReturnObject.success(msg, claimed);
 	}
-	
+
+	// =============================================
 	// front
+	// =============================================
 	public ApiReturnObject getChatRoom(Integer memId) {
 		List<Map<String, Object>> chatRoomByMessage = chatRoomRepository.getChatRoomByMessage(memId);
 

@@ -22,7 +22,9 @@ public class MemberCouponService {
 	@Autowired
 	private MemberCouponRepository memberCouponRepository;
 
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> list(MemberCoupon memberCoupon) {
 		return memberCouponDao.list(memberCoupon);
 	}
@@ -39,7 +41,9 @@ public class MemberCouponService {
 		memberCouponDao.batchAddOneWeekCoupon(coupon, member);
 	}
 
+	// =============================================
 	// front
+	// =============================================
 	@Transactional
 	public void useCoupon(MemberCoupon memberCoupon) {
 		memberCouponRepository.useCoupon(memberCoupon.getMemCpId());

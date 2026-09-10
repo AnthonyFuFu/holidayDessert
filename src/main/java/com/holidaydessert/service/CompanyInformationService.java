@@ -18,8 +18,10 @@ public class CompanyInformationService {
 	
 	@Autowired
 	private CompanyInformationRepository companyInformationRepository;
-	
+
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> list(CompanyInformation companyInformation) {
 		return companyInformationDao.list(companyInformation);
 	}
@@ -44,7 +46,9 @@ public class CompanyInformationService {
 		return companyInformationDao.getData(companyInformation);
 	}
 
+	// =============================================
 	// front
+	// =============================================
 	public List<Map<String, Object>> frontList() {
 	    List<Map<String, Object>> list = companyInformationRepository.frontList();
 	    return list.isEmpty() ? null : list;

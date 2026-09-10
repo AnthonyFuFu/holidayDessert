@@ -36,7 +36,9 @@ import jakarta.mail.Transport;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
 import jakarta.mail.internet.MimeUtility;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 public class CommonService {
 
@@ -273,12 +275,12 @@ public class CommonService {
 		try {
 			// 判断Key是否正确
 			if (sKey == null) {
-				System.out.print("Key为空null");
+				log.info("Key为空null");
 				return null;
 			}
 			// 判断Key是否为16位
 			if (sKey.length() != 16) {
-				System.out.print("Key长度不是16位");
+				log.info("Key长度不是16位");
 				return null;
 			}
 			byte[] raw = sKey.getBytes("ASCII");
@@ -288,17 +290,17 @@ public class CommonService {
 			cipher.init(Cipher.DECRYPT_MODE, skeySpec, iv);
 //			byte[] encrypted1 = new BASE64Decoder().decodeBuffer(sSrc);//先用base64解密
 			byte[] encrypted1 = decoder.decode(sSrc);// 先用base64解密
-//			System.out.println("encrypted1: "+encrypted1.toString());
+//			log.info("encrypted1: "+encrypted1.toString());
 			try {
 				byte[] original = cipher.doFinal(encrypted1);
 				String originalString = new String(original);
 				return originalString;
 			} catch (Exception e) {
-				System.out.println(e.toString());
+				log.info(e.toString());
 				return null;
 			}
 		} catch (Exception ex) {
-			System.out.println(ex.toString());
+			log.info(ex.toString());
 			return null;
 		}
 	}

@@ -15,7 +15,9 @@ public class CommentService {
 	@Autowired
 	private CommentRepository commentRepository;
 
+	// =============================================
 	// front
+	// =============================================
 	public ApiReturnObject getCommentList() {
 		
 		List<Map<String, Object>> commentList = commentRepository.getCommentList();

@@ -1,45 +1,61 @@
 package com.holidaydessert.config;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Optional;
+
+import javax.crypto.SecretKey;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.oauth2.jose.jws.MacAlgorithm;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtValidators;
+import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.holidaydessert.constant.AllowedOrigin;
 import com.holidaydessert.filter.OAuth2LoginOriginFilter;
 import com.holidaydessert.filter.SessionCookieFilter;
+import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.service.MemberService;
+import com.holidaydessert.utils.CommonUtil;
 
-@Order(Ordered.HIGHEST_PRECEDENCE)
+import io.jsonwebtoken.security.Keys;
+
+@Slf4j
 @Configuration
 @EnableWebSecurity
-public class SpringSecurityConfig {
+public class SecurityConfig {
 
 	@Autowired
 	private MemberService memberService;
 
 	@Bean
+	@Order(2)
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors(Customizer.withDefaults()) // CORS 在 Spring Security 認證之前處理，header 才能加到 redirect response
                 .csrf(csrf -> csrf.disable())
@@ -52,7 +68,7 @@ public class SpringSecurityConfig {
                             @Override
                             public void onAuthenticationSuccess(HttpServletRequest pRequest, HttpServletResponse pResponse, Authentication authentication) throws IOException, ServletException {
                                 Object principal = authentication.getPrincipal();
-                                String ip = getRemoteHost(pRequest);
+                                String ip = CommonUtil.getRemoteHost(pRequest);
                                 // 獲取HttpSession對象
                                 HttpSession session = pRequest.getSession();
 
@@ -63,7 +79,7 @@ public class SpringSecurityConfig {
                                     String oAuth2UserEmail = (String) oAuth2User.getAttribute("email");
 
                                     Optional<Member> optional = memberService.getDataByGoogleUid(oAuth2UserSub);
-                                    System.out.println(ip + "-" + session + "-" + oAuth2UserName + "-" + oAuth2UserEmail + "-" + oAuth2UserSub);
+                                    log.info(ip + "-" + session + "-" + oAuth2UserName + "-" + oAuth2UserEmail + "-" + oAuth2UserSub);
                                     if (!optional.isPresent()) {
                                         Member member = new Member();
                                         member.setMemName(oAuth2UserName);
@@ -122,7 +138,7 @@ public class SpringSecurityConfig {
 	
 	private String resolveRedirectPath(HttpServletRequest request, String basePath) {
 	    int port = getOriginPortFromCookie(request);
-	    System.out.println("[resolveRedirectPath] 使用 port: " + port);
+	    log.info("[resolveRedirectPath] 使用 port: " + port);
 	    if (port == AllowedOrigin.PORT_HTML) {
 	        return basePath + ".html";
 	    } else {
@@ -153,18 +169,69 @@ public class SpringSecurityConfig {
 	    response.addCookie(expiredCookie);
 	}
 	
-	private String getRemoteHost(HttpServletRequest request) {
-		String ip = request.getHeader("x-forwarded-for");
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getHeader("WL-Proxy-Client-IP");
-		}
-		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
-			ip = request.getRemoteAddr();
-		}
-		return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+	
+	
+	
+	
+	
+	// JWT 驗證
+	private static final String JWT_SECRET = "holiday-dessert-jwt-secret-key-very-secure";
+	private static final String JWT_ISSUER = "holidaydesserAPIKey";
+	@Autowired
+	private ObjectMapper objectMapper;
+	@Bean
+	SecretKey jwtSecretKey() {
+		return Keys.hmacShaKeyFor(JWT_SECRET.getBytes(StandardCharsets.UTF_8));
 	}
 
+	@Bean
+	JwtDecoder jwtDecoder(SecretKey jwtSecretKey) {
+		NimbusJwtDecoder decoder = NimbusJwtDecoder.withSecretKey(jwtSecretKey).macAlgorithm(MacAlgorithm.HS256).build();
+		decoder.setJwtValidator(JwtValidators.createDefaultWithIssuer(JWT_ISSUER));
+		return decoder;
+	}
+
+	@Bean
+	@Order(1)
+	SecurityFilterChain apiSecurityFilterChain(HttpSecurity http) throws Exception {
+		http.securityMatcher("/api/**")
+				.cors(Customizer.withDefaults())
+				.csrf(csrf -> csrf.disable())
+				.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+				.exceptionHandling(exception -> exception
+						// 沒有 Token、Token 無效、Token 過期
+						.authenticationEntryPoint((request, response, authException) -> {
+							ApiReturnObject result = ApiReturnObject.unauthorized("未登入或 Token 無效");
+							response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+							response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+							response.getWriter().write(objectMapper.writeValueAsString(result));
+						})
+						// Token 有效，但權限不足
+						.accessDeniedHandler((request, response, accessDeniedException) -> {
+							ApiReturnObject result = ApiReturnObject.forbidden("沒有權限存取此資源");
+							response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+							response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+							response.getWriter().write(objectMapper.writeValueAsString(result));
+						}))
+				.authorizeHttpRequests(auth -> auth
+						.requestMatchers(HttpMethod.POST, "/api/token/getToken").permitAll()
+						.requestMatchers(HttpMethod.POST, "/api/token/refresh").permitAll()
+						.anyRequest().authenticated())
+				.oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults())
+						// Resource Server 驗證失敗時也使用相同 JSON
+						.authenticationEntryPoint((request, response, authException) -> {
+							ApiReturnObject result = ApiReturnObject.unauthorized("Token 無效或已過期");
+							response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+							response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+							response.getWriter().write(objectMapper.writeValueAsString(result));
+						})
+						.accessDeniedHandler((request, response, accessDeniedException) -> {
+							ApiReturnObject result = ApiReturnObject.forbidden("沒有權限存取此資源");
+							response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+							response.setContentType(MediaType.APPLICATION_JSON_VALUE + ";charset=UTF-8");
+							response.getWriter().write(objectMapper.writeValueAsString(result));
+						}));
+		return http.build();
+	}
+	
 }

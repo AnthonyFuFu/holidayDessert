@@ -7,6 +7,7 @@ import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -30,6 +31,7 @@ import com.holidaydessert.service.FullcalendarService;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
+@Slf4j
 @Controller
 @RequestMapping("/admin/calendar")
 @SessionAttributes("employeeSession")
@@ -76,7 +78,7 @@ public class CalendarManagement {
 	@ResponseBody
 	@GetMapping("/getManagedEmployees")
 	public List<Map<String, Object>>getManagedEmployees(@RequestParam(value = "EMP_ID", required = true) String empId) throws Exception {
-		System.out.println("empId:"+empId);
+		log.info("empId:"+empId);
 		Fullcalendar fullcalendarData = new Fullcalendar();
 		Employee employee = new Employee();
 		employee.setEmpManagerId(empId);
@@ -84,7 +86,7 @@ public class CalendarManagement {
 		
 		List<Map<String, Object>> getManagedEmpList = fullcalendarService.getManagedEmployees(fullcalendarData);
 
-		System.out.println("getManagedEmpList:"+getManagedEmpList);
+		log.info("getManagedEmpList:"+getManagedEmpList);
 		if (getManagedEmpList == null) {
 			getManagedEmpList = new ArrayList<Map<String, Object>>();
 		}

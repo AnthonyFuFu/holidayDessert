@@ -13,11 +13,13 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
+import jakarta.servlet.http.HttpServletRequest;
+
 /**
  * 常用類別 使用Static靜態 就不需要new util使用來放常用類別 ,放在此package底下基本上不需要給予@Bean的宣告就能使用
  * 因為都是靜態的屬性與方法
  */
-public class BaseUtil {
+public class CommonUtil {
 	protected static String PASSWORD_KEY = "HOLIDAY_DESSERT_KEY";
 
 	// 回傳加密字串
@@ -126,4 +128,18 @@ public class BaseUtil {
 		return null;
 	}
 
+	public static String getRemoteHost(HttpServletRequest request) {
+		String ip = request.getHeader("x-forwarded-for");
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getHeader("WL-Proxy-Client-IP");
+		}
+		if (ip == null || ip.length() == 0 || "unknown".equalsIgnoreCase(ip)) {
+			ip = request.getRemoteAddr();
+		}
+		return "0:0:0:0:0:0:0:1".equals(ip) ? "127.0.0.1" : ip;
+	}
+	
 }

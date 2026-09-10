@@ -3,13 +3,19 @@ package com.holidaydessert.service;
 import java.util.List;
 import java.util.Map;
 
-public interface TokenService {
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
-	/***
-	 * 核對資料
-	 * @param String web_code
-	 * @param String code_description
-	 * @return
-	 */
-	public List<Map<String, Object>> getToken(String memEmail,String memPassword);
+import com.holidaydessert.dao.TokenDao;
+
+@Service
+public class TokenService {
+
+	@Autowired
+	private TokenDao tokenDao;
+	
+	public List<Map<String, Object>> getToken(String memEmail,String memPassword) {
+		return tokenDao.getToken(memEmail, memPassword);
+	}
+	
 }

@@ -20,8 +20,10 @@ public class CartService {
 	
     @Autowired
     private CartRepository cartRepository;
-    
+
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> list(Cart cart) {
 		return cartDao.list(cart);
 	}
@@ -29,8 +31,10 @@ public class CartService {
 	public Integer getCount(Cart cart) {
 		return cartDao.getCount(cart);
 	}
-	
+
+	// =============================================
 	// front
+	// =============================================
 	public List<Cart> frontList(String memId) {
         List<Cart> list = cartRepository.frontList(memId);
         return list.isEmpty() ? null : list;

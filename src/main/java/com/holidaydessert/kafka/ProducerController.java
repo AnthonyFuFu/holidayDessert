@@ -1,7 +1,5 @@
 package com.holidaydessert.kafka;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
@@ -16,11 +14,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.holidaydessert.model.Member;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @RestController
 @RequestMapping("kafka")
 public class ProducerController {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(ProducerController.class);
 
 	@Autowired(required = false) //如果有 KafkaTemplate 就幫我注入，沒有的話就塞 null，不要炸
 	private KafkaTemplate<String, Member> kafkaTemplate;
@@ -35,9 +34,9 @@ public class ProducerController {
 	        CompletableFuture<SendResult<String, Member>> future = kafkaTemplate.send(KafkaProducerConfig.JSON_TOPIC, member);
 	        future.whenComplete((result, ex) -> {
 	            if (ex == null) {
-	                LOGGER.info("success send message:{} with offset:{} ", member, result.getRecordMetadata().offset());
+	                log.info("success send message:{} with offset:{} ", member, result.getRecordMetadata().offset());
 	            } else {
-	                LOGGER.error("fail send message! Do somthing....");
+	            	log.error("fail send message! Do somthing....");
 	            }
 	        });
 	        return "Published done";

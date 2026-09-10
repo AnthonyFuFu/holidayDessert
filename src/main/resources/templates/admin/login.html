@@ -15,7 +15,7 @@
         <div class="card">
             <div class="body">
             	
-                <form id="mainForm" method="POST" enctype="multipart/form-data">
+                <form id="mainForm" method="POST" th:action="@{/admin/doLogin}">
                     <div class="msg">請登入開始使用系統</div>
                     <div class="msg" th:text="${msg}">&nbsp;</div>
                     <div class="input-group">
@@ -37,7 +37,7 @@
                     <div class="row">
                         <div class="col-xs-8 p-t-5"></div>
                         <div class="col-xs-4">
-                            <button class="btn btn-block bg-pink waves-effect" type="submit" onclick="checkLogin()">Login</button>
+                            <button class="btn btn-block bg-pink waves-effect" type="submit">Login</button>
                         </div>
                     </div>
                 </form>

@@ -1,14 +1,95 @@
 package com.holidaydessert.dao;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.stereotype.Repository;
+
 import com.holidaydessert.model.OrderDetail;
 
-public interface OrderDetailDao {
+@Repository
+public class OrderDetailDao {
 
+	@Autowired
+	private JdbcTemplate jdbcTemplate;
+
+	// =============================================
 	// back
-	public List<Map<String, Object>> list(OrderDetail orderDetail);
-	public int getCount(OrderDetail orderDetail);
+	// =============================================
+	public List<Map<String, Object>> list(OrderDetail orderDetail) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT ORD_SUBTOTAL, ORD_TOTAL, ORD_STATUS, DATE_FORMAT(ORD_CREATE, '%Y-%m-%d %H:%i:%s') ORD_CREATE, ORD_RECIPIENT, ORD_RECIPIENT_PHONE, "
+				   + " ORD_PAYMENT, ORD_DELIVERY, ORD_ADDRESS, od.*, PD_NAME "
+				   + " FROM holiday_dessert.order_detail od "
+				   + " LEFT JOIN main_order mo ON od.ORD_ID = mo.ORD_ID "
+				   + " LEFT JOIN product p ON p.PD_ID = od.PD_ID ";
+
+		if (orderDetail.getSearchText() != null && orderDetail.getSearchText().length() > 0) {
+			String[] searchText = orderDetail.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(ORD_RECIPIENT, ?) > 0"
+					+  " OR INSTR(od.ORD_ID, ?) > 0 "
+					+  " OR INSTR(PD_NAME, ?) > 0 "
+					+  " ) ";
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			  	args.add(searchText[i]);
+			}
+		}
+
+		if (orderDetail.getStart() != null && !"".equals(orderDetail.getStart())) {
+			sql += " LIMIT " + orderDetail.getStart() + "," + orderDetail.getLength();
+		}
+
+		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
+		
+		if (list != null && list.size() > 0) {
+			return list;
+		} else {
+			return null;
+		}
+
+	}
+
+	public int getCount(OrderDetail orderDetail) {
+
+		List<Object> args = new ArrayList<>();
+		
+		String sql = " SELECT COUNT(*) AS COUNT "
+				   + " FROM holiday_dessert.order_detail od "
+				   + " LEFT JOIN main_order mo ON od.ORD_ID = mo.ORD_ID "
+				   + " LEFT JOIN product p ON p.PD_ID = od.PD_ID ";
+
+		if (orderDetail.getSearchText() != null && orderDetail.getSearchText().length() > 0) {
+			String[] searchText = orderDetail.getSearchText().split(" ");
+			sql += " WHERE ";
+			for(int i=0; i<searchText.length; i++) {
+				if(i > 0) {
+					sql += " AND ( ";
+				} else {
+					sql += " ( ";
+				}
+				sql += " INSTR(ORD_RECIPIENT, ?) > 0"
+					+  " OR INSTR(od.ORD_ID, ?) > 0 "
+					+  " OR INSTR(PD_NAME, ?) > 0 "
+					+  " ) ";
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+		  		args.add(searchText[i]);
+			}
+		}
+		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
+	}
 	
 }

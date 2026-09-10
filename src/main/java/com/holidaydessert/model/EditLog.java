@@ -1,12 +1,15 @@
 package com.holidaydessert.model;
 
+import java.time.LocalDateTime;
+
+import org.hibernate.annotations.CreationTimestamp;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,28 +34,29 @@ public class EditLog {
     @Column(name = "LOG_ID")
 	private String logId;			   // 操作紀錄ID
     
-    @Column(name = "LOG_IP")
+    @Column(name = "LOG_IP", length = 50)
 	private String logIp;			   // 操作紀錄IP
     
-    @Column(name = "LOG_URL")
+    @Column(name = "LOG_URL", length = 50)
 	private String logUrl;			   // 操作紀錄URL
     
-    @Column(name = "LOG_TYPE")
+    @Column(name = "LOG_TYPE", length = 20)
 	private String logType;			   // 操作紀錄前/後台
     
-    @Column(name = "LOG_METHOD")
+    @Column(name = "LOG_METHOD", length = 50)
 	private String logMethod;		   // 操作紀錄請求方法
     
-    @Column(name = "LOG_HTTP_STATUS_CODE")
+    @Column(name = "LOG_HTTP_STATUS_CODE", length = 50)
 	private String logHttpStatusCode;  // 操作紀錄狀態碼
     
-    @Column(name = "LOG_CONTENT")
+    @Column(name = "LOG_CONTENT", columnDefinition = "LONGTEXT")
 	private String logContent;		   // 操作紀錄內容
     
-    @Column(name = "LOG_CREATE_BY")
+    @Column(name = "LOG_CREATE_BY", length = 50)
 	private String logCreateBy;		   // 操作紀錄創建人
-    
-    @Column(name = "LOG_CREATE_TIME")
-	private String logCreateTime;	   // 操作紀錄創建時間
+
+	@CreationTimestamp
+	@Column(name = "LOG_CREATE_TIME", nullable = false, updatable = false)
+	private LocalDateTime logCreateTime; // 操作紀錄創建時間
 	
 }

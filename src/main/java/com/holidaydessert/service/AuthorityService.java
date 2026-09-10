@@ -16,7 +16,9 @@ public class AuthorityService {
 	@Autowired
 	private AuthorityDao authorityDao;
 
+	// =============================================
 	// back
+	// =============================================
 	public List<Map<String, Object>> list(Authority authority) {
 		return authorityDao.list(authority);
 	}

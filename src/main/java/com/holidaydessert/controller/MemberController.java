@@ -12,6 +12,7 @@ import java.util.Map;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import lombok.extern.slf4j.Slf4j;
 
 import org.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +41,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Hidden;
 
+@Slf4j
 @RestController
 @RequestMapping("/member")
 @Tag(name = "會員")
@@ -283,7 +285,7 @@ public class MemberController {
 				commonService.sendGmail(email, HTML_TITLE+"-忘記密碼", content);
 
 			} catch(Exception e) {
-				System.out.println(e.getMessage());
+				log.info(e.getMessage());
 			}
 			map.put("STATUS", "Y");
 			map.put("MSG", "寄送完成");
@@ -298,7 +300,7 @@ public class MemberController {
 			PrintWriter out = pResponse.getWriter();
 			out.write(tJSONArray.toString());
 		} catch(Exception ex) {
-			System.out.println("error:"+ex);
+			log.info("error:"+ex);
 		}
 		
 	}

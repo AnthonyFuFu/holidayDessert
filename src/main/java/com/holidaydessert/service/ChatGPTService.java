@@ -28,6 +28,9 @@ import com.azure.core.util.BinaryData;
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.AzureOpenAIConfig;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class ChatGPTService {
 
@@ -66,19 +69,19 @@ public class ChatGPTService {
 			    new ImageAnalysisOptions().setGenderNeutralCaption(true)); // options:  Set to 'true' or 'false' (relevant for CAPTION or DENSE_CAPTIONS visual features)
 
 			// Print analysis results to the console
-			System.out.println("Image analysis results:");
-			System.out.println(" Caption:");
-			System.out.println("   \"" + result.getCaption().getText() + "\", Confidence " 
+			log.info("Image analysis results:");
+			log.info(" Caption:");
+			log.info("   \"" + result.getCaption().getText() + "\", Confidence " 
 			    + String.format("%.4f", result.getCaption().getConfidence()));
 
             return ApiReturnObject.success("分析成功", result.getCaption().getText());
 
 		} catch (HttpResponseException e) {
-			System.out.println("Exception: " + e.getClass().getSimpleName());
-			System.out.println("Status code: " + e.getResponse().getStatusCode());
-			System.out.println("Message: " + e.getMessage());
+			log.info("Exception: " + e.getClass().getSimpleName());
+			log.info("Status code: " + e.getResponse().getStatusCode());
+			log.info("Message: " + e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Message: " + e.getMessage());
+			log.info("Message: " + e.getMessage());
 		}
         return ApiReturnObject.serverError("分析失敗");
 	}
@@ -97,19 +100,19 @@ public class ChatGPTService {
 			    new ImageAnalysisOptions().setGenderNeutralCaption(true)); // options:  Set to 'true' or 'false' (relevant for CAPTION or DENSE_CAPTIONS visual features)
 
 			// Print analysis results to the console
-			System.out.println("Image analysis results:");
-			System.out.println(" Caption:");
-			System.out.println("   \"" + result.getCaption().getText() + "\", Confidence "
+			log.info("Image analysis results:");
+			log.info(" Caption:");
+			log.info("   \"" + result.getCaption().getText() + "\", Confidence "
 			    + String.format("%.4f", result.getCaption().getConfidence()));
 			
             return ApiReturnObject.success("分析成功", result.getCaption().getText());
 
 		} catch (HttpResponseException e) {
-			System.out.println("Exception: " + e.getClass().getSimpleName());
-			System.out.println("Status code: " + e.getResponse().getStatusCode());
-			System.out.println("Message: " + e.getMessage());
+			log.info("Exception: " + e.getClass().getSimpleName());
+			log.info("Status code: " + e.getResponse().getStatusCode());
+			log.info("Message: " + e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Message: " + e.getMessage());
+			log.info("Message: " + e.getMessage());
 		}
         return ApiReturnObject.serverError("分析失敗");
 	}
@@ -129,23 +132,23 @@ public class ChatGPTService {
 		
         	StringBuilder extractedText = new StringBuilder();
 			// Print analysis results to the console
-			System.out.println("Image analysis results:");
-			System.out.println(" Read:");
+			log.info("Image analysis results:");
+			log.info(" Read:");
 			for (DetectedTextLine line : result.getRead().getBlocks().get(0).getLines()) {
 				extractedText.append(line.getText()).append("\n");
-			    System.out.println("Line: '" + line.getText() + "',Bounding polygon " + line.getBoundingPolygon());
+				log.info("Line: '" + line.getText() + "',Bounding polygon " + line.getBoundingPolygon());
 			    for (DetectedTextWord word : line.getWords()) {
-			        System.out.println("Word: '" + word.getText() + "',Bounding polygon " + word.getBoundingPolygon() + ",Confidence " + String.format("%.4f", word.getConfidence()));
+					log.info("Word: '" + word.getText() + "',Bounding polygon " + word.getBoundingPolygon() + ",Confidence " + String.format("%.4f", word.getConfidence()));
 			    }
 			}
 			return ApiReturnObject.success("分析成功", extractedText.toString());
 			
 		} catch (HttpResponseException e) {
-			System.out.println("Exception: " + e.getClass().getSimpleName());
-			System.out.println("Status code: " + e.getResponse().getStatusCode());
-			System.out.println("Message: " + e.getMessage());
+			log.info("Exception: " + e.getClass().getSimpleName());
+			log.info("Status code: " + e.getResponse().getStatusCode());
+			log.info("Message: " + e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Message: " + e.getMessage());
+			log.info("Message: " + e.getMessage());
 		}
         return ApiReturnObject.serverError("分析失敗");
 	}
@@ -165,13 +168,13 @@ public class ChatGPTService {
 
         	StringBuilder extractedText = new StringBuilder();
 			// Print analysis results to the console
-			System.out.println("Image analysis results:");
-			System.out.println(" Read:");
+			log.info("Image analysis results:");
+			log.info(" Read:");
 			for (DetectedTextLine line : result.getRead().getBlocks().get(0).getLines()) {
-				System.out.println("   Line: '" + line.getText()
+				log.info("   Line: '" + line.getText()
 				    + "', Bounding polygon " + line.getBoundingPolygon());
 				for (DetectedTextWord word : line.getWords()) {
-					System.out.println("     Word: '" + word.getText()
+					log.info("     Word: '" + word.getText()
 					+ "', Bounding polygon " + word.getBoundingPolygon()
 					+ ", Confidence " + String.format("%.4f", word.getConfidence()));
 				}
@@ -179,11 +182,11 @@ public class ChatGPTService {
 			return ApiReturnObject.success("分析成功", extractedText.toString());
 			
 		} catch (HttpResponseException e) {
-			System.out.println("Exception: " + e.getClass().getSimpleName());
-			System.out.println("Status code: " + e.getResponse().getStatusCode());
-			System.out.println("Message: " + e.getMessage());
+			log.info("Exception: " + e.getClass().getSimpleName());
+			log.info("Status code: " + e.getResponse().getStatusCode());
+			log.info("Message: " + e.getMessage());
 		} catch (Exception e) {
-			System.out.println("Message: " + e.getMessage());
+			log.info("Message: " + e.getMessage());
 		}
         return ApiReturnObject.serverError("分析失敗");
 	}
