@@ -14,12 +14,11 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
-          MYSQL_ALLOW_EMPTY_PASSWORD: yes
-          MYSQL_ROOT_HOST: '%'
+          MYSQL_ROOT_PASSWORD: "123456"
         ports:
           - 3306:3306
         options: >-
-          --health-cmd="mysqladmin ping -h localhost"
+          --health-cmd="mysqladmin ping -h localhost -uroot -p123456"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
@@ -47,7 +46,7 @@ jobs:
         run: chmod +x mvnw
 
       - name: Load DB schema
-        run: mysql -h127.0.0.1 -P3306 -uroot < "holiday_dessert分大小寫.sql"
+        run: mysql -h127.0.0.1 -P3306 -uroot -p123456 < "holiday_dessert分大小寫.sql"
 
       - name: Run tests
         run: ./mvnw -B test -Dtest='!TicketSeckillIntegrationTest'
