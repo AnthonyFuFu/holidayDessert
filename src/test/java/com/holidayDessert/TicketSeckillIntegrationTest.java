@@ -1,5 +1,6 @@
 package com.holidayDessert;
 
+import com.holidaydessert.HolidayDessertApplication;
 import com.holidaydessert.constant.TicketConstant;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.repository.MemberRepository;
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import static org.junit.jupiter.api.Assertions.*;
 
 @Slf4j
-@SpringBootTest
+@SpringBootTest(classes = HolidayDessertApplication.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @TestInstance(TestInstance.Lifecycle.PER_CLASS) // ← 允許非 static 的 @BeforeAll/@AfterAll
 public class TicketSeckillIntegrationTest {
