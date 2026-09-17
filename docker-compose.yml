@@ -1,31 +1,39 @@
 version: '3'
 services:
   holidayDessert-server:
-    build: .
+    image: ghcr.io/anthonyfufu/holidaydessert:latest
     ports:
       - 8080:8080
     networks:
       - holidayDessert-bridge
     environment:
-      - spring.datasource.druid.first.url=jdbc:mysql://mysqldbcompose:3306/holiday_dessert
-      - spring.datasource.druid.first.username=root
-      - spring.datasource.druid.first.password=cga103g4
-      - spring.datasource.druid.first.driver-class-name=com.mysql.cj.jdbc.Driver
+      - SPRING_DATASOURCE_URL=jdbc:mysql://mysqldbcompose:3306/holiday_dessert?serverTimezone=Asia/Taipei
+      - SPRING_DATASOURCE_USERNAME=root
+      - SPRING_DATASOURCE_PASSWORD=123456
+      - SPRING_DATA_REDIS_HOST=redisdbcompose
+      - SPRING_DATA_REDIS_PORT=6379
     depends_on:
       - mysqldbcompose
+      - redisdbcompose
   mysqldbcompose:
-    image: mariadb:10.5.3
+    image: mysql:8.0
     ports:
       - '3306:3306'
     environment:
-      MYSQL_DATABASE: 'holidayDessert'
-      MYSQL_USER: 'root'
-      MYSQL_PASSWORD: 'cga103g4'
-      MYSQL_ROOT_PASSWORD: 'cga103g4'
+      MYSQL_DATABASE: 'holiday_dessert'
+      MYSQL_ROOT_PASSWORD: '123456'
     volumes:
-      - /app/server/mysql:/var/lib/mysql
+      - mysql-data:/var/lib/mysql
+      - ./holiday_dessert分大小寫.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - holidayDessert-bridge
+  redisdbcompose:
+    image: redis:7
+    ports:
+      - '6379:6379'
     networks:
       - holidayDessert-bridge
 networks:
   holidayDessert-bridge:
-    external: true
+volumes:
+  mysql-data:
