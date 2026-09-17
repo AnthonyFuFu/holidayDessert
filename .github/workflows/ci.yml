@@ -20,5 +20,8 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Grant execute permission for mvnw
+        run: chmod +x mvnw
+
       - name: Compile with Maven
         run: ./mvnw -B compile
