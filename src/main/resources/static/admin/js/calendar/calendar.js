@@ -41,28 +41,23 @@ $(document).ready(function() {
 			$('#calendarStart').focus(); // 手動聚焦到 datepicker 輸入框
 		},
 		eventClick: function(info) {
-		    let eventId = info.event.id;
-			let approveStatus = confirm("是否批准此假？");
-			let url = approveStatus ? 'approve' : 'notApprove';
-		    $.ajax({
-		        url: url,
-		        method: 'POST',
-		        data: {
-		            id: eventId
-		        },
-				success: function(response) {
-				    if (response.status === 'success') {
-				        alert(response.message);
-						location.reload();
-				    } else {
-				        alert('審核失敗：' + response.message);
-				    }
-				},
-		        error: function(xhr, status, error) {
-		            console.error('API調用失敗: ' + error);
-					alert('審核失敗，請稍後再試');
-		        }
-		    });
+			// 阻止 FullCalendar 依事件的 url 欄位跳轉頁面（url 為 null 時會導向 admin/calendar/null）
+			info.jsEvent.preventDefault();
+
+			let eventId = info.event.id;
+			let eventEmpId = info.event.extendedProps.EMP_ID;
+			// 自己的假單不能自己審核，需由直屬主管審核
+			if (String(eventEmpId) === String(empId)) {
+				swal({
+					title: "無法審核自己的假單",
+					text: "請由直屬主管進行審核",
+					type: "info",
+					confirmButtonColor: "#3085d6",
+					confirmButtonText: "確定"
+				});
+				return;
+			}
+			approveConfirm(eventId, info.event.title);
 		},
 		dayCellDidMount: function(info) {
 		    info.el.classList.add('datepicker');
@@ -156,6 +151,72 @@ $(document).ready(function() {
 	    	confirmButtonColor: "#DD6B55",
 	    	confirmButtonText: "確定",
 	    	closeOnConfirm: false
+		});
+	}
+
+	// 准假審核彈窗：先選擇 准假 / 不准假，再二次確認（可取消）
+	function approveConfirm(eventId, title) {
+		swal({
+			title: "是否批准此假？",
+			text: title,
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: "#32CD32",
+			confirmButtonText: "准假",
+			cancelButtonText: "不准假",
+			closeOnConfirm: false,
+			closeOnCancel: false
+		}, function(result) {
+			if (result == true) {
+				approveCheck(eventId, "approve", "確定准假？", "#32CD32");
+			} else {
+				approveCheck(eventId, "notApprove", "確定不准假？", "#DD6B55");
+			}
+		});
+	}
+
+	// 二次確認：確定 送出審核，取消 關閉彈窗不做任何事
+	function approveCheck(eventId, url, message, color) {
+		swal({
+			title: message,
+			type: "warning",
+			showCancelButton: true,
+			confirmButtonColor: color,
+			confirmButtonText: "確定",
+			cancelButtonText: "取消",
+			closeOnConfirm: false
+		}, function(result) {
+			if (result == true) {
+				approveSubmit(eventId, url);
+			}
+		});
+	}
+
+	function approveSubmit(eventId, url) {
+		$.ajax({
+			url: url,
+			method: 'POST',
+			data: {
+				id: eventId
+			},
+			success: function(response) {
+				if (response.status === 'success') {
+					swal({
+						title: response.message,
+						type: "success",
+						confirmButtonColor: "#3085d6",
+						confirmButtonText: "確定"
+					}, function() {
+						location.reload();
+					});
+				} else {
+					swal("審核失敗", response.message, "error");
+				}
+			},
+			error: function(xhr, status, error) {
+				console.error('API調用失敗: ' + error);
+				swal("審核失敗", "請稍後再試", "error");
+			}
 		});
 	}
 

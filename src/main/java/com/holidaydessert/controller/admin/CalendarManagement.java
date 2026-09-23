@@ -129,8 +129,15 @@ public class CalendarManagement {
 	@ResponseBody
 	@PostMapping("/approve")
 	public Map<String, String> approve(
+	        @SessionAttribute Employee employeeSession,
 	        @RequestParam(required = true) String id) {
 	    Map<String, String> response = new HashMap<>();
+	    // 只有該員工的直屬主管可以審核
+	    if (!fullcalendarService.isManagerOfEvent(id, employeeSession.getEmpId())) {
+	        response.put("status", "error");
+	        response.put("message", "只有直屬主管可以審核此假單");
+	        return response;
+	    }
 	    try {
 	        Fullcalendar fullcalendarData = new Fullcalendar();
 	        fullcalendarData.setId(id);
@@ -152,8 +159,15 @@ public class CalendarManagement {
 	@ResponseBody
 	@PostMapping("/notApprove")
 	public Map<String, String> notApprove(
+	        @SessionAttribute Employee employeeSession,
 	        @RequestParam(required = true) String id) {
 	    Map<String, String> response = new HashMap<>();
+	    // 只有該員工的直屬主管可以審核
+	    if (!fullcalendarService.isManagerOfEvent(id, employeeSession.getEmpId())) {
+	        response.put("status", "error");
+	        response.put("message", "只有直屬主管可以審核此假單");
+	        return response;
+	    }
 		try {
 			Fullcalendar fullcalendarData = new Fullcalendar();
 			fullcalendarData.setId(id);

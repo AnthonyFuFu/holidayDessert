@@ -93,6 +93,24 @@ public class FullcalendarDao {
 		
 	}
 
+	// 取得假單所屬員工的主管 ID
+	public String getEventManagerId(String id) {
+
+		String sql = " SELECT e.EMP_MANAGER_ID "
+				   + " FROM fullcalendar fc "
+				   + " JOIN employee e ON fc.EMP_ID = e.EMP_ID "
+				   + " WHERE fc.id = ? ";
+
+		List<String> list = jdbcTemplate.queryForList(sql, String.class, id);
+
+		if (list != null && list.size() > 0) {
+			return list.get(0);
+		} else {
+			return null;
+		}
+
+	}
+
 	public void update(Fullcalendar fullcalendar) {
 
 		List<Object> args = new ArrayList<>();
