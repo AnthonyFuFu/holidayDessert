@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cart")
+@Table(name = "cart", schema = "holiday_dessert")
 public class Cart extends Base {
 	
 	@EmbeddedId

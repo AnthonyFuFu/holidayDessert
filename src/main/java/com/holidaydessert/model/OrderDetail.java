@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "order_detail")
+@Table(name = "order_detail", schema = "holiday_dessert")
 public class OrderDetail extends Base {
 	
     @Id

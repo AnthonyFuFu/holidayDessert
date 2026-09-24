@@ -26,7 +26,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "fullcalendar")
+@Table(name = "fullcalendar", schema = "holiday_dessert")
 public class Fullcalendar {
 
 	@Id

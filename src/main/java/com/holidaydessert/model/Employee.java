@@ -31,7 +31,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "employee")
+@Table(name = "employee", schema = "holiday_dessert")
 public class Employee extends Base {
 	
     @Id

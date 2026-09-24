@@ -23,7 +23,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "authority")
+@Table(name = "authority", schema = "holiday_dessert")
 public class Authority extends Base {
 	
 	@EmbeddedId

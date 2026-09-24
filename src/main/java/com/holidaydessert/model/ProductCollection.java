@@ -21,7 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "product_collection")
+@Table(name = "product_collection", schema = "holiday_dessert")
 public class ProductCollection extends Base {
 	
     @Id

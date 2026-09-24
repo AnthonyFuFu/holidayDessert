@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.holidaydessert.dao.ProductPicDao;
 import com.holidaydessert.model.ProductPic;
 import com.holidaydessert.repository.ProductPicRepository;
+import com.holidaydessert.utils.PageableUtil;
 
 @Service
 public class ProductPicService {
@@ -47,20 +48,17 @@ public class ProductPicService {
 	// =============================================
 	// front
 	// =============================================
-	public List<Map<String, Object>> frontRandList(ProductPic productPic) {
-	    List<Map<String, Object>> list;
-
-	    if (productPic.getLength() != null && !"".equals(productPic.getLength())) {
-	        // 有 LIMIT：用 Pageable 處理
-	        int length = Integer.parseInt(productPic.getLength());
-	        Pageable pageable = PageRequest.of(0, length);
-	        list = productPicRepository.frontRandList(productPic.getPdId(), pageable);
-	    } else {
-	        // 無 LIMIT：查全部
-	        list = productPicRepository.frontRandListAll(productPic.getPdId());
-	    }
-
-	    return list.isEmpty() ? null : list;
+	public Map<String, Object> frontRandList(Map<String, Object> params) {
+		// 1. 取得基本參數
+		String pdId = PageableUtil.getStringParam(params, "pdId", "").trim();
+	    // 2. 建立只有分頁、沒有排序的 Pageable
+	    Pageable pageable = PageableUtil.buildPageable(params);
+		// 3. 查詢資料
+		Page<ProductPic> productPicPage = productPicRepository.frontRandList(pdId, pageable);
+		// 4. 取得查詢結果
+		List<ProductPic> productPicList = productPicPage.getContent();
+		// 5. 統一封裝回傳結果
+		return PageableUtil.buildResult(productPicPage, productPicList);
 	}
 	
 }

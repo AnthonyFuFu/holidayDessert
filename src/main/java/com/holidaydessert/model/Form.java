@@ -23,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "form")
+@Table(name = "form", schema = "holiday_dessert")
 public class Form extends Base {
 
     @Id

@@ -26,7 +26,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "product_pic")
+@Table(name = "product_pic", schema = "holiday_dessert")
 public class ProductPic extends Base {
 	
     @Id

@@ -23,7 +23,7 @@ import lombok.ToString;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "promotion")
+@Table(name = "promotion", schema = "holiday_dessert")
 public class Promotion extends Base {
 	
     @Id
