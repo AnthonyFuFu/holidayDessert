@@ -279,6 +279,10 @@ spring:
 web:
   path: http://localhost:8080/
 
+admin:
+  upload:
+    file:
+      path: 'C:\Users\User\git\holidayDessert\src\main\resources\static\admin\upload\'
 
 # ------------------------------
 # HX370 windows Environment
@@ -299,7 +303,10 @@ spring:
 web:
   path: http://localhost:8080/
 
-
+admin:
+  upload:
+    file:
+      path: 'C:\Users\傅勝宏\git\holidayDessert\src\main\resources\static\admin\upload\'
 # ------------------------------
 # Mac Environment
 # ------------------------------

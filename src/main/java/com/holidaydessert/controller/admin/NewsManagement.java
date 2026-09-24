@@ -1,8 +1,5 @@
 package com.holidaydessert.controller.admin;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -25,7 +22,6 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Banner;
 import com.holidaydessert.model.Employee;
@@ -61,7 +57,6 @@ public class NewsManagement {
 	@Autowired
 	private CommonService commonService;
 
-	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
@@ -86,45 +81,10 @@ public class NewsManagement {
 
 	}
 	
+	@ResponseBody
 	@GetMapping("/newsTables")
-	public void newsTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute News news, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		News newsData = new News();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		newsData.setStart(start);
-		newsData.setLength(length);
-		newsData.setSearchText(searchValue);
-		
-		List<Map<String, Object>> newsList = newsService.list(newsData);
-
-		if (newsList == null) {
-			newsList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = newsService.getCount(newsData);
-
-		news.setRecordsFiltered(count);
-		news.setRecordsTotal(count);
-		news.setData(newsList);
-		news.setDraw(Integer.valueOf(draw));
-
-		String output = gson.toJson(news);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> newsTables(@RequestParam Map<String, String> params) {
+		return newsService.list(params);
 	}
 
 	@RequestMapping(value = "/addNews" , method = {RequestMethod.GET, RequestMethod.POST})
