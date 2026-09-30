@@ -16,6 +16,9 @@ import com.holidaydessert.model.News;
 import com.holidaydessert.repository.NewsRepository;
 import com.holidaydessert.utils.PageableUtil;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 @Service
 public class NewsService {
 
@@ -32,8 +35,13 @@ public class NewsService {
 		// 1. 取得 DataTables 參數
 		String keyword = PageableUtil.getStringParam(dataTableParams, "search[value]", "").trim();
 		String draw = PageableUtil.getStringParam(dataTableParams, "draw", "0");
-		// 2. 建立分頁（start / length，排序寫在 SQL 內）
-		Pageable pageable = PageableUtil.buildDataTablePageable(dataTableParams);
+		// 2. 建立分頁與排序（start / length / order）
+		Pageable pageable = PageableUtil.buildDataTablePageable(
+				dataTableParams,
+				SortFieldsConstant.NEWS_TABLE,
+				SortFieldsConstant.DEFAULT,
+				Sort.Direction.DESC
+		);
 		// 3. 查詢資料
 		Page<Map<String, Object>> newsPage = newsRepository.backList(keyword, pageable);
 		// 4. 取得查詢結果（轉成可修改的 Map，避免 Tuple 包裝的唯讀 Map）
@@ -42,10 +50,6 @@ public class NewsService {
 				.toList();
 		// 5. 封裝成 DataTables 回傳格式
 		return PageableUtil.buildDataTable(newsPage, newsList, draw);
-	}
-
-	public int getCount(News news) {
-		return newsDao.getCount(news);
 	}
 
 	public void add(News news) {
@@ -57,15 +61,16 @@ public class NewsService {
 	}
 
 	public void delete(News news) {
-		newsDao.delete(news);
+		newsRepository.offlineById(news.getNewsId());
 	}
 
 	public News getData(News news) {
-		return newsDao.getData(news);
+		// 查無資料時回傳空的 News（Controller 會直接取用欄位）
+		return newsRepository.findDataById(news.getNewsId()).orElseGet(News::new);
 	}
 
 	public List<Map<String, Object>> getList() {
-		return newsDao.getList();
+		return newsRepository.findOnlineList();
 	}
 	
 	public List<Map<String, Object>> getListForBanner() {

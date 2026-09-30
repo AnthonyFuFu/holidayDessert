@@ -27,4 +27,17 @@ public class SortFieldsConstant {
 	        Map.entry("newsCreate", "NEWS_CREATE")
 	);
 	
+	// 後台 DataTables 排序對應關係
+	public static final Map<String, String> NEWS_TABLE = Map.ofEntries(
+			// DataTables columns data name, DB column name
+			Map.entry("NEWS_ID", "NEWS_ID"),
+			Map.entry("NEWS_NAME", "NEWS_NAME"),
+			Map.entry("NEWS_CONTENT", "NEWS_CONTENT"),
+			Map.entry("PM_NAME", "PM_NAME"),
+			Map.entry("STATUS", "NEWS_STATUS"),
+			Map.entry("NEWS_START", "NEWS_START"),
+			Map.entry("NEWS_END", "NEWS_END"),
+			Map.entry("NEWS_CREATE", "NEWS_CREATE")
+	);
+	
 }

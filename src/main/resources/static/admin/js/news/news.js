@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "NEWS_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.NEWS_ID;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "NEWS_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.NEWS_NAME;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "NEWS_CONTENT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.NEWS_CONTENT;
 				}
@@ -62,7 +62,7 @@ $(function() {
 				targets: [3],
 				data: "PM_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_NAME;
 				}
@@ -71,7 +71,7 @@ $(function() {
 				targets: [4],
 				data: "STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.STATUS;
 				}
@@ -80,7 +80,7 @@ $(function() {
 				targets: [5],
 				data: "NEWS_START",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.NEWS_START;
 				}
@@ -89,7 +89,7 @@ $(function() {
 				targets: [6],
 				data: "NEWS_END",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.NEWS_END;
 				}

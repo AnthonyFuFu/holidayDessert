@@ -86,6 +86,25 @@ public final class PageableUtil {
 	}
 
 	/**
+	 * 從 DataTables 參數建立 Pageable（含排序）
+	 *
+	 * @param params       DataTables 請求參數 Map（start / length / order / columns）
+	 * @param fieldMapping DataTables 欄位 data 名稱與 DB / Entity 欄位的對應（對應 SortFieldsConstant 的 Map）
+	 * @param defaultField 預設排序欄位
+	 * @param defaultDir   預設排序方向
+	 * @return Pageable；length <= 0（DataTables 的「全部」）時回傳 unpaged（仍保留排序）
+	 */
+	public static Pageable buildDataTablePageable(Map<String, ?> params, Map<String, String> fieldMapping, String defaultField, Sort.Direction defaultDir) {
+		int length = parseIntParam(params, "length", DEFAULT_PAGE_SIZE);
+		int start = parseIntParam(params, "start", 0);
+		Sort sort = SortUtil.buildDataTableSort(params, fieldMapping, defaultField, defaultDir);
+		if (length <= 0) {
+			return Pageable.unpaged(sort);
+		}
+		return PageRequest.of(start / length, length, sort);
+	}
+
+	/**
 	 * 將 Page 結果封裝成 DataTables 回傳格式
 	 *
 	 * @param page    Spring Data 的 Page 物件（用於取得 totalElements）

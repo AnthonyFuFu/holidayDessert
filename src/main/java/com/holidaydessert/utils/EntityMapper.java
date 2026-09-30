@@ -14,12 +14,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * EntityMapper
- *
- * @author Sun Lu
- * @date 2025/6/5
- */
 public class EntityMapper {
 
     public static <T> List<T> mapToEntity(Class<T> clazz, List<Map<String, String>> rows) throws Exception {
@@ -124,12 +118,6 @@ public class EntityMapper {
 
     /**
      * getEntityCombinationDataByKeyColumn
-     *
-     * @param dto
-     * @param keyColumns
-     * @return java.lang.String
-     * @author Sun Lu
-     * @date 2025/06/17
      */
     public static String getEntityCombinationDataByKeyColumn(Object dto, List<String> keyColumns) {
         List<String> values = new ArrayList<>();
@@ -187,12 +175,6 @@ public class EntityMapper {
 
     /**
      * 要使用此共用方法请确认 dto 中确实包含 columnInternalName 栏位
-     *
-     * @param dtos
-     * @param keyColumns
-     * @return java.util.List<java.lang.String>
-     * @author Sun Lu
-     * @date 2025/06/17
      */
     public static List<String> getKeyColumnListBySettingKeyColumn(List<? extends Object> dtos, List<String> keyColumns) {
         List<String> values = new ArrayList<>();
