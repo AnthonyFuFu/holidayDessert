@@ -12,6 +12,16 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
+import com.holidaydessert.constant.SortFieldsConstant;
+import com.holidaydessert.utils.PageableUtil;
 
 @Slf4j
 @Service
@@ -33,10 +43,11 @@ public class TicketOrderService {
 	 * @param memId    會員 ID
 	 * @param quantity 購買張數
 	 * @param price    票種單價（快照，來自 Redis）
+	 * @param seats    配位結果（排-座，逗號分隔；自由座為 null）
 	 */
 	@Async("dbWriteExecutor")
 	@Transactional
-	public void persistOrder(Integer typeId, Integer memId, Integer quantity, Integer price) {
+	public void persistOrder(Integer typeId, Integer memId, Integer quantity, Integer price, String seats) {
 		try {
 			// Step 1：扣減 DB 庫存（有防超賣條件，返回 0 代表庫存不足）
 			int affected = ticketTypeRepository.decrementRemaining(typeId, quantity);
@@ -54,6 +65,7 @@ public class TicketOrderService {
 			order.setTicketOrdQuantity(quantity);
 			order.setTicketOrdStatus(0); // 0: 待付款
 			order.setTicketOrdAmount(price * quantity); // 金額快照
+			order.setTicketOrdSeats(seats);
 			order.setTicketOrdExpire(LocalDateTime.now().plusMinutes(TicketConstant.ORDER_EXPIRE_MINUTES)); // 付款期限
 			// ticketOrdPayTime 為 null（尚未付款）
 
@@ -65,6 +77,34 @@ public class TicketOrderService {
 			log.error("[DB] ❌ 持久化失敗 typeId={} memId={}", typeId, memId, e);
 			saveCompensationLog(typeId, memId, quantity, "EXCEPTION: " + e.getMessage());
 			// TODO: 推入 MQ 重試
+		}
+	}
+
+	// =============================================
+	// back：後台訂單 DataTables
+	// =============================================
+	public Map<String, Object> list(Map<String, String> dataTableParams) {
+		String keyword = PageableUtil.getStringParam(dataTableParams, "search[value]", "").trim();
+		String draw = PageableUtil.getStringParam(dataTableParams, "draw", "0");
+		Integer ticketId = parseTicketId(PageableUtil.getStringParam(dataTableParams, "ticketId", "0"));
+		Pageable pageable = PageableUtil.buildDataTablePageable(
+				dataTableParams,
+				SortFieldsConstant.TICKET_ORDER_TABLE,
+				SortFieldsConstant.TICKET_ORDER_DEFAULT,
+				Sort.Direction.DESC
+		);
+		Page<Map<String, Object>> orderPage = ticketOrderRepository.backList(ticketId, keyword, pageable);
+		List<Map<String, Object>> orderList = orderPage.getContent().stream()
+				.map(row -> (Map<String, Object>) new LinkedHashMap<>(row))
+				.toList();
+		return PageableUtil.buildDataTable(orderPage, orderList, draw);
+	}
+
+	private Integer parseTicketId(String value) {
+		try {
+			return Integer.valueOf(value);
+		} catch (NumberFormatException e) {
+			return 0;
 		}
 	}
 

@@ -19,6 +19,10 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 	List<Member> findByMemName(String name);
 	List<Member> findByMemNameAndMemEmail(String name, String email);
     List<Member> findByMemEmailContaining(String memEmail); // 模糊搜尋
+
+    // 搶票測試用：取得測試會員 ID（帳號前綴相同）
+    @Query("SELECT m.memId FROM Member m WHERE m.memAccount LIKE CONCAT(:prefix, '%') ORDER BY m.memId")
+    List<Integer> findIdsByAccountPrefix(@Param("prefix") String prefix);
 	
     // =============================================
     // register → save() 內建，不需要額外方法

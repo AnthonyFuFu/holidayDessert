@@ -46,6 +46,26 @@ public class TicketType implements Serializable  {
     @Column(name = "TYPE_MAX_PER_PERSON", nullable = false)
     private Integer typeMaxPerPerson;        // 每人購買上限
 
+    @Column(name = "TYPE_AREA")
+    private String typeArea;                 // 區域群組（座位圖分層用）
+
+    @Column(name = "TYPE_COLOR")
+    private String typeColor;                // 座位圖顏色
+
+    @Column(name = "TYPE_ROWS")
+    private Integer typeRows;                // 排數（null 代表自由座，不配位）
+
+    @Column(name = "TYPE_SEATS_PER_ROW")
+    private Integer typeSeatsPerRow;         // 每排座位數
+
+    @Column(name = "TYPE_SORT", nullable = false)
+    private Integer typeSort = 0;            // 排序
+
+    /** 是否為劃位票種（有排數、每排座位數才會配位） */
+    public boolean hasSeatMap() {
+        return typeRows != null && typeRows > 0 && typeSeatsPerRow != null && typeSeatsPerRow > 0;
+    }
+
     @Version                                 // 樂觀鎖，JPA 自動管理
     @Column(name = "LOCK_VERSION", nullable = false)
     private Integer lockVersion;             // 樂觀鎖版本號

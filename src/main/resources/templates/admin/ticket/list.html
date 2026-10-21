@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{admin/load/css :: css}"></head>
+<head th:insert="~{admin/load/css :: jquery-datatable}"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 票務管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/ticket.css}" />
+</head>
+<body th:class="theme- + (${employeeSession.empTheme} != 'null' and ${employeeSession.empTheme} != '' ? ${employeeSession.empTheme} : 'red')">
+
+    <!-- Page Loader -->
+    <div th:insert="~{admin/load/pageloader :: pageloader}" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+
+    <!-- Search Bar -->
+    <div th:insert="~{admin/load/searchbar :: searchbar}" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+
+    <!-- Top Bar -->
+    <nav th:insert="~{admin/load/navbar :: navbar}" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:insert="~{admin/load/leftsidebar :: leftsidebar}" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+
+        <!-- Right Sidebar -->
+        <aside th:insert="~{admin/load/rightsidebar :: rightsidebar}" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+			<!-- breadcrumbs -->
+            <div th:insert="~{admin/load/breadcrumbs :: ticket}" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>票務管理</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li class="dropdown">
+                                    <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                                        <i class="material-icons">more_vert</i>
+                                    </a>
+                                    <ul class="dropdown-menu pull-right">
+                            			<li><a href="/holidayDessert/admin/ticket/addTicket">新增活動</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                        	<div class="row clearfix">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <!-- Nav tabs -->
+                                    <ul class="nav nav-tabs tab-nav-right" role="tablist">
+                                        <li role="presentation" class="active"><a href="#ticket_animation" data-toggle="tab">活動清單</a></li>
+                                        <li role="presentation"><a href="#order_animation" data-toggle="tab">票務訂單</a></li>
+                                    </ul>
+                                    <!-- Tab panes -->
+                                    <div class="tab-content">
+                                        <div role="tabpanel" class="tab-pane fade in active" id="ticket_animation">
+                                        	<div class="table-responsive">
+                                				<table id="ticket-table" class="table table-bordered table-striped table-hover dataTable">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>ID</th>
+                                            				<th>活動名稱</th>
+                                            				<th>場地</th>
+                                            				<th>活動時間</th>
+                                            				<th>售票開始</th>
+                                            				<th>分區數</th>
+                                            				<th>總票數</th>
+                                            				<th>剩餘票數</th>
+                                            				<th>狀態</th>
+                                            				<th>預熱</th>
+                                            				<th>功能</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
+                            			</div>
+                                        <div role="tabpanel" class="tab-pane fade" id="order_animation">
+                                        	<div class="table-responsive">
+                                				<table id="order-table" class="table table-bordered table-striped table-hover dataTable" data-ticket-id="0">
+                                    				<thead>
+                                        				<tr>
+                                        					<th>訂單ID</th>
+                                            				<th>活動名稱</th>
+                                            				<th>分區</th>
+                                            				<th>會員</th>
+                                            				<th>張數</th>
+                                            				<th>金額</th>
+                                            				<th>座位</th>
+                                            				<th>狀態</th>
+                                            				<th>下單時間</th>
+                                        				</tr>
+                                    				</thead>
+                                				</table>
+                            				</div>
+                            			</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+<div th:insert="~{admin/load/js :: js}"></div>
+<div th:insert="~{admin/load/js :: jquery-datatable}"></div>
+<div th:insert="~{admin/load/js :: chat}"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/ticket/ticket.js}"></script>
+<script th:src="@{/admin/js/ticket/ticket-order.js}"></script>
+
+</body>
+</html>

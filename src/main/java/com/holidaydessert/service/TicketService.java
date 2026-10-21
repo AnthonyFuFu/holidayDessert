@@ -1,7 +1,9 @@
 package com.holidaydessert.service;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -11,16 +13,27 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.Cursor;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ScanOptions;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.holidaydessert.constant.SortFieldsConstant;
 import com.holidaydessert.constant.TicketConstant;
+import com.holidaydessert.constant.TicketVenue;
 import com.holidaydessert.kafka.TicketOrderProducer;
 import com.holidaydessert.model.Ticket;
 import com.holidaydessert.model.TicketType;
+import com.holidaydessert.repository.TicketOrderRepository;
+import com.holidaydessert.repository.TicketRepository;
 import com.holidaydessert.repository.TicketTypeRepository;
+import com.holidaydessert.utils.PageableUtil;
 import com.holidaydessert.utils.RedisLockUtil;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +59,15 @@ public class TicketService {
 
     @Autowired
     private TicketOrderService ticketOrderService;
+
+    @Autowired
+    private TicketTypeService ticketTypeService;
+
+    @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
+    private TicketOrderRepository ticketOrderRepository;
     
     @Autowired(required = false)
     private TicketOrderProducer ticketOrderProducer;
@@ -92,6 +114,7 @@ public class TicketService {
                 if (Boolean.TRUE.equals(isNew)) {
                     stringRedisTemplate.expire(remainingKey, TicketConstant.REDIS_TTL_HOURS, TimeUnit.HOURS);
                     LOCAL_REMAINING.put(typeId, new AtomicInteger(type.getTypeRemaining()));
+                    buildSeatPool(type);
                     log.info("[Init] ✅ 新建 typeId={} remaining={}", typeId, type.getTypeRemaining());
                 } else {
                     // 從 Redis 同步本地計數器（避免 LOCAL_REMAINING 為 0 而 Redis 還有票）
@@ -114,6 +137,22 @@ public class TicketService {
             redisLockUtil.unlock(lockKey, lockValue);
         }
     }
+
+    // ─── 座位池：ticket:seats:{typeId}（List，前排優先、同排連號）────────
+    //     只在剩餘數 Key 新建時重建，避免覆蓋搶票中的座位池
+    private void buildSeatPool(TicketType type) {
+        String seatsKey = String.format(TicketConstant.TICKET_SEATS_KEY, type.getTypeId());
+        stringRedisTemplate.delete(seatsKey);
+        if (!type.hasSeatMap()) {
+            return; // 自由座不配位
+        }
+        List<String> seats = ticketTypeService.availableSeats(type);
+        if (!seats.isEmpty()) {
+            stringRedisTemplate.opsForList().rightPushAll(seatsKey, seats);
+            stringRedisTemplate.expire(seatsKey, TicketConstant.REDIS_TTL_HOURS, TimeUnit.HOURS);
+        }
+        log.info("[Init] 🪑 座位池建立 typeId={} seats={}", type.getTypeId(), seats.size());
+    }
     
 
     // ─────────────────────────────────────────────────────────────
@@ -131,7 +170,7 @@ public class TicketService {
             // ── Layer 2：本地計數器快速失敗 ──────────────────────────
             AtomicInteger localRemaining = LOCAL_REMAINING.get(typeId);
             if (localRemaining == null) {
-                return "票種尚未初始化，請聯繫管理員";
+                return "此票種尚未開放或已停止售票";
             }
             if (localRemaining.get() < quantity) {
                 log.info("[Layer2-FastFail] 本地判斷票不足 typeId={} memId={} local={}", typeId, memId, localRemaining.get());
@@ -149,14 +188,20 @@ public class TicketService {
             // ── Layer 3：Redis Lua 原子操作（扣票 + 個人上限）───────────
             String remainingKey  = String.format(TicketConstant.TICKET_REMAINING_KEY, typeId);
             String userCountKey  = String.format(TicketConstant.TICKET_USER_COUNT_KEY, typeId, memId);
+            String seatsKey      = String.format(TicketConstant.TICKET_SEATS_KEY, typeId);
 
-            Long result = stringRedisTemplate.execute(
+            List<?> scriptResult = stringRedisTemplate.execute(
             	    TicketConstant.PURCHASE_SCRIPT,
-            	    Arrays.asList(remainingKey, userCountKey),
+            	    Arrays.asList(remainingKey, userCountKey, seatsKey),
             	    String.valueOf(quantity),
             	    String.valueOf(maxPerPerson),
             	    String.valueOf(TicketConstant.USER_COUNT_TTL_SECONDS)
             );
+            // 第一個元素為剩餘票數（或錯誤碼），其後為配到的座位
+            Long result = scriptResult == null || scriptResult.isEmpty() ? null : Long.valueOf(String.valueOf(scriptResult.get(0)));
+            String seats = scriptResult != null && scriptResult.size() > 1
+                    ? String.join(",", scriptResult.subList(1, scriptResult.size()).stream().map(String::valueOf).toList())
+                    : null;
 
             if (result == null || result == -1L) {
                 localRemaining.set(0);
@@ -177,13 +222,14 @@ public class TicketService {
 
             // ── Layer 4：異步 DB 持久化（不阻塞主流程）──────────────────
             if (ticketOrderProducer != null) {
-                ticketOrderProducer.sendOrder(typeId, memId, quantity, price); // ✅ Kafka 模式
+                ticketOrderProducer.sendOrder(typeId, memId, quantity, price, seats); // ✅ Kafka 模式
             } else {
-                ticketOrderService.persistOrder(typeId, memId, quantity, price); // ✅ @Async 降級
+                ticketOrderService.persistOrder(typeId, memId, quantity, price, seats); // ✅ @Async 降級
             }
 
-            log.info("[Success] 搶票成功 typeId={} memId={} quantity={} remaining={}", typeId, memId, quantity, result);
-            return String.format("搶票成功！購買 %d 張，剩餘票數：%d", quantity, result);
+            log.info("[Success] 搶票成功 typeId={} memId={} quantity={} remaining={} seats={}", typeId, memId, quantity, result, seats);
+            String message = String.format("搶票成功！購買 %d 張，剩餘票數：%d", quantity, result);
+            return seats != null ? message + "，座位：" + TicketTypeService.formatSeats(seats) : message;
 
         } finally {
             SEMAPHORE.release();
@@ -197,6 +243,178 @@ public class TicketService {
         return count != null ? Integer.parseInt(count) : 0;
     }
     
+    // =============================================
+    // back：後台活動管理
+    // =============================================
+    public Map<String, Object> list(Map<String, String> dataTableParams) {
+        String keyword = PageableUtil.getStringParam(dataTableParams, "search[value]", "").trim();
+        String draw = PageableUtil.getStringParam(dataTableParams, "draw", "0");
+        Pageable pageable = PageableUtil.buildDataTablePageable(
+                dataTableParams,
+                SortFieldsConstant.TICKET_TABLE,
+                SortFieldsConstant.TICKET_DEFAULT,
+                Sort.Direction.DESC
+        );
+        Page<Map<String, Object>> ticketPage = ticketRepository.backList(keyword, pageable);
+        List<Map<String, Object>> ticketList = ticketPage.getContent().stream()
+                .map(row -> {
+                    Map<String, Object> map = new LinkedHashMap<>(row);
+                    map.put("VENUE_NAME", TicketVenue.of(String.valueOf(row.get("TICKET_VENUE"))).getVenueName());
+                    Integer ticketId = ((Number) row.get("TICKET_ID")).intValue();
+                    map.put("WARMED_TYPES", warmedTypeCount(ticketId));
+                    return map;
+                })
+                .toList();
+        return PageableUtil.buildDataTable(ticketPage, ticketList, draw);
+    }
+
+    public Ticket getData(Integer ticketId) {
+        return ticketId == null ? null : ticketRepository.findById(ticketId).orElse(null);
+    }
+
+    /** 新增活動，並依場地模板產生分區與票數；回傳錯誤訊息，成功回傳 null */
+    @Transactional
+    public String add(Ticket ticket) {
+        String error = validate(ticket);
+        if (error != null) return error;
+        if (ticketRepository.existsByTicketName(ticket.getTicketName())) return "活動名稱已存在";
+
+        TicketVenue venue = TicketVenue.of(ticket.getTicketVenue());
+        ticket.setTicketId(null);
+        ticket.setTicketVenue(venue.name());
+        ticket.setTicketQuantity(venue.getCapacity());
+        Ticket saved = ticketRepository.save(ticket);
+        ticketTypeService.saveAll(ticketTypeService.buildZones(saved, venue));
+        log.info("[Admin] 新增活動 ticketId={} venue={} zones={} quantity={}", saved.getTicketId(), venue, venue.getZones().size(), venue.getCapacity());
+        return null;
+    }
+
+    /** 修改活動基本資料（場地、票數不在此修改，請至座位配置頁）；回傳錯誤訊息，成功回傳 null */
+    public String update(Ticket form) {
+        Ticket ticket = getData(form.getTicketId());
+        if (ticket == null) return "查無此活動";
+        String error = validate(form);
+        if (error != null) return error;
+        if (ticketRepository.existsByTicketNameAndTicketIdNot(form.getTicketName(), form.getTicketId())) return "活動名稱已存在";
+
+        ticket.setTicketName(form.getTicketName());
+        ticket.setTicketStart(form.getTicketStart());
+        ticket.setTicketSaleStart(form.getTicketSaleStart());
+        ticket.setTicketSaleEnd(form.getTicketSaleEnd());
+        ticket.setTicketStatus(form.getTicketStatus());
+        ticketRepository.save(ticket);
+        return null;
+    }
+
+    private String validate(Ticket ticket) {
+        if (ticket.getTicketName() == null || ticket.getTicketName().isBlank()) return "請輸入活動名稱";
+        if (ticket.getTicketStart() == null) return "請選擇活動時間";
+        if (ticket.getTicketSaleStart() == null || ticket.getTicketSaleEnd() == null) return "請選擇售票期間";
+        if (ticket.getTicketSaleStart().isAfter(ticket.getTicketSaleEnd())) return "售票開始時間不得大於結束時間";
+        if (ticket.getTicketStatus() == null) ticket.setTicketStatus(0);
+        return null;
+    }
+
+    /** 依分區重新加總活動總票數 */
+    public void refreshQuantity(Integer ticketId) {
+        ticketRepository.refreshQuantity(ticketId);
+    }
+
+    /**
+     * 清除單一票種的 Redis 快取（資訊、剩餘數、座位池、個人購買數）與本地計數器
+     * 分區修改後呼叫，下次預熱會依 DB 重建
+     */
+    public void evictType(Integer typeId) {
+        stringRedisTemplate.delete(Arrays.asList(
+                String.format(TicketConstant.TICKET_TYPE_INFO_KEY, typeId),
+                String.format(TicketConstant.TICKET_REMAINING_KEY, typeId),
+                String.format(TicketConstant.TICKET_SEATS_KEY, typeId)));
+
+        String userCountPattern = String.format(TicketConstant.TICKET_USER_COUNT_PATTERN, typeId);
+        List<String> userCountKeys = new ArrayList<>();
+        try (Cursor<String> cursor = stringRedisTemplate.scan(ScanOptions.scanOptions().match(userCountPattern).count(1000).build())) {
+            cursor.forEachRemaining(userCountKeys::add);
+        }
+        if (!userCountKeys.isEmpty()) {
+            stringRedisTemplate.delete(userCountKeys);
+        }
+        LOCAL_REMAINING.remove(typeId);
+    }
+
+    // =============================================
+    // 預熱狀態：開啟 / 關閉
+    // =============================================
+
+    /** 已預熱（Redis 有剩餘數 Key）的票種數 */
+    public int warmedTypeCount(Integer ticketId) {
+        return (int) ticketTypeRepository.findByTicketId(ticketId).stream()
+                .filter(type -> Boolean.TRUE.equals(stringRedisTemplate.hasKey(String.format(TicketConstant.TICKET_REMAINING_KEY, type.getTypeId()))))
+                .count();
+    }
+
+    /** Redis 中所有已預熱票種的剩餘票數加總；未預熱回傳 -1 */
+    public int warmedRemaining(Integer ticketId) {
+        int total = -1;
+        for (TicketType type : ticketTypeRepository.findByTicketId(ticketId)) {
+            String remaining = stringRedisTemplate.opsForValue().get(String.format(TicketConstant.TICKET_REMAINING_KEY, type.getTypeId()));
+            if (remaining != null) {
+                total = Math.max(total, 0) + Integer.parseInt(remaining);
+            }
+        }
+        return total;
+    }
+
+    /**
+     * 關閉預熱：清除 Redis 的票種資訊、剩餘數、座位池，停止搶票
+     * DB 剩餘票數已由非同步寫入同步，不需回寫；個人已購數量保留到 TTL 到期，重新預熱後上限仍有效
+     * 已售罄的票種保留本地計數器 0，之後的請求仍回覆「票已售罄」而不是「停止售票」
+     */
+    public String closeWarmUp(Integer ticketId, String reason) {
+        Ticket ticket = getData(ticketId);
+        if (ticket == null) return "查無此活動";
+
+        int closed = 0;
+        for (TicketType type : ticketTypeRepository.findByTicketId(ticketId)) {
+            Integer typeId = type.getTypeId();
+            String remainingKey = String.format(TicketConstant.TICKET_REMAINING_KEY, typeId);
+            String remaining = stringRedisTemplate.opsForValue().get(remainingKey);
+            if (remaining == null) {
+                continue;
+            }
+            stringRedisTemplate.delete(Arrays.asList(
+                    String.format(TicketConstant.TICKET_TYPE_INFO_KEY, typeId),
+                    remainingKey,
+                    String.format(TicketConstant.TICKET_SEATS_KEY, typeId)));
+            if (Integer.parseInt(remaining) <= 0) {
+                LOCAL_REMAINING.put(typeId, new AtomicInteger(0));
+            } else {
+                LOCAL_REMAINING.remove(typeId);
+            }
+            closed++;
+        }
+        log.info("[Admin] 關閉預熱 ticketId={} 票種 {} 個 reason={}", ticketId, closed, reason);
+        return closed == 0
+                ? String.format("活動「%s」目前未預熱", ticket.getTicketName())
+                : String.format("活動「%s」已關閉預熱（%s），共 %d 個票種停止搶票", ticket.getTicketName(), reason, closed);
+    }
+
+    /**
+     * 測試用：重置活動票務
+     * 刪除該活動所有訂單 → DB 剩餘票數還原 → 清除 Redis → 重新預熱
+     */
+    public String resetTicket(Integer ticketId) {
+        Ticket ticket = getData(ticketId);
+        if (ticket == null) return "查無此活動";
+
+        int deleted = ticketOrderRepository.deleteByTicketId(ticketId);
+        ticketTypeRepository.resetRemainingByTicketId(ticketId);
+        ticketTypeRepository.findByTicketId(ticketId).forEach(type -> evictType(type.getTypeId()));
+        log.info("[Admin] 重置活動 ticketId={} 刪除訂單 {} 筆", ticketId, deleted);
+
+        String initMsg = initTickets(ticket.getTicketName());
+        return String.format("已重置：刪除訂單 %d 筆，%s", deleted, initMsg);
+    }
+
     // ────────────────── 管理用途維持 RedisTemplate<String, Object>（存放 Ticket 物件）──────────────────
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

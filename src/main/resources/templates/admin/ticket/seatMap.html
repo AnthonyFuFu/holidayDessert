@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{admin/load/css :: css}"></head>
+<head th:insert="~{admin/load/css :: jquery-datatable}"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 座位配置</title>
+<link rel="stylesheet" th:href="@{/admin/css/ticket.css}" />
+</head>
+<body th:class="theme- + (${employeeSession.empTheme} != 'null' and ${employeeSession.empTheme} != '' ? ${employeeSession.empTheme} : 'red')">
+
+    <!-- Page Loader -->
+    <div th:insert="~{admin/load/pageloader :: pageloader}" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+
+    <!-- Search Bar -->
+    <div th:insert="~{admin/load/searchbar :: searchbar}" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+
+    <!-- Top Bar -->
+    <nav th:insert="~{admin/load/navbar :: navbar}" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:insert="~{admin/load/leftsidebar :: leftsidebar}" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+
+        <!-- Right Sidebar -->
+        <aside th:insert="~{admin/load/rightsidebar :: rightsidebar}" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+			<!-- breadcrumbs -->
+            <div th:insert="~{admin/load/breadcrumbs :: ticket}" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+
+            <input type="hidden" id="ticketId" th:value="${ticket.ticketId}">
+            <input type="hidden" id="ticketVenue" th:value="${ticket.ticketVenue}">
+
+            <!-- 統計 -->
+            <div class="row clearfix">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-indigo">
+                        <div class="icon"><i class="material-icons">event_seat</i></div>
+                        <div class="content">
+                            <div class="text">總座位</div>
+                            <div class="number" id="stat-total">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-pink">
+                        <div class="icon"><i class="material-icons">shopping_cart</i></div>
+                        <div class="content">
+                            <div class="text">已售出</div>
+                            <div class="number" id="stat-sold">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-teal">
+                        <div class="icon"><i class="material-icons">confirmation_number</i></div>
+                        <div class="content">
+                            <div class="text">剩餘</div>
+                            <div class="number" id="stat-remaining">0</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange">
+                        <div class="icon"><i class="material-icons">trending_up</i></div>
+                        <div class="content">
+                            <div class="text">售出率 / 預熱</div>
+                            <div class="number"><span id="stat-rate">0%</span> <small id="stat-init" class="ticket-init-badge">未預熱</small></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 座位圖 -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>[[${ticket.ticketName}]] <small>[[${venueName}]]｜點擊分區可查看座位</small></h2>
+                            <div class="ticket-toolbar">
+                                <button type="button" id="btn-init" class="btn bg-blue waves-effect"><i class="material-icons">cloud_upload</i><span>預熱至 Redis</span></button>
+                                <button type="button" id="btn-close" class="btn bg-blue-grey waves-effect"><i class="material-icons">cloud_off</i><span>關閉預熱</span></button>
+                                <button type="button" id="btn-simulate" class="btn bg-red waves-effect"><i class="material-icons">flash_on</i><span>搶票測試</span></button>
+                                <button type="button" id="btn-reset" class="btn bg-grey waves-effect"><i class="material-icons">restore</i><span>重置測試資料</span></button>
+                                <button type="button" id="btn-refresh" class="btn btn-default waves-effect"><i class="material-icons">refresh</i><span>重新整理</span></button>
+                                <a class="btn btn-default waves-effect" th:href="@{/admin/ticket/updateTicket(ticketId=${ticket.ticketId})}"><i class="material-icons">edit</i><span>活動資料</span></a>
+                                <a class="btn btn-default waves-effect" href="/holidayDessert/admin/ticket/list"><i class="material-icons">list</i><span>返回列表</span></a>
+                            </div>
+                        </div>
+                        <div class="body">
+                            <div id="simulate-result" class="ticket-simulate-result" style="display:none"></div>
+
+                            <!-- 視圖切換 -->
+                            <div class="ticket-view-bar">
+                                <div class="btn-group" role="group" id="view-switch">
+                                    <button type="button" class="btn btn-default waves-effect active" data-view="card"><i class="material-icons">view_module</i><span>分區卡片</span></button>
+                                    <button type="button" class="btn btn-default waves-effect" data-view="plan"><i class="material-icons">map</i><span>場地平面圖</span></button>
+                                </div>
+                                <div class="btn-group" role="group" id="color-switch" style="display:none">
+                                    <button type="button" class="btn btn-default waves-effect active" data-mode="price">依票價</button>
+                                    <button type="button" class="btn btn-default waves-effect" data-mode="sold">依售出率</button>
+                                </div>
+                            </div>
+
+                            <!-- 分區卡片 -->
+                            <div id="card-view">
+                                <div id="price-legend" class="ticket-legend"></div>
+                                <div id="seat-map" class="ticket-seat-map"></div>
+                            </div>
+
+                            <!-- 場地平面圖 -->
+                            <div id="plan-view" style="display:none">
+                                <div class="row clearfix">
+                                    <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                                        <div class="ticket-plan">
+                                            <svg id="venue-plan-svg" role="img" th:attr="aria-label=${venueName} + '平面圖'"></svg>
+                                        </div>
+                                        <div id="plan-legend" class="ticket-legend"></div>
+                                        <div id="plan-unplaced" class="ticket-plan-unplaced" style="display:none"></div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                                        <table id="tier-table" class="table table-hover ticket-tier-table">
+                                            <thead>
+                                                <tr>
+                                                    <th>票價</th>
+                                                    <th class="text-right">分區</th>
+                                                    <th class="text-right">座位</th>
+                                                    <th class="text-right">已售</th>
+                                                    <th>售出率</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+                                        <p class="help-block">移到票價列可在平面圖上標出該價位的分區；點平面圖上的分區可查看座位明細。</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 分區設定 -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>分區票數設定 <small>座位數 = 排數 × 每排座位數；排數留空則為自由座（不配位）</small></h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li><button type="button" id="btn-add-zone" class="btn btn-primary waves-effect">新增分區</button></li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table id="zone-table" class="table table-bordered table-striped table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>區域</th>
+                                            <th>分區</th>
+                                            <th>票價</th>
+                                            <th>排 × 座</th>
+                                            <th>座位數</th>
+                                            <th>已售</th>
+                                            <th>剩餘</th>
+                                            <th>每人上限</th>
+                                            <th>功能</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 訂單 -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>此活動訂單 <small>訂單為非同步寫入 DB，搶票後稍等片刻再重新整理</small></h2>
+                        </div>
+                        <div class="body">
+                            <div class="table-responsive">
+                                <table id="order-table" class="table table-bordered table-striped table-hover dataTable" th:attr="data-ticket-id=${ticket.ticketId}">
+                                    <thead>
+                                        <tr>
+                                            <th>訂單ID</th>
+                                            <th>活動名稱</th>
+                                            <th>分區</th>
+                                            <th>會員</th>
+                                            <th>張數</th>
+                                            <th>金額</th>
+                                            <th>座位</th>
+                                            <th>狀態</th>
+                                            <th>下單時間</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 分區編輯 Modal -->
+    <div class="modal fade" id="zoneModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="zoneModalTitle">分區設定</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="zoneForm">
+                        <input type="hidden" name="typeId" id="zoneTypeId">
+                        <div class="row clearfix">
+                            <div class="col-sm-6">
+                                <label for="zoneArea">區域群組</label>
+                                <div class="form-group"><div class="form-line"><input type="text" class="form-control" name="typeArea" id="zoneArea" maxlength="50" placeholder="例如：B1特區"></div></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="zoneName">分區名稱</label>
+                                <div class="form-group"><div class="form-line"><input type="text" class="form-control" name="typeName" id="zoneName" maxlength="100" placeholder="例如：特A區"></div></div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-sm-6">
+                                <label for="zonePrice">票價</label>
+                                <div class="form-group"><div class="form-line"><input type="number" min="0" class="form-control" name="typePrice" id="zonePrice"></div></div>
+                            </div>
+                            <div class="col-sm-6">
+                                <label for="zoneMax">每人購買上限</label>
+                                <div class="form-group"><div class="form-line"><input type="number" min="1" class="form-control" name="typeMaxPerPerson" id="zoneMax"></div></div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-sm-4">
+                                <label for="zoneRows">排數</label>
+                                <div class="form-group"><div class="form-line"><input type="number" min="0" class="form-control" name="typeRows" id="zoneRows" placeholder="留空 = 自由座"></div></div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="zoneSeats">每排座位數</label>
+                                <div class="form-group"><div class="form-line"><input type="number" min="1" class="form-control" name="typeSeatsPerRow" id="zoneSeats"></div></div>
+                            </div>
+                            <div class="col-sm-4">
+                                <label for="zoneQuantity">座位數 / 可售張數</label>
+                                <div class="form-group"><div class="form-line"><input type="number" min="1" class="form-control" name="typeQuantity" id="zoneQuantity"></div></div>
+                            </div>
+                        </div>
+                        <div class="row clearfix">
+                            <div class="col-sm-6">
+                                <label for="zoneColor">座位圖顏色</label>
+                                <div class="form-group"><input type="color" class="form-control ticket-color-input" name="typeColor" id="zoneColor" value="#9e9e9e"></div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="zone-save" class="btn btn-primary waves-effect">儲 存</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">取 消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 座位明細 Modal -->
+    <div class="modal fade" id="seatModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="seatModalTitle">座位明細</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="ticket-seat-legend">
+                        <span><i class="ticket-seat"></i> 可售</span>
+                        <span><i class="ticket-seat sold"></i> 已售</span>
+                        <span id="seatModalHint"></span>
+                    </div>
+                    <div class="ticket-stage small">STAGE</div>
+                    <div id="seat-grid" class="ticket-seat-grid"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">關 閉</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 搶票測試 Modal -->
+    <div class="modal fade" id="simulateModal" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">搶票測試</h4>
+                </div>
+                <div class="modal-body">
+                    <p class="help-block">模擬多位測試會員（帳號 tkt_sim_ 開頭，停權狀態不可登入）同時搶票，走完整的 Semaphore → 本地計數 → Redis Lua 扣票配位 → 非同步寫入訂單 流程。</p>
+                    <div class="row clearfix">
+                        <div class="col-sm-6">
+                            <label for="simUsers">同時搶票人數（上限 <span th:text="${maxUsers}"></span>）</label>
+                            <div class="form-group"><div class="form-line"><input type="number" min="1" th:max="${maxUsers}" class="form-control" id="simUsers" value="500"></div></div>
+                        </div>
+                        <div class="col-sm-6">
+                            <label for="simQuantity">每人張數</label>
+                            <select id="simQuantity" class="form-control">
+                                <option value="0">隨機（1 ~ 每人上限）</option>
+                                <option value="1">1 張</option>
+                                <option value="2">2 張</option>
+                                <option value="3">3 張</option>
+                                <option value="4">4 張</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row clearfix">
+                        <div class="col-sm-12">
+                            <label for="simZone">搶票分區</label>
+                            <select id="simZone" class="form-control">
+                                <option value="0">全部分區（每人隨機）</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" id="simulate-start" class="btn bg-red waves-effect">開始搶票</button>
+                    <button type="button" class="btn btn-link waves-effect" data-dismiss="modal">取 消</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div th:insert="~{admin/load/js :: js}"></div>
+<div th:insert="~{admin/load/js :: jquery-datatable}"></div>
+<div th:insert="~{admin/load/js :: chat}"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<div id="plan-tip" class="ticket-plan-tip" style="display:none"></div>
+
+<script th:src="@{/admin/js/ticket/ticket-order.js}"></script>
+<script th:src="@{/admin/js/ticket/venue-plan.js}"></script>
+<script th:src="@{/admin/js/ticket/seat-map.js}"></script>
+</body>
+</html>

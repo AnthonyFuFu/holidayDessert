@@ -140,6 +140,7 @@ public class TicketController {
             if (msg.contains("售罄"))           return ResponseEntity.ok(ApiReturnObject.conflict(msg));
             if (msg.contains("個人購買上限"))   return ResponseEntity.ok(ApiReturnObject.badRequest(msg));
             if (msg.contains("系統繁忙"))       return ResponseEntity.ok(ApiReturnObject.tooManyRequests(msg));
+            if (msg.contains("停止售票"))       return ResponseEntity.ok(ApiReturnObject.conflict(msg));
 
             return ResponseEntity.ok(ApiReturnObject.serverError(msg));
 

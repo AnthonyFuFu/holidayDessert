@@ -3,20 +3,21 @@
 <head th:insert="~{admin/load/css :: css}"></head>
 <head>
 <title>[[${@environment.getProperty('html.title')}]] - 後台</title>
+<link rel="stylesheet" th:href="@{/admin/css/dashboard.css}" />
 </head>
 <body th:class="theme- + (${employeeSession.empTheme} != 'null' and ${employeeSession.empTheme} != '' ? ${employeeSession.empTheme} : 'red')">
     <!-- Page Loader -->
     <div th:insert="~{admin/load/pageloader :: pageloader}" class="page-loader-wrapper"></div>
     <!-- #END# Page Loader -->
-    
+
     <!-- Overlay For Sidebars -->
     <div class="overlay"></div>
     <!-- #END# Overlay For Sidebars -->
-    
+
     <!-- Search Bar -->
     <div th:insert="~{admin/load/searchbar :: searchbar}" class="search-bar"></div>
     <!-- #END# Search Bar -->
-    
+
     <!-- Top Bar -->
     <nav th:insert="~{admin/load/navbar :: navbar}" id="navbar" class="navbar"></nav>
     <!-- #Top Bar -->
@@ -24,7 +25,7 @@
         <!-- Left Sidebar -->
         <aside th:insert="~{admin/load/leftsidebar :: leftsidebar}" id="leftsidebar" class="sidebar"></aside>
         <!-- #END# Left Sidebar -->
-        
+
         <!-- Right Sidebar -->
         <aside th:insert="~{admin/load/rightsidebar :: rightsidebar}" id="rightsidebar" class="right-sidebar"></aside>
         <!-- #END# Right Sidebar -->
@@ -35,23 +36,321 @@
 			<!-- breadcrumbs -->
             <div th:insert="~{admin/load/breadcrumbs :: index}" class="row clearfix block-header"></div>
             <!-- #END# breadcrumbs -->
-            <div th:if="${employeeSession != null}"> [[${employeeSession.empName}]], [[${employeeSession.empAccount}]], [[${employeeSession.empPassword}]] </div>
-            
+
+            <!-- 問候 -->
+            <div class="dash-hello">
+                <div>
+                    <h2>[[${greeting}]]，[[${employeeSession.empName}]]</h2>
+                    <p>[[${today}]]｜資料更新於 [[${updatedAt}]]</p>
+                </div>
+                <a href="/holidayDessert/admin/index" class="btn btn-default waves-effect"><i class="material-icons">refresh</i><span>重新整理</span></a>
+            </div>
+
+            <!-- 關鍵指標 -->
+            <div class="row clearfix dash-kpi">
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-pink hover-expand-effect">
+                        <div class="icon"><i class="material-icons">attach_money</i></div>
+                        <div class="content">
+                            <div class="text">本月甜點營收</div>
+                            <div class="number">$[[${#numbers.formatInteger(revenue.THIS_MONTH ?: 0, 1, 'COMMA')}]]</div>
+                            <div class="dash-sub" th:if="${revenue.GROWTH != null}"
+                                 th:text="'較上月 ' + (${revenue.GROWTH} >= 0 ? '+' : '') + ${revenue.GROWTH} + '%'"></div>
+                            <div class="dash-sub" th:if="${revenue.GROWTH == null}" th:text="'今日 $' + ${#numbers.formatInteger(revenue.TODAY ?: 0, 1, 'COMMA')}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-orange hover-expand-effect">
+                        <div class="icon"><i class="material-icons">local_shipping</i></div>
+                        <div class="content">
+                            <div class="text">待處理訂單</div>
+                            <div class="number" th:text="${orderStatus.size() == 4 ? orderStatus[0].count + orderStatus[2].count : 0}">0</div>
+                            <div class="dash-sub" th:if="${orderStatus.size() == 4}" th:text="'未完成 ' + ${orderStatus[0].count} + '｜配送中 ' + ${orderStatus[2].count}"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-cyan hover-expand-effect">
+                        <div class="icon"><i class="material-icons">people</i></div>
+                        <div class="content">
+                            <div class="text">有效會員</div>
+                            <div class="number">[[${#numbers.formatInteger(members.ACTIVE ?: 0, 1, 'COMMA')}]]</div>
+                            <div class="dash-sub" th:text="'共 ' + ${members.TOTAL ?: 0} + ' 位，不含 ' + ${members.TEST ?: 0} + ' 位搶票測試會員'"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12">
+                    <div class="info-box bg-indigo hover-expand-effect">
+                        <div class="icon"><i class="material-icons">confirmation_number</i></div>
+                        <div class="content">
+                            <div class="text">票務已售張數</div>
+                            <div class="number">[[${#numbers.formatInteger(ticketSummary.SOLD ?: 0, 1, 'COMMA')}]]</div>
+                            <div class="dash-sub" th:text="'票房 $' + ${#numbers.formatInteger(ticketSummary.AMOUNT ?: 0, 1, 'COMMA')} + '｜待付款 ' + ${ticketSummary.UNPAID ?: 0} + ' 筆'"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 營收趨勢 / 訂單狀態 -->
+            <div class="row clearfix">
+                <div class="col-lg-8 col-md-8 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>近 30 天甜點營收 <small>不含已取消訂單｜移到長條上可看當日訂單數</small></h2>
+                        </div>
+                        <div class="body">
+                            <div class="dash-chart"><canvas id="revenue-chart"></canvas></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>訂單狀態 <small>全部甜點訂單</small></h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li><a href="/holidayDessert/admin/order/list" class="dash-link">訂單管理</a></li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <div class="dash-status-list" th:with="total=${#aggregates.sum(orderStatus.![count])}">
+                                <div class="dash-status" th:each="item : ${orderStatus}">
+                                    <div class="dash-status-head">
+                                        <span th:text="${item.name}"></span>
+                                        <b th:text="${item.count}"></b>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar" th:classappend="${item.status == 0 ? 'bg-orange' : item.status == 1 ? 'bg-green' : item.status == 2 ? 'bg-light-blue' : 'bg-grey'}"
+                                             th:style="'width:' + (${total} > 0 ? ${item.count * 100.0 / total} : 0) + '%'"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 票務活動 -->
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>票務活動 <small>預熱中的活動以 Redis 即時剩餘數計算；售完、售票結束或活動結束後會自動關閉預熱</small></h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li><a href="/holidayDessert/admin/ticket/list" class="dash-link">票務管理</a></li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <p class="dash-empty" th:if="${#lists.isEmpty(ticketEvents)}">目前沒有票務活動，可到「票務管理」新增活動。</p>
+                            <div class="table-responsive" th:unless="${#lists.isEmpty(ticketEvents)}">
+                                <table class="table table-hover dash-table">
+                                    <thead>
+                                        <tr>
+                                            <th>活動</th>
+                                            <th>場地</th>
+                                            <th>狀態</th>
+                                            <th>預熱</th>
+                                            <th class="dash-col-progress">售出</th>
+                                            <th class="text-right">剩餘</th>
+                                            <th>售票截止</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr th:each="event : ${ticketEvents}">
+                                            <td>
+                                                <b th:text="${event.TICKET_NAME}"></b>
+                                                <div class="col-grey dash-small" th:text="${event.TICKET_START}"></div>
+                                            </td>
+                                            <td th:text="${event.VENUE_NAME}"></td>
+                                            <td><span class="label" th:classappend="${event.TICKET_STATUS == 1 ? 'bg-green' : event.TICKET_STATUS == 0 ? 'bg-blue-grey' : event.TICKET_STATUS == 3 ? 'bg-red' : 'bg-grey'}" th:text="${event.STATUS}"></span></td>
+                                            <td>
+                                                <span th:if="${event.WARMED_TYPES > 0}" class="label bg-green">預熱中</span>
+                                                <span th:if="${event.WARMED_TYPES == 0}" class="label bg-grey">未預熱</span>
+                                            </td>
+                                            <td class="dash-col-progress">
+                                                <div class="dash-progress-row">
+                                                    <div class="progress">
+                                                        <div class="progress-bar bg-indigo" th:style="'width:' + ${event.SOLD_RATE} + '%'"></div>
+                                                    </div>
+                                                    <span class="dash-small" th:text="${event.SOLD_RATE} + '%'"></span>
+                                                </div>
+                                                <div class="col-grey dash-small" th:text="${#numbers.formatInteger(event.SOLD, 1, 'COMMA')} + ' / ' + ${#numbers.formatInteger(event.QUANTITY, 1, 'COMMA')} + ' 張'"></div>
+                                            </td>
+                                            <td class="text-right" th:text="${#numbers.formatInteger(event.REMAINING, 1, 'COMMA')}"></td>
+                                            <td th:text="${event.TICKET_SALE_END}"></td>
+                                            <td class="text-right">
+                                                <a class="btn btn-default btn-xs waves-effect" th:href="@{/admin/ticket/seatMap(ticketId=${event.TICKET_ID})}">座位配置</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 熱銷商品 / 排班 / 最近訂單 -->
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>熱銷商品 <small>依售出數量</small></h2>
+                        </div>
+                        <div class="body">
+                            <p class="dash-empty" th:if="${#lists.isEmpty(topProducts)}">還沒有售出的商品。</p>
+                            <ol class="dash-rank" th:unless="${#lists.isEmpty(topProducts)}">
+                                <li th:each="product : ${topProducts}">
+                                    <span class="dash-rank-name" th:text="${product.PD_NAME}"></span>
+                                    <span class="dash-rank-value">
+                                        <b th:text="${product.QTY} + ' 件'"></b>
+                                        <small class="col-grey" th:text="'$' + ${#numbers.formatInteger(product.REVENUE, 1, 'COMMA')}"></small>
+                                    </span>
+                                </li>
+                            </ol>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>今明排班</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li><a href="/holidayDessert/admin/calendar/list" class="dash-link">排班管理</a></li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <p class="dash-empty" th:if="${#lists.isEmpty(schedules)}">今天和明天沒有排班。</p>
+                            <ul class="dash-list" th:unless="${#lists.isEmpty(schedules)}">
+                                <li th:each="item : ${schedules}">
+                                    <span class="label" th:classappend="${item.DAY_LABEL == '今天' ? 'bg-pink' : 'bg-blue-grey'}" th:text="${item.DAY_LABEL}"></span>
+                                    <div class="dash-list-main">
+                                        <b th:text="${item.TITLE}"></b>
+                                        <div class="col-grey dash-small" th:text="${item.EMP_NAME} + '｜' + (${item.ALL_DAY == 1} ? '全天' : ${item.START_TIME} + (${item.END_TIME != null} ? ' – ' + ${item.END_TIME} : ''))"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>最近訂單</h2>
+                            <ul class="header-dropdown m-r--5">
+                                <li><a href="/holidayDessert/admin/order/list" class="dash-link">全部</a></li>
+                            </ul>
+                        </div>
+                        <div class="body">
+                            <p class="dash-empty" th:if="${#lists.isEmpty(recentOrders)}">還沒有訂單。</p>
+                            <ul class="dash-list" th:unless="${#lists.isEmpty(recentOrders)}">
+                                <li th:each="order : ${recentOrders}">
+                                    <span class="label" th:classappend="${order.ORD_STATUS == 0 ? 'bg-orange' : order.ORD_STATUS == 1 ? 'bg-green' : order.ORD_STATUS == 2 ? 'bg-light-blue' : 'bg-grey'}" th:text="${order.STATUS}"></span>
+                                    <div class="dash-list-main">
+                                        <b th:text="'#' + ${order.ORD_ID} + ' ' + ${order.MEM_NAME}"></b>
+                                        <div class="col-grey dash-small" th:text="${order.ORD_CREATE}"></div>
+                                    </div>
+                                    <span class="dash-amount" th:text="'$' + ${#numbers.formatInteger(order.ORD_TOTAL, 1, 'COMMA')}"></span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 上架內容 / 系統狀態 / 最近操作 -->
+            <div class="row clearfix">
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>上架內容</h2>
+                        </div>
+                        <div class="body">
+                            <div class="dash-mini-grid">
+                                <a href="/holidayDessert/admin/product/list" class="dash-mini">
+                                    <span>上架商品</span><b th:text="${content.PRODUCTS_ON ?: 0}"></b><small class="col-grey" th:text="'共 ' + ${content.PRODUCTS ?: 0} + ' 項'"></small>
+                                </a>
+                                <a href="/holidayDessert/admin/promotion/list" class="dash-mini">
+                                    <span>進行中優惠</span><b th:text="${content.PROMOTIONS_ON ?: 0}"></b><small class="col-grey">優惠活動</small>
+                                </a>
+                                <a href="/holidayDessert/admin/news/list" class="dash-mini">
+                                    <span>顯示中消息</span><b th:text="${content.NEWS_ON ?: 0}"></b><small class="col-grey">最新消息</small>
+                                </a>
+                                <a href="/holidayDessert/admin/coupon/list" class="dash-mini">
+                                    <span>上架優惠券</span><b th:text="${content.COUPONS_ON ?: 0}"></b><small class="col-grey">優惠券種類</small>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>系統狀態</h2>
+                        </div>
+                        <div class="body">
+                            <ul class="dash-system">
+                                <li>
+                                    <span><i class="material-icons" th:classappend="${system.db} ? 'col-green' : 'col-red'" th:text="${system.db} ? 'check_circle' : 'error'"></i>MySQL</span>
+                                    <b th:text="${system.db} ? '連線正常' : '無法連線'"></b>
+                                </li>
+                                <li>
+                                    <span><i class="material-icons" th:classappend="${system.redis} ? 'col-green' : 'col-red'" th:text="${system.redis} ? 'check_circle' : 'error'"></i>Redis</span>
+                                    <b th:text="${system.redis} ? '連線正常｜記憶體 ' + ${system.redisMemory} : '無法連線'"></b>
+                                </li>
+                                <li>
+                                    <span><i class="material-icons col-indigo">whatshot</i>預熱中的票種</span>
+                                    <b th:text="${system.warmedTypes ?: 0} + ' 個'"></b>
+                                </li>
+                                <li>
+                                    <span><i class="material-icons col-blue-grey">swap_horiz</i>訂單寫入方式</span>
+                                    <b th:text="${system.kafka} ? 'Kafka' : '@Async 非同步'"></b>
+                                </li>
+                                <li>
+                                    <span><i class="material-icons col-blue-grey">settings</i>執行環境</span>
+                                    <b th:text="${system.profiles}"></b>
+                                </li>
+                                <li>
+                                    <span><i class="material-icons col-blue-grey">badge</i>啟用中員工</span>
+                                    <b th:text="${content.EMPLOYEES ?: 0} + ' 位'"></b>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                            <h2>最近後台操作 <small>員工送出的 POST 請求</small></h2>
+                        </div>
+                        <div class="body">
+                            <p class="dash-empty" th:if="${#lists.isEmpty(recentActions)}">目前沒有操作紀錄。</p>
+                            <ul class="dash-list" th:unless="${#lists.isEmpty(recentActions)}">
+                                <li th:each="action : ${recentActions}">
+                                    <span class="label bg-blue-grey" th:text="${action.LOG_CREATE_BY}"></span>
+                                    <div class="dash-list-main">
+                                        <code class="dash-url" th:text="${#strings.replace(action.LOG_URL, '/holidayDessert', '')}"></code>
+                                        <div class="col-grey dash-small" th:text="${action.LOG_TIME} + (${action.LOG_HTTP_STATUS_CODE != null} ? '｜' + ${action.LOG_HTTP_STATUS_CODE} : '')"></div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </section>
 
 <div th:insert="~{admin/load/js :: js}"></div>
-<div th:insert="~{admin/load/js :: jquery-datatable}"></div>
-<div th:insert="~{admin/load/js :: flot-charts}"></div>
-<div th:insert="~{admin/load/js :: JVector-map}"></div>
-<div th:insert="~{admin/load/js :: datetime-picker}"></div>
-<div th:insert="~{admin/load/js :: morris-chart}"></div>
-<div th:insert="~{admin/load/js :: range-slider}"></div>
-<div th:insert="~{admin/load/js :: light-gallery}"></div>
 <div th:insert="~{admin/load/js :: chat}"></div>
 
+<script th:inline="javascript">
+    const DASHBOARD_TREND = /*[[${revenueTrend}]]*/ [];
+</script>
 <script th:src="@{/admin/js/admin.js}"></script>
 <script th:src="@{/admin/js/index/index.js}"></script>
-    
+
 </body>
 </html>

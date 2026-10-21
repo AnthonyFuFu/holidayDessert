@@ -14,4 +14,5 @@ public class TicketOrderMessageDto {
     private Integer memId;
     private Integer quantity;
     private Integer price;
+    private String seats;
 }

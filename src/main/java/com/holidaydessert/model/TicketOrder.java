@@ -52,4 +52,7 @@ public class TicketOrder implements Serializable {
 
     @Column(name = "TICKET_ORD_PAY_TIME")
     private LocalDateTime ticketOrdPayTime;  // 付款時間
+
+    @Column(name = "TICKET_ORD_SEATS")
+    private String ticketOrdSeats;           // 配位結果（排-座，逗號分隔，例如 3-5,3-6）
 }

@@ -1,0 +1,226 @@
+/* ===== 後台首頁儀表板 ===== */
+.dash-hello {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px;
+	margin-bottom: 20px;
+}
+.dash-hello h2 {
+	margin: 0 0 4px;
+	font-size: 22px;
+	font-weight: bold;
+	color: #333;
+}
+.dash-hello p {
+	margin: 0;
+	color: #777;
+}
+.dash-hello .btn .material-icons {
+	font-size: 18px;
+	vertical-align: middle;
+}
+
+/* 主題的 .info-box 固定 80px 高，首頁指標多一行說明，改為依內容撐高 */
+.dash-kpi .info-box {
+	height: auto;
+	min-height: 92px;
+}
+.dash-kpi .info-box .content {
+	padding: 10px 10px 10px 0;
+	min-width: 0;
+}
+.dash-kpi .info-box .content .number {
+	margin-top: 2px;
+}
+.info-box .content .dash-sub {
+	font-size: 12px;
+	opacity: .9;
+	margin-top: 2px;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.dash-link {
+	font-size: 13px;
+}
+.dash-small {
+	font-size: 12px;
+}
+.dash-empty {
+	margin: 0;
+	padding: 18px 0;
+	color: #999;
+	text-align: center;
+}
+
+.dash-chart {
+	position: relative;
+	height: 280px;
+}
+
+/* 訂單狀態 */
+.dash-status-list {
+	display: grid;
+	gap: 14px;
+}
+.dash-status-head {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 4px;
+}
+.dash-status .progress,
+.dash-progress-row .progress {
+	height: 8px;
+	margin: 0;
+	border-radius: 4px;
+	background: #eceff1;
+}
+
+/* 票務活動 */
+.dash-table td {
+	vertical-align: middle !important;
+}
+.dash-col-progress {
+	min-width: 180px;
+}
+.dash-progress-row {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+.dash-progress-row .progress {
+	flex: 1;
+}
+.dash-progress-row span {
+	width: 46px;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+
+/* 排行 / 清單 */
+.dash-rank {
+	margin: 0;
+	padding-left: 20px;
+}
+.dash-rank li {
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+.dash-rank li:last-child {
+	border-bottom: 0;
+}
+.dash-rank-name {
+	font-weight: bold;
+}
+.dash-rank-value {
+	float: right;
+	text-align: right;
+	font-variant-numeric: tabular-nums;
+}
+.dash-rank-value small {
+	display: block;
+}
+
+.dash-list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.dash-list li {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+.dash-list li:last-child {
+	border-bottom: 0;
+}
+.dash-list .label {
+	flex: 0 0 auto;
+	min-width: 52px;
+	text-align: center;
+}
+.dash-list-main {
+	flex: 1;
+	min-width: 0;
+}
+.dash-list-main b {
+	display: block;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.dash-amount {
+	font-weight: bold;
+	font-variant-numeric: tabular-nums;
+}
+.dash-url {
+	display: block;
+	padding: 0;
+	background: none;
+	color: #37474f;
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+/* 上架內容 */
+.dash-mini-grid {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+}
+.dash-mini {
+	display: grid;
+	gap: 2px;
+	padding: 12px;
+	border: 1px solid #eceff1;
+	border-radius: 6px;
+	color: #555;
+	text-decoration: none;
+}
+.dash-mini:hover,
+.dash-mini:focus {
+	border-color: #b0bec5;
+	text-decoration: none;
+	color: #333;
+}
+.dash-mini b {
+	font-size: 24px;
+	color: #222;
+	font-variant-numeric: tabular-nums;
+}
+
+/* 系統狀態 */
+.dash-system {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.dash-system li {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	gap: 10px;
+	padding: 8px 0;
+	border-bottom: 1px solid #f0f0f0;
+}
+.dash-system li:last-child {
+	border-bottom: 0;
+}
+.dash-system span {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	color: #555;
+}
+.dash-system .material-icons {
+	font-size: 18px;
+}
+.dash-system b {
+	text-align: right;
+}

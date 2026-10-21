@@ -22,12 +22,13 @@ public class TicketOrderProducer {
      * 將搶票成功的訂單資訊送入 Kafka
      * Key 使用 typeId，確保同一票種的訂單進入同一 Partition（有序消費）
      */
-    public void sendOrder(Integer typeId, Integer memId, Integer quantity, Integer price) {
+    public void sendOrder(Integer typeId, Integer memId, Integer quantity, Integer price, String seats) {
     	TicketOrderMessageDto message = TicketOrderMessageDto.builder()
                 .typeId(typeId)
                 .memId(memId)
                 .quantity(quantity)
                 .price(price)
+                .seats(seats)
                 .build();
     	
     	// Spring Kafka 3.x

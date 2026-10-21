@@ -60,6 +60,7 @@ public class TicketOrderConsumer {
             order.setTicketOrdQuantity(message.getQuantity());
             order.setTicketOrdStatus(0);
             order.setTicketOrdAmount(message.getPrice() * message.getQuantity());
+            order.setTicketOrdSeats(message.getSeats());
             order.setTicketOrdExpire(
                     LocalDateTime.now().plusMinutes(TicketConstant.ORDER_EXPIRE_MINUTES));
 

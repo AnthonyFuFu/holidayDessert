@@ -10,6 +10,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Data;
 
 @Entity
@@ -28,12 +30,15 @@ public class Ticket implements Serializable {
     private String ticketName;
 
     @Column(name = "TICKET_START", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime ticketStart;
 
     @Column(name = "TICKET_SALE_START", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime ticketSaleStart;
 
     @Column(name = "TICKET_SALE_END", nullable = false)
+    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime ticketSaleEnd;
 
     @Column(name = "TICKET_QUANTITY", nullable = false)
@@ -41,6 +46,9 @@ public class Ticket implements Serializable {
 
     @Column(name = "TICKET_STATUS", nullable = false)
     private Integer ticketStatus;
+
+    @Column(name = "TICKET_VENUE", nullable = false)
+    private String ticketVenue;              // 場地代碼（對應 TicketVenue）
 
     @Column(name = "TICKET_CREATE_TIME", updatable = false, insertable = false)
     private LocalDateTime ticketCreateTime; // 建立時間（自動生成）

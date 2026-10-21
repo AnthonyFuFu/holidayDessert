@@ -1,6 +1,9 @@
 CREATE DATABASE IF NOT EXISTS holiday_dessert;
 USE holiday_dessert;
 
+DROP TABLE IF EXISTS ticket_order;
+DROP TABLE IF EXISTS ticket_type;
+DROP TABLE IF EXISTS ticket;
 DROP TABLE IF EXISTS product_pic;
 DROP TABLE IF EXISTS message;
 DROP TABLE IF EXISTS chat_room;
@@ -23,9 +26,6 @@ DROP TABLE IF EXISTS news;
 DROP TABLE IF EXISTS company_information;
 DROP TABLE IF EXISTS order_detail;
 DROP TABLE IF EXISTS fullcalendar;
-DROP TABLE IF EXISTS ticket_event;
-DROP TABLE IF EXISTS ticket_type;
-DROP TABLE IF EXISTS ticket_order;
 -- ================== CREATE TABLE(會員）================== --
 
 CREATE TABLE `member`(
@@ -125,7 +125,8 @@ VALUES ('公司管理','1','0','/holidayDessert/admin/company/list',1,'business'
 	('商品管理','1','0','/holidayDessert/admin/product/list',1,'shop'),
 	('優惠活動管理','1','0','/holidayDessert/admin/promotion/list',1,'event'),
 	('優惠券管理','1','0','/holidayDessert/admin/coupon/list',1,'card_giftcard'),
-	('最新消息管理','1','0','/holidayDessert/admin/news/list',1,'fiber_new');
+	('最新消息管理','1','0','/holidayDessert/admin/news/list',1,'fiber_new'),
+	('票務管理','1','0','/holidayDessert/admin/ticket/list',1,'confirmation_number');
 
 -- 管理員權限 --
 CREATE TABLE authority(
@@ -137,9 +138,9 @@ CONSTRAINT authority_emp_function_FK FOREIGN KEY (FUNC_ID) REFERENCES emp_functi
 CONSTRAINT PK_authority_emp_ID_FUNC_ID PRIMARY KEY (EMP_ID, FUNC_ID)
 ) COMMENT='管理員權限';
 INSERT INTO authority(EMP_ID, FUNC_ID, AUTH_STATUS)
-VALUES  (1,1,1),(1,2,1),(1,3,1),(1,4,1),(1,5,1),(1,6,1),(1,7,1),(1,8,1),(1,9,1),
-        (2,1,0),(2,2,0),(2,3,1),(2,4,1),(2,5,1),(2,6,1),(2,7,1),(2,8,1),(2,9,1),
-        (3,1,1),(3,2,1),(3,3,1),(3,4,1),(3,5,1),(3,6,1),(3,7,1),(3,8,1),(3,9,1);
+VALUES  (1,1,1),(1,2,1),(1,3,1),(1,4,1),(1,5,1),(1,6,1),(1,7,1),(1,8,1),(1,9,1),(1,10,1),
+        (2,1,0),(2,2,0),(2,3,1),(2,4,1),(2,5,1),(2,6,1),(2,7,1),(2,8,1),(2,9,1),(2,10,1),
+        (3,1,1),(3,2,1),(3,3,1),(3,4,1),(3,5,1),(3,6,1),(3,7,1),(3,8,1),(3,9,1),(3,10,1);
 
 -- 最新消息 --
 CREATE TABLE news(
@@ -452,6 +453,7 @@ CREATE TABLE ticket (
     TICKET_SALE_END DATETIME NOT NULL COMMENT '售票結束時間',
     TICKET_QUANTITY INT NOT NULL COMMENT '總票數',
     TICKET_STATUS INT(2) NOT NULL DEFAULT 0 COMMENT '活動狀態(0:尚未開始 1:開始期間 2:活動結束 3:活動取消)',
+    TICKET_VENUE VARCHAR(30) NOT NULL DEFAULT 'CUSTOM' COMMENT '場地代碼(CUSTOM:自訂 TAIPEI_DOME:台北大巨蛋 TAIPEI_ARENA:台北小巨蛋)',
     TICKET_CREATE_TIME DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
     TICKET_UPDATE_TIME DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新時間'
 ) COMMENT='票務活動資料表';
@@ -470,6 +472,11 @@ CREATE TABLE ticket_type (
     TYPE_QUANTITY INT NOT NULL COMMENT '可售張數',
     TYPE_REMAINING INT NOT NULL COMMENT '剩餘票數',
     TYPE_MAX_PER_PERSON INT NOT NULL DEFAULT 4 COMMENT '每人購買上限',
+    TYPE_AREA VARCHAR(50) COMMENT '區域群組(座位圖分層)',
+    TYPE_COLOR VARCHAR(20) COMMENT '座位圖顏色',
+    TYPE_ROWS INT COMMENT '排數(NULL:自由座不配位)',
+    TYPE_SEATS_PER_ROW INT COMMENT '每排座位數',
+    TYPE_SORT INT NOT NULL DEFAULT 0 COMMENT '排序',
     LOCK_VERSION INT NOT NULL DEFAULT 0 COMMENT '樂觀鎖版本號',
     TYPE_CREATE_TIME DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT '建立時間',
     TYPE_UPDATE_TIME DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新時間',
@@ -491,6 +498,7 @@ CREATE TABLE ticket_order (
     TICKET_ORD_AMOUNT INT NOT NULL COMMENT '實際付款金額（TYPE_PRICE × QUANTITY 快照）',
 	TICKET_ORD_EXPIRE DATETIME COMMENT '付款期限（例如：下單後15分鐘）',
 	TICKET_ORD_PAY_TIME DATETIME COMMENT '付款時間',
+	TICKET_ORD_SEATS VARCHAR(500) COMMENT '配位結果(排-座，逗號分隔，例如 3-5,3-6)',
     CONSTRAINT ticket_order_member_FK FOREIGN KEY (MEM_ID) REFERENCES member(MEM_ID),
     CONSTRAINT ticket_order_ticket_type_FK FOREIGN KEY (TYPE_ID) REFERENCES ticket_type(TYPE_ID)
 ) COMMENT='訂單資料表';

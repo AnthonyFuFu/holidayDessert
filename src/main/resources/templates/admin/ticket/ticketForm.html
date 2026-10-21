@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:insert="~{admin/load/css :: css}"></head>
+<head th:insert="~{admin/load/css :: datetime-picker}"></head>
+<head>
+<title>[[${@environment.getProperty('html.title')}]] - 票務管理</title>
+<link rel="stylesheet" th:href="@{/admin/css/common.css}" />
+</head>
+<body th:class="theme- + (${employeeSession.empTheme} != 'null' and ${employeeSession.empTheme} != '' ? ${employeeSession.empTheme} : 'red')">
+
+    <!-- Page Loader -->
+    <div th:insert="~{admin/load/pageloader :: pageloader}" class="page-loader-wrapper"></div>
+    <!-- #END# Page Loader -->
+
+    <!-- Overlay For Sidebars -->
+    <div class="overlay"></div>
+    <!-- #END# Overlay For Sidebars -->
+
+    <!-- Search Bar -->
+    <div th:insert="~{admin/load/searchbar :: searchbar}" class="search-bar"></div>
+    <!-- #END# Search Bar -->
+
+    <!-- Top Bar -->
+    <nav th:insert="~{admin/load/navbar :: navbar}" id="navbar" class="navbar"></nav>
+    <!-- #Top Bar -->
+    <section>
+        <!-- Left Sidebar -->
+        <aside th:insert="~{admin/load/leftsidebar :: leftsidebar}" id="leftsidebar" class="sidebar"></aside>
+        <!-- #END# Left Sidebar -->
+
+        <!-- Right Sidebar -->
+        <aside th:insert="~{admin/load/rightsidebar :: rightsidebar}" id="rightsidebar" class="right-sidebar"></aside>
+        <!-- #END# Right Sidebar -->
+    </section>
+
+    <section class="content">
+        <div class="container-fluid">
+
+			<!-- breadcrumbs -->
+            <div th:insert="~{admin/load/breadcrumbs :: ticket}" class="row clearfix block-header"></div>
+            <!-- #END# breadcrumbs -->
+
+            <div class="row clearfix">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <div class="card">
+                        <div class="header">
+                        	<h2 th:text="${ticket.ticketId != null ? '票務活動 - 修改' : '票務活動 - 新增'}"></h2>
+                        </div>
+                        <div class="body">
+							<form class="form-horizontal" role="form" id="mainForm" method="POST" th:object="${ticket}">
+
+								<input id="ticketId" type="hidden" th:field="*{ticketId}">
+
+								<div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="ticketName">活動名稱</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                            <div class="form-line">
+                                                <input type="text" id="ticketName" class="form-control" th:field="*{ticketName}" maxlength="100" placeholder="請輸入活動名稱">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+								<div class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="ticketVenue">場地</label>
+                                    </div>
+                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
+                                    	<select id="ticketVenue" class="form-control show-tick" th:field="*{ticketVenue}" th:disabled="*{ticketId} != null">
+                                        	<option th:each="venue:${venueList}" th:value="${venue.code}"
+                                        		th:attr="data-zone-count=${venue.zoneCount},data-capacity=${venue.capacity}"
+                                        		th:text="${venue.name}"></option>
+                                    	</select>
+                                    	<p class="help-block" id="venueHint" th:if="*{ticketId} == null"></p>
+                                    	<p class="help-block" th:if="*{ticketId} != null">場地建立後不可更改，分區、票價與座位數請至「座位配置」頁調整。</p>
+                                	</div>
+                            	</div>
+
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="ticketStart">活動時間</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="form-line">
+                                            	<input type="text" id="ticketStart" class="datepicker form-control" placeholder="請選擇活動時間" th:field="*{ticketStart}">
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="ticketSaleStart">售票開始時間</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="form-line">
+                                            	<input type="text" id="ticketSaleStart" class="datepicker form-control" placeholder="請選擇售票開始時間" th:field="*{ticketSaleStart}">
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row clearfix">
+                                    <div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="ticketSaleEnd">售票結束時間</label>
+                                    </div>
+                                    <div class="col-lg-10 col-md-10 col-sm-8 col-xs-7">
+                                        <div class="form-group">
+                                        	<div class="form-line">
+                                            	<input type="text" id="ticketSaleEnd" class="datepicker form-control" placeholder="請選擇售票結束時間" th:field="*{ticketSaleEnd}">
+                                        	</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+								<div class="row clearfix">
+									<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label">
+                                        <label for="ticketStatus">活動狀態</label>
+                                    </div>
+                                	<div class="col-lg-10 col-md-10 col-sm-8 col-xs-7" style="padding-left:0;padding-right:30px">
+                                    	<select id="ticketStatus" class="form-control show-tick" th:field="*{ticketStatus}">
+                                        	<option value="0">尚未開始</option>
+                                        	<option value="1">售票中</option>
+                                        	<option value="2">活動結束</option>
+                                        	<option value="3">活動取消</option>
+                                    	</select>
+                                	</div>
+                            	</div>
+
+                                <div class="row clearfix">
+                                	<div class="col-lg-2 col-md-2 col-sm-4 col-xs-5 form-control-label"> </div>
+                                	<div class="row clearfix">
+                                		<div class="col-lg-offset-2 col-md-offset-2 col-sm-offset-4 col-xs-offset-5">
+                                			<button id="add-submit" class="btn btn-primary waves-effect" th:if="*{ticketId} eq null" type="button">新 增</button>
+                                    		<button id="update-submit" class="btn btn-primary waves-effect" th:if="*{ticketId} ne null" type="button">修 改</button>
+                                    		<a class="btn bg-teal waves-effect" th:if="*{ticketId} ne null" th:href="@{/admin/ticket/seatMap(ticketId=*{ticketId})}">座位配置</a>
+                                    		<button id="backBtn" class="btn" onclick="history.back()" type="button" >返回列表</button>
+                                		</div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+<div th:insert="~{admin/load/js :: js}"></div>
+<div th:insert="~{admin/load/js :: datetime-picker}"></div>
+
+<script th:src="@{/admin/js/admin.js}"></script>
+<script th:src="@{/admin/js/ticket/ticket.js}"></script>
+</body>
+</html>

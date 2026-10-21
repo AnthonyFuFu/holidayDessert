@@ -11,7 +11,7 @@ import java.util.List;
 
 public interface TicketTypeRepository extends JpaRepository<TicketType, Integer> {
 
-    @Query("SELECT tt FROM TicketType tt JOIN FETCH tt.ticket t WHERE t.ticketName = :ticketName")
+    @Query("SELECT tt FROM TicketType tt JOIN FETCH tt.ticket t WHERE t.ticketName = :ticketName ORDER BY tt.typeSort, tt.typeId")
     List<TicketType> findByTicketName(@Param("ticketName") String ticketName);
 
     @Modifying
@@ -23,6 +23,18 @@ public interface TicketTypeRepository extends JpaRepository<TicketType, Integer>
         "WHERE t.TICKET_NAME = :ticketName",
         nativeQuery = true)   // ← 加這個
     void resetRemainingByTicketName(@Param("ticketName") String ticketName);
+
+    @Query("SELECT tt FROM TicketType tt JOIN FETCH tt.ticket t WHERE t.ticketId = :ticketId ORDER BY tt.typeSort, tt.typeId")
+    List<TicketType> findByTicketId(@Param("ticketId") Integer ticketId);
+
+    @Query("SELECT COALESCE(MAX(tt.typeSort), 0) FROM TicketType tt WHERE tt.ticket.ticketId = :ticketId")
+    int findMaxSort(@Param("ticketId") Integer ticketId);
+
+    @Modifying
+    @Transactional
+    @Query(value = "UPDATE holiday_dessert.ticket_type SET TYPE_REMAINING = TYPE_QUANTITY WHERE TICKET_ID = :ticketId",
+           nativeQuery = true)
+    int resetRemainingByTicketId(@Param("ticketId") Integer ticketId);
 
     @Modifying
     @Transactional
