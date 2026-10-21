@@ -23,10 +23,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Fullcalendar;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.FullcalendarService;
 
 import io.swagger.v3.oas.annotations.Hidden;
@@ -38,24 +36,14 @@ import io.swagger.v3.oas.annotations.Hidden;
 @CrossOrigin
 @Hidden
 public class CalendarManagement {
-
-	@Autowired
-	private AuthorityService authorityService;
-
+	
 	@Autowired
 	private FullcalendarService fullcalendarService;
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String list(@SessionAttribute Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
-		model.addAttribute("authorityList", authorityList);
 		return "admin/calendar/list";
-
 	}
 
 	@ResponseBody

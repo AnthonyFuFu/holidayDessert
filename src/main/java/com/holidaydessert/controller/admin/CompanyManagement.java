@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.CompanyInformation;
 import com.holidaydessert.model.Department;
 import com.holidaydessert.model.Employee;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CompanyInformationService;
 import com.holidaydessert.service.DepartmentService;
 
@@ -40,9 +38,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class CompanyManagement {
 	
 	@Autowired
-	private AuthorityService authorityService;
-	
-	@Autowired
 	private CompanyInformationService companyInformationService;
 	
 	@Autowired
@@ -51,16 +46,9 @@ public class CompanyManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
-		model.addAttribute("authorityList", authorityList);
 		return "admin/company/list";
-
 	}
 	
 	@GetMapping("/companyTables")
@@ -149,14 +137,8 @@ public class CompanyManagement {
 	public String addCompany(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			CompanyInformation companyInformation = new CompanyInformation();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("companyInformation", companyInformation);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -168,14 +150,8 @@ public class CompanyManagement {
 	public String updateCompany(@SessionAttribute Employee employeeSession,
 			@ModelAttribute CompanyInformation companyInformation, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			companyInformation = companyInformationService.getData(companyInformation);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("companyInformation", companyInformation);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {
@@ -221,14 +197,8 @@ public class CompanyManagement {
 	public String addDepartment(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			Department department = new Department();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("department", department);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -240,14 +210,8 @@ public class CompanyManagement {
 	public String updateDepartment(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Department department, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			department = departmentService.getData(department);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("department", department);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {

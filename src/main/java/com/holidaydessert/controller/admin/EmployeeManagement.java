@@ -65,14 +65,7 @@ public class EmployeeManagement {
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String list(@SessionAttribute Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
-		model.addAttribute("authorityList", authorityList);
 		return "admin/employee/list";
-
 	}
 	
 	@GetMapping("/employeeTables")
@@ -209,15 +202,9 @@ public class EmployeeManagement {
 	public String addEmployee(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		List<Map<String, Object>> departmentList = departmentService.getList();
 		try {
 			Employee employee = new Employee();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("departmentList", departmentList);
 			model.addAttribute("employee", employee);
 		} catch (JSONException e) {
@@ -230,15 +217,10 @@ public class EmployeeManagement {
 	public String updateEmployee(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> departmentList = departmentService.getList();
 		
 		try {
 			employee = employeeService.getData(employee);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("departmentList", departmentList);
 			model.addAttribute("employee", employee);
 			model.addAttribute("MESSAGE", "資料修改成功");
@@ -325,14 +307,8 @@ public class EmployeeManagement {
 	public String addEmpFunction(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			EmpFunction empFunction = new EmpFunction();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("empFunction", empFunction);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -344,14 +320,8 @@ public class EmployeeManagement {
 	public String updateEmpFunction(@SessionAttribute Employee employeeSession,
 			@ModelAttribute EmpFunction empFunction, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			empFunction = empFunctionService.getData(empFunction);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("empFunction", empFunction);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {

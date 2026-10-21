@@ -21,11 +21,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.MainOrder;
 import com.holidaydessert.model.OrderDetail;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.MainOrderService;
 import com.holidaydessert.service.OrderDetailService;
 
@@ -39,9 +37,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class OrderManagement {
 	
 	@Autowired
-	private AuthorityService authorityService;
-	
-	@Autowired
 	private MainOrderService mainOrderService;
 	
 	@Autowired
@@ -50,16 +45,9 @@ public class OrderManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
-		model.addAttribute("authorityList", authorityList);
 		return "admin/order/list";
-
 	}
 	
 	@GetMapping("/orderTables")

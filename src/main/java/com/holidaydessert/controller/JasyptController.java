@@ -21,7 +21,7 @@ public class JasyptController {
     @Value("${jasypt.encryptor.algorithm:PBEWithMD5AndDES}")
     private String algorithm;
 
-    @Value("${jasypt.encryptor.password:123456}")
+    @Value("${jasypt.encryptor.password:AnthonyFu-Learning}")
     private String password;
 
     // =============================================
@@ -58,10 +58,7 @@ public class JasyptController {
     public ApiReturnObject decrypt(@RequestParam String text) {
         try {
             // 自動去除 ENC() 包裝
-            String cleanText = text.trim()
-                                   .replace("ENC(", "")
-                                   .replace(")", "");
-
+			String cleanText = text.trim().replace("ENC(", "").replace(")", "");
             String result = getEncryptor().decrypt(cleanText);
 
             Map<String, String> data = new LinkedHashMap<>();

@@ -22,12 +22,10 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Product;
 import com.holidaydessert.model.Promotion;
 import com.holidaydessert.model.PromotionDetail;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.ProductService;
 import com.holidaydessert.service.PromotionDetailService;
 import com.holidaydessert.service.PromotionService;
@@ -42,9 +40,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class PromotionManagement {
 	
 	@Autowired
-	private AuthorityService authorityService;
-	
-	@Autowired
 	private PromotionService promotionService;
 
 	@Autowired
@@ -56,16 +51,9 @@ public class PromotionManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
-		model.addAttribute("authorityList", authorityList);
 		return "admin/promotion/list";
-
 	}
 	
 	@GetMapping("/promotionTables")
@@ -193,14 +181,8 @@ public class PromotionManagement {
 	public String addPromotion(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			Promotion promotion = new Promotion();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("promotion", promotion);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -212,14 +194,8 @@ public class PromotionManagement {
 	public String updatePromotion(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Promotion promotion, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			promotion = promotionService.getData(promotion);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("promotion", promotion);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {
@@ -262,14 +238,9 @@ public class PromotionManagement {
 	public String issuePromotion(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> promotionList = promotionService.getList();
 		
 		try {
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("promotionList", promotionList);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -329,16 +300,11 @@ public class PromotionManagement {
 	public String addOneProductPromotion(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> productList = productService.issueOneProductList();
 		List<Map<String, Object>> promotionList = promotionService.getList();
 		
 		try {
 			PromotionDetail promotionDetail = new PromotionDetail();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productList", productList);
 			model.addAttribute("promotionList", promotionList);
 			model.addAttribute("promotionDetail", promotionDetail);
@@ -352,16 +318,11 @@ public class PromotionManagement {
 	public String updateOneProductPromotion(@SessionAttribute Employee employeeSession,
 			@ModelAttribute PromotionDetail promotionDetail, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> productList = productService.getList();
 		List<Map<String, Object>> promotionList = promotionService.getList();
 		
 		try {
 			promotionDetail = promotionDetailService.getData(promotionDetail);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productList", productList);
 			model.addAttribute("promotionList", promotionList);
 			model.addAttribute("promotionDetail", promotionDetail);

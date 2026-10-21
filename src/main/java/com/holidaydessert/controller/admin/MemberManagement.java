@@ -21,12 +21,10 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
 import com.google.gson.Gson;
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Cart;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.model.ReceiptInformation;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CartService;
 import com.holidaydessert.service.ChatRoomService;
 import com.holidaydessert.service.MemberService;
@@ -40,9 +38,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 @CrossOrigin
 @Hidden
 public class MemberManagement {
-	
-	@Autowired
-	private AuthorityService authorityService;
 	
 	@Autowired
 	private MemberService memberService;
@@ -59,17 +54,11 @@ public class MemberManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
-		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
+	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
 		List<Map<String, Object>> chatRoomList = chatRoomService.getAllChatRoom();
-		
 		model.addAttribute("chatRoomList", chatRoomList);
-		model.addAttribute("authorityList", authorityList);
+		
 		return "admin/member/list";
 
 	}

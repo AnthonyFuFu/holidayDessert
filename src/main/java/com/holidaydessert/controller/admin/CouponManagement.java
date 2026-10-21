@@ -24,12 +24,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Coupon;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.model.MemberCoupon;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.CouponService;
 import com.holidaydessert.service.MemberCouponService;
@@ -46,9 +44,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class CouponManagement {
 
 	@Autowired
-	private AuthorityService authorityService;
-	
-	@Autowired
 	private CouponService couponService;
 
 	@Autowired
@@ -63,16 +58,9 @@ public class CouponManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
+	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
-		model.addAttribute("authorityList", authorityList);
 		return "admin/coupon/list";
-
 	}
 	
 	@GetMapping("/couponTables")
@@ -207,14 +195,8 @@ public class CouponManagement {
 	public String addCoupon(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			Coupon coupon = new Coupon();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("coupon", coupon);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -226,14 +208,8 @@ public class CouponManagement {
 	public String updateCoupon(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Coupon coupon, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			coupon = couponService.getData(coupon);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("coupon", coupon);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {
@@ -295,13 +271,8 @@ public class CouponManagement {
 	public String issueCoupon(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> couponList = couponService.getList();
 		try {
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("couponList", couponList);
 		} catch (JSONException e) {
 			e.printStackTrace();

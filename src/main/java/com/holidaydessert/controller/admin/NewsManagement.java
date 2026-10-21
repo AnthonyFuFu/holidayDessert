@@ -22,11 +22,9 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Banner;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.News;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.BannerService;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.NewsService;
@@ -43,9 +41,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class NewsManagement {
 	
 	@Autowired
-	private AuthorityService authorityService;
-	
-	@Autowired
 	private NewsService newsService;
 
 	@Autowired
@@ -59,12 +54,7 @@ public class NewsManagement {
 
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
-		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
+	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
 		List<Map<String, Object>> newsList = newsService.getListForBanner();
 		
@@ -74,8 +64,6 @@ public class NewsManagement {
 			List<Map<String, Object>> bannerList = bannerService.list(banner);
 			newsList.get(i).put("bannerList", bannerList);
 		}
-		
-		model.addAttribute("authorityList", authorityList);
 		model.addAttribute("newsList", newsList);
 		return "admin/news/list";
 
@@ -88,18 +76,12 @@ public class NewsManagement {
 	}
 
 	@RequestMapping(value = "/addNews" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addNews(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
+	public String addNews(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> promotionList = promotionService.getList();
 		
 		try {
 			News news = new News();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("promotionList", promotionList);
 			model.addAttribute("news", news);
 		} catch (JSONException e) {
@@ -109,18 +91,12 @@ public class NewsManagement {
 	}
 	
 	@RequestMapping(value = "/updateNews" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateNews(@SessionAttribute Employee employeeSession,
-			@ModelAttribute News news, Model model) throws Exception {
+	public String updateNews(@SessionAttribute Employee employeeSession, @ModelAttribute News news, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> promotionList = promotionService.getList();
 		
 		try {
 			news = newsService.getData(news);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("promotionList", promotionList);
 			model.addAttribute("news", news);
 			model.addAttribute("MESSAGE", "資料修改成功");
@@ -167,17 +143,11 @@ public class NewsManagement {
 	public String editBanner(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news,@ModelAttribute Banner banner, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		banner.setNewsId(news.getNewsId());
 		List<Map<String, Object>> bannerList = bannerService.list(banner);
 		
 		try {
 			news = newsService.getData(news);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("news", news);
 			model.addAttribute("bannerList", bannerList);
 		} catch (JSONException e) {
@@ -190,10 +160,6 @@ public class NewsManagement {
 	public String addBanner(@SessionAttribute Employee employeeSession,
 			@ModelAttribute News news, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		news = newsService.getData(news);
 		
 		List<Map<String, Object>> newsList = newsService.getList();
@@ -202,7 +168,6 @@ public class NewsManagement {
 			Banner banner = new Banner();
 			banner.setNewsId(news.getNewsId());
 			banner.setNewsName(news.getNewsName());
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("newsList", newsList);
 			model.addAttribute("banner", banner);
 		} catch (JSONException e) {
@@ -215,14 +180,8 @@ public class NewsManagement {
 	public String updateBanner(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Banner banner, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			banner = bannerService.getData(banner);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("banner", banner);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {

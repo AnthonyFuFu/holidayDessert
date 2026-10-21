@@ -26,12 +26,10 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.google.gson.Gson;
-import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.Employee;
 import com.holidaydessert.model.Product;
 import com.holidaydessert.model.ProductCollection;
 import com.holidaydessert.model.ProductPic;
-import com.holidaydessert.service.AuthorityService;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.ProductCollectionService;
 import com.holidaydessert.service.ProductPicService;
@@ -48,9 +46,6 @@ import io.swagger.v3.oas.annotations.Hidden;
 public class ProductManagement {
 	
 	@Autowired
-	private AuthorityService authorityService;
-	
-	@Autowired
 	private ProductService productService;
 	
 	@Autowired
@@ -65,12 +60,7 @@ public class ProductManagement {
 	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
-	public String list(@SessionAttribute Employee employeeSession, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
-		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
+	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
 		
 		List<Map<String, Object>> productList = productService.getPicList();
 		for (int i = 0; i < productList.size(); i++) {
@@ -80,7 +70,6 @@ public class ProductManagement {
 			productList.get(i).put("productPicList", productPicList);
 		}
 		
-		model.addAttribute("authorityList", authorityList);
 		model.addAttribute("productList", productList);
 		return "admin/product/list";
 
@@ -172,15 +161,10 @@ public class ProductManagement {
 	public String addProduct(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
 		
 		try {
 			Product product = new Product();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productCollectionList", productCollectionList);
 			model.addAttribute("product", product);
 		} catch (JSONException e) {
@@ -193,15 +177,10 @@ public class ProductManagement {
 	public String updateProduct(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
 		
 		try {
 			product = productService.getData(product);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productCollectionList", productCollectionList);
 			model.addAttribute("product", product);
 			model.addAttribute("MESSAGE", "資料修改成功");
@@ -251,14 +230,8 @@ public class ProductManagement {
 	public String addProductCollection(@SessionAttribute Employee employeeSession,
 			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			ProductCollection productCollection = new ProductCollection();
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productCollection", productCollection);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -270,14 +243,8 @@ public class ProductManagement {
 	public String updateProductCollection(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductCollection productCollection, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			productCollection = productCollectionService.getData(productCollection);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productCollection", productCollection);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {
@@ -323,17 +290,11 @@ public class ProductManagement {
 	public String editProductPic(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product,@ModelAttribute ProductPic productPic, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		productPic.setPdId(product.getPdId());
 		List<Map<String, Object>> productPicList = productPicService.list(productPic);
 		
 		try {
 			product = productService.getData(product);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("product", product);
 			model.addAttribute("productPicList", productPicList);
 		} catch (JSONException e) {
@@ -346,19 +307,13 @@ public class ProductManagement {
 	public String addProductPic(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Product product, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
 		product = productService.getData(product);
-		
 		List<Map<String, Object>> productList = productService.getList();
 		
 		try {
 			ProductPic productPic = new ProductPic();
 			productPic.setPdId(product.getPdId());
 			productPic.setPdName(product.getPdName());
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productList", productList);
 			model.addAttribute("productPic", productPic);
 		} catch (JSONException e) {
@@ -371,14 +326,8 @@ public class ProductManagement {
 	public String updateProductPic(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductPic productPic, Model model) throws Exception {
 		
-		// 權限
-		Authority authority = new Authority();
-		authority.setEmpId(employeeSession.getEmpId());
-		List<Map<String, Object>> authorityList = authorityService.list(authority);
-		
 		try {
 			productPic = productPicService.getData(productPic);
-			model.addAttribute("authorityList", authorityList);
 			model.addAttribute("productPic", productPic);
 			model.addAttribute("MESSAGE", "資料修改成功");
 		} catch (JSONException e) {
