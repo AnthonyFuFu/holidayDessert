@@ -2,13 +2,16 @@ package com.holidaydessert.controller;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -22,7 +25,9 @@ import com.holidaydessert.service.MessageService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Hidden;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RestController
 @Hidden
 public class ChatRoomController {
@@ -77,6 +82,15 @@ public class ChatRoomController {
 		message.setMsgTime(time);
         messageService.saveMessage(message);
         return message;
+    }
+
+    // 處理 @MessageMapping 方法拋出的例外（例如存訊息失敗），只回傳給發送者本人，避免無聲失敗
+    // 前端訂閱 /user/queue/errors 即可收到；未登入的連線 Spring 會用 WebSocket sessionId 對應
+    @MessageExceptionHandler
+    @SendToUser(destinations = "/queue/errors", broadcast = false)
+    public Map<String, String> handleChatException(Exception e) {
+        log.error("聊天室訊息處理失敗", e);
+        return Map.of("message", "訊息傳送失敗，請稍後再試");
     }
 	
 }

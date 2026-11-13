@@ -83,6 +83,11 @@ function connectChatRoom(roomUrl) {
 				appendMessage(msg);
             }
         );
+        // 後端 @MessageExceptionHandler 的錯誤通知（只會送給自己）
+        stompClient.subscribe('/user/queue/errors', (message) => {
+            const body = JSON.parse(message.body);
+            alert(body.message || '訊息傳送失敗');
+        });
     };
     stompClient.onWebSocketError = (error) => {
         console.error('WebSocket error', error);

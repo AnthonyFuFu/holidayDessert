@@ -27,15 +27,6 @@ public interface MessageRepository extends JpaRepository<Message, String> {
     List<Map<String, Object>> getMessageByMem(@Param("memId") Integer memId);
 
     // =============================================
-    // claimMessages：認領聊天室（誰先讀取誰負責）
-    // =============================================
-    @Modifying
-    @Transactional
-    @Query(value = "UPDATE holiday_dessert.message SET EMP_ID = :empId WHERE ROOM_ID = :roomId AND EMP_ID IS NULL",
-           nativeQuery = true)
-    int claimMessages(@Param("empId") String empId, @Param("roomId") String roomId);
-
-    // =============================================
     // saveMessage → save() 內建，不需要額外方法
     // =============================================
 

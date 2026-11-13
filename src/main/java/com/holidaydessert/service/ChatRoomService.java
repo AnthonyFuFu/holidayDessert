@@ -1,20 +1,18 @@
 package com.holidaydessert.service;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.holidaydessert.dao.ChatRoomDao;
 import com.holidaydessert.model.ApiReturnObject;
 import com.holidaydessert.model.ChatRoom;
-import com.holidaydessert.model.Message;
 import com.holidaydessert.repository.ChatRoomRepository;
-import com.holidaydessert.repository.MessageRepository;
 
 @Service
 public class ChatRoomService {
@@ -24,15 +22,6 @@ public class ChatRoomService {
 	
     @Autowired
     private ChatRoomRepository chatRoomRepository;
-    
-	@Autowired
-	private MessageService messageService;
-
-	@Autowired
-	private CommonService commonService;
-
-	@Autowired
-	private MessageRepository messageRepository;
 
 	// =============================================
 	// back
@@ -43,7 +32,7 @@ public class ChatRoomService {
 
 	@Transactional
 	public ApiReturnObject claimChatRoom(String roomId, String empId) {
-		int claimed = messageRepository.claimMessages(empId, roomId);
+		int claimed = chatRoomRepository.claimChatRoom(empId, roomId);
 		String msg = claimed > 0 ? "已認領聊天室" : "聊天室已有負責人";
 		return ApiReturnObject.success(msg, claimed);
 	}
@@ -51,46 +40,33 @@ public class ChatRoomService {
 	// =============================================
 	// front
 	// =============================================
+	// get-or-create：有則取得，沒有則建立
+	// 刻意不加 @Transactional：建立時若撞到 UNIQUE(MEM_ID)，需要在新的交易裡重新查詢
 	public ApiReturnObject getChatRoom(Integer memId) {
-		List<Map<String, Object>> chatRoomByMessage = chatRoomRepository.getChatRoomByMessage(memId);
-
-		if (chatRoomByMessage == null || chatRoomByMessage.isEmpty()) {
-			try {
-		        String roomUrl = commonService.generateEncryptedToken(memId.toString());
-		        Long roomId = chatRoomRepository.save(ChatRoom.createNew(roomUrl)).getRoomId();
-
-				String dateTime = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date());
-				Message message = new Message();
-				message.setEmpId(null);       // 尚未分派員工，設為 null
-				message.setMemId(memId);
-				message.setRoomId(roomId.toString());
-				message.setMsgContent(null);  // null 代表佔位訊息，不顯示在前端
-				message.setMsgTime(dateTime);
-				message.setMsgDirection("1");
-				messageService.saveMessage(message);
-
-				List<Map<String, Object>> newchatRoomByMessage = chatRoomRepository.getChatRoomByMessage(memId);
-				
-				Long newChatRoomId = newchatRoomByMessage.stream()
-				        .map(m -> ((Number) m.get("ROOM_ID")).longValue())
-				        .findFirst()
-				        .orElse(null);
-				
-				List<Map<String, Object>> newChatRoom = chatRoomRepository.getChatRoom(newChatRoomId.toString());
-				return ApiReturnObject.success("建立新聊天室", newChatRoom);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+		if (memId == null) {
+			return ApiReturnObject.badRequest("缺少會員ID");
 		}
 
-		Long chatRoomId = chatRoomByMessage.stream()
-		        .map(m -> ((Number) m.get("ROOM_ID")).longValue())
-		        .findFirst()
-		        .orElse(null);
+		ChatRoom existing = chatRoomRepository.findByMemId(memId).orElse(null);
+		if (existing != null) {
+			return ApiReturnObject.success("取得聊天室", chatRoomRepository.getChatRoom(existing.getRoomId()));
+		}
 
-		List<Map<String, Object>> chatRoom = chatRoomRepository.getChatRoom(chatRoomId.toString());
-		
-		return ApiReturnObject.success("取得聊天室", chatRoom);
+		Long roomId = createChatRoom(memId);
+		return ApiReturnObject.success("建立新聊天室", chatRoomRepository.getChatRoom(roomId));
+	}
+
+	private Long createChatRoom(Integer memId) {
+		// 用 UUID：只含 [0-9a-f-]，放進 STOMP 路徑 /app/chat/{roomUrl} 不會被 '/' 切斷
+		String roomUrl = UUID.randomUUID().toString();
+		try {
+			return chatRoomRepository.saveAndFlush(ChatRoom.createNew(memId, roomUrl)).getRoomId();
+		} catch (DataIntegrityViolationException e) {
+			// 同一會員同時發出兩個建立請求（連點、多分頁），另一個請求已先建好：改為取得那一間
+			return chatRoomRepository.findByMemId(memId)
+					.map(ChatRoom::getRoomId)
+					.orElseThrow(() -> e);
+		}
 	}
 	
 	public ApiReturnObject getServiceStaff(Integer memId) {

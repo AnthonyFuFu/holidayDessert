@@ -27,6 +27,12 @@ public class ChatRoom {
     @Column(name = "ROOM_ID")
 	private Long roomId;			   // 聊天室ID
     
+    @Column(name = "MEM_ID", nullable = false, unique = true)
+	private Integer memId;			   // 會員ID（一個會員只有一間聊天室）
+    
+    @Column(name = "EMP_ID")
+	private Integer empId;			   // 負責客服ID（NULL 代表尚未認領）
+    
     @Column(name = "ROOM_URL")
 	private String roomUrl;			   // 聊天室URL
     
@@ -41,8 +47,9 @@ public class ChatRoom {
 	private String roomLastUpdate;	   // 聊天室最後更新時間
     
     // 靜態工廠方法：固定初始值集中管理
-    public static ChatRoom createNew(String roomUrl) {
+    public static ChatRoom createNew(Integer memId, String roomUrl) {
         return ChatRoom.builder()
+                .memId(memId)
                 .roomUrl(roomUrl)
                 .roomStatus(1)       // 初始狀態固定為 1
                 .roomUpdateStatus(0) // 初始更新狀態固定為 0
