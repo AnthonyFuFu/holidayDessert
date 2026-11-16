@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: read
+      contents: write
       packages: write
 
     services:
@@ -26,6 +26,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=10
+
       redis:
         image: redis:7
         ports:
@@ -37,8 +38,10 @@ jobs:
           --health-retries=10
 
     steps:
-      - name: Checkout code
+      - name: Checkout code and tags
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -58,46 +61,9 @@ jobs:
       - name: Package application
         run: ./mvnw -B package -DskipTests
 
-      - name: Log in to GHCR
+      - name: Calculate release tag
+        id: version
         if: github.event_name == 'push'
-        uses: docker/login-action@v3
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Extract Docker metadata
-        id: meta
-        uses: docker/metadata-action@v5
-        with:
-          images: ghcr.io/${{ github.repository }}
-          tags: |
-            type=raw,value=latest,enable={{is_default_branch}}
-            type=sha
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          context: .
-          push: ${{ github.event_name == 'push' }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-
-  tag:
-    needs: build
-    if: github.event_name == 'push' && (github.ref_name == 'master' || github.ref_name == 'pre-production' || github.ref_name == 'production')
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: write
-
-    steps:
-      - name: Checkout code and tags
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Create and push Git tag
         shell: bash
         run: |
           case "${GITHUB_REF_NAME}" in
@@ -121,19 +87,87 @@ jobs:
 
           git fetch origin --tags --force
 
-          latest=$(git tag --list "$pattern" --sort=-version:refname | head -n 1)
+          # 同一個 commit 重跑時，沿用已建立的同環境 tag。
+          existing=$(git tag --list "$pattern" --points-at "$GITHUB_SHA" --sort=-version:refname | head -n 1)
 
-          if [[ -z "$latest" ]]; then
-            patch=0
+          if [[ -n "$existing" ]]; then
+            tag="$existing"
           else
-            patch="${latest##*.}"
+            latest=$(git tag --list "$pattern" --sort=-version:refname | head -n 1)
+
+            if [[ -z "$latest" ]]; then
+              patch=0
+            else
+              patch="${latest##*.}"
+
+              if ! [[ "$patch" =~ ^[0-9]+$ ]]; then
+                echo "Latest tag has an invalid version number: $latest"
+                exit 1
+              fi
+            fi
+
+            next_patch=$((patch + 1))
+            tag="${tag_prefix}1.0.${next_patch}"
           fi
 
-          next_patch=$((patch + 1))
-          tag="${tag_prefix}1.0.${next_patch}"
+          echo "tag=$tag" >> "$GITHUB_OUTPUT"
+          echo "Docker image and Git tag will use: $tag"
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          flavor: |
+            latest=false
+          tags: |
+            type=raw,value=${{ steps.version.outputs.tag }},enable=${{ github.event_name == 'push' }}
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=sha
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+      - name: Create and push matching Git tag
+        if: github.event_name == 'push'
+        shell: bash
+        run: |
+          tag="${{ steps.version.outputs.tag }}"
+
+          if [[ -z "$tag" ]]; then
+            echo "No version tag was calculated."
+            exit 1
+          fi
+
+          # 若同名 Git tag 已存在，確認它是否指向目前 commit。
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            tagged_sha=$(git rev-list -n 1 "$tag")
+
+            if [[ "$tagged_sha" == "$GITHUB_SHA" ]]; then
+              echo "Git tag $tag already exists on this commit."
+              exit 0
+            fi
+
+            echo "Git tag $tag already exists on another commit."
+            exit 1
+          fi
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
           git tag -a "$tag" "$GITHUB_SHA" -m "$tag"
           git push origin "$tag"
 
