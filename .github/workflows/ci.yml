@@ -2,7 +2,7 @@ name: CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: [ "master", "pre-production", "production" ]
   pull_request:
     branches: [ "master" ]
 
@@ -82,3 +82,46 @@ jobs:
           push: ${{ github.event_name == 'push' }}
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+
+  tag:
+    needs: build
+    if: github.event_name == 'push' && (github.ref_name == 'pre-production' || github.ref_name == 'production')
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout code and tags
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Create and push Git tag
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "pre-production" ]]; then
+            prefix="qas"
+          else
+            prefix="prd"
+          fi
+
+          git fetch origin --tags --force
+
+          latest=$(git tag --list "${prefix}.1.0.*" --sort=-version:refname | head -n 1)
+
+          if [[ -z "$latest" ]]; then
+            patch=0
+          else
+            patch="${latest##*.}"
+          fi
+
+          next_patch=$((patch + 1))
+          tag="${prefix}.1.0.${next_patch}"
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$tag" "$GITHUB_SHA" -m "$tag"
+          git push origin "$tag"
+
+          echo "Created Git tag: $tag"
