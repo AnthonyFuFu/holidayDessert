@@ -85,7 +85,7 @@ jobs:
 
   tag:
     needs: build
-    if: github.event_name == 'push' && (github.ref_name == 'pre-production' || github.ref_name == 'production')
+    if: github.event_name == 'push' && (github.ref_name == 'master' || github.ref_name == 'pre-production' || github.ref_name == 'production')
     runs-on: ubuntu-latest
 
     permissions:
@@ -100,15 +100,28 @@ jobs:
       - name: Create and push Git tag
         shell: bash
         run: |
-          if [[ "${GITHUB_REF_NAME}" == "pre-production" ]]; then
-            prefix="qas"
-          else
-            prefix="prd"
-          fi
+          case "${GITHUB_REF_NAME}" in
+            master)
+              tag_prefix=""
+              pattern="1.0.*"
+              ;;
+            pre-production)
+              tag_prefix="qas."
+              pattern="qas.1.0.*"
+              ;;
+            production)
+              tag_prefix="prd."
+              pattern="prd.1.0.*"
+              ;;
+            *)
+              echo "Unsupported branch: ${GITHUB_REF_NAME}"
+              exit 1
+              ;;
+          esac
 
           git fetch origin --tags --force
 
-          latest=$(git tag --list "${prefix}.1.0.*" --sort=-version:refname | head -n 1)
+          latest=$(git tag --list "$pattern" --sort=-version:refname | head -n 1)
 
           if [[ -z "$latest" ]]; then
             patch=0
@@ -117,7 +130,7 @@ jobs:
           fi
 
           next_patch=$((patch + 1))
-          tag="${prefix}.1.0.${next_patch}"
+          tag="${tag_prefix}1.0.${next_patch}"
 
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
