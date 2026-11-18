@@ -32,6 +32,8 @@ import com.holidaydessert.service.PromotionService;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
+import static com.holidaydessert.constant.BuildPath.*;
+
 @Controller
 @RequestMapping("/admin/promotion")
 @SessionAttributes("employeeSession")
@@ -217,7 +219,7 @@ public class PromotionManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
 		return "admin/toPath";
 	}
 	
@@ -227,7 +229,7 @@ public class PromotionManagement {
 		
 		try {
 			promotionService.update(promotion);
-			model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+			model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -267,7 +269,7 @@ public class PromotionManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
 
 		return "admin/toPath";
 	}
@@ -291,7 +293,7 @@ public class PromotionManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
 
 		return "admin/toPath";
 	}
@@ -346,7 +348,7 @@ public class PromotionManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
 
 		return "admin/toPath";
 	}
@@ -357,7 +359,7 @@ public class PromotionManagement {
 		
 		try {
 			promotionDetailService.update(promotionDetail);
-			model.addAttribute("PATH", "/holidayDessert/admin/promotion/list");
+			model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -30,6 +30,8 @@ import com.holidaydessert.service.DepartmentService;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
+import static com.holidaydessert.constant.BuildPath.*;
+
 @Controller
 @RequestMapping("/admin/company")
 @SessionAttributes("employeeSession")
@@ -174,7 +176,7 @@ public class CompanyManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+		model.addAttribute("PATH", ADMIN_COMPANY_LIST);
 
 		return "admin/toPath";
 	}
@@ -186,7 +188,7 @@ public class CompanyManagement {
 		
 		try {
 			companyInformationService.update(companyInformation);
-			model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+			model.addAttribute("PATH", ADMIN_COMPANY_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -234,7 +236,7 @@ public class CompanyManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+		model.addAttribute("PATH", ADMIN_COMPANY_LIST);
 
 		return "admin/toPath";
 	}
@@ -246,7 +248,7 @@ public class CompanyManagement {
 		
 		try {
 			departmentService.update(department);
-			model.addAttribute("PATH", "/holidayDessert/admin/company/list");
+			model.addAttribute("PATH", ADMIN_COMPANY_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -206,7 +206,7 @@ public class ProductManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+		model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
 
 		return "admin/toPath";
 	}
@@ -219,7 +219,7 @@ public class ProductManagement {
 		try {
 			product.setPdUpdateBy(employeeSession.getEmpName());
 			productService.update(product);
-			model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+			model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -267,7 +267,7 @@ public class ProductManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+		model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
 
 		return "admin/toPath";
 	}
@@ -279,7 +279,7 @@ public class ProductManagement {
 		
 		try {
 			productCollectionService.update(productCollection);
-			model.addAttribute("PATH", "/holidayDessert/admin/product/list");
+			model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -355,7 +355,7 @@ public class ProductManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/product/editProductPic?pdId="+productPic.getPdId());
+		model.addAttribute("PATH", adminProductPicPath(productPic.getPdId()));
 
 		return "admin/toPath";
 	}
@@ -378,7 +378,7 @@ public class ProductManagement {
 			}
 	        productPic.setPdPicture(PRODUCTPIC_WEB_PATH + productPic.getPdImage());
 			productPicService.update(productPic);
-			model.addAttribute("PATH", "/holidayDessert/admin/product/editProductPic?pdId="+productPic.getPdId());
+			model.addAttribute("PATH", adminProductPicPath(productPic.getPdId()));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

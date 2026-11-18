@@ -237,7 +237,7 @@ public class CouponManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+		model.addAttribute("PATH", ADMIN_COUPON_LIST);
 
 		return "admin/toPath";
 	}
@@ -260,7 +260,7 @@ public class CouponManagement {
 			}
 	        coupon.setCpPicture(COUPON_WEB_PATH + coupon.getCpImage());
 			couponService.update(coupon);
-			model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+			model.addAttribute("PATH", ADMIN_COUPON_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -298,7 +298,7 @@ public class CouponManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+		model.addAttribute("PATH", ADMIN_COUPON_LIST);
 
 		return "admin/toPath";
 	}
@@ -321,7 +321,7 @@ public class CouponManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/coupon/list");
+		model.addAttribute("PATH", ADMIN_COUPON_LIST);
 
 		return "admin/toPath";
 	}

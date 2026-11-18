@@ -259,7 +259,7 @@ public class EmployeeManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
+		model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
 
 		return "admin/toPath";
 	}
@@ -282,7 +282,7 @@ public class EmployeeManagement {
 			}
 	        employee.setEmpPicture(EMPLOYEE_WEB_PATH + employee.getEmpImage());
 			employeeService.update(employee);
-			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
+			model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -295,7 +295,7 @@ public class EmployeeManagement {
 
 		try {
 			employeeService.resign(employee);
-			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
+			model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
 
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -344,7 +344,7 @@ public class EmployeeManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
+		model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
 
 		return "admin/toPath";
 	}
@@ -356,7 +356,7 @@ public class EmployeeManagement {
 		
 		try {
 			empFunctionService.update(empFunction);
-			model.addAttribute("PATH", "/holidayDessert/admin/employee/list");
+			model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

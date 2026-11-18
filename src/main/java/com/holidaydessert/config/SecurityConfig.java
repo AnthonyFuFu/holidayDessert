@@ -46,6 +46,8 @@ import com.holidaydessert.utils.CommonUtil;
 
 import io.jsonwebtoken.security.Keys;
 
+import static com.holidaydessert.constant.BuildPath.*;
+
 @Slf4j
 @Configuration
 @EnableWebSecurity
@@ -93,7 +95,7 @@ public class SecurityConfig {
                                     }
                                 }
                                 // 加上 googleLogin=true，讓前端知道是 Google 登入
-                                pResponse.sendRedirect(resolveRedirectPath(pRequest, "/holidayDessert/index") + "?googleLogin=true");
+                                pResponse.sendRedirect(resolveRedirectPath(pRequest, FRONT_INDEX) + "?googleLogin=true");
                                 clearOriginPortCookie(pResponse);
                             }
 
@@ -102,7 +104,7 @@ public class SecurityConfig {
                     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
                         // 根據 port 決定是否加 .html
                         response.sendRedirect(
-                            resolveRedirectPath(request, "/holidayDessert/index")
+                            resolveRedirectPath(request, FRONT_INDEX)
                         );
                         clearOriginPortCookie(response);
                     }
@@ -111,7 +113,7 @@ public class SecurityConfig {
                         .logoutUrl("/front/google/logout")
                         .invalidateHttpSession(true)
                         .clearAuthentication(true)
-                        .logoutSuccessHandler((request, response, authentication) -> response.sendRedirect(resolveRedirectPath(request, "/holidayDessert/index"))
+                        .logoutSuccessHandler((request, response, authentication) -> response.sendRedirect(resolveRedirectPath(request, FRONT_INDEX))
                     )
                 )
                 //這是真正的google登出方法

@@ -120,7 +120,7 @@ public class NewsManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/news/list");
+		model.addAttribute("PATH", ADMIN_NEWS_LIST);
 
 		return "admin/toPath";
 	}
@@ -132,7 +132,7 @@ public class NewsManagement {
 		
 		try {
 			newsService.update(news);
-			model.addAttribute("PATH", "/holidayDessert/admin/news/list");
+			model.addAttribute("PATH", ADMIN_NEWS_LIST);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -210,7 +210,7 @@ public class NewsManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/news/editBanner?newsId="+banner.getNewsId());
+		model.addAttribute("PATH", adminBannerPath(banner.getNewsId()));
 
 		return "admin/toPath";
 	}
@@ -233,7 +233,7 @@ public class NewsManagement {
 			}
 	        banner.setBanPicture(BANNER_WEB_PATH + banner.getBanImage());
 			bannerService.update(banner);
-			model.addAttribute("PATH", "/holidayDessert/admin/news/editBanner?newsId="+banner.getNewsId());
+			model.addAttribute("PATH", adminBannerPath(banner.getNewsId()));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

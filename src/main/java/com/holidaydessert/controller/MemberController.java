@@ -152,12 +152,12 @@ public class MemberController {
 			
 			member = memberService.getCheckMemberEmail(member);
 			memberService.verificationEmail(member);
-	    	redirectView.setUrl("/holidayDessert/member/verificationSuccess.html"); // 設置要跳轉的URL
+	    	redirectView.setUrl(FRONT_MEMBER_VERIFICATION_SUCCESS_HTML); // 設置要跳轉的URL
 			
 		} catch (UnsupportedEncodingException e1) {
-	    	redirectView.setUrl("/holidayDessert/member/verification.html"); // 設置要跳轉的URL
+	    	redirectView.setUrl(FRONT_MEMBER_VERIFICATION_HTML); // 設置要跳轉的URL
 		} catch (Exception e) {
-	    	redirectView.setUrl("/holidayDessert/member/verification.html"); // 設置要跳轉的URL
+	    	redirectView.setUrl(FRONT_MEMBER_VERIFICATION_HTML); // 設置要跳轉的URL
 		}
     	return redirectView;
 	}
@@ -168,7 +168,7 @@ public class MemberController {
 		
 		try {
 			if(memberSession == null) {
-				model.addAttribute("PATH", "/holidayDessert/index"); 
+				model.addAttribute("PATH", FRONT_INDEX);
 				return "front/toPath";
 			}
 			// 取得舊資料
@@ -198,7 +198,7 @@ public class MemberController {
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("PATH", "/holidayDessert/member/update");
+		model.addAttribute("PATH", FRONT_MEMBER_UPDATE);
 		return "front/toPath";
 	}
 	
@@ -220,7 +220,7 @@ public class MemberController {
 			e.printStackTrace();
 		}
 		
-		model.addAttribute("PATH", "/forecast/member/update");
+		model.addAttribute("PATH", FRONT_MEMBER_UPDATE);
 		return "front/toPath";
 	}
 

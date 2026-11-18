@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.Hidden;
 
+import static com.holidaydessert.constant.BuildPath.*;
+
 @RestController
 @Tag(name = "首頁")
 public class IndexController {
@@ -40,7 +42,7 @@ public class IndexController {
 	@Operation(summary = "首頁", description = "導回首頁")
     public RedirectView index(HttpServletRequest pRequest, HttpServletResponse pResponse) {
 		RedirectView redirectView = new RedirectView();
-		redirectView.setUrl("/holidayDessert/index.html"); // 設置要跳轉的URL
+		redirectView.setUrl(FRONT_INDEX_HTML); // 設置要跳轉的URL
 		return redirectView;
     }
     

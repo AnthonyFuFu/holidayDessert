@@ -32,6 +32,8 @@ import com.holidaydessert.service.TicketTypeService;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.holidaydessert.constant.BuildPath.*;
+
 @Slf4j
 @Controller
 @RequestMapping("/admin/ticket")
@@ -39,8 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 @CrossOrigin
 @Hidden
 public class TicketManagement {
-
-	private static final String LIST_PATH = "/holidayDessert/admin/ticket/list";
 
 	@Autowired
 	private TicketService ticketService;
@@ -92,7 +92,7 @@ public class TicketManagement {
 		Ticket ticket = ticketService.getData(ticketId);
 		if (ticket == null) {
 			model.addAttribute("MESSAGE", "查無此活動");
-			model.addAttribute("PATH", LIST_PATH);
+			model.addAttribute("PATH", ADMIN_TICKET_LIST);
 			return "admin/toPath";
 		}
 		model.addAttribute("ticket", ticket);
@@ -104,7 +104,7 @@ public class TicketManagement {
 	public String ticketAddSubmit(@SessionAttribute Employee employeeSession, @ModelAttribute Ticket ticket, Model model) {
 		String error = ticketService.add(ticket);
 		model.addAttribute("MESSAGE", error != null ? error : "資料新增成功，已依場地自動配置座位與票數");
-		model.addAttribute("PATH", error != null ? "/holidayDessert/admin/ticket/addTicket" : LIST_PATH);
+		model.addAttribute("PATH", error != null ? ADMIN_TICKET_ADD : ADMIN_TICKET_LIST);
 		return "admin/toPath";
 	}
 
@@ -112,7 +112,7 @@ public class TicketManagement {
 	public String ticketUpdateSubmit(@SessionAttribute Employee employeeSession, @ModelAttribute Ticket ticket, Model model) {
 		String error = ticketService.update(ticket);
 		model.addAttribute("MESSAGE", error != null ? error : "資料修改成功");
-		model.addAttribute("PATH", error != null ? "/holidayDessert/admin/ticket/updateTicket?ticketId=" + ticket.getTicketId() : LIST_PATH);
+		model.addAttribute("PATH", error != null ? adminTicketUpdatePath(ticket.getTicketId()) : ADMIN_TICKET_LIST);
 		return "admin/toPath";
 	}
 
@@ -124,7 +124,7 @@ public class TicketManagement {
 		Ticket ticket = ticketService.getData(ticketId);
 		if (ticket == null) {
 			model.addAttribute("MESSAGE", "查無此活動");
-			model.addAttribute("PATH", LIST_PATH);
+			model.addAttribute("PATH", ADMIN_TICKET_LIST);
 			return "admin/toPath";
 		}
 		model.addAttribute("ticket", ticket);

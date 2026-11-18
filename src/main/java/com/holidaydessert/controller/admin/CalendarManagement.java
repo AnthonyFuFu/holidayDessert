@@ -29,6 +29,8 @@ import com.holidaydessert.service.FullcalendarService;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
+import static com.holidaydessert.constant.BuildPath.*;
+
 @Slf4j
 @Controller
 @RequestMapping("/admin/calendar")
@@ -109,7 +111,7 @@ public class CalendarManagement {
 			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
 			throw new Exception("dataRollback");
 		}
-		model.addAttribute("PATH", "/holidayDessert/admin/calendar/list");
+		model.addAttribute("PATH", ADMIN_CALENDAR_LIST);
 
 		return "admin/toPath";
 	}
