@@ -48,6 +48,15 @@ jobs:
         with:
           java-version: '17'
           distribution: 'temurin'
+          # 快取相依套件（~/.m2/repository），避免每次都向 Maven Central 下載而被限流（HTTP 429）
+          cache: 'maven'
+
+      # 快取 mvnw 下載的 Maven 本體（~/.m2/wrapper），版本改了才會重新下載
+      - name: Cache Maven wrapper
+        uses: actions/cache@v4
+        with:
+          path: ~/.m2/wrapper
+          key: maven-wrapper-${{ hashFiles('.mvn/wrapper/maven-wrapper.properties') }}
 
       - name: Grant execute permission for mvnw
         run: chmod +x mvnw
