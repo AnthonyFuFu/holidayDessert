@@ -66,7 +66,8 @@ public class PromotionDetailService {
 	}
 	
 	public PromotionDetail getData(PromotionDetail promotionDetail) {
-		return promotionDetailDao.getData(promotionDetail);
+		// 查無資料時回傳空的 PromotionDetail（Controller 會直接取用欄位）
+		return promotionDetailRepository.findDataById(promotionDetail.getPmdId()).orElseGet(PromotionDetail::new);
 	}
 
 	// =============================================

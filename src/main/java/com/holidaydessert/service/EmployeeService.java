@@ -90,7 +90,8 @@ public class EmployeeService {
 	}
 
 	public Employee getData(Employee employee) {
-		return employeeDao.getData(employee);
+		// 查無資料時回傳空的 Employee（Controller 會直接取用欄位）
+		return employeeRepository.findDataById(employee.getEmpId()).orElseGet(Employee::new);
 	}
 	
 	public Employee login(Employee employee) {

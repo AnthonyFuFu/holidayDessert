@@ -53,7 +53,8 @@ public class EmpFunctionService {
 	}
 
 	public EmpFunction getData(EmpFunction empFunction) {
-		return empFunctionDao.getData(empFunction);
+		// 查無資料時回傳空的 EmpFunction（Controller 會直接取用欄位）
+		return empFunctionRepository.findDataById(empFunction.getFuncId()).orElseGet(EmpFunction::new);
 	}
 	
 	public List<Map<String, Object>> getAdminListToAuth() {

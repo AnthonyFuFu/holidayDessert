@@ -78,36 +78,4 @@ public class BannerDao {
 		
 	}
 
-	public Banner getData(Banner banner) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT b.*,n.NEWS_NAME FROM holiday_dessert.banner b "
-				   + " LEFT JOIN news n on n.NEWS_ID = b.NEWS_ID "
-				   + " WHERE BAN_ID = ? ";
-		
-		args.add(banner.getBanId());
-		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		Banner pic = new Banner();
-		if (!list.isEmpty()) {
-	        Map<String, Object> resultMap = list.get(0);
-	        
-	        String banId = String.valueOf(resultMap.get("BAN_ID"));
-	        String newsId = String.valueOf(resultMap.get("NEWS_ID"));
-	        String banPicture = String.valueOf(resultMap.get("BAN_PICTURE"));
-	        String banImage = String.valueOf(resultMap.get("BAN_IMAGE"));
-	        String newsName = String.valueOf(resultMap.get("NEWS_NAME"));
-	        
-	        pic.setBanId(banId);
-	        pic.setNewsId(newsId);
-	        pic.setBanPicture(banPicture);
-	        pic.setBanImage(banImage);
-	        pic.setNewsName(newsName);
-	        
-	    }
-		return pic == null ? null : pic;
-	}
-	
 }

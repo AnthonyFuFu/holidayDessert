@@ -57,7 +57,8 @@ public class DepartmentService {
 	}
 
 	public Department getData(Department department) {
-		return departmentDao.getData(department);
+		// 查無資料時回傳空的 Department（Controller 會直接取用欄位）
+		return departmentRepository.findDataById(department.getDeptId()).orElseGet(Department::new);
 	}
 	
 	public List<Map<String, Object>> getList() {

@@ -57,7 +57,8 @@ public class CompanyInformationService {
 	}
 
 	public CompanyInformation getData(CompanyInformation companyInformation) {
-		return companyInformationDao.getData(companyInformation);
+		// 查無資料時回傳空的 CompanyInformation（Controller 會直接取用欄位）
+		return companyInformationRepository.findDataById(companyInformation.getComId()).orElseGet(CompanyInformation::new);
 	}
 
 	// =============================================

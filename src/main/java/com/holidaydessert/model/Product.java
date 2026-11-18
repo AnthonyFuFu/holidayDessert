@@ -59,7 +59,7 @@ public class Product extends Base {
     @Column(name = "PD_CREATE_BY")
 	private String pdCreateBy;         // 商品創建人
     
-    @Column(name = "PDCREATETIME")
+    @Column(name = "PD_CREATE_TIME")
 	private String pdCreateTime;       // 商品創建時間
     
     @Column(name = "PD_UPDATE_BY")

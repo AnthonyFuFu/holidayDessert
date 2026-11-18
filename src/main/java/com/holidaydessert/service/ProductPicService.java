@@ -42,7 +42,13 @@ public class ProductPicService {
 	}
 	
 	public ProductPic getData(ProductPic productPic) {
-		return productPicDao.getData(productPic);
+		// 查無資料時回傳空的 ProductPic（Controller 會直接取用欄位）
+		ProductPic data = productPicRepository.findDataById(productPic.getPdPicId()).orElseGet(ProductPic::new);
+		// pdName 為 @Transient，由關聯的商品帶出
+		if (data.getProduct() != null) {
+			data.setPdName(data.getProduct().getPdName());
+		}
+		return data;
 	}
 
 	// =============================================

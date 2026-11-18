@@ -1,10 +1,11 @@
 package com.holidaydessert.repository;
 
-import org.springframework.data.repository.query.Param;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.repository.query.Param;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,15 @@ import com.holidaydessert.model.CompanyInformation;
 
 @Repository
 public interface CompanyInformationRepository extends JpaRepository<CompanyInformation, String> {
+
+    // =============================================
+    // findDataById：後台單筆查詢（修改頁使用）- 公司資訊
+    // SELECT * 直接對應 Entity，之後新增欄位只要在 Entity 加上 @Column 即可
+    // =============================================
+    @Query(value = "SELECT * FROM holiday_dessert.company_information " +
+                   "WHERE COM_ID = :comId ",
+           nativeQuery = true)
+    Optional<CompanyInformation> findDataById(@Param("comId") String comId);
 
     // =============================================
     // backList：後台 DataTables 分頁 - 公司資訊

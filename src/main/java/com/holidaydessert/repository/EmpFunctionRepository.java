@@ -1,6 +1,7 @@
 package com.holidaydessert.repository;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,15 @@ import com.holidaydessert.model.EmpFunction;
 
 @Repository
 public interface EmpFunctionRepository extends JpaRepository<EmpFunction, String> {
+
+    // =============================================
+    // findDataById：後台單筆查詢（修改頁使用）- 功能選單
+    // SELECT * 直接對應 Entity，之後新增欄位只要在 Entity 加上 @Column 即可
+    // =============================================
+    @Query(value = "SELECT * FROM holiday_dessert.emp_function " +
+                   "WHERE FUNC_ID = :funcId ",
+           nativeQuery = true)
+    Optional<EmpFunction> findDataById(@Param("funcId") String funcId);
 
     // =============================================
     // backList：後台 DataTables 分頁 - 功能選單（啟用中）

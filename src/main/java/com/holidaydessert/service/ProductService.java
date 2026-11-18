@@ -49,7 +49,8 @@ public class ProductService {
 	}
 	
 	public Product getData(Product product) {
-		return productDao.getData(product);
+		// 查無資料時回傳空的 Product（Controller 會直接取用欄位）
+		return productRepository.findDataById(product.getPdId()).orElseGet(Product::new);
 	}
 	
 	public List<Map<String, Object>> getList() {

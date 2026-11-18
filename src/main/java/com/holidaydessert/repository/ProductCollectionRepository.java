@@ -2,6 +2,7 @@ package com.holidaydessert.repository;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -12,6 +13,15 @@ import com.holidaydessert.model.ProductCollection;
 
 @Repository
 public interface ProductCollectionRepository extends JpaRepository<ProductCollection, String> {
+
+    // =============================================
+    // findDataById：後台單筆查詢（修改頁使用）- 商品分類
+    // SELECT * 直接對應 Entity，之後新增欄位只要在 Entity 加上 @Column 即可
+    // =============================================
+    @Query(value = "SELECT * FROM holiday_dessert.product_collection " +
+                   "WHERE PDC_ID = :pdcId ",
+           nativeQuery = true)
+    Optional<ProductCollection> findDataById(@Param("pdcId") String pdcId);
 
     // =============================================
     // getAllPdcList

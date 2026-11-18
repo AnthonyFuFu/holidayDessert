@@ -135,33 +135,6 @@ public class ProductCollectionDao {
 		
 	}
 
-	public ProductCollection getData(ProductCollection productCollection) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT * FROM holiday_dessert.product_collection "
-				   + " WHERE PDC_ID = ? ";
-		
-		args.add(productCollection.getPdcId());
-		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		ProductCollection collection = new ProductCollection();
-		if (!list.isEmpty()) {
-	        Map<String, Object> resultMap = list.get(0);
-	        String pdcId = String.valueOf(resultMap.get("PDC_ID"));
-	        String pdcName = String.valueOf(resultMap.get("PDC_NAME"));
-	        String pdcKeyword = String.valueOf(resultMap.get("PDC_KEYWORD"));
-	        String pdcStatus = String.valueOf(resultMap.get("PDC_STATUS"));
-	        
-	        collection.setPdcId(pdcId);
-	        collection.setPdcName(pdcName);
-	        collection.setPdcKeyword(pdcKeyword);
-	        collection.setPdcStatus(pdcStatus);
-	    }
-		return collection == null ? null : collection;
-	}
-
 	public List<Map<String, Object>> getList() {
 
 		List<Object> args = new ArrayList<>();

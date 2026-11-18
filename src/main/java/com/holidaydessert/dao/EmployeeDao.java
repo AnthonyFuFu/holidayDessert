@@ -91,55 +91,6 @@ public class EmployeeDao {
 		
 	}
 
-	public Employee getData(Employee employee) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT * FROM holiday_dessert.employee "
-				   + " WHERE EMP_ID = ? ";
-		
-		args.add(employee.getEmpId());
-		
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		Employee user = new Employee();
-		if (!list.isEmpty()) {
-	        Map<String, Object> resultMap = list.get(0);
-	        String empId = String.valueOf(resultMap.get("EMP_ID"));
-	        String empName = String.valueOf(resultMap.get("EMP_NAME"));
-	        String deptId = String.valueOf(resultMap.get("DEPT_ID"));
-	        String empPhone = String.valueOf(resultMap.get("EMP_PHONE"));
-	        String empJob = String.valueOf(resultMap.get("EMP_JOB"));
-	        String empSalary = String.valueOf(resultMap.get("EMP_SALARY"));
-	        String empPicture = String.valueOf(resultMap.get("EMP_PICTURE"));
-	        String empImage = String.valueOf(resultMap.get("EMP_IMAGE"));
-	        String empAccount = String.valueOf(resultMap.get("EMP_ACCOUNT"));
-	        String empPassword = String.valueOf(resultMap.get("EMP_PASSWORD"));
-	        String empEmail = String.valueOf(resultMap.get("EMP_EMAIL"));
-	        String empLevel = String.valueOf(resultMap.get("EMP_LEVEL"));
-	        String empStatus = String.valueOf(resultMap.get("EMP_STATUS"));
-	        String empHiredate = String.valueOf(resultMap.get("EMP_HIREDATE"));
-	        String empTheme = String.valueOf(resultMap.get("EMP_THEME"));
-	        
-	        user.setEmpId(empId);
-	        user.setDeptId(deptId);
-	        user.setEmpName(empName);
-	        user.setEmpPhone(empPhone);
-	        user.setEmpJob(empJob);
-	        user.setEmpSalary(empSalary);
-	        user.setEmpPicture(empPicture);
-	        user.setEmpImage(empImage);
-	        user.setEmpAccount(empAccount);
-	        user.setEmpPassword(empPassword);
-	        user.setEmpEmail(empEmail);
-	        user.setEmpLevel(empLevel);
-	        user.setEmpStatus(empStatus);
-	        user.setEmpHiredate(empHiredate);
-	        user.setEmpTheme(empTheme);
-	    }
-		return user == null ? null : user;
-	}
-
 	public Employee login(Employee employee) {
 
 		List<Object> args = new ArrayList<>();

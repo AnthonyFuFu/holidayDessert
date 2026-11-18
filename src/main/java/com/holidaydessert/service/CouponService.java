@@ -57,7 +57,8 @@ public class CouponService {
 	}
 
 	public Coupon getData(Coupon coupon) {
-		return couponDao.getData(coupon);
+		// 查無資料時回傳空的 Coupon（Controller 會直接取用欄位）
+		return couponRepository.findDataById(coupon.getCpId()).orElseGet(Coupon::new);
 	}
 
 	public List<Map<String, Object>> getList() {

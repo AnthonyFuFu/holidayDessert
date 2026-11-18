@@ -1,5 +1,6 @@
 package com.holidaydessert.repository;
 
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -11,6 +12,15 @@ import com.holidaydessert.model.ProductPic;
 
 @Repository
 public interface ProductPicRepository extends JpaRepository<ProductPic, String> {
+
+    // =============================================
+    // findDataById：後台單筆查詢（修改頁使用）- 商品圖片
+    // SELECT * 直接對應 Entity，之後新增欄位只要在 Entity 加上 @Column 即可
+    // =============================================
+    @Query(value = "SELECT * FROM holiday_dessert.product_pic " +
+                   "WHERE PD_PIC_ID = :pdPicId ",
+           nativeQuery = true)
+    Optional<ProductPic> findDataById(@Param("pdPicId") String pdPicId);
 
 	// =============================================
 	// frontRandList：帶 LIMIT（Pageable 處理動態 LIMIT）

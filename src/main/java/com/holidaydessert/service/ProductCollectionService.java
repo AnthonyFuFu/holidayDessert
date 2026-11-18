@@ -44,7 +44,8 @@ public class ProductCollectionService {
 	}
 	
 	public ProductCollection getData(ProductCollection productCollection) {
-		return productCollectionDao.getData(productCollection);
+		// 查無資料時回傳空的 ProductCollection（Controller 會直接取用欄位）
+		return productCollectionRepository.findDataById(productCollection.getPdcId()).orElseGet(ProductCollection::new);
 	}
 	
 	public List<Map<String, Object>> getList() {

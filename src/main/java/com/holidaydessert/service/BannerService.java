@@ -39,7 +39,13 @@ public class BannerService {
 	}
 
 	public Banner getData(Banner banner) {
-		return bannerDao.getData(banner);
+		// 查無資料時回傳空的 Banner（Controller 會直接取用欄位）
+		Banner data = bannerRepository.findDataById(banner.getBanId()).orElseGet(Banner::new);
+		// newsName 為 @Transient，由關聯的最新消息帶出
+		if (data.getNews() != null) {
+			data.setNewsName(data.getNews().getNewsName());
+		}
+		return data;
 	}
 
 	// =============================================

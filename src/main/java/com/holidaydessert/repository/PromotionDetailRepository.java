@@ -1,9 +1,10 @@
 package com.holidaydessert.repository;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,18 @@ import com.holidaydessert.model.PromotionDetail;
 
 @Repository
 public interface PromotionDetailRepository extends JpaRepository<PromotionDetail, String> {
+
+    // =============================================
+    // findDataById：後台單筆查詢（修改頁使用）- 促銷明細（日期格式化為 yyyy-MM-dd，供日期選擇器使用）
+    // 需要格式化的欄位明確列出，新增欄位時記得一併加入 SELECT
+    // =============================================
+    @Query(value = "SELECT PMD_ID, PD_ID, PM_ID, PMD_PD_DISCOUNT_PRICE, " +
+                   "       DATE_FORMAT(PMD_START, '%Y-%m-%d') PMD_START, " +
+                   "       DATE_FORMAT(PMD_END,   '%Y-%m-%d') PMD_END " +
+                   "FROM holiday_dessert.promotion_detail " +
+                   "WHERE PMD_ID = :pmdId ",
+           nativeQuery = true)
+    Optional<PromotionDetail> findDataById(@Param("pmdId") String pmdId);
 
     // =============================================
     // backList：後台 DataTables 分頁 - 促銷明細（排除已刪除商品）

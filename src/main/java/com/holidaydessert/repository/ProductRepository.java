@@ -1,9 +1,10 @@
 package com.holidaydessert.repository;
 
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -14,6 +15,15 @@ import com.holidaydessert.model.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
+
+    // =============================================
+    // findDataById：後台單筆查詢（修改頁使用）- 商品
+    // SELECT * 直接對應 Entity，之後新增欄位只要在 Entity 加上 @Column 即可
+    // =============================================
+    @Query(value = "SELECT * FROM holiday_dessert.product " +
+                   "WHERE PD_ID = :pdId ",
+           nativeQuery = true)
+    Optional<Product> findDataById(@Param("pdId") String pdId);
 
     // =============================================
     // issuePromotionList：後台 DataTables 分頁 - 發放促銷：目前不在促銷期間的上架商品（每個商品取最近一筆促銷）

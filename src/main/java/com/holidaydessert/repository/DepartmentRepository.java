@@ -1,6 +1,7 @@
 package com.holidaydessert.repository;
 
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,6 +14,15 @@ import com.holidaydessert.model.Department;
 
 @Repository
 public interface DepartmentRepository extends JpaRepository<Department, String> {
+
+    // =============================================
+    // findDataById：後台單筆查詢（修改頁使用）- 部門
+    // SELECT * 直接對應 Entity，之後新增欄位只要在 Entity 加上 @Column 即可
+    // =============================================
+    @Query(value = "SELECT * FROM holiday_dessert.department " +
+                   "WHERE DEPT_ID = :deptId ",
+           nativeQuery = true)
+    Optional<Department> findDataById(@Param("deptId") String deptId);
 
     // =============================================
     // backList：後台 DataTables 分頁 - 部門
