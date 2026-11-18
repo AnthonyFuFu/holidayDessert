@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "ORD_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_ID;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "ORD_RECIPIENT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_RECIPIENT;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "MEM_GENDER",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_GENDER;
 				}
@@ -62,7 +62,7 @@ $(function() {
 				targets: [3],
 				data: "MEM_EMAIL",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_EMAIL;
 				}
@@ -71,7 +71,7 @@ $(function() {
 				targets: [4],
 				data: "ORD_RECIPIENT_PHONE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_RECIPIENT_PHONE;
 				}
@@ -80,7 +80,7 @@ $(function() {
 				targets: [5],
 				data: "ORD_ADDRESS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_ADDRESS;
 				}
@@ -89,7 +89,7 @@ $(function() {
 				targets: [6],
 				data: "ORD_DELIVERY",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 0){
 						return '超商取貨'
@@ -104,7 +104,7 @@ $(function() {
 				targets: [7],
 				data: "ORD_SUBTOTAL",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_SUBTOTAL;
 				}
@@ -113,7 +113,7 @@ $(function() {
 				targets: [8],
 				data: "ORD_TOTAL",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_TOTAL;
 				}
@@ -122,7 +122,7 @@ $(function() {
 				targets: [9],
 				data: "ORD_DELIVERY_FEE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_DELIVERY_FEE;
 				}
@@ -131,7 +131,7 @@ $(function() {
 				targets: [10],
 				data: "ORD_STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 0){
 						return '未完成'
@@ -148,7 +148,7 @@ $(function() {
 				targets: [11],
 				data: "ORD_PAYMENT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 0){
 						return '貨到付款'
@@ -163,7 +163,7 @@ $(function() {
 				targets: [12],
 				data: "ORD_NOTE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == '' || data == null){
 						return '無'
@@ -176,7 +176,7 @@ $(function() {
 				targets: [13],
 				data: "COUPON_USED",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.COUPON_USED;
 				}
@@ -185,7 +185,7 @@ $(function() {
 				targets: [14],
 				data: "ORD_CREATE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_CREATE;
 				}

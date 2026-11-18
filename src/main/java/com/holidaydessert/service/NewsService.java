@@ -1,6 +1,5 @@
 package com.holidaydessert.service;
 
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -33,8 +32,8 @@ public class NewsService {
 	// =============================================
 	public Map<String, Object> list(Map<String, String> dataTableParams) {
 		// 1. 取得 DataTables 參數
-		String keyword = PageableUtil.getStringParam(dataTableParams, "search[value]", "").trim();
-		String draw = PageableUtil.getStringParam(dataTableParams, "draw", "0");
+		String keyword = PageableUtil.getSearchValue(dataTableParams);
+		String draw = PageableUtil.getDraw(dataTableParams);
 		// 2. 建立分頁與排序（start / length / order）
 		Pageable pageable = PageableUtil.buildDataTablePageable(
 				dataTableParams,
@@ -44,12 +43,8 @@ public class NewsService {
 		);
 		// 3. 查詢資料
 		Page<Map<String, Object>> newsPage = newsRepository.backList(keyword, pageable);
-		// 4. 取得查詢結果（轉成可修改的 Map，避免 Tuple 包裝的唯讀 Map）
-		List<Map<String, Object>> newsList = newsPage.getContent().stream()
-				.map(row -> (Map<String, Object>) new LinkedHashMap<>(row))
-				.toList();
-		// 5. 封裝成 DataTables 回傳格式
-		return PageableUtil.buildDataTable(newsPage, newsList, draw);
+		// 4. 封裝成 DataTables 回傳格式
+		return PageableUtil.buildDataTable(newsPage, PageableUtil.toMutableList(newsPage), draw);
 	}
 
 	public void add(News news) {

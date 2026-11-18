@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "MEM_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_NAME;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "CP_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.CP_NAME;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "CP_DISCOUNT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.CP_DISCOUNT;
 				}
@@ -62,7 +62,7 @@ $(function() {
 				targets: [3],
 				data: "MEM_CP_START",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_CP_START;
 				}
@@ -71,7 +71,7 @@ $(function() {
 				targets: [4],
 				data: "MEM_CP_END",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_CP_END;
 				}
@@ -80,7 +80,7 @@ $(function() {
 				targets: [5],
 				data: "MEM_CP_STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 1){
 						return '可用'
@@ -93,7 +93,7 @@ $(function() {
 				targets: [6],
 				data: "MEM_CP_RECORD",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == null){
 						return '未使用'
@@ -182,7 +182,7 @@ $(function() {
 				targets: [1],
 				data: "MEM_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_NAME;
 				}
@@ -191,7 +191,7 @@ $(function() {
 				targets: [2],
 				data: "GENDER",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.GENDER;
 				}
@@ -200,7 +200,7 @@ $(function() {
 				targets: [3],
 				data: "MEM_ACCOUNT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_ACCOUNT;
 				}
@@ -209,7 +209,7 @@ $(function() {
 				targets: [4],
 				data: "MEM_PHONE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_PHONE;
 				}
@@ -218,7 +218,7 @@ $(function() {
 				targets: [5],
 				data: "MEM_EMAIL",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_EMAIL;
 				}
@@ -227,7 +227,7 @@ $(function() {
 				targets: [6],
 				data: "MEM_BIRTHDAY",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_BIRTHDAY;
 				}
@@ -236,7 +236,7 @@ $(function() {
 				targets: [7],
 				data: "TOTAL_EXPENSE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.TOTAL_EXPENSE;
 				}

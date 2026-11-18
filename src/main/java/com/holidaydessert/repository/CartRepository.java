@@ -1,5 +1,8 @@
 package com.holidaydessert.repository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import java.util.Map;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,6 +17,33 @@ import com.holidaydessert.model.Cart.CartId;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart, CartId> {
+
+    // =============================================
+    // backList：後台 DataTables 分頁 - 購物車（排除已刪除商品）
+    // 排序由 Pageable 的 Sort 動態產生，SQL 內不寫 ORDER BY
+    // =============================================
+    @Query(value =
+               "SELECT * FROM ( " +
+               "  SELECT c.MEM_ID, c.PD_ID, MEM_NAME, MEM_ACCOUNT, MEM_GENDER, MEM_PHONE, MEM_EMAIL, " +
+               "         CART_PD_QUANTITY, PD_NAME, PD_IS_DEL, " +
+               "         CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER " +
+               "  FROM holiday_dessert.cart c " +
+               "  LEFT JOIN holiday_dessert.product p ON p.PD_ID = c.PD_ID " +
+               "  LEFT JOIN holiday_dessert.member m ON m.MEM_ID = c.MEM_ID " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(MEM_ACCOUNT, :keyword) > 0 OR INSTR(GENDER, :keyword) > 0 OR INSTR(MEM_PHONE, :keyword) > 0 OR INSTR(MEM_EMAIL, :keyword) > 0 OR INSTR(PD_NAME, :keyword) > 0) AND PD_IS_DEL = 0 ",
+           countQuery =
+               "SELECT COUNT(*) FROM ( " +
+               "  SELECT c.MEM_ID, c.PD_ID, MEM_NAME, MEM_ACCOUNT, MEM_GENDER, MEM_PHONE, MEM_EMAIL, " +
+               "         CART_PD_QUANTITY, PD_NAME, PD_IS_DEL, " +
+               "         CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER " +
+               "  FROM holiday_dessert.cart c " +
+               "  LEFT JOIN holiday_dessert.product p ON p.PD_ID = c.PD_ID " +
+               "  LEFT JOIN holiday_dessert.member m ON m.MEM_ID = c.MEM_ID " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(MEM_ACCOUNT, :keyword) > 0 OR INSTR(GENDER, :keyword) > 0 OR INSTR(MEM_PHONE, :keyword) > 0 OR INSTR(MEM_EMAIL, :keyword) > 0 OR INSTR(PD_NAME, :keyword) > 0) AND PD_IS_DEL = 0 ",
+           nativeQuery = true)
+    Page<Map<String, Object>> backList(@Param("keyword") String keyword, Pageable pageable);
 	
     @Query(value = "SELECT m.MEM_ID, MEM_NAME, MEM_ACCOUNT, MEM_GENDER, MEM_PHONE, MEM_EMAIL, " +
                    "       CART_PD_QUANTITY, p.* " +

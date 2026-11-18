@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "PM_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_ID;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "PM_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_NAME;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "PM_DESCRIPTION",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_DESCRIPTION;
 				}
@@ -62,7 +62,7 @@ $(function() {
 				targets: [3],
 				data: "PM_DISCOUNT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_DISCOUNT;
 				}
@@ -71,7 +71,7 @@ $(function() {
 				targets: [4],
 				data: "PM_START",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_START;
 				}
@@ -80,7 +80,7 @@ $(function() {
 				targets: [5],
 				data: "PM_END",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_END;
 				}
@@ -89,7 +89,7 @@ $(function() {
 				targets: [6],
 				data: "STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.STATUS;
 				}
@@ -98,7 +98,7 @@ $(function() {
 				targets: [7],
 				data: "PM_REGULARLY",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 1){
 						return '例行'

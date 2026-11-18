@@ -1,43 +1,63 @@
 package com.holidaydessert.service;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.holidaydessert.dao.MemberDao;
+import com.holidaydessert.constant.SortFieldsConstant;
 import com.holidaydessert.model.Member;
 import com.holidaydessert.repository.MemberRepository;
+import com.holidaydessert.utils.PageableUtil;
 
 @Service
 public class MemberService {
 
-	@Autowired
-	private MemberDao memberDao;
-	
     @Autowired
     private MemberRepository memberRepository;
     
 	// back
-	public List<Map<String, Object>> list(Member member) {
-		return memberDao.list(member);
+	public Map<String, Object> list(Map<String, String> dataTableParams) {
+		// 1. 取得 DataTables 參數
+		String keyword = PageableUtil.getSearchValue(dataTableParams);
+		String draw = PageableUtil.getDraw(dataTableParams);
+		// 2. 建立分頁與排序（start / length / order）
+		Pageable pageable = PageableUtil.buildDataTablePageable(
+				dataTableParams,
+				SortFieldsConstant.MEMBER_TABLE,
+				SortFieldsConstant.MEMBER_DEFAULT,
+				Sort.Direction.ASC
+		);
+		// 3. 查詢資料
+		Page<Map<String, Object>> memberPage = memberRepository.backList(keyword, pageable);
+		// 4. 封裝成 DataTables 回傳格式
+		return PageableUtil.buildDataTable(memberPage, PageableUtil.toMutableList(memberPage), draw);
 	}
 
-	public int getCount(Member member) {
-		return memberDao.getCount(member);
+	public Map<String, Object> issueCouponList(Map<String, String> dataTableParams) {
+		// 1. 取得 DataTables 參數
+		String keyword = PageableUtil.getSearchValue(dataTableParams);
+		String draw = PageableUtil.getDraw(dataTableParams);
+		// 搜尋框輸入純數字時，視為「近一個月消費金額 >= 此數字」
+		Long totalExpense = keyword.matches("\\d{1,18}") ? Long.valueOf(keyword) : null;
+		// 2. 建立分頁與排序（start / length / order）
+		Pageable pageable = PageableUtil.buildDataTablePageable(
+				dataTableParams,
+				SortFieldsConstant.ISSUE_COUPON_TABLE,
+				SortFieldsConstant.MEMBER_DEFAULT,
+				Sort.Direction.ASC
+		);
+		// 3. 查詢資料
+		Page<Map<String, Object>> memberPage = memberRepository.issueCouponList(keyword, totalExpense, pageable);
+		// 4. 封裝成 DataTables 回傳格式
+		return PageableUtil.buildDataTable(memberPage, PageableUtil.toMutableList(memberPage), draw);
 	}
 
-	public List<Map<String, Object>> issueCouponList(Member member) {
-		return memberDao.issueCouponList(member);
-	}
-
-	public int getIssueCouponCount(Member member) {
-		return memberDao.getIssueCouponCount(member);
-	}
-	
 	// front
 	@Transactional
 	public void register(Member member) {

@@ -4,31 +4,41 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.holidaydessert.dao.ReceiptInformationDao;
+import com.holidaydessert.constant.SortFieldsConstant;
 import com.holidaydessert.model.ReceiptInformation;
 import com.holidaydessert.repository.ReceiptInformationRepository;
+import com.holidaydessert.utils.PageableUtil;
 
 @Service
 public class ReceiptInformationService {
 
-	@Autowired
-	private ReceiptInformationDao receiptInformationDao;
-	
 	@Autowired
 	private ReceiptInformationRepository receiptInformationRepository;
 
 	// =============================================
 	// back
 	// =============================================
-	public List<Map<String, Object>> list(ReceiptInformation receiptInformation) {
-		return receiptInformationDao.list(receiptInformation);
-	}
-	
-	public int getCount(ReceiptInformation receiptInformation) {
-		return receiptInformationDao.getCount(receiptInformation);
+	public Map<String, Object> list(Map<String, String> dataTableParams) {
+		// 1. 取得 DataTables 參數
+		String keyword = PageableUtil.getSearchValue(dataTableParams);
+		String draw = PageableUtil.getDraw(dataTableParams);
+		// 2. 建立分頁與排序（start / length / order）
+		Pageable pageable = PageableUtil.buildDataTablePageable(
+				dataTableParams,
+				SortFieldsConstant.RECEIPT_TABLE,
+				SortFieldsConstant.RECEIPT_DEFAULT,
+				Sort.Direction.ASC
+		);
+		// 3. 查詢資料
+		Page<Map<String, Object>> receiptInformationPage = receiptInformationRepository.backList(keyword, pageable);
+		// 4. 封裝成 DataTables 回傳格式
+		return PageableUtil.buildDataTable(receiptInformationPage, PageableUtil.toMutableList(receiptInformationPage), draw);
 	}
 
 	// =============================================

@@ -1,5 +1,7 @@
 package com.holidaydessert.repository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +14,45 @@ import com.holidaydessert.model.Product;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, String> {
+
+    // =============================================
+    // issuePromotionList：後台 DataTables 分頁 - 發放促銷：目前不在促銷期間的上架商品（每個商品取最近一筆促銷）
+    // 排序由 Pageable 的 Sort 動態產生，SQL 內不寫 ORDER BY
+    // =============================================
+    @Query(value =
+               "SELECT * FROM ( " +
+               "  SELECT sub.PD_ID, sub.PM_ID, sub.PDC_NAME, sub.PD_NAME, sub.PD_DESCRIPTION, sub.PD_PRICE, sub.PMD_START, sub.PMD_END " +
+               "  FROM (SELECT p.PD_ID, pmd.PM_ID, PDC_NAME, PD_NAME, PD_DESCRIPTION, PD_PRICE, " +
+               "               DATE_FORMAT(PMD_START, '%Y-%m-%d') AS PMD_START, " +
+               "               DATE_FORMAT(PMD_END,   '%Y-%m-%d') AS PMD_END, " +
+               "               ROW_NUMBER() OVER (PARTITION BY p.PD_ID ORDER BY PMD_END DESC) AS rn " +
+               "        FROM holiday_dessert.product p " +
+               "        LEFT JOIN holiday_dessert.product_collection pc ON p.PDC_ID = pc.PDC_ID " +
+               "        LEFT JOIN holiday_dessert.promotion_detail pmd ON p.PD_ID = pmd.PD_ID " +
+               "        LEFT JOIN holiday_dessert.promotion pm ON pmd.PM_ID = pm.PM_ID " +
+               "        WHERE p.PD_STATUS = 1 AND p.PD_IS_DEL = 0) AS sub " +
+               "  WHERE sub.rn = 1 " +
+               "    AND (CURDATE() < PMD_START OR CURDATE() > PMD_END OR PMD_START IS NULL OR PMD_END IS NULL) " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(PDC_NAME, :keyword) > 0 OR INSTR(PD_NAME, :keyword) > 0) ",
+           countQuery =
+               "SELECT COUNT(*) FROM ( " +
+               "  SELECT sub.PD_ID, sub.PM_ID, sub.PDC_NAME, sub.PD_NAME, sub.PD_DESCRIPTION, sub.PD_PRICE, sub.PMD_START, sub.PMD_END " +
+               "  FROM (SELECT p.PD_ID, pmd.PM_ID, PDC_NAME, PD_NAME, PD_DESCRIPTION, PD_PRICE, " +
+               "               DATE_FORMAT(PMD_START, '%Y-%m-%d') AS PMD_START, " +
+               "               DATE_FORMAT(PMD_END,   '%Y-%m-%d') AS PMD_END, " +
+               "               ROW_NUMBER() OVER (PARTITION BY p.PD_ID ORDER BY PMD_END DESC) AS rn " +
+               "        FROM holiday_dessert.product p " +
+               "        LEFT JOIN holiday_dessert.product_collection pc ON p.PDC_ID = pc.PDC_ID " +
+               "        LEFT JOIN holiday_dessert.promotion_detail pmd ON p.PD_ID = pmd.PD_ID " +
+               "        LEFT JOIN holiday_dessert.promotion pm ON pmd.PM_ID = pm.PM_ID " +
+               "        WHERE p.PD_STATUS = 1 AND p.PD_IS_DEL = 0) AS sub " +
+               "  WHERE sub.rn = 1 " +
+               "    AND (CURDATE() < PMD_START OR CURDATE() > PMD_END OR PMD_START IS NULL OR PMD_END IS NULL) " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(PDC_NAME, :keyword) > 0 OR INSTR(PD_NAME, :keyword) > 0) ",
+           nativeQuery = true)
+    Page<Map<String, Object>> issuePromotionList(@Param("keyword") String keyword, Pageable pageable);
 
     // =============================================
     // 共用 SQL 片段（抽取共同部分）

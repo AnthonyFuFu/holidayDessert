@@ -266,58 +266,6 @@ public class ProductDao {
 
 	}
 	
-	public List<Map<String, Object>> issuePromotionList(Product product) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT * FROM ( "
-				   + " SELECT sub.PD_ID, sub.PM_ID, sub.PDC_NAME, sub.PD_NAME, sub.PD_DESCRIPTION, sub.PD_PRICE, sub.PMD_START, sub.PMD_END "
-				   + " FROM (SELECT p.PD_ID, pmd.PM_ID, PDC_NAME, PD_NAME, PD_DESCRIPTION, PD_PRICE, "
-				   + " DATE_FORMAT(PMD_START, '%Y-%m-%d') AS PMD_START, "
-				   + " DATE_FORMAT(PMD_END, '%Y-%m-%d') AS PMD_END, "
-				   + " ROW_NUMBER() OVER (PARTITION BY p.PD_ID ORDER BY PMD_END DESC) AS rn "
-				   + " FROM product p "
-				   + " LEFT JOIN product_collection pc ON p.PDC_ID = pc.PDC_ID "
-				   + " LEFT JOIN promotion_detail pmd ON p.PD_ID = pmd.PD_ID "
-				   + " LEFT JOIN promotion pm ON pmd.PM_ID = pm.PM_ID "
-				   + " WHERE p.PD_STATUS = 1 "
-				   + " AND p.PD_IS_DEL = 0 "
-				   + " ) AS sub "
-				   + " WHERE sub.rn = 1 "
-				   + " AND (CURDATE() < PMD_START OR CURDATE() > PMD_END OR PMD_START IS NULL OR PMD_END IS NULL) "
-				   + " ) AS subquery "; // 註：rn=1 已保證每個 PD_ID 一列，移除多餘的 GROUP BY 以相容 only_full_group_by
-		
-		if (product.getSearchText() != null && product.getSearchText().length() > 0){
-			String[] searchText = product.getSearchText().split(" ");
-			sql += " WHERE ";
-			for(int i=0; i<searchText.length; i++) {
-				if(i > 0) {
-					sql += " AND ( ";
-				} else {
-					sql += " ( ";
-				}
-				sql += " INSTR(PDC_NAME, ?) > 0"
-					+  " OR INSTR(PD_NAME, ?) > 0 "
-					+  " ) ";
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-			}
-		}
-		
-		if (product.getStart() != null && !"".equals(product.getStart())) {
-			sql += " LIMIT " + product.getStart() + "," + product.getLength();
-		}
-
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		if (list != null && list.size() > 0) {
-			return list;
-		} else {
-			return null;
-		}
-
-	}
-
 	public List<Map<String, Object>> issueOneProductList() {
 
 		List<Object> args = new ArrayList<>();
@@ -347,48 +295,6 @@ public class ProductDao {
 			return null;
 		}
 
-	}
-	
-	public int getIssuePromotionCount(Product product) {
-
-		List<Object> args = new ArrayList<>();
-		
-		String sql = " SELECT COUNT(*) AS COUNT "
-				   + " FROM ( "
-				   + " SELECT sub.PD_ID, sub.PM_ID, sub.PDC_NAME, sub.PD_NAME, sub.PD_DESCRIPTION, sub.PD_PRICE, sub.PMD_START, sub.PMD_END "
-				   + " FROM (SELECT p.PD_ID, pmd.PM_ID, PDC_NAME, PD_NAME, PD_DESCRIPTION, PD_PRICE, "
-				   + " DATE_FORMAT(PMD_START, '%Y-%m-%d') AS PMD_START, "
-				   + " DATE_FORMAT(PMD_END, '%Y-%m-%d') AS PMD_END, "
-				   + " ROW_NUMBER() OVER (PARTITION BY p.PD_ID ORDER BY PMD_END DESC) AS rn "
-				   + " FROM product p "
-				   + " LEFT JOIN product_collection pc ON p.PDC_ID = pc.PDC_ID "
-				   + " LEFT JOIN promotion_detail pmd ON p.PD_ID = pmd.PD_ID "
-				   + " LEFT JOIN promotion pm ON pmd.PM_ID = pm.PM_ID "
-				   + " WHERE p.PD_STATUS = 1 "
-				   + " AND p.PD_IS_DEL = 0 "
-				   + " ) AS sub "
-				   + " WHERE sub.rn = 1 "
-				   + " AND (CURDATE() < PMD_START OR CURDATE() > PMD_END OR PMD_START IS NULL OR PMD_END IS NULL) "
-				   + " ) AS subquery "; // 註：rn=1 已保證每個 PD_ID 一列，移除多餘的 GROUP BY 以相容 only_full_group_by
-		
-		if (product.getSearchText() != null && product.getSearchText().length() > 0){
-			String[] searchText = product.getSearchText().split(" ");
-			sql += " WHERE ";
-			for(int i=0; i<searchText.length; i++) {
-				if(i > 0) {
-					sql += " AND ( ";
-				} else {
-					sql += " ( ";
-				}
-				sql += " INSTR(PDC_NAME, ?) > 0"
-					+  " OR INSTR(PD_NAME, ?) > 0 "
-					+  " ) ";
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-			}
-		}
-		
-		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
 	}
 	
 }

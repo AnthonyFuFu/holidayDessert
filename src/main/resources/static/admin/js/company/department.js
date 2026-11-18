@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "DEPT_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.DEPT_ID;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "DEPT_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.DEPT_NAME;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "DEPT_LOC",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.DEPT_LOC;
 				}

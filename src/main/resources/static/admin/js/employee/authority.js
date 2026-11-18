@@ -39,7 +39,7 @@ $(function() {
 				targets: [0],
 				data: "EMP_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_ID;
 				}
@@ -48,7 +48,7 @@ $(function() {
 				targets: [1],
 				data: "EMP_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_NAME;
 				}

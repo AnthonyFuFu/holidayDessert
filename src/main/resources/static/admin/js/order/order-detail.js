@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "ORD_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_ID;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "ORD_RECIPIENT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_RECIPIENT;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "ORD_RECIPIENT_PHONE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_RECIPIENT_PHONE;
 				}
@@ -62,7 +62,7 @@ $(function() {
 				targets: [3],
 				data: "PD_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PD_NAME;
 				}
@@ -71,7 +71,7 @@ $(function() {
 				targets: [4],
 				data: "ORDD_NUMBER",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORDD_NUMBER;
 				}
@@ -80,7 +80,7 @@ $(function() {
 				targets: [5],
 				data: "ORDD_PRICE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORDD_PRICE;
 				}
@@ -89,7 +89,7 @@ $(function() {
 				targets: [6],
 				data: "ORDD_DISCOUNT_PRICE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORDD_DISCOUNT_PRICE;
 				}
@@ -98,7 +98,7 @@ $(function() {
 				targets: [7],
 				data: "ORD_CREATE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.ORD_CREATE;
 				}

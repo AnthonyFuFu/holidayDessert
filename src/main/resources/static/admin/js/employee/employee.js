@@ -39,7 +39,7 @@ $(function() {
 				targets: [0],
 				data: "EMP_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_ID;
 				}
@@ -48,7 +48,7 @@ $(function() {
 				targets: [1],
 				data: "EMP_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_NAME;
 				}
@@ -57,7 +57,7 @@ $(function() {
 				targets: [2],
 				data: "EMP_ACCOUNT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_ACCOUNT;
 				}
@@ -66,7 +66,7 @@ $(function() {
 				targets: [3],
 				data: "EMP_PHONE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_PHONE;
 				}
@@ -75,7 +75,7 @@ $(function() {
 				targets: [4],
 				data: "EMP_EMAIL",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_EMAIL;
 				}
@@ -84,7 +84,7 @@ $(function() {
 				targets: [5],
 				data: "DEPT_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.DEPT_NAME;
 				}
@@ -93,7 +93,7 @@ $(function() {
 				targets: [6],
 				data: "DEPT_LOC",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.DEPT_LOC;
 				}
@@ -102,7 +102,7 @@ $(function() {
 				targets: [7],
 				data: "EMP_LEVEL",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 0){
 						return '最高管理員'
@@ -117,7 +117,7 @@ $(function() {
 				targets: [8],
 				data: "EMP_STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 1){
 						return '啟用'
@@ -130,7 +130,7 @@ $(function() {
 				targets: [9],
 				data: "EMP_HIREDATE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.EMP_HIREDATE;
 				}

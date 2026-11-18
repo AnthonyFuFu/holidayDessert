@@ -2,14 +2,12 @@ package com.holidaydessert.dao;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import com.holidaydessert.model.Coupon;
-import com.holidaydessert.model.MemberCoupon;
 
 @Repository
 public class MemberCouponDao {
@@ -20,75 +18,6 @@ public class MemberCouponDao {
 	// =============================================
 	// back
 	// =============================================
-	public List<Map<String, Object>> list(MemberCoupon memberCoupon) {
-
-		List<Object> args = new ArrayList<>();
-
-		String sql = " SELECT MEM_NAME, DATE_FORMAT(MEM_CP_START, '%Y-%m-%d %H:%i:%s') MEM_CP_START, DATE_FORMAT(MEM_CP_END, '%Y-%m-%d %H:%i:%s') MEM_CP_END, "
-				   + " MEM_CP_STATUS, MEM_CP_RECORD, CP_NAME,CP_DISCOUNT "
-				   + " FROM holiday_dessert.member_coupon mc "
-				   + " LEFT JOIN member m ON m.MEM_ID = mc.MEM_ID "
-				   + " LEFT JOIN coupon c ON c.CP_ID = mc.CP_ID ";
-		
-		if (memberCoupon.getSearchText() != null && memberCoupon.getSearchText().length() > 0) {
-			String[] searchText = memberCoupon.getSearchText().split(" ");
-			sql += " WHERE ";
-			for(int i=0; i<searchText.length; i++) {
-				if(i > 0) {
-					sql += " AND ( ";
-				} else {
-					sql += " ( ";
-				}
-				sql += " INSTR(MEM_NAME, ?) > 0"
-					+  " OR INSTR(MEM_CP_STATUS, ?) > 0 "
-					+  " OR INSTR(CP_NAME, ?) > 0 "
-					+  " ) ";
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-			}
-		}
-
-		List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, args.toArray());
-		
-		if (list != null && list.size() > 0) {
-			return list;
-		} else {
-			return null;
-		}
-
-	}
-
-	public int getCount(MemberCoupon memberCoupon) {
-
-		List<Object> args = new ArrayList<>();
-
-		String sql = " SELECT COUNT(*) AS COUNT "
-				   + " FROM holiday_dessert.member_coupon mc "
-				   + " LEFT JOIN member m ON m.MEM_ID = mc.MEM_ID "
-				   + " LEFT JOIN coupon c ON c.CP_ID = mc.CP_ID ";
-		
-		if (memberCoupon.getSearchText() != null && memberCoupon.getSearchText().length() > 0) {
-			String[] searchText = memberCoupon.getSearchText().split(" ");
-			sql += " WHERE ";
-			for(int i=0; i<searchText.length; i++) {
-				if(i > 0) {
-					sql += " AND ( ";
-				} else {
-					sql += " ( ";
-				}
-				sql += " INSTR(MEM_NAME, ?) > 0"
-					+  " OR INSTR(MEM_CP_STATUS, ?) > 0 "
-					+  " OR INSTR(CP_NAME, ?) > 0 "
-					+  " ) ";
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-		  		args.add(searchText[i]);
-			}
-		}
-		return Integer.valueOf(jdbcTemplate.queryForList(sql, args.toArray()).get(0).get("COUNT").toString());
-	}
-
 	public void batchAddOneDayCoupon(Coupon coupon, String[] member) {
 		List<Object> args = new ArrayList<>();
 		

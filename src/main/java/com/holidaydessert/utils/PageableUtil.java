@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -119,6 +120,23 @@ public final class PageableUtil {
 		resultMap.put("recordsFiltered", page.getTotalElements());
 		resultMap.put("data", dtoList);
 		return resultMap;
+	}
+
+	// 取得 DataTables 搜尋框輸入（search[value]，已去除前後空白）
+	public static String getSearchValue(Map<String, ?> params) {
+		return getStringParam(params, "search[value]", "").trim();
+	}
+
+	// 取得 DataTables 的 draw（需原樣回傳給前端）
+	public static String getDraw(Map<String, ?> params) {
+		return getStringParam(params, "draw", "0");
+	}
+
+	// 將原生查詢結果轉成可修改的 Map（Tuple 包裝的 Map 為唯讀，之後要 put 欄位時需先轉換）
+	public static List<Map<String, Object>> toMutableList(Page<Map<String, Object>> page) {
+		return page.getContent().stream()
+				.map(row -> (Map<String, Object>) new LinkedHashMap<>(row))
+				.toList();
 	}
 
 	// 從 params 取得字串參數，若不存在則回傳預設值

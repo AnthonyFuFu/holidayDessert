@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "COM_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.COM_ID;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "COM_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.COM_NAME;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "COM_ADDRESS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.COM_ADDRESS;
 				}
@@ -62,7 +62,7 @@ $(function() {
 				targets: [3],
 				data: "COM_PHONE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.COM_PHONE;
 				}
@@ -71,7 +71,7 @@ $(function() {
 				targets: [4],
 				data: "COM_MEMO",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.COM_MEMO;
 				}

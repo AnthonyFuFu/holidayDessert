@@ -1,5 +1,7 @@
 package com.holidaydessert.repository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,23 @@ import com.holidaydessert.model.ReceiptInformation;
 
 @Repository
 public interface ReceiptInformationRepository extends JpaRepository<ReceiptInformation, String> {
+
+    // =============================================
+    // backList：後台 DataTables 分頁 - 收件資訊
+    // 排序由 Pageable 的 Sort 動態產生，SQL 內不寫 ORDER BY
+    // =============================================
+    @Query(value =
+               "SELECT * FROM ( " +
+               "  SELECT * FROM holiday_dessert.receipt_information " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(RCP_NAME, :keyword) > 0 OR INSTR(RCP_CVS, :keyword) > 0 OR INSTR(RCP_ADDRESS, :keyword) > 0 OR INSTR(RCP_PHONE, :keyword) > 0) ",
+           countQuery =
+               "SELECT COUNT(*) FROM ( " +
+               "  SELECT * FROM holiday_dessert.receipt_information " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(RCP_NAME, :keyword) > 0 OR INSTR(RCP_CVS, :keyword) > 0 OR INSTR(RCP_ADDRESS, :keyword) > 0 OR INSTR(RCP_PHONE, :keyword) > 0) ",
+           nativeQuery = true)
+    Page<Map<String, Object>> backList(@Param("keyword") String keyword, Pageable pageable);
 
     // =============================================
     // frontList

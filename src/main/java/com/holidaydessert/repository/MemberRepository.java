@@ -1,5 +1,8 @@
 package com.holidaydessert.repository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
+import java.util.Map;
 import java.util.List;
 import java.util.Optional;
 
@@ -14,6 +17,60 @@ import com.holidaydessert.model.Member;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
+
+    // =============================================
+    // issueCouponList：後台 DataTables 分頁 - 發放優惠券：近一個月有消費的會員
+    // 排序由 Pageable 的 Sort 動態產生，SQL 內不寫 ORDER BY
+    // =============================================
+    @Query(value =
+               "SELECT * FROM ( " +
+               "  SELECT m.MEM_ID, m.MEM_NAME, m.MEM_ACCOUNT, m.MEM_PHONE, m.MEM_EMAIL, " +
+               "         CASE m.MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER, " +
+               "         DATE_FORMAT(m.MEM_BIRTHDAY, '%Y-%m-%d') MEM_BIRTHDAY, SUM(mo.ORD_TOTAL) AS TOTAL_EXPENSE " +
+               "  FROM holiday_dessert.member m " +
+               "  INNER JOIN holiday_dessert.main_order mo ON m.MEM_ID = mo.MEM_ID " +
+               "  WHERE mo.ORD_CREATE >= DATE_SUB(NOW(), INTERVAL 1 MONTH) " +
+               "    AND m.MEM_STATUS = 1 AND m.MEM_VERIFICATION_STATUS = 1 " +
+               "  GROUP BY m.MEM_ID, m.MEM_NAME, m.MEM_ACCOUNT, m.MEM_PHONE, m.MEM_EMAIL, m.MEM_GENDER " +
+               ") AS subquery " +
+               "WHERE ((:totalExpense IS NULL AND (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(GENDER, :keyword) > 0 OR INSTR(MEM_BIRTHDAY, :keyword) > 0)) OR TOTAL_EXPENSE >= :totalExpense) ",
+           countQuery =
+               "SELECT COUNT(*) FROM ( " +
+               "  SELECT m.MEM_ID, m.MEM_NAME, m.MEM_ACCOUNT, m.MEM_PHONE, m.MEM_EMAIL, " +
+               "         CASE m.MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER, " +
+               "         DATE_FORMAT(m.MEM_BIRTHDAY, '%Y-%m-%d') MEM_BIRTHDAY, SUM(mo.ORD_TOTAL) AS TOTAL_EXPENSE " +
+               "  FROM holiday_dessert.member m " +
+               "  INNER JOIN holiday_dessert.main_order mo ON m.MEM_ID = mo.MEM_ID " +
+               "  WHERE mo.ORD_CREATE >= DATE_SUB(NOW(), INTERVAL 1 MONTH) " +
+               "    AND m.MEM_STATUS = 1 AND m.MEM_VERIFICATION_STATUS = 1 " +
+               "  GROUP BY m.MEM_ID, m.MEM_NAME, m.MEM_ACCOUNT, m.MEM_PHONE, m.MEM_EMAIL, m.MEM_GENDER " +
+               ") AS subquery " +
+               "WHERE ((:totalExpense IS NULL AND (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(GENDER, :keyword) > 0 OR INSTR(MEM_BIRTHDAY, :keyword) > 0)) OR TOTAL_EXPENSE >= :totalExpense) ",
+           nativeQuery = true)
+    Page<Map<String, Object>> issueCouponList(@Param("keyword") String keyword, @Param("totalExpense") Long totalExpense, Pageable pageable);
+
+    // =============================================
+    // backList：後台 DataTables 分頁 - 會員
+    // 排序由 Pageable 的 Sort 動態產生，SQL 內不寫 ORDER BY
+    // =============================================
+    @Query(value =
+               "SELECT * FROM ( " +
+               "  SELECT MEM_ID, MEM_NAME, MEM_ACCOUNT, MEM_GENDER, MEM_PHONE, MEM_EMAIL, MEM_ADDRESS, " +
+               "         DATE_FORMAT(MEM_BIRTHDAY, '%Y-%m-%d') MEM_BIRTHDAY, MEM_STATUS, MEM_VERIFICATION_STATUS, " +
+               "         CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER " +
+               "  FROM holiday_dessert.member " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(MEM_ACCOUNT, :keyword) > 0 OR INSTR(MEM_PHONE, :keyword) > 0 OR INSTR(MEM_EMAIL, :keyword) > 0 OR INSTR(MEM_ADDRESS, :keyword) > 0 OR INSTR(MEM_BIRTHDAY, :keyword) > 0 OR INSTR(GENDER, :keyword) > 0) ",
+           countQuery =
+               "SELECT COUNT(*) FROM ( " +
+               "  SELECT MEM_ID, MEM_NAME, MEM_ACCOUNT, MEM_GENDER, MEM_PHONE, MEM_EMAIL, MEM_ADDRESS, " +
+               "         DATE_FORMAT(MEM_BIRTHDAY, '%Y-%m-%d') MEM_BIRTHDAY, MEM_STATUS, MEM_VERIFICATION_STATUS, " +
+               "         CASE MEM_GENDER WHEN 'm' THEN '男' WHEN 'f' THEN '女' END AS GENDER " +
+               "  FROM holiday_dessert.member " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(MEM_ACCOUNT, :keyword) > 0 OR INSTR(MEM_PHONE, :keyword) > 0 OR INSTR(MEM_EMAIL, :keyword) > 0 OR INSTR(MEM_ADDRESS, :keyword) > 0 OR INSTR(MEM_BIRTHDAY, :keyword) > 0 OR INSTR(GENDER, :keyword) > 0) ",
+           nativeQuery = true)
+    Page<Map<String, Object>> backList(@Param("keyword") String keyword, Pageable pageable);
 	
 	// CRUDController Use
 	List<Member> findByMemName(String name);

@@ -1,8 +1,5 @@
 package com.holidaydessert.controller.admin;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -21,11 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
 import com.holidaydessert.model.Authority;
 import com.holidaydessert.model.EmpFunction;
 import com.holidaydessert.model.Employee;
@@ -34,9 +31,8 @@ import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.DepartmentService;
 import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
-import static com.holidaydessert.constant.BuildPath.*;
-
 import io.swagger.v3.oas.annotations.Hidden;
+import static com.holidaydessert.constant.BuildPath.*;
 
 @Controller
 @RequestMapping("/admin/employee")
@@ -60,142 +56,28 @@ public class EmployeeManagement {
 	@Autowired
 	private CommonService commonService;
 	
-	private Gson gson = new Gson();
-	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String list(@SessionAttribute Employee employeeSession, @ModelAttribute Employee employee, Model model, HttpServletRequest pRequest, HttpServletResponse pResponse) throws Exception {
 		
 		return "admin/employee/list";
 	}
 	
+	@ResponseBody
 	@GetMapping("/employeeTables")
-	public void employeeTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Employee employee, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Employee employeeData = new Employee();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		employeeData.setStart(start);
-		employeeData.setLength(length);
-		employeeData.setSearchText(searchValue);
-		
-		List<Map<String, Object>> employeeList = employeeService.list(employeeData);
-
-		if (employeeList == null) {
-			employeeList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = employeeService.getCount(employeeData);
-
-		employee.setRecordsFiltered(count);
-		employee.setRecordsTotal(count);
-		employee.setData(employeeList);
-		employee.setDraw(Integer.valueOf(draw));
-
-		String output = gson.toJson(employee);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> employeeTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return employeeService.list(params);
 	}
 
+	@ResponseBody
 	@GetMapping("/authorityTables")
-	public void authorityTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Employee employee, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Employee employeeData = new Employee();
-		Authority authority = new Authority();
-		
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		employeeData.setStart(start);
-		employeeData.setLength(length);
-		employeeData.setSearchText(searchValue);
-
-		List<Map<String, Object>> employeeList = employeeService.list(employeeData);
-
-		if (employeeList == null) {
-			employeeList = new ArrayList<Map<String, Object>>();
-		}
-
-		for(int i=0; i<employeeList.size(); i++) {
-			authority.setEmpId(employeeList.get(i).get("EMP_ID").toString());
-			List<Map<String, Object>> authList = authorityService.getAuthorityList(authority);
-			employeeList.get(i).put("AUTH_LIST", authList);
-		}
-		
-		int count = employeeService.getCount(employeeData);
-		
-		employee.setRecordsFiltered(count);
-		employee.setRecordsTotal(count);
-		employee.setData(employeeList);
-		employee.setDraw(Integer.valueOf(draw));
-		
-		String output = gson.toJson(employee);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> authorityTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return employeeService.authorityList(params);
 	}
 	
+	@ResponseBody
 	@GetMapping("/empFunctionTables")
-	public void empFunctionTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute EmpFunction empFunction, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		EmpFunction empFunctionData = new EmpFunction();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		empFunctionData.setStart(start);
-		empFunctionData.setLength(length);
-		empFunctionData.setSearchText(searchValue);
-		
-		List<Map<String, Object>> empFunctionList = empFunctionService.list(empFunctionData);
-
-		if (empFunctionList == null) {
-			empFunctionList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = empFunctionService.getCount(empFunctionData);
-
-		empFunction.setRecordsFiltered(count);
-		empFunction.setRecordsTotal(count);
-		empFunction.setData(empFunctionList);
-		empFunction.setDraw(Integer.valueOf(draw));
-		
-		String output = gson.toJson(empFunction);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> empFunctionTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return empFunctionService.list(params);
 	}
 	
 	@RequestMapping(value = "/addEmployee" , method = {RequestMethod.GET, RequestMethod.POST})

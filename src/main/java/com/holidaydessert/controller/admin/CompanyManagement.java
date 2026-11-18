@@ -1,9 +1,5 @@
 package com.holidaydessert.controller.admin;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -18,10 +14,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import com.google.gson.Gson;
 import com.holidaydessert.model.CompanyInformation;
 import com.holidaydessert.model.Department;
 import com.holidaydessert.model.Employee;
@@ -29,7 +26,6 @@ import com.holidaydessert.service.CompanyInformationService;
 import com.holidaydessert.service.DepartmentService;
 
 import io.swagger.v3.oas.annotations.Hidden;
-
 import static com.holidaydessert.constant.BuildPath.*;
 
 @Controller
@@ -44,8 +40,6 @@ public class CompanyManagement {
 	
 	@Autowired
 	private DepartmentService departmentService;
-
-	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
@@ -53,86 +47,16 @@ public class CompanyManagement {
 		return "admin/company/list";
 	}
 	
+	@ResponseBody
 	@GetMapping("/companyTables")
-	public void companyTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute CompanyInformation companyInformation, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		CompanyInformation companyInformationData = new CompanyInformation();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		companyInformationData.setStart(start);
-		companyInformationData.setLength(length);
-		companyInformationData.setSearchText(searchValue);
-		
-		List<Map<String, Object>> companyList = companyInformationService.list(companyInformationData);
-
-		if (companyList == null) {
-			companyList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = companyInformationService.getCount(companyInformationData);
-
-		companyInformation.setRecordsFiltered(count);
-		companyInformation.setRecordsTotal(count);
-		companyInformation.setData(companyList);
-		companyInformation.setDraw(Integer.valueOf(draw));
-
-		String output = gson.toJson(companyInformation);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> companyTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return companyInformationService.list(params);
 	}
 	
+	@ResponseBody
 	@GetMapping("/departmentTables")
-	public void departmentTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Department department, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Department departmentData = new Department();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		departmentData.setStart(start);
-		departmentData.setLength(length);
-		departmentData.setSearchText(searchValue);
-		
-		List<Map<String, Object>> departmentList = departmentService.list(departmentData);
-
-		if (departmentList == null) {
-			departmentList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = departmentService.getCount(departmentData);
-
-		department.setRecordsFiltered(count);
-		department.setRecordsTotal(count);
-		department.setData(departmentList);
-		department.setDraw(Integer.valueOf(draw));
-
-		String output = gson.toJson(department);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> departmentTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return departmentService.list(params);
 	}
 
 	@RequestMapping(value = "/addCompany" , method = {RequestMethod.GET, RequestMethod.POST})

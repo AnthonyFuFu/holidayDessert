@@ -1,8 +1,5 @@
 package com.holidaydessert.controller.admin;
 
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -19,22 +16,19 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.google.gson.Gson;
 import com.holidaydessert.model.Coupon;
 import com.holidaydessert.model.Employee;
-import com.holidaydessert.model.Member;
-import com.holidaydessert.model.MemberCoupon;
 import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.CouponService;
 import com.holidaydessert.service.MemberCouponService;
 import com.holidaydessert.service.MemberService;
-import static com.holidaydessert.constant.BuildPath.*;
-
 import io.swagger.v3.oas.annotations.Hidden;
+import static com.holidaydessert.constant.BuildPath.*;
 
 @Controller
 @RequestMapping("/admin/coupon")
@@ -54,8 +48,6 @@ public class CouponManagement {
 	
 	@Autowired
 	private MemberService memberService;
-
-	private Gson gson = new Gson();
 	
 	@RequestMapping(value = "/list", method = { RequestMethod.GET, RequestMethod.POST })
 	public String list(@SessionAttribute Employee employeeSession, Model model) throws Exception {
@@ -63,132 +55,22 @@ public class CouponManagement {
 		return "admin/coupon/list";
 	}
 	
+	@ResponseBody
 	@GetMapping("/couponTables")
-	public void couponTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Coupon coupon, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Coupon couponData = new Coupon();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		couponData.setStart(start);
-		couponData.setLength(length);
-		couponData.setSearchText(searchValue);
-		
-		List<Map<String, Object>> couponList = couponService.list(couponData);
-
-		if (couponList == null) {
-			couponList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = couponService.getCount(couponData);
-
-		coupon.setRecordsFiltered(count);
-		coupon.setRecordsTotal(count);
-		coupon.setData(couponList);
-		coupon.setDraw(Integer.valueOf(draw));
-
-		String output = gson.toJson(coupon);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> couponTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return couponService.list(params);
 	}
 
+	@ResponseBody
 	@GetMapping("/memberCouponTables")
-	public void memberCouponTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute MemberCoupon memberCoupon, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		MemberCoupon memberCouponData = new MemberCoupon();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-
-		memberCouponData.setStart(start);
-		memberCouponData.setLength(length);
-		memberCouponData.setSearchText(searchValue);
-		
-		List<Map<String, Object>> memberCouponList = memberCouponService.list(memberCouponData);
-
-		if (memberCouponList == null) {
-			memberCouponList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = memberCouponService.getCount(memberCouponData);
-
-		memberCoupon.setRecordsFiltered(count);
-		memberCoupon.setRecordsTotal(count);
-		memberCoupon.setData(memberCouponList);
-		memberCoupon.setDraw(Integer.valueOf(draw));
-		
-		String output = gson.toJson(memberCoupon);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> memberCouponTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return memberCouponService.list(params);
 	}
 	
+	@ResponseBody
 	@GetMapping("/issueCouponTables")
-	public void issueCouponTables(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Member member, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		Member memberData = new Member();
-
-		String start = pRequest.getParameter("start") == null ? "0" : pRequest.getParameter("start");
-		String length = pRequest.getParameter("length") == null ? "10" : pRequest.getParameter("length");
-		String draw = pRequest.getParameter("draw") == null ? "0" : pRequest.getParameter("draw");
-		String searchValue = pRequest.getParameter("search[value]") == null ? "" : pRequest.getParameter("search[value]");
-		
-		memberData.setStart(start);
-		memberData.setLength(length);
-		memberData.setSearchText(searchValue);
-		
-		// 判斷一個字串是否為數字
-		if (searchValue.matches("\\d+")) {
-			memberData.setTotalExpense(searchValue);
-		}
-		
-		List<Map<String, Object>> couponList = memberService.issueCouponList(memberData);
-
-		if (couponList == null) {
-			couponList = new ArrayList<Map<String, Object>>();
-		}
-
-		int count = memberService.getIssueCouponCount(memberData);
-
-		member.setRecordsFiltered(count);
-		member.setRecordsTotal(count);
-		member.setData(couponList);
-		member.setDraw(Integer.valueOf(draw));
-
-		String output = gson.toJson(member);
-
-		pResponse.setCharacterEncoding("utf-8");
-		
-		try {
-			PrintWriter out;
-			out = pResponse.getWriter();
-			out.write(output);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
+	public Map<String, Object> issueCouponTables(@SessionAttribute Employee employeeSession, @RequestParam Map<String, String> params) {
+		return memberService.issueCouponList(params);
 	}
 	
 	@RequestMapping(value = "/addCoupon" , method = {RequestMethod.GET, RequestMethod.POST})

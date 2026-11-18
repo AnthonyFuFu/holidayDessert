@@ -1,5 +1,7 @@
 package com.holidaydessert.repository;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Page;
 import java.util.List;
 import java.util.Map;
 
@@ -14,6 +16,35 @@ import com.holidaydessert.model.MemberCoupon;
 
 @Repository
 public interface MemberCouponRepository extends JpaRepository<MemberCoupon, String> {
+
+    // =============================================
+    // backList：後台 DataTables 分頁 - 會員優惠券
+    // 排序由 Pageable 的 Sort 動態產生，SQL 內不寫 ORDER BY
+    // =============================================
+    @Query(value =
+               "SELECT * FROM ( " +
+               "  SELECT mc.MEM_CP_ID, MEM_NAME, CP_NAME, CP_DISCOUNT, MEM_CP_STATUS, " +
+               "         DATE_FORMAT(MEM_CP_START,  '%Y-%m-%d %H:%i:%s') MEM_CP_START, " +
+               "         DATE_FORMAT(MEM_CP_END,    '%Y-%m-%d %H:%i:%s') MEM_CP_END, " +
+               "         DATE_FORMAT(MEM_CP_RECORD, '%Y-%m-%d %H:%i:%s') MEM_CP_RECORD " +
+               "  FROM holiday_dessert.member_coupon mc " +
+               "  LEFT JOIN holiday_dessert.member m ON m.MEM_ID = mc.MEM_ID " +
+               "  LEFT JOIN holiday_dessert.coupon c ON c.CP_ID = mc.CP_ID " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(MEM_CP_STATUS, :keyword) > 0 OR INSTR(CP_NAME, :keyword) > 0) ",
+           countQuery =
+               "SELECT COUNT(*) FROM ( " +
+               "  SELECT mc.MEM_CP_ID, MEM_NAME, CP_NAME, CP_DISCOUNT, MEM_CP_STATUS, " +
+               "         DATE_FORMAT(MEM_CP_START,  '%Y-%m-%d %H:%i:%s') MEM_CP_START, " +
+               "         DATE_FORMAT(MEM_CP_END,    '%Y-%m-%d %H:%i:%s') MEM_CP_END, " +
+               "         DATE_FORMAT(MEM_CP_RECORD, '%Y-%m-%d %H:%i:%s') MEM_CP_RECORD " +
+               "  FROM holiday_dessert.member_coupon mc " +
+               "  LEFT JOIN holiday_dessert.member m ON m.MEM_ID = mc.MEM_ID " +
+               "  LEFT JOIN holiday_dessert.coupon c ON c.CP_ID = mc.CP_ID " +
+               ") AS subquery " +
+               "WHERE (:keyword = '' OR INSTR(MEM_NAME, :keyword) > 0 OR INSTR(MEM_CP_STATUS, :keyword) > 0 OR INSTR(CP_NAME, :keyword) > 0) ",
+           nativeQuery = true)
+    Page<Map<String, Object>> backList(@Param("keyword") String keyword, Pageable pageable);
 
     // =============================================
     // useCoupon：更新使用狀態

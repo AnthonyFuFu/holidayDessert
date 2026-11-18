@@ -39,7 +39,7 @@ $(function() {
 				targets: [0],
 				data: "CP_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.CP_ID;
 				}
@@ -48,7 +48,7 @@ $(function() {
 				targets: [1],
 				data: "CP_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.CP_NAME;
 				}
@@ -57,7 +57,7 @@ $(function() {
 				targets: [2],
 				data: "CP_DISCOUNT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.CP_DISCOUNT;
 				}
@@ -66,7 +66,7 @@ $(function() {
 				targets: [3],
 				data: "STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.STATUS;
 				}

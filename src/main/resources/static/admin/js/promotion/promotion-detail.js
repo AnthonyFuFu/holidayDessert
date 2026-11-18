@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "PM_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_NAME;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "PM_STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 1){
 						return '上架'
@@ -57,7 +57,7 @@ $(function() {
 				targets: [2],
 				data: "PD_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PD_NAME;
 				}
@@ -66,7 +66,7 @@ $(function() {
 				targets: [3],
 				data: "PD_STATUS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 1){
 						return '上架'
@@ -79,7 +79,7 @@ $(function() {
 				targets: [4],
 				data: "PM_DESCRIPTION",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_DESCRIPTION;
 				}
@@ -88,7 +88,7 @@ $(function() {
 				targets: [5],
 				data: "PM_DISCOUNT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PM_DISCOUNT;
 				}
@@ -97,7 +97,7 @@ $(function() {
 				targets: [6],
 				data: "PD_PRICE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PD_PRICE;
 				}
@@ -106,7 +106,7 @@ $(function() {
 				targets: [7],
 				data: "PMD_PD_DISCOUNT_PRICE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PMD_PD_DISCOUNT_PRICE;
 				}
@@ -115,7 +115,7 @@ $(function() {
 				targets: [8],
 				data: "PMD_START",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PMD_START;
 				}
@@ -124,7 +124,7 @@ $(function() {
 				targets: [9],
 				data: "PMD_END",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PMD_END;
 				}
@@ -133,7 +133,7 @@ $(function() {
 				targets: [10],
 				data: "PM_REGULARLY",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					if(data == 1){
 						return '例行'
@@ -256,7 +256,7 @@ $(function() {
 				targets: [1],
 				data: "PDC_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PDC_NAME;
 				}
@@ -265,7 +265,7 @@ $(function() {
 				targets: [2],
 				data: "PD_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PD_NAME;
 				}
@@ -274,7 +274,7 @@ $(function() {
 				targets: [3],
 				data: "PD_DESCRIPTION",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PD_DESCRIPTION;
 				}
@@ -283,7 +283,7 @@ $(function() {
 				targets: [4],
 				data: "PD_PRICE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.PD_PRICE;
 				}

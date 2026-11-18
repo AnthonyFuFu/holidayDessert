@@ -4,11 +4,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.holidaydessert.constant.SortFieldsConstant;
 import com.holidaydessert.dao.CompanyInformationDao;
 import com.holidaydessert.model.CompanyInformation;
 import com.holidaydessert.repository.CompanyInformationRepository;
+import com.holidaydessert.utils.PageableUtil;
 
 @Service
 public class CompanyInformationService {
@@ -22,12 +27,21 @@ public class CompanyInformationService {
 	// =============================================
 	// back
 	// =============================================
-	public List<Map<String, Object>> list(CompanyInformation companyInformation) {
-		return companyInformationDao.list(companyInformation);
-	}
-
-	public int getCount(CompanyInformation companyInformation) {
-		return companyInformationDao.getCount(companyInformation);
+	public Map<String, Object> list(Map<String, String> dataTableParams) {
+		// 1. 取得 DataTables 參數
+		String keyword = PageableUtil.getSearchValue(dataTableParams);
+		String draw = PageableUtil.getDraw(dataTableParams);
+		// 2. 建立分頁與排序（start / length / order）
+		Pageable pageable = PageableUtil.buildDataTablePageable(
+				dataTableParams,
+				SortFieldsConstant.COMPANY_TABLE,
+				SortFieldsConstant.COMPANY_DEFAULT,
+				Sort.Direction.ASC
+		);
+		// 3. 查詢資料
+		Page<Map<String, Object>> companyPage = companyInformationRepository.backList(keyword, pageable);
+		// 4. 封裝成 DataTables 回傳格式
+		return PageableUtil.buildDataTable(companyPage, PageableUtil.toMutableList(companyPage), draw);
 	}
 
 	public void add(CompanyInformation companyInformation) {

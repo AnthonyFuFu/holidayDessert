@@ -35,7 +35,7 @@ $(function() {
 				targets: [0],
 				data: "RCP_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.RCP_ID;
 				}
@@ -44,7 +44,7 @@ $(function() {
 				targets: [1],
 				data: "MEM_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_ID;
 				}
@@ -53,7 +53,7 @@ $(function() {
 				targets: [2],
 				data: "RCP_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.RCP_NAME;
 				}
@@ -62,7 +62,7 @@ $(function() {
 				targets: [3],
 				data: "RCP_CVS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.RCP_CVS;
 				}
@@ -71,7 +71,7 @@ $(function() {
 				targets: [4],
 				data: "RCP_ADDRESS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.RCP_ADDRESS;
 				}
@@ -80,7 +80,7 @@ $(function() {
 				targets: [5],
 				data: "RCP_PHONE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.RCP_PHONE;
 				}

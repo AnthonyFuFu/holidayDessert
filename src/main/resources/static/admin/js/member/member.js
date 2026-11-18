@@ -36,7 +36,7 @@ $(function() {
 				targets: [0],
 				data: "MEM_ID",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_ID;
 				}
@@ -45,7 +45,7 @@ $(function() {
 				targets: [1],
 				data: "MEM_NAME",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_NAME;
 				}
@@ -54,7 +54,7 @@ $(function() {
 				targets: [2],
 				data: "MEM_ACCOUNT",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_ACCOUNT;
 				}
@@ -63,7 +63,7 @@ $(function() {
 				targets: [3],
 				data: "MEM_PHONE",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_PHONE;
 				}
@@ -72,7 +72,7 @@ $(function() {
 				targets: [4],
 				data: "MEM_EMAIL",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_EMAIL;
 				}
@@ -81,7 +81,7 @@ $(function() {
 				targets: [5],
 				data: "MEM_ADDRESS",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_ADDRESS;
 				}
@@ -90,7 +90,7 @@ $(function() {
 				targets: [6],
 				data: "MEM_BIRTHDAY",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.MEM_BIRTHDAY;
 				}
@@ -99,7 +99,7 @@ $(function() {
 				targets: [7],
 				data: "GENDER",
 				searching: false,
-				orderable: false,
+				orderable: true,
 				render: function(data, type, row, meta) {
 					return row.GENDER;
 				}
