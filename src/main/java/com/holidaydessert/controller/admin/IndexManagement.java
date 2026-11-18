@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.Locale;
-import java.util.function.Supplier;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -25,6 +24,8 @@ import com.holidaydessert.service.EmployeeService;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
+
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 @Slf4j
 @Controller
@@ -66,14 +67,6 @@ public class IndexManagement {
 		return "admin/index";
 	}
 	
-	private <T> T safe(String name, Supplier<T> supplier, T fallback) {
-		try {
-			return supplier.get();
-		} catch (Exception e) {
-			log.error("[Dashboard] {} 查詢失敗", name, e);
-			return fallback;
-		}
-	}
 
 	@RequestMapping(value = "/updateTheme" , method = {RequestMethod.GET, RequestMethod.POST})
 	public void updateTheme(HttpServletRequest pRequest, HttpServletResponse pResponse, HttpSession session, Model model) {

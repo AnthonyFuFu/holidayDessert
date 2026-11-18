@@ -3,13 +3,13 @@ package com.holidaydessert.controller.admin;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,6 +35,7 @@ import com.holidaydessert.service.ProductCollectionService;
 import com.holidaydessert.service.ProductPicService;
 import com.holidaydessert.service.ProductService;
 import static com.holidaydessert.constant.BuildPath.*;
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
@@ -158,182 +159,96 @@ public class ProductManagement {
 	}
 
 	@RequestMapping(value = "/addProduct" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addProduct(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
-		
-		try {
-			Product product = new Product();
-			model.addAttribute("productCollectionList", productCollectionList);
-			model.addAttribute("product", product);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addProduct(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("productCollectionList", safe("productCollectionList", productCollectionService::getList, Collections.emptyList()));
+		model.addAttribute("product", new Product());
 		return "admin/product/productForm";
 	}
 	
 	@RequestMapping(value = "/updateProduct" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateProduct(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Product product, Model model) throws Exception {
-		
-		List<Map<String, Object>> productCollectionList = productCollectionService.getList();
-		
-		try {
-			product = productService.getData(product);
-			model.addAttribute("productCollectionList", productCollectionList);
-			model.addAttribute("product", product);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute Product product, Model model) {
+
+		model.addAttribute("productCollectionList", safe("productCollectionList", productCollectionService::getList, Collections.emptyList()));
+		model.addAttribute("product", productService.getData(product));
 		return "admin/product/productForm";
 	}
 	
 	@RequestMapping(value = "/productAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String productAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Product product,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute Product product, Model model) {
 
-		try {
-			product.setPdCreateBy(employeeSession.getEmpName());
-			product.setPdUpdateBy(employeeSession.getEmpName());
-			productService.add(product);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
-
-		return "admin/toPath";
+		product.setPdCreateBy(employeeSession.getEmpName());
+		product.setPdUpdateBy(employeeSession.getEmpName());
+		return addSubmit(model, ADMIN_PRODUCT_LIST, () -> productService.add(product));
 	}
 	
 	@RequestMapping(value = "/productUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String productUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Product product,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			product.setPdUpdateBy(employeeSession.getEmpName());
-			productService.update(product);
-			model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute Product product, Model model) {
+
+		product.setPdUpdateBy(employeeSession.getEmpName());
+		return updateSubmit(model, ADMIN_PRODUCT_LIST, () -> productService.update(product));
 	}
 	
 	@RequestMapping(value = "/addProductCollection" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addProductCollection(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		try {
-			ProductCollection productCollection = new ProductCollection();
-			model.addAttribute("productCollection", productCollection);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addProductCollection(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("productCollection", new ProductCollection());
 		return "admin/product/productCollectionForm";
 	}
 	
 	@RequestMapping(value = "/updateProductCollection" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateProductCollection(@SessionAttribute Employee employeeSession,
-			@ModelAttribute ProductCollection productCollection, Model model) throws Exception {
-		
-		try {
-			productCollection = productCollectionService.getData(productCollection);
-			model.addAttribute("productCollection", productCollection);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute ProductCollection productCollection, Model model) {
+
+		model.addAttribute("productCollection", productCollectionService.getData(productCollection));
 		return "admin/product/productCollectionForm";
 	}
 	
 	@RequestMapping(value = "/productCollectionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String productCollectionAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute ProductCollection productCollection,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute ProductCollection productCollection, Model model) {
 
-		try {
-			productCollectionService.add(productCollection);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_PRODUCT_LIST, () -> productCollectionService.add(productCollection));
 	}
 	
 	@RequestMapping(value = "/productCollectionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String productCollectionUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute ProductCollection productCollection,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			productCollectionService.update(productCollection);
-			model.addAttribute("PATH", ADMIN_PRODUCT_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute ProductCollection productCollection, Model model) {
+
+		return updateSubmit(model, ADMIN_PRODUCT_LIST, () -> productCollectionService.update(productCollection));
 	}
 	
 	@RequestMapping(value = "/editProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String editProductPic(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Product product,@ModelAttribute ProductPic productPic, Model model) throws Exception {
-		
+			@ModelAttribute Product product, @ModelAttribute ProductPic productPic, Model model) {
+
 		productPic.setPdId(product.getPdId());
-		List<Map<String, Object>> productPicList = productPicService.list(productPic);
-		
-		try {
-			product = productService.getData(product);
-			model.addAttribute("product", product);
-			model.addAttribute("productPicList", productPicList);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		model.addAttribute("product", productService.getData(product));
+		model.addAttribute("productPicList", productPicService.list(productPic));
 		return "admin/product/editProductPic";
 	}
 	
 	@RequestMapping(value = "/addProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String addProductPic(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Product product, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		product = productService.getData(product);
-		List<Map<String, Object>> productList = productService.getList();
-		
-		try {
-			ProductPic productPic = new ProductPic();
-			productPic.setPdId(product.getPdId());
-			productPic.setPdName(product.getPdName());
-			model.addAttribute("productList", productList);
-			model.addAttribute("productPic", productPic);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+			@ModelAttribute Product product, Model model) {
+
+		Product productData = productService.getData(product);
+		ProductPic productPic = new ProductPic();
+		productPic.setPdId(productData.getPdId());
+		productPic.setPdName(productData.getPdName());
+		model.addAttribute("productList", safe("productList", productService::getList, Collections.emptyList()));
+		model.addAttribute("productPic", productPic);
 		return "admin/product/productPicForm";
 	}
 	
 	@RequestMapping(value = "/updateProductPic" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateProductPic(@SessionAttribute Employee employeeSession,
-			@ModelAttribute ProductPic productPic, Model model) throws Exception {
-		
-		try {
-			productPic = productPicService.getData(productPic);
-			model.addAttribute("productPic", productPic);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute ProductPic productPic, Model model) {
+
+		model.addAttribute("productPic", productPicService.getData(productPic));
 		return "admin/product/productPicForm";
 	}
 	
@@ -341,48 +256,34 @@ public class ProductManagement {
 	@RequestMapping(value = "/productPicAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String productPicAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductPic productPic,
-			@RequestParam MultipartFile imageFile,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@RequestParam MultipartFile imageFile, Model model) {
 
-		try {
-	        String uploadPath = buildUploadPath(PRODUCTPIC_IMAGE_FOLDER);
-	        productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
-	        productPic.setPdPicture(PRODUCTPIC_WEB_PATH + productPic.getPdImage());
+		return addSubmit(model, adminProductPicPath(productPic.getPdId()), () -> {
+			String uploadPath = buildUploadPath(PRODUCTPIC_IMAGE_FOLDER);
+			productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+			productPic.setPdPicture(PRODUCTPIC_WEB_PATH + productPic.getPdImage());
 			productPicService.add(productPic);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", adminProductPicPath(productPic.getPdId()));
-
-		return "admin/toPath";
+		});
 	}
 
 	@RequestMapping(value = "/productPicUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String productPicUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute ProductPic productPic,
 			@RequestParam MultipartFile imageFile,
-			@RequestParam(required = false) String originalImage,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
+			@RequestParam(required = false) String originalImage, Model model) {
+
+		return updateSubmit(model, adminProductPicPath(productPic.getPdId()), () -> {
 			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				productPic.setPdImage(originalImage);
 			} else {
-	            String uploadPath = buildUploadPath(PRODUCTPIC_IMAGE_FOLDER);
-	            commonService.deleteUploadedFiles(originalImage, uploadPath);
-	            productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+				String uploadPath = buildUploadPath(PRODUCTPIC_IMAGE_FOLDER);
+				commonService.deleteUploadedFiles(originalImage, uploadPath);
+				productPic.setPdImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-	        productPic.setPdPicture(PRODUCTPIC_WEB_PATH + productPic.getPdImage());
+			productPic.setPdPicture(PRODUCTPIC_WEB_PATH + productPic.getPdImage());
 			productPicService.update(productPic);
-			model.addAttribute("PATH", adminProductPicPath(productPic.getPdId()));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+		});
 	}
 
 	@ResponseBody

@@ -2,10 +2,6 @@ package com.holidaydessert.controller.admin;
 
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,6 +23,7 @@ import com.holidaydessert.service.DepartmentService;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import static com.holidaydessert.constant.BuildPath.*;
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 @Controller
 @RequestMapping("/admin/company")
@@ -60,123 +57,61 @@ public class CompanyManagement {
 	}
 
 	@RequestMapping(value = "/addCompany" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addCompany(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		try {
-			CompanyInformation companyInformation = new CompanyInformation();
-			model.addAttribute("companyInformation", companyInformation);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addCompany(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("companyInformation", new CompanyInformation());
 		return "admin/company/companyForm";
 	}
 	
 	@RequestMapping(value = "/updateCompany" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateCompany(@SessionAttribute Employee employeeSession,
-			@ModelAttribute CompanyInformation companyInformation, Model model) throws Exception {
-		
-		try {
-			companyInformation = companyInformationService.getData(companyInformation);
-			model.addAttribute("companyInformation", companyInformation);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute CompanyInformation companyInformation, Model model) {
+
+		model.addAttribute("companyInformation", companyInformationService.getData(companyInformation));
 		return "admin/company/companyForm";
 	}
 
 	@RequestMapping(value = "/companyAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String companyAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute CompanyInformation companyInformation,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute CompanyInformation companyInformation, Model model) {
 
-		try {
-			companyInformationService.add(companyInformation);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_COMPANY_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_COMPANY_LIST, () -> companyInformationService.add(companyInformation));
 	}
 	
 	@RequestMapping(value = "/companyUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String companyUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute CompanyInformation companyInformation,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			companyInformationService.update(companyInformation);
-			model.addAttribute("PATH", ADMIN_COMPANY_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute CompanyInformation companyInformation, Model model) {
+
+		return updateSubmit(model, ADMIN_COMPANY_LIST, () -> companyInformationService.update(companyInformation));
 	}
 	
 	@RequestMapping(value = "/addDepartment" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addDepartment(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		try {
-			Department department = new Department();
-			model.addAttribute("department", department);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addDepartment(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("department", new Department());
 		return "admin/company/departmentForm";
 	}
 	
 	@RequestMapping(value = "/updateDepartment" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateDepartment(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Department department, Model model) throws Exception {
-		
-		try {
-			department = departmentService.getData(department);
-			model.addAttribute("department", department);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute Department department, Model model) {
+
+		model.addAttribute("department", departmentService.getData(department));
 		return "admin/company/departmentForm";
 	}
 
 	@RequestMapping(value = "/departmentAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String departmentAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Department department,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute Department department, Model model) {
 
-		try {
-			departmentService.add(department);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_COMPANY_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_COMPANY_LIST, () -> departmentService.add(department));
 	}
 	
 	@RequestMapping(value = "/departmentUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String departmentUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Department department,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			departmentService.update(department);
-			model.addAttribute("PATH", ADMIN_COMPANY_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute Department department, Model model) {
+
+		return updateSubmit(model, ADMIN_COMPANY_LIST, () -> departmentService.update(department));
 	}
 	
 }

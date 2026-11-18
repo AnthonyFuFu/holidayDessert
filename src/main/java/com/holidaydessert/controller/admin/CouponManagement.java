@@ -1,12 +1,8 @@
 package com.holidaydessert.controller.admin;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +25,7 @@ import com.holidaydessert.service.MemberCouponService;
 import com.holidaydessert.service.MemberService;
 import io.swagger.v3.oas.annotations.Hidden;
 import static com.holidaydessert.constant.BuildPath.*;
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 @Controller
 @RequestMapping("/admin/coupon")
@@ -74,138 +71,78 @@ public class CouponManagement {
 	}
 	
 	@RequestMapping(value = "/addCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addCoupon(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		try {
-			Coupon coupon = new Coupon();
-			model.addAttribute("coupon", coupon);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addCoupon(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("coupon", new Coupon());
 		return "admin/coupon/couponForm";
 	}
 	
 	@RequestMapping(value = "/updateCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateCoupon(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Coupon coupon, Model model) throws Exception {
-		
-		try {
-			coupon = couponService.getData(coupon);
-			model.addAttribute("coupon", coupon);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute Coupon coupon, Model model) {
+
+		model.addAttribute("coupon", couponService.getData(coupon));
 		return "admin/coupon/couponForm";
 	}
 	
 	@RequestMapping(value = "/couponAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String couponAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Coupon coupon,
-			@RequestParam MultipartFile imageFile,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@RequestParam MultipartFile imageFile, Model model) {
 
-		try {
-	        String uploadPath = buildUploadPath(COUPON_IMAGE_FOLDER);
-	        coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
-	        coupon.setCpPicture(COUPON_WEB_PATH + coupon.getCpImage());
+		return addSubmit(model, ADMIN_COUPON_LIST, () -> {
+			String uploadPath = buildUploadPath(COUPON_IMAGE_FOLDER);
+			coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+			coupon.setCpPicture(COUPON_WEB_PATH + coupon.getCpImage());
 			couponService.add(coupon);
-			
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_COUPON_LIST);
-
-		return "admin/toPath";
+		});
 	}
 	
 	@RequestMapping(value = "/couponUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String couponUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Coupon coupon,
 			@RequestParam MultipartFile imageFile,
-			@RequestParam(required = false) String originalImage,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
+			@RequestParam(required = false) String originalImage, Model model) {
+
+		return updateSubmit(model, ADMIN_COUPON_LIST, () -> {
 			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				coupon.setCpImage(originalImage);
 			} else {
-	            String uploadPath = buildUploadPath(COUPON_IMAGE_FOLDER);
-	            commonService.deleteUploadedFiles(originalImage, uploadPath);
-	            coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+				String uploadPath = buildUploadPath(COUPON_IMAGE_FOLDER);
+				commonService.deleteUploadedFiles(originalImage, uploadPath);
+				coupon.setCpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-	        coupon.setCpPicture(COUPON_WEB_PATH + coupon.getCpImage());
+			coupon.setCpPicture(COUPON_WEB_PATH + coupon.getCpImage());
 			couponService.update(coupon);
-			model.addAttribute("PATH", ADMIN_COUPON_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+		});
 	}
 
 	@RequestMapping(value = "/issueCoupon" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issueCoupon(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		List<Map<String, Object>> couponList = couponService.getList();
-		try {
-			model.addAttribute("couponList", couponList);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String issueCoupon(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("couponList", safe("couponList", couponService::getList, Collections.emptyList()));
 		return "admin/coupon/memberCouponForm";
 	}
 
 	@RequestMapping(value = "/issueDailyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String issueDailyCouponSubmit(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest,Model model) throws Exception {
+			@RequestParam(required = false) String members,
+			@RequestParam(required = false) String couponId, Model model) {
 
-		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;
-		String couponId = pRequest.getParameter("couponId")!=null ? pRequest.getParameter("couponId") : null;
-		
 		Coupon coupon = new Coupon();
 		coupon.setCpId(couponId);
-		
-		try {
-			memberCouponService.batchAddOneDayCoupon(coupon, members);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_COUPON_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_COUPON_LIST, () -> memberCouponService.batchAddOneDayCoupon(coupon, members != null ? members.split(",") : null));
 	}
 
 	@RequestMapping(value = "/issueWeeklyCouponSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String issueWeeklyCouponSubmit(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		String[] members = pRequest.getParameter("members")!=null ? pRequest.getParameter("members").split(",") : null;
-		String couponId = pRequest.getParameter("couponId")!=null ? pRequest.getParameter("couponId") : null;
-		
+			@RequestParam(required = false) String members,
+			@RequestParam(required = false) String couponId, Model model) {
+
 		Coupon coupon = new Coupon();
 		coupon.setCpId(couponId);
-		
-		try {
-			memberCouponService.batchAddOneWeekCoupon(coupon, members);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_COUPON_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_COUPON_LIST, () -> memberCouponService.batchAddOneWeekCoupon(coupon, members != null ? members.split(",") : null));
 	}
 
 }

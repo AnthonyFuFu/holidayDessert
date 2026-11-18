@@ -1,12 +1,11 @@
 package com.holidaydessert.controller.admin;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +29,7 @@ import com.holidaydessert.service.CommonService;
 import com.holidaydessert.service.NewsService;
 import com.holidaydessert.service.PromotionService;
 import static com.holidaydessert.constant.BuildPath.*;
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 import io.swagger.v3.oas.annotations.Hidden;
 
@@ -76,118 +76,63 @@ public class NewsManagement {
 	}
 
 	@RequestMapping(value = "/addNews" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addNews(@SessionAttribute Employee employeeSession, Model model) throws Exception {
-		
-		List<Map<String, Object>> promotionList = promotionService.getList();
-		
-		try {
-			News news = new News();
-			model.addAttribute("promotionList", promotionList);
-			model.addAttribute("news", news);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addNews(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("promotionList", safe("promotionList", promotionService::getList, Collections.emptyList()));
+		model.addAttribute("news", new News());
 		return "admin/news/newsForm";
 	}
 	
 	@RequestMapping(value = "/updateNews" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String updateNews(@SessionAttribute Employee employeeSession, @ModelAttribute News news, Model model) throws Exception {
-		
-		List<Map<String, Object>> promotionList = promotionService.getList();
-		
-		try {
-			news = newsService.getData(news);
-			model.addAttribute("promotionList", promotionList);
-			model.addAttribute("news", news);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+	public String updateNews(@SessionAttribute Employee employeeSession, @ModelAttribute News news, Model model) {
+
+		model.addAttribute("promotionList", safe("promotionList", promotionService::getList, Collections.emptyList()));
+		model.addAttribute("news", newsService.getData(news));
 		return "admin/news/newsForm";
 	}
 	
 	@RequestMapping(value = "/newsAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String newsAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute News news,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute News news, Model model) {
 
-		try {
-			newsService.add(news);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_NEWS_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_NEWS_LIST, () -> newsService.add(news));
 	}
 	
 	@RequestMapping(value = "/newsUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String newsUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute News news,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			newsService.update(news);
-			model.addAttribute("PATH", ADMIN_NEWS_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute News news, Model model) {
+
+		return updateSubmit(model, ADMIN_NEWS_LIST, () -> newsService.update(news));
 	}
 
 	@RequestMapping(value = "/editBanner" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String editBanner(@SessionAttribute Employee employeeSession,
-			@ModelAttribute News news,@ModelAttribute Banner banner, Model model) throws Exception {
-		
+			@ModelAttribute News news, @ModelAttribute Banner banner, Model model) {
+
 		banner.setNewsId(news.getNewsId());
-		List<Map<String, Object>> bannerList = bannerService.list(banner);
-		
-		try {
-			news = newsService.getData(news);
-			model.addAttribute("news", news);
-			model.addAttribute("bannerList", bannerList);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+		model.addAttribute("news", newsService.getData(news));
+		model.addAttribute("bannerList", bannerService.list(banner));
 		return "admin/news/editBanner";
 	}
 
 	@RequestMapping(value = "/addBanner" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String addBanner(@SessionAttribute Employee employeeSession,
-			@ModelAttribute News news, HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		news = newsService.getData(news);
-		
-		List<Map<String, Object>> newsList = newsService.getList();
-		
-		try {
-			Banner banner = new Banner();
-			banner.setNewsId(news.getNewsId());
-			banner.setNewsName(news.getNewsName());
-			model.addAttribute("newsList", newsList);
-			model.addAttribute("banner", banner);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+			@ModelAttribute News news, Model model) {
+
+		News newsData = newsService.getData(news);
+		Banner banner = new Banner();
+		banner.setNewsId(newsData.getNewsId());
+		banner.setNewsName(newsData.getNewsName());
+		model.addAttribute("newsList", safe("newsList", newsService::getList, Collections.emptyList()));
+		model.addAttribute("banner", banner);
 		return "admin/news/bannerForm";
 	}
 	
 	@RequestMapping(value = "/updateBanner" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateBanner(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Banner banner, Model model) throws Exception {
-		
-		try {
-			banner = bannerService.getData(banner);
-			model.addAttribute("banner", banner);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute Banner banner, Model model) {
+
+		model.addAttribute("banner", bannerService.getData(banner));
 		return "admin/news/bannerForm";
 	}
 	
@@ -195,49 +140,34 @@ public class NewsManagement {
 	@RequestMapping(value = "/bannerAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String bannerAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Banner banner,
-			@RequestParam MultipartFile imageFile,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@RequestParam MultipartFile imageFile, Model model) {
 
-		try {
-	        String uploadPath = buildUploadPath(BANNER_IMAGE_FOLDER);
-	        banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
-	        banner.setBanPicture(BANNER_WEB_PATH + banner.getBanImage());
+		return addSubmit(model, adminBannerPath(banner.getNewsId()), () -> {
+			String uploadPath = buildUploadPath(BANNER_IMAGE_FOLDER);
+			banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+			banner.setBanPicture(BANNER_WEB_PATH + banner.getBanImage());
 			bannerService.add(banner);
-			
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", adminBannerPath(banner.getNewsId()));
-
-		return "admin/toPath";
+		});
 	}
 
 	@RequestMapping(value = "/bannerUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String bannerUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Banner banner,
 			@RequestParam MultipartFile imageFile,
-			@RequestParam(required = false) String originalImage,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
+			@RequestParam(required = false) String originalImage, Model model) {
+
+		return updateSubmit(model, adminBannerPath(banner.getNewsId()), () -> {
 			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				banner.setBanImage(originalImage);
 			} else {
-	            String uploadPath = buildUploadPath(BANNER_IMAGE_FOLDER);
-	            commonService.deleteUploadedFiles(originalImage, uploadPath);
-	            banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+				String uploadPath = buildUploadPath(BANNER_IMAGE_FOLDER);
+				commonService.deleteUploadedFiles(originalImage, uploadPath);
+				banner.setBanImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-	        banner.setBanPicture(BANNER_WEB_PATH + banner.getBanImage());
+			banner.setBanPicture(BANNER_WEB_PATH + banner.getBanImage());
 			bannerService.update(banner);
-			model.addAttribute("PATH", adminBannerPath(banner.getNewsId()));
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+		});
 	}
 
 	@ResponseBody

@@ -30,6 +30,7 @@ import com.holidaydessert.service.FullcalendarService;
 import io.swagger.v3.oas.annotations.Hidden;
 
 import static com.holidaydessert.constant.BuildPath.*;
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 @Slf4j
 @Controller
@@ -89,8 +90,8 @@ public class CalendarManagement {
 			@RequestParam(required = true) String start,
 			@RequestParam(required = true) String end,
 			@RequestParam(required = true) String empId,
-			Model model) throws Exception {
-		
+			Model model) {
+
 		Fullcalendar fullcalendarData = new Fullcalendar();
 		fullcalendarData.setTitle(title);
 		fullcalendarData.setStart(start);
@@ -102,18 +103,8 @@ public class CalendarManagement {
 		    fullcalendarData.setEmployee(new Employee());
 		}
 		fullcalendarData.getEmployee().setEmpId(empId);
-		
-		try {
-			fullcalendarService.add(fullcalendarData);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_CALENDAR_LIST);
 
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_CALENDAR_LIST, () -> fullcalendarService.add(fullcalendarData));
 	}
 	
 	@ResponseBody

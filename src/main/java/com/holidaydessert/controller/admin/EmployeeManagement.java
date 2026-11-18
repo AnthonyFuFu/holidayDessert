@@ -1,5 +1,6 @@
 package com.holidaydessert.controller.admin;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -7,7 +8,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +33,7 @@ import com.holidaydessert.service.EmpFunctionService;
 import com.holidaydessert.service.EmployeeService;
 import io.swagger.v3.oas.annotations.Hidden;
 import static com.holidaydessert.constant.BuildPath.*;
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 @Controller
 @RequestMapping("/admin/employee")
@@ -81,168 +82,98 @@ public class EmployeeManagement {
 	}
 	
 	@RequestMapping(value = "/addEmployee" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addEmployee(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		List<Map<String, Object>> departmentList = departmentService.getList();
-		try {
-			Employee employee = new Employee();
-			model.addAttribute("departmentList", departmentList);
-			model.addAttribute("employee", employee);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addEmployee(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("departmentList", safe("departmentList", departmentService::getList, Collections.emptyList()));
+		model.addAttribute("employee", new Employee());
 		return "admin/employee/employeeForm";
 	}
 	
 	@RequestMapping(value = "/updateEmployee" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateEmployee(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Employee employee, Model model) throws Exception {
-		
-		List<Map<String, Object>> departmentList = departmentService.getList();
-		
-		try {
-			employee = employeeService.getData(employee);
-			model.addAttribute("departmentList", departmentList);
-			model.addAttribute("employee", employee);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute Employee employee, Model model) {
+
+		model.addAttribute("departmentList", safe("departmentList", departmentService::getList, Collections.emptyList()));
+		model.addAttribute("employee", employeeService.getData(employee));
 		return "admin/employee/employeeForm";
 	}
 	
 	@RequestMapping(value = "/employeeAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String employeeAddSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee,
-			@RequestParam MultipartFile imageFile,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@RequestParam MultipartFile imageFile, Model model) {
 
-		try {
-	        String uploadPath = buildUploadPath(EMPLOYEE_IMAGE_FOLDER);
-	        employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
-	        employee.setEmpPicture(EMPLOYEE_WEB_PATH + employee.getEmpImage());
+		return addSubmit(model, ADMIN_EMPLOYEE_LIST, () -> {
+			String uploadPath = buildUploadPath(EMPLOYEE_IMAGE_FOLDER);
+			employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+			employee.setEmpPicture(EMPLOYEE_WEB_PATH + employee.getEmpImage());
 			employeeService.add(employee);
 			
-			String id = employeeService.getNextId();
-			employee.setEmpId(id);
-			
+			// 依員工等級建立預設權限
+			employee.setEmpId(employeeService.getNextId());
 			List<Map<String, Object>> adminList = empFunctionService.getAdminListToAuth();
 			if (employee.getEmpLevel().equals("0")) {
 				authorityService.addAdminAuthority(employee, adminList);
 			} else {
 				authorityService.addStaffAuthority(employee, adminList);
 			}
-			
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
-
-		return "admin/toPath";
+		});
 	}
 	
 	@RequestMapping(value = "/employeeUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String employeeUpdateSubmit(@SessionAttribute Employee employeeSession,
 			@ModelAttribute Employee employee,
 			@RequestParam MultipartFile imageFile,
-			@RequestParam(required = false) String originalImage,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
+			@RequestParam(required = false) String originalImage, Model model) {
+
+		return updateSubmit(model, ADMIN_EMPLOYEE_LIST, () -> {
 			// 若原image_url 不為空且無新檔案名稱，則image_url 設為原始image_url
 			if (originalImage != null && imageFile.getOriginalFilename().equals("")) {
 				employee.setEmpImage(originalImage);
 			} else {
-	            String uploadPath = buildUploadPath(EMPLOYEE_IMAGE_FOLDER);
-	            commonService.deleteUploadedFiles(originalImage, uploadPath);
-	            employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
+				String uploadPath = buildUploadPath(EMPLOYEE_IMAGE_FOLDER);
+				commonService.deleteUploadedFiles(originalImage, uploadPath);
+				employee.setEmpImage(commonService.saveByDateNameUploadedFiles(imageFile, uploadPath));
 			}
-	        employee.setEmpPicture(EMPLOYEE_WEB_PATH + employee.getEmpImage());
+			employee.setEmpPicture(EMPLOYEE_WEB_PATH + employee.getEmpImage());
 			employeeService.update(employee);
-			model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+		});
 	}
 	
 	@PostMapping("/resignEmployee")
 	public String resignEmployee(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Employee employee, Model model) throws Exception {
+			@ModelAttribute Employee employee, Model model) {
 
-		try {
-			employeeService.resign(employee);
-			model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
-
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+		return updateSubmit(model, ADMIN_EMPLOYEE_LIST, () -> employeeService.resign(employee));
 	}
 	
 	@RequestMapping(value = "/addEmpFunction" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addEmpFunction(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		try {
-			EmpFunction empFunction = new EmpFunction();
-			model.addAttribute("empFunction", empFunction);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addEmpFunction(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("empFunction", new EmpFunction());
 		return "admin/employee/empFunctionForm";
 	}
 	
 	@RequestMapping(value = "/updateEmpFunction" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateEmpFunction(@SessionAttribute Employee employeeSession,
-			@ModelAttribute EmpFunction empFunction, Model model) throws Exception {
-		
-		try {
-			empFunction = empFunctionService.getData(empFunction);
-			model.addAttribute("empFunction", empFunction);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute EmpFunction empFunction, Model model) {
+
+		model.addAttribute("empFunction", empFunctionService.getData(empFunction));
 		return "admin/employee/empFunctionForm";
 	}
 	
 	@RequestMapping(value = "/empFunctionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String empFunctionAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute EmpFunction empFunction,
-			HttpServletRequest pRequest, Model model) throws Exception {
+			@ModelAttribute EmpFunction empFunction, Model model) {
 
-		try {
-			empFunctionService.add(empFunction);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_EMPLOYEE_LIST, () -> empFunctionService.add(empFunction));
 	}
 	
 	@RequestMapping(value = "/empFunctionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String empFunctionUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute EmpFunction empFunction,
-			HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			empFunctionService.update(empFunction);
-			model.addAttribute("PATH", ADMIN_EMPLOYEE_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute EmpFunction empFunction, Model model) {
+
+		return updateSubmit(model, ADMIN_EMPLOYEE_LIST, () -> empFunctionService.update(empFunction));
 	}
 	
 	@RequestMapping(value = "/authUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})

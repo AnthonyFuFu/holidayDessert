@@ -1,12 +1,8 @@
 package com.holidaydessert.controller.admin;
 
-import java.util.List;
+import java.util.Collections;
 import java.util.Map;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-import org.json.JSONException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -29,6 +25,7 @@ import com.holidaydessert.service.PromotionService;
 
 import io.swagger.v3.oas.annotations.Hidden;
 import static com.holidaydessert.constant.BuildPath.*;
+import static com.holidaydessert.utils.ControllerUtil.*;
 
 @Controller
 @RequestMapping("/admin/promotion")
@@ -71,190 +68,96 @@ public class PromotionManagement {
 	}
 	
 	@RequestMapping(value = "/addPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addPromotion(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		try {
-			Promotion promotion = new Promotion();
-			model.addAttribute("promotion", promotion);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addPromotion(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("promotion", new Promotion());
 		return "admin/promotion/promotionForm";
 	}
 	
 	@RequestMapping(value = "/updatePromotion" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updatePromotion(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Promotion promotion, Model model) throws Exception {
-		
-		try {
-			promotion = promotionService.getData(promotion);
-			model.addAttribute("promotion", promotion);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute Promotion promotion, Model model) {
+
+		model.addAttribute("promotion", promotionService.getData(promotion));
 		return "admin/promotion/promotionForm";
 	}
 	
 	@RequestMapping(value = "/promotionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String promotionAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Promotion promotion, HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			promotionService.add(promotion);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
-		return "admin/toPath";
+			@ModelAttribute Promotion promotion, Model model) {
+
+		return addSubmit(model, ADMIN_PROMOTION_LIST, () -> promotionService.add(promotion));
 	}
 	
 	@RequestMapping(value = "/promotionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String promotionUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute Promotion promotion, HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			promotionService.update(promotion);
-			model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute Promotion promotion, Model model) {
+
+		return updateSubmit(model, ADMIN_PROMOTION_LIST, () -> promotionService.update(promotion));
 	}
 	
 	@RequestMapping(value = "/issuePromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String issuePromotion(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		List<Map<String, Object>> promotionList = promotionService.getList();
-		
-		try {
-			model.addAttribute("promotionList", promotionList);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String issuePromotion(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("promotionList", safe("promotionList", promotionService::getList, Collections.emptyList()));
 		return "admin/promotion/promotionDetailForm";
 	}
 
 	@RequestMapping(value = "/issueDailyPromotionSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String issueDailyPromotionSubmit(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest,Model model) throws Exception {
+			@RequestParam(required = false) String products,
+			@RequestParam(required = false) String promotionId, Model model) {
 
-		String[] products = pRequest.getParameter("products")!=null ? pRequest.getParameter("products").split(",") : null;
-		String promotionId = pRequest.getParameter("promotionId")!=null ? pRequest.getParameter("promotionId") : null;
-		
-		Promotion promotion = new Promotion();
-		promotion.setPmId(promotionId);
-		promotion = promotionService.getData(promotion);
-		
-		try {
-			promotionDetailService.batchAddOneDayPromotion(promotion, products);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
-
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_PROMOTION_LIST, () -> {
+			Promotion promotion = new Promotion();
+			promotion.setPmId(promotionId);
+			promotionDetailService.batchAddOneDayPromotion(promotionService.getData(promotion), products != null ? products.split(",") : null);
+		});
 	}
 
 	@RequestMapping(value = "/issueWeeklyPromotionSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String issueWeeklyPromotionSubmit(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		String[] products = pRequest.getParameter("products")!=null ? pRequest.getParameter("products").split(",") : null;
-		String promotionId = pRequest.getParameter("promotionId")!=null ? pRequest.getParameter("promotionId") : null;
-		
-		Promotion promotion = new Promotion();
-		promotion.setPmId(promotionId);
-		promotion = promotionService.getData(promotion);
-		
-		try {
-			promotionDetailService.batchAddOneWeekPromotion(promotion, products);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
+			@RequestParam(required = false) String products,
+			@RequestParam(required = false) String promotionId, Model model) {
 
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_PROMOTION_LIST, () -> {
+			Promotion promotion = new Promotion();
+			promotion.setPmId(promotionId);
+			promotionDetailService.batchAddOneWeekPromotion(promotionService.getData(promotion), products != null ? products.split(",") : null);
+		});
 	}
 	
 	@RequestMapping(value = "/addOneProductPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
-	public String addOneProductPromotion(@SessionAttribute Employee employeeSession,
-			HttpServletRequest pRequest, HttpServletResponse pResponse, Model model) throws Exception {
-		
-		List<Map<String, Object>> productList = productService.issueOneProductList();
-		List<Map<String, Object>> promotionList = promotionService.getList();
-		
-		try {
-			PromotionDetail promotionDetail = new PromotionDetail();
-			model.addAttribute("productList", productList);
-			model.addAttribute("promotionList", promotionList);
-			model.addAttribute("promotionDetail", promotionDetail);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
+	public String addOneProductPromotion(@SessionAttribute Employee employeeSession, Model model) {
+
+		model.addAttribute("productList", safe("productList", productService::issueOneProductList, Collections.emptyList()));
+		model.addAttribute("promotionList", safe("promotionList", promotionService::getList, Collections.emptyList()));
+		model.addAttribute("promotionDetail", new PromotionDetail());
 		return "admin/promotion/oneProductPromotionForm";
 	}
 	
 	@RequestMapping(value = "/updateOneProductPromotion" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String updateOneProductPromotion(@SessionAttribute Employee employeeSession,
-			@ModelAttribute PromotionDetail promotionDetail, Model model) throws Exception {
-		
-		List<Map<String, Object>> productList = productService.getList();
-		List<Map<String, Object>> promotionList = promotionService.getList();
-		
-		try {
-			promotionDetail = promotionDetailService.getData(promotionDetail);
-			model.addAttribute("productList", productList);
-			model.addAttribute("promotionList", promotionList);
-			model.addAttribute("promotionDetail", promotionDetail);
-			model.addAttribute("MESSAGE", "資料修改成功");
-		} catch (JSONException e) {
-			model.addAttribute("MESSAGE", "修改失敗，請重新操作");
-			e.printStackTrace();
-		}
+			@ModelAttribute PromotionDetail promotionDetail, Model model) {
+
+		model.addAttribute("productList", safe("productList", productService::getList, Collections.emptyList()));
+		model.addAttribute("promotionList", safe("promotionList", promotionService::getList, Collections.emptyList()));
+		model.addAttribute("promotionDetail", promotionDetailService.getData(promotionDetail));
 		return "admin/promotion/oneProductPromotionForm";
 	}
 
 	@RequestMapping(value = "/oneProductPromotionAddSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String oneProductPromotionAddSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			promotionDetailService.addOne(promotionDetail);
-			model.addAttribute("MESSAGE", "資料新增成功");
-		} catch (Exception e) {
-			e.printStackTrace();
-			model.addAttribute("MESSAGE", "新增失敗，請重新操作");
-			throw new Exception("dataRollback");
-		}
-		model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
+			@ModelAttribute PromotionDetail promotionDetail, Model model) {
 
-		return "admin/toPath";
+		return addSubmit(model, ADMIN_PROMOTION_LIST, () -> promotionDetailService.addOne(promotionDetail));
 	}
 
 	@RequestMapping(value = "/oneProductPromotionUpdateSubmit" , method = {RequestMethod.GET, RequestMethod.POST})
 	public String oneProductPromotionUpdateSubmit(@SessionAttribute Employee employeeSession,
-			@ModelAttribute PromotionDetail promotionDetail, HttpServletRequest pRequest, Model model) throws Exception {
-		
-		try {
-			promotionDetailService.update(promotionDetail);
-			model.addAttribute("PATH", ADMIN_PROMOTION_LIST);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-		return "admin/toPath";
+			@ModelAttribute PromotionDetail promotionDetail, Model model) {
+
+		return updateSubmit(model, ADMIN_PROMOTION_LIST, () -> promotionDetailService.update(promotionDetail));
 	}
 	
 }
